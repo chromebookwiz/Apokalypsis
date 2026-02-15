@@ -1,28 +1,45 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useSceneController } from '../controllers/SceneController';
-
+import { getRevelation } from '../data/revelation';
+import { LANG_NAMES } from '../data/translations';
 
 interface Props {
     controller: ReturnType<typeof useSceneController>;
 }
 
 export const UIOverlay: React.FC<Props> = ({ controller }) => {
-    const isRTL = controller.language === 'HE' || controller.language === 'AR';
+    const isRTL = controller.language === 'HE';
+    const isAmharic = controller.language === 'AM';
+    const GREEK_TITLE = "ΑΠΟΚΑΛΥΨΙΣ"; // Always Greek Title
 
-    // Vertical Text Constants
-    const GREEK_TITLE = "ΑΠΟΚΑΛΥΨΙΣ"; // Apokalypsis
+    // Parse Revelation Text
+    const { note, body } = useMemo(() => {
+        const raw = getRevelation(controller.language);
+        const lines = raw.split('\n').filter(l => l.trim() !== '');
+        // We ignore the title from the text file for the side columns
+        // But we parse note and body
+        let n = "";
+        let b = "";
+
+        lines.forEach(line => {
+            if (line.startsWith('[S]')) { /* Ignore Title */ }
+            else if (line.startsWith('[N]')) n = line.substring(3).trim();
+            else b += line + "\n";
+        });
+        return { note: n, body: b.trim() };
+    }, [controller.language]);
 
     return (
         <div className="ui-overlay" style={{ fontFamily: 'Cinzel, serif', pointerEvents: 'none' }}>
 
-            {/* LEFT COLUMN: GREEK INVERTED */}
+            {/* LEFT COLUMN: GREEK TITLE (Vertical Upwards) */}
             <div style={{
                 position: 'fixed',
                 top: '50%',
                 left: '40px',
-                transform: 'translateY(-50%) rotate(180deg)',
+                transform: 'translateY(-50%)',
                 display: 'flex',
-                flexDirection: 'column',
+                flexDirection: 'column-reverse', // Upwards
                 gap: '5px',
                 pointerEvents: 'none',
                 opacity: 0.6
@@ -32,14 +49,15 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         fontSize: '1.5rem',
                         color: '#ffd700',
                         textShadow: 'none',
-                        textAlign: 'center'
+                        textAlign: 'center',
+                        transform: 'rotate(0deg)' // Upright
                     }}>
                         {char}
                     </div>
                 ))}
             </div>
 
-            {/* RIGHT COLUMN: GREEK */}
+            {/* RIGHT COLUMN: GREEK TITLE */}
             <div style={{
                 position: 'fixed',
                 top: '50%',
@@ -63,14 +81,88 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 ))}
             </div>
 
-            {/* TOP RIGHT: Dark Mode Toggle */}
+            {/* CENTER TOP: Verse Display (Hidden unless Book Open) */}
+            <div style={{
+                position: 'fixed',
+                top: '10%',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                textAlign: 'center',
+                color: '#ffd700',
+                maxWidth: '600px',
+                width: '80%',
+                textShadow: '0 0 10px rgba(0,0,0,0.8)',
+                pointerEvents: 'none',
+                transition: 'all 0.5s ease',
+                opacity: controller.libraryOpen ? 1 : 0,
+                visibility: controller.libraryOpen ? 'visible' : 'hidden'
+            }}>
+                <div style={{ fontSize: '1.2rem', marginBottom: '0.5rem', opacity: 0.8 }}>{note}</div>
+                <div style={{
+                    fontSize: isAmharic ? '1.5rem' : '1.5rem',
+                    whiteSpace: 'pre-wrap',
+                    fontFamily: isAmharic ? 'sans-serif' : 'Cinzel, serif',
+                    direction: isRTL ? 'rtl' : 'ltr'
+                }}>
+                    {body}
+                </div>
+            </div>
+
+            {/* TOP RIGHT: Controls (Book + Language Dropdown + Dark Mode) */}
             <div className={`corner-tr ${isRTL ? 'rtl-override-tr' : ''}`} style={{
                 position: 'fixed',
                 top: '40px',
                 right: '40px',
                 pointerEvents: 'auto',
-                zIndex: 100
+                zIndex: 100,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px',
+                alignItems: 'flex-end'
             }}>
+                {/* Golden Book Icon */}
+                <button
+                    className="sacred-btn"
+                    onClick={() => controller.setLibraryOpen(!controller.libraryOpen)}
+                    title="Toggle Sacred Text"
+                    style={{
+                        fontSize: '1.5rem',
+                        background: 'none',
+                        border: 'none',
+                        color: controller.libraryOpen ? '#ffd700' : '#555',
+                        cursor: 'pointer',
+                        filter: controller.libraryOpen ? 'drop-shadow(0 0 5px #ffd700)' : 'none'
+                    }}
+                >
+                    📖
+                </button>
+
+                {/* Language Dropdown */}
+                <select
+                    value={controller.language}
+                    onChange={(e) => controller.setLang(e.target.value as any)}
+                    style={{
+                        fontSize: '1rem',
+                        background: 'rgba(0,0,0,0.8)',
+                        border: '1px solid #ffd700',
+                        color: '#ffd700',
+                        cursor: 'pointer',
+                        padding: '5px 10px',
+                        fontFamily: 'Orbitron, sans-serif',
+                        appearance: 'none', // Remove default arrow
+                        textAlign: 'right',
+                        width: '150px',
+                        outline: 'none'
+                    }}
+                >
+                    {Object.entries(LANG_NAMES).map(([code, name]) => (
+                        <option key={code} value={code} style={{ background: '#000', color: '#ffd700' }}>
+                            {name}
+                        </option>
+                    ))}
+                </select>
+
+                {/* Dark Mode Toggle */}
                 <button
                     className="sacred-btn"
                     onClick={controller.toggleDarkMode}
@@ -128,7 +220,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 </div>
             </div>
 
-            {/* BR: Controls */}
+            {/* BR: Controls (Grid, Speed) */}
             <div className={`corner-br ${isRTL ? 'rtl-override-br' : ''}`} style={{
                 bottom: '40px',
                 left: isRTL ? '40px' : 'auto',
@@ -178,7 +270,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                                 borderRadius: '5px',
                                 background: 'rgba(255,215,0,0.1)'
                             }}
-                            title={`c: ${controller.rotationSpeed?.toFixed(1) || 1.0}`}
+                            title={`Speed: ${controller.rotationSpeed?.toFixed(1) || 1.0}`}
                         />
                     </div>
 
@@ -200,7 +292,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
 
             <style>{`
                 .sacred-btn { transition: all 0.2s; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
-                .sacred-btn:hover { background: rgba(255,215,0,0.2) !important; }
+                .sacred-btn:hover { background: rgba(255,215,0,0.2) !important; color: #ffd700 !important; }
                 .sacred-text-btn:hover h1 { text-shadow: 0 0 25px rgba(255,215,0,0.8) !important; }
             `}</style>
         </div>

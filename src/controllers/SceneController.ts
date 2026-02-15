@@ -20,7 +20,7 @@ export const useSceneController = () => {
     const [darkMode, setDarkMode] = useState(false);
 
     // Language & Library State
-    const [language, setLanguage] = useState<Language>('EN');
+    const [language, setLanguage] = useState<Language>('GR');
     const [libraryOpen, setLibraryOpen] = useState(false);
     const [currentBookId, setCurrentBookId] = useState('revelation');
     const [isSpeaking, setIsSpeaking] = useState(false);
@@ -56,8 +56,8 @@ export const useSceneController = () => {
     const [zoom, setZoom] = useState(40);
     const [viewAngle, setViewAngle] = useState(0);
 
-    // Speech Ref
-    const synthesis = window.speechSynthesis;
+    // Speech Ref - Removed
+    // const synthesis = window.speechSynthesis;
 
     // --- LOGIC ---
     const setTesseractPreset = (name: string) => {
@@ -87,7 +87,7 @@ export const useSceneController = () => {
             }
             return;
         }
-        const types: GeometryType[] = ['TESSERACT', 'METATRON', 'ULAM_SPIRAL'];
+        const types: GeometryType[] = ['METATRON'];
         const idx = types.indexOf(geometryType);
         const next = types[(idx + 1) % types.length];
         setGeometryType(next);
@@ -116,40 +116,14 @@ export const useSceneController = () => {
         setDarkMode(prev => !prev);
     };
 
-    // --- SPEECH LOGIC ---
-    const speakText = (text: string) => {
-        if (synthesis.speaking) {
-            synthesis.cancel();
-            setIsSpeaking(false);
-            return;
-        }
-
-        if (language === 'HI') return; // Cannot speak hieroglyphs
-
-        const utter = new SpeechSynthesisUtterance(text);
-
-        // Map Language Code
-        const map: Record<string, string> = {
-            'EN': 'en-US', 'ES': 'es-ES', 'DE': 'de-DE',
-            'AM': 'am-ET', 'HE': 'he-IL', 'GR': 'el-GR',
-            'AR': 'ar-SA', 'SA': 'hi-IN', 'LA': 'it-IT',
-            'NO': 'no-NO', 'ZH': 'zh-CN'
-        };
-        utter.lang = map[language] || 'en-US';
-        utter.rate = 0.85; // Slower for gravitas
-
-        utter.onend = () => setIsSpeaking(false);
-        utter.onerror = () => setIsSpeaking(false);
-
-        setIsSpeaking(true);
-        synthesis.speak(utter);
+    // --- SPEECH LOGIC REMOVED ---
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const speakText = (_text: string) => {
+        // Speech removed per user request
     };
 
     const stopSpeaking = () => {
-        if (synthesis.speaking) {
-            synthesis.cancel();
-            setIsSpeaking(false);
-        }
+        // No-op
     };
 
     // --- EFFECTS ---
@@ -234,6 +208,7 @@ export const useSceneController = () => {
         setTesseractPreset,
         triggerCameraReset,
         darkMode,
-        toggleDarkMode
+        toggleDarkMode,
+        selectNumber: (n: number) => console.log('Select:', n)
     };
 };

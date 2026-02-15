@@ -5,8 +5,6 @@ import { useSceneController } from '../controllers/SceneController';
 
 // Only Import what we use
 import { MetatronGeometry } from './geometries/Metatron';
-import { UlamSpiral } from './geometries/UlamSpiral';
-import { TesseractGeometry } from './geometries/Tesseract';
 
 interface Props {
     controller: ReturnType<typeof useSceneController>;
@@ -97,8 +95,6 @@ export const MainScene: React.FC<Props> = ({ controller }) => {
 const GeometrySwitch: React.FC<{ controller: any }> = ({ controller }) => {
     switch (controller.geometryType) {
         case 'METATRON': return <MetatronGeometry controller={controller} />;
-        case 'ULAM_SPIRAL': return <UlamSpiral controller={controller} />;
-        case 'TESSERACT': return <TesseractGeometry controller={controller} />;
-        default: return <TesseractGeometry controller={controller} />;
+        default: return <MetatronGeometry controller={controller} />;
     }
 };
