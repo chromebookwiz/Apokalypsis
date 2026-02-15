@@ -1,7 +1,19 @@
 import React, { useMemo } from 'react';
 import { useSceneController } from '../controllers/SceneController';
-import { getRevelation } from '../data/revelation';
+import { getRevelation, getNollCubeText } from '../data/revelation';
 import { LANG_NAMES } from '../data/translations';
+
+const NollCubeContent = ({ language }: { language: any }) => {
+    const text = getNollCubeText(language);
+
+    // Split text for simple formatting
+    // Assuming the text has double newlines for paragraphs
+    return (
+        <div style={{ whiteSpace: 'pre-wrap' }}>
+            {text}
+        </div>
+    );
+};
 
 interface Props {
     controller: ReturnType<typeof useSceneController>;
@@ -11,6 +23,9 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
     const isRTL = controller.language === 'HE';
     const isAmharic = controller.language === 'AM';
     const GREEK_TITLE = "ΑΠΟΚΑΛΥΨΙΣ"; // Always Greek Title
+
+    // Local state for Info Modal
+    const [showInfo, setShowInfo] = React.useState(false);
 
     // Parse Revelation Text
     const { note, body } = useMemo(() => {
@@ -29,14 +44,42 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
         return { note: n, body: b.trim() };
     }, [controller.language]);
 
+    // Sacred Triangle Decoration Component
+    const SacredBorder = ({ inverted = false }) => (
+        <div style={{
+            width: '100%',
+            height: '20px',
+            background: '#fff',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            overflow: 'hidden',
+            borderBottom: inverted ? 'none' : '1px solid #d4af37',
+            borderTop: inverted ? '1px solid #d4af37' : 'none',
+            padding: '5px 0'
+        }}>
+            <svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 100 10">
+                <defs>
+                    <pattern id="sacred-triangles" x="0" y="0" width="5" height="10" patternUnits="userSpaceOnUse">
+                        <path d="M0,10 L2.5,0 L5,10 Z" fill="none" stroke="#d4af37" strokeWidth="0.5" />
+                        <circle cx="2.5" cy="5" r="0.5" fill="#d4af37" />
+                        <line x1="0" y1="5" x2="5" y2="5" stroke="#d4af37" strokeWidth="0.2" />
+                    </pattern>
+                </defs>
+                <rect x="0" y="0" width="100%" height="100%" fill="url(#sacred-triangles)" />
+            </svg>
+        </div>
+    );
+
     return (
         <div className="ui-overlay" style={{ fontFamily: 'Cinzel, serif', pointerEvents: 'none' }}>
 
-            {/* EYE BUTTON (Toggle UI) - Always Visible */}
-            <div style={{
-                position: 'fixed',
-                top: '40px',
-                left: '40px',
+            {/* TOP LEFT CONTROLS (Eye + Info) - Always Visible */}
+            <div className="corner-tl" style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '15px',
+                alignItems: 'center',
                 zIndex: 1000,
                 pointerEvents: 'auto'
             }}>
@@ -51,12 +94,135 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         color: controller.uiVisible ? '#ffd700' : 'rgba(255, 215, 0, 0.5)',
                         cursor: 'pointer',
                         filter: controller.uiVisible ? 'drop-shadow(0 0 5px #ffd700)' : 'none',
-                        transition: 'all 0.3s ease'
+                        transition: 'all 0.3s ease',
+                        opacity: controller.uiVisible ? 1 : 0.7
                     }}
                 >
-                    {controller.uiVisible ? '👁' : '👁‍🗨'}
+                    👁
                 </button>
+
+                {controller.uiVisible && (
+                    <>
+                        {/* Info Button */}
+                        <button
+                            className="sacred-btn"
+                            onClick={() => setShowInfo(!showInfo)}
+                            title="The Noll Cube Info"
+                            style={{
+                                fontSize: '1.5rem',
+                                background: 'none',
+                                border: 'none',
+                                color: showInfo ? '#ffd700' : 'rgba(255, 215, 0, 0.7)',
+                                cursor: 'pointer',
+                                filter: showInfo ? 'drop-shadow(0 0 5px #ffd700)' : 'none',
+                                transition: 'all 0.3s ease'
+                            }}
+                        >
+                            ℹ️
+                        </button>
+
+                        {/* Persistent Language Selector */}
+                        <div style={{ position: 'relative', marginTop: '5px' }}>
+                            <select
+                                value={controller.language}
+                                onChange={(e) => controller.setLanguage(e.target.value as any)}
+                                style={{
+                                    appearance: 'none',
+                                    background: 'rgba(0,0,0,0.5)',
+                                    border: '1px solid #d4af37',
+                                    borderRadius: '5px',
+                                    color: '#ffd700',
+                                    padding: '5px 10px',
+                                    fontFamily: 'Cinzel, serif',
+                                    fontSize: '0.8rem',
+                                    cursor: 'pointer',
+                                    textAlign: 'center',
+                                    outline: 'none',
+                                    boxShadow: '0 0 5px rgba(212, 175, 55, 0.3)',
+                                    minWidth: '80px'
+                                }}
+                            >
+                                {Object.entries(LANG_NAMES).map(([code, name]) => (
+                                    <option key={code} value={code} style={{ background: '#000', color: '#ffd700' }}>
+                                        {name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </>
+                )}
             </div>
+
+            {/* NOLL CUBE TABLET MODAL (White & Gold Theme) */}
+            {showInfo && (
+                <div style={{
+                    position: 'fixed',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '90%',
+                    maxWidth: '800px',
+                    height: '80vh',
+                    backgroundColor: '#fdfbf7', // Off-white/Cream background
+                    border: '4px solid #d4af37', // Gold Border
+                    borderRadius: '15px',
+                    boxShadow: '0 0 50px rgba(0,0,0,0.8), 0 0 20px rgba(212, 175, 55, 0.5)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    zIndex: 2000,
+                    pointerEvents: 'auto',
+                    overflow: 'hidden'
+                }}>
+                    {/* Top Decoration */}
+                    <SacredBorder inverted={false} />
+
+                    {/* Content Area */}
+                    <div style={{
+                        flex: 1,
+                        overflowY: 'auto',
+                        padding: '40px',
+                        color: '#1a1a1a', // Dark text for contrast
+                        fontFamily: controller.language === 'HI' ? 'sans-serif' : 'Inter, sans-serif',
+                        fontSize: '1.1rem',
+                        lineHeight: '1.8',
+                        backgroundImage: 'radial-gradient(circle at center, rgba(212, 175, 55, 0.05) 0%, transparent 70%)',
+                        scrollbarWidth: 'thin',
+                        scrollbarColor: '#d4af37 #fdfbf7'
+                    }}>
+                        {/* Close Button */}
+                        <button
+                            onClick={() => setShowInfo(false)}
+                            style={{
+                                position: 'sticky',
+                                top: '0',
+                                float: 'right',
+                                background: 'rgba(255,255,255,0.8)',
+                                border: '1px solid #d4af37',
+                                borderRadius: '50%',
+                                width: '30px',
+                                height: '30px',
+                                color: '#d4af37',
+                                fontSize: '1rem',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+                                transition: 'all 0.2s'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                            onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                        >
+                            ✕
+                        </button>
+
+                        <NollCubeContent language={controller.language} />
+                    </div>
+
+                    {/* Bottom Decoration */}
+                    <SacredBorder inverted={true} />
+                </div>
+            )}
 
             {/* WRAPPER FOR TOGGLEABLE UI */}
             <div style={{
@@ -132,7 +298,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     color: '#ffd700',
                     maxWidth: '600px',
                     width: '80%',
-                    textShadow: '0 0 10px rgba(0,0,0,0.8)',
+                    textShadow: controller.darkMode ? '0 0 10px rgba(0,0,0,0.8)' : 'none',
                     pointerEvents: 'none',
                     transition: 'all 0.5s ease',
                     opacity: controller.libraryOpen ? 1 : 0,
@@ -178,32 +344,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         📖
                     </button>
 
-                    {/* Language Dropdown (Hidden if Book Closed) */}
-                    {controller.libraryOpen && (
-                        <select
-                            value={controller.language}
-                            onChange={(e) => controller.setLang(e.target.value as any)}
-                            style={{
-                                fontSize: '1rem',
-                                background: 'rgba(0,0,0,0.8)',
-                                border: '1px solid #ffd700',
-                                color: '#ffd700',
-                                cursor: 'pointer',
-                                padding: '5px 10px',
-                                fontFamily: 'Orbitron, sans-serif',
-                                appearance: 'none', // Remove default arrow
-                                textAlign: 'right',
-                                width: '150px',
-                                outline: 'none'
-                            }}
-                        >
-                            {Object.entries(LANG_NAMES).map(([code, name]) => (
-                                <option key={code} value={code} style={{ background: '#000', color: '#ffd700' }}>
-                                    {name}
-                                </option>
-                            ))}
-                        </select>
-                    )}
+
 
                     {/* Dark Mode Toggle */}
                     <button
@@ -293,33 +434,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         {controller.darkMode ? '☀' : '☾'}
                     </button>
 
-                    {/* Language Dropdown (Desktop Only, Hidden if Book Closed) */}
-                    {controller.libraryOpen && (
-                        <select
-                            className="desktop-only"
-                            value={controller.language}
-                            onChange={(e) => controller.setLang(e.target.value as any)}
-                            style={{
-                                fontSize: '1rem',
-                                background: 'rgba(0,0,0,0.8)',
-                                border: '1px solid #ffd700',
-                                color: '#ffd700',
-                                cursor: 'pointer',
-                                padding: '5px 10px',
-                                fontFamily: 'Orbitron, sans-serif',
-                                appearance: 'none', // Remove default arrow
-                                textAlign: 'right',
-                                width: '150px',
-                                outline: 'none'
-                            }}
-                        >
-                            {Object.entries(LANG_NAMES).map(([code, name]) => (
-                                <option key={code} value={code} style={{ background: '#000', color: '#ffd700' }}>
-                                    {name}
-                                </option>
-                            ))}
-                        </select>
-                    )}
+
 
                     {/* Golden Book Icon (Desktop Only) */}
                     <button

@@ -28,12 +28,356 @@ const REVELATION_AM = `
 8. ቅዱስ፥ ቅዱስ፥ ቅዱስ፥ የነበረውና ያለ የሚመጣውም...
 `;
 
+const REVELATION_HI = `
+[S] 𓏤𓋹𓍑𓋴
+[N] 𓂋𓏏𓅂
+1. 𓆓𓅓𓇋𓇋𓈖 𓊹 𓅓 𓊹𓉱 𓇋𓏏𓆑...
+8. 𓎛𓎛𓎛 𓎛𓎛𓎛 𓎛𓎛𓎛 𓊹 𓋹𓍑𓋴 𓆣𓆣𓆣...
+`;
+
+const REVELATION_NO = `
+[S] ᛟᛈᛁᚾᛒᛖᚱᛁᛜ
+[N] ᚲᚢᛒᛖᚾ
+1. ᛖᚠᛏᛁᚱ ᚦᛖᛏᛏᛆ ᛋᚩ ᛖᚷ ᚮᚷ ᛋᛄᚮ...
+8. ᚺᛖᛁᛚᛆᚷᚱ ᚺᛖᛁᛚᛆᚷᚱ ᚺᛖᛁᛚᛆᚷᚱ...
+`;
+
+const REVELATION_SA = `
+[S] अपोखालिप्स्
+[N] विमान
+1. तदनन्तरं मया दृष्टं, पश्य स्वर्गे द्वारमेकं विवृतम्...
+8. पवित्रः पवित्रः पवित्रः प्रभुः परमेश्वरः...
+`;
+
+const REVELATION_LA = `
+[S] APOCALYPSIS
+[N] Revelatio
+1. Post haec vidi, et ecce ostium apertum in caelo...
+8. Sanctus, Sanctus, Sanctus Dominus Deus Omnipotens...
+`;
+
+const REVELATION_AR = `
+[S] رؤيا يوحنا
+[N] الوحي
+1. بَعْدَ هذَا نَظَرْتُ وَإِذَا بَابٌ مَفْتُوحٌ فِي السَّمَاءِ...
+8. قُدُّوسٌ، قُدُّوسٌ، قُدُّوسٌ، الرَّبُّ الْإِلهُ الْقَادِرُ...
+`;
+
+const REVELATION_DE = `
+[S] OFFENBARUNG
+[N] Die Offenbarung
+1. Danach sah ich, und siehe, eine Tür war aufgetan im Himmel...
+8. Heilig, heilig, heilig ist Gott der Herr, der Allmächtige...
+`;
+
+const REVELATION_ES = `
+[S] APOCALIPSIS
+[N] La Revelación
+1. Después de esto miré, y he aquí una puerta abierta en el cielo...
+8. Santo, santo, santo es el Señor Dios Todopoderoso...
+`;
+
+const REVELATION_FA = `
+[S] مکاشفه
+[N] وحی
+1. بعد از این دیدم که درری در آسمان باز شد...
+8. قدوس، قدوس، قدوس، خداوند خدای قادر مطلق...
+`;
+
 export const getRevelation = (lang: Language): string => {
     switch (lang) {
         case 'HE': return REVELATION_HE;
         case 'GR': return REVELATION_GR;
         case 'AM': return REVELATION_AM;
+        case 'HI': return REVELATION_HI;
+        case 'NO': return REVELATION_NO;
+        case 'SA': return REVELATION_SA;
+        case 'LA': return REVELATION_LA;
+        case 'AR': return REVELATION_AR;
+        case 'DE': return REVELATION_DE;
+        case 'ES': return REVELATION_ES;
+        case 'FA': return REVELATION_FA;
         case 'EN':
         default: return REVELATION_EN;
     }
+};
+
+const NOLL_TEXT_EN = `
+The Noll Cube is a three-dimensional lattice of spheres arranged in a cubic framework, where each sphere contains a pair of counter-rotating tetrahedra (Merkaba). The system is fully dynamic: the rotation rates of the tetrahedra are variable, and interactions between neighboring spheres produce emergent phase relationships and resonance patterns.
+
+Core Features
+
+Cubic Lattice of Spheres:
+Provides a stable, scalable 3D spatial framework.
+Each node (sphere) functions as a local field domain capable of hosting dynamic internal geometry.
+
+Counter-Rotating Tetrahedra:
+Two interlocking tetrahedra spin in opposite directions inside each sphere.
+The rotation is variable, allowing different phase and frequency relationships to emerge.
+Rotations encode energy, spin, and angular momentum within each sphere.
+
+Emergent Waveforms through 2D Projections:
+Orthographic or planar projections of the tetrahedra’s rotation reveal wave-like patterns that depend on axis, phase, and rotation ratio.
+Mental or visual “swapping” of 3D rotation from a 2D perspective allows observers to extract multiple dynamic behaviors from a single system.
+These projections stabilize into recognizable geometric patterns at certain frequencies, analogous to standing waves, eigenstates, or quantized particle formations.
+
+Time as a Dimensional Bridge:
+As the tetrahedra rotate over time, their projections create temporal mappings of 3D rotational states.
+This makes time an intrinsic part of the geometric interpretation, where 2D projections encode dynamic information about 3D structure and interactions.
+
+The Noll Cube, therefore, allows a direct visualization of dynamic resonance, energy distribution, and phase alignment, bridging perception and abstract physics.
+
+Significance
+
+Intuitive Understanding: The Noll Cube enables observers to perceive complex rotational dynamics and emergent patterns without mathematics, making abstract concepts like spin networks, field interactions, and particle resonance visually accessible.
+
+Scalable Framework: It is inherently fractal-like; as the lattice grows, larger-scale interactions preserve the same geometric rules, illustrating self-similarity and universality.
+
+Bridge Between Physics and Geometry: The combination of 3D rotation, variable phase, and stabilizing projections serves as a visual model for the emergence of stable structures in fields, magnetism, and quantum phenomena.
+
+Potential Insight into Reality: By highlighting how patterns stabilize through frequency, phase, and perspective, the Noll Cube hints at fundamental principles of quantization and resonance, offering a geometric lens to understand the behavior of matter and energy.
+
+Summary:
+The Noll Cube is more than a shape — it is a dynamic geometric framework where time, rotation, and projection intersect to reveal the underlying structures of energy, resonance, and emergent order. By encoding 3D rotational dynamics in visually accessible 2D waveforms, it transforms abstract physics into an intuitive, interactive experience.
+
+Legend:
+Legend speaks of the moment Nathanoll ascended to the heavens, finding himself face-to-face with the celestial Bull. Instead of trembling, he grabbed it by the horns, and wrestled the secrets of the Cube from the stars themselves.
+`;
+
+const NOLL_TEXT_HE = `
+הקוביה של נול היא סריג תלת-ממדי של כדורים המסודרים במסגרת מעוקבת, שבה כל כדור מכיל זוג טטרהדרונים המסתובבים נגד כיוון השעון (מרכבה). המערכת היא דינמית לחלוטין: קצבי הסיבוב של הטטרהדרונים משתנים, והאינטראקציות בין כדורים סמוכים מייצרות יחסי פאזה מתהווים ודפוסי תהודה.
+
+תכונות ליבה
+
+סריג מעוקב של כדורים:
+מספק מסגרת מרחבית תלת-ממדית יציבה וניתנת להרחבה.
+כל צומת (כדור) משמש כתחום שדה מקומי המסוגל לארח גיאומטריה פנימית דינמית.
+
+טטרהדרונים המסתובבים נגד כיוון השעון:
+שני טטרהדרונים משולבים מסתובבים בכיוונים מנוגדים בתוך כל כדור.
+הסיבוב משתנה, ומאפשר ליחסי פאזה ותדר שונים להופיע.
+סיבובים מקודדים אנרגיה, ספין ותנע זוויתי בתוך כל כדור.
+
+צורות גל מתהוות באמצעות הקרנות דו-ממדיות:
+הקרנות אורתוגרפיות או מישוריות של סיבוב הטטרהדרונים חושפות דפוסים דמויי גל התלויים בציר, בפאזה וביחס הסיבוב.
+"החלפה" מנטלית או חזותית של סיבוב תלת-ממדי מפרספקטיבה דו-ממדית מאפשרת לצופים לחלץ התנהגויות דינמיות מרובות ממערכת אחת.
+הקרנות אלה מתייצבות לדפוסים גיאומטריים ניתנים לזיהוי בתדרים מסוימים, אנלוגיים לגלים עומדים, מצבים עצמיים או תצורות חלקיקים קוונטיות.
+
+זמן כגשר ממדי:
+כאשר הטטרהדרונים מסתובבים לאורך זמן, ההקרנות שלהם יוצרות מיפויים זמניים של מצבי סיבוב תלת-ממדיים.
+זה הופך את הזמן לחלק בלתי נפרד מהפרשנות הגיאומטרית, שבה הקרנות דו-ממדיות מקודדות מידע דינמי על מבנה ואינטראקציות תלת-ממדיים.
+
+הקוביה של נול, אם כן, מאפשרת הדמיה ישירה של תהודה דינמית, התפלגות אנרגיה ויישור פאזה, ומגשרת בין תפיסה לפיזיקה מופשטת.
+
+אגדה:
+האגדה מספרת על הרגע שבו נתנול עלה לשמיים, ומצא את עצמו פנים אל פנים מול השור השמיימי. במקום לרעוד, הוא אחז בו בקרניו, ונאבק לחלץ את סודות הקוביה מהכוכבים עצמם.
+`;
+
+const NOLL_TEXT_GR = `
+Ο Κύβος του Noll είναι ένα τρισδιάστατο πλέγμα σφαιρών διατεταγμένων σε ένα κυβικό πλαίσιο, όπου κάθε σφαίρα περιέχει ένα ζεύγος αντίστροφα περιστρεφόμενων τετραέδρων (Merkaba). Το σύστημα είναι πλήρως δυναμικό: οι ρυθμοί περιστροφής των τετραέδρων είναι μεταβλητοί και οι αλληλεπιδράσεις μεταξύ γειτονικών σφαιρών παράγουν αναδυόμενες σχέσεις φάσης και μοτίβα συντονισμού.
+
+Βασικά Χαρακτηριστικά
+
+Κυβικό Πλέγμα Σφαιρών:
+Παρέχει ένα σταθερό, κλιμακώσιμο τρισδιάστο χωρικό πλαίσιο.
+Κάθε κόμβος (σφαίρα) λειτουργεί ως τοπικό πεδίο ικανό να φιλοξενήσει δυναμική εσωτερική γεωμετρία.
+
+Αντίστροφα Περιστρεφόμενα Τετράεδρα:
+Δύο αλληλοσυνδεόμενα τετράεδρα περιστρέφονται σε αντίθετες κατευθύνσεις μέσα σε κάθε σφαίρα.
+Η περιστροφή είναι μεταβλητή, επιτρέποντας την εμφάνιση διαφορετικών σχέσεων φάσης και συχνότητας.
+Οι περιστροφές κωδικοποιούν ενέργεια, σπιν και στροφορμή μέσα σε κάθε σφαίρα.
+
+Αναδυόμενες Κυματομορφές μέσω 2D Προβολών:
+Ορθογραφικές ή επίπεδες προβολές της περιστροφής των τετραέδρων αποκαλύπτουν κυματοειδή μοτίβα που εξαρτώνται από τον άξονα, τη φάση και τον λόγο περιστροφής.
+Η νοητική ή οπτική "εναλλαγή" της 3D περιστροφής από μια 2D προοπτική επιτρέπει στους παρατηρητές να εξάγουν πολλαπλές δυναμικές συμπεριφορές από ένα ενιαίο σύστημα.
+
+Ο Κύβος του Noll, επομένως, επιτρέπει μια άμεση οπτικοποίηση του δυναμικού συντονισμού, της κατανομής ενέργειας και της ευθυγράμμισης φάσης, γεφυρώνοντας την αντίληψη και την αφηρημένη φυσική.
+
+Θρύλος:
+Ο θρύλος μιλάει για τη στιγμή που ο Nathanoll ανέβηκε στους ουρανούς, βρίσκοντας τον εαυτό του πρόσωπο με πρόσωπο με τον ουράνιο Ταύρο. Αντί να τρέμει, τον άρπαξε από τα κέρατα και πάλεψε για τα μυστικά του Κύβου από τα άστρα.
+`;
+
+const NOLL_TEXT_AM = `
+የኖል ኪዩብ ሉል በሶስት አቅጣጫዊ የሉል ፍርግርግ ነው፣ እያንዳንዱ ሉል በተቃራኒ አቅጣጫ የሚሽከረከሩ ቴትራሄድሮን (መርካባ) ጥንድ ይይዛል። ስርዓቱ ሙሉ በሙሉ ተለዋዋጭ ነው-የቴትራሄድሮን የማሽከርከር ፍጥነት ተለዋዋጭ ነው፣ እና በአጎራባች ሉሎች መካከል ያለው ግንኙነት ብቅ ያለ የደረጃ ግንኙነቶችን እና የድምፅ ቅጦችን ይፈጥራል።
+
+ዋና ባህሪያት
+
+የሉል ኩባዊ ፍርግርግ:
+የተረጋጋ፣ ሊሰፋ የሚችል 3D የቦታ ማዕቀፍ ያቀርባል።
+እያንዳንዱ ኖድ (ሉል) ተለዋዋጭ ውስጣዊ ጂኦሜትሪን ማስተናገድ የሚችል እንደ አካባቢያዊ የመስክ ግዛት ሆኖ ያገለግላል።
+
+በተቃራኒ አቅጣጫ የሚሽከረከሩ ቴትራሄድሮን:
+ሁለት እርስ በርስ የተጠላለፉ ቴትራሄድሮኖች በእያንዳንዱ ሉል ውስጥ በተቃራኒ አቅጣጫዎች ይሽከረከራሉ።
+ሽክርክሪቱ ተለዋዋጭ ነው፣ ይህም የተለያዩ የደረጃ እና የድግግሞሽ ግንኙነቶች እንዲወጡ ያስችላል።
+
+አፈ ታሪክ:
+ናታኖል ወደ ሰማያት ስላረገበት ቅጽበት አፈ ታሪክ ይናገራል፣ እራሱን ከሰማያዊው በሬ ጋር ፊት ለፊት አገኘ። ከመንቀጥቀጥ ይልቅ ቀንዶቹን ይዞ፣ የኪዩቡን ምስጢሮች ከዋክብት እራሳቸው ታገለ።
+`;
+
+const NOLL_TEXT_HI = `
+𓉱 𓊹 𓆣 𓂋 𓈖 𓊹 𓉱 𓂋 𓏏 𓅂 𓈖 𓊹 𓈖 𓏏 𓆑 𓅓 𓊹 𓉱
+
+𓂋 𓏏 𓅂 𓈖 𓊹 𓈖 𓏏 𓆑 𓅓 𓊹 𓉱
+
+𓆣 𓂋 𓈖 𓊹 𓉱
+𓂋 𓏏 𓅂 𓈖 𓊹 𓈖 𓏏 𓆑 𓅓 𓊹 𓉱
+
+𓆣 𓂋 𓈖 𓊹 𓉱
+𓂋 𓏏 𓅂 𓈖 𓊹 𓈖 𓏏 𓆑 𓅓 𓊹 𓉱
+`;
+
+const NOLL_TEXT_NO = `
+ᚦᛖ ᚾᚩᛚᛚ ᚲᚢᛒᛖ ᛁᛋ ᚪ ᚦᚱᛖᛖ-ᛞᛁᛗᛖᚾᛋᛁᚩᚾᚪᛚ ᛚᚪᛏᛏᛁᚲᛖ ᚢᚠ ᛋᛈᚺᛖᚱᛖᛋ ᚪᚱᚱᚪᛜᛖᛞ ᛁᚾ ᚪ ᚲᚢᛒᛁᚲ ᚠᚱᚪᛗᛖᚹᚩᚱᚲ.
+ᛖᚪᚲᚺ ᛋᛈᚺᛖᚱᛖ ᚲᚩᚾᛏᚪᛁᚾᛋ ᚪ ᛈᚪᛁᚱ ᚢᚠ ᚲᚩᚢᚾᛏᛖᚱ-ᚱᚩᛏᚪᛏᛁᛜ ᛏᛖᛏᚱᚪᚺᛖᛞᚱᚪ (ᛗᛖᚱᚲᚪᛒᚪ).
+
+ᚲᚩᚱᛖ ᚠᛖᚪᛏᚢᚱᛖᛋ
+
+ᚲᚢᛒᛁᚲ ᛚᚪᛏᛏᛁᚲᛖ:
+ᛈᚱᚩᚢᛁᛞᛖᛋ ᚪ ᛋᛏᚪᛒᛚᛖ ᚠᚱᚪᛗᛖᚹᚩᚱᚲ.
+ᛖᚪᚲᚺ ᚾᚩᛞᛖ ᛁᛋ ᚪ ᛚᚩᚲᚪᛚ ᚠᛁᛖᛚᛞ ᛞᚩᛗᚪᛁᚾ.
+
+ᛏᛖᛏᚱᚪᚺᛖᛞᚱᚪ:
+ᛏᚹᚩ ᛁᚾᛏᛖᚱᛚᚩᚲᚲᛁᛜ ᛏᛖᛏᚱᚪᚺᛖᛞᚱᚪ ᛋᛈᛁᚾ.
+ᚱᚩᛏᚪᛏᛁᚩᚾᛋ ᛖᚾᚲᚩᛞᛖ ᛖᚾᛖᚱᚷᚤ.
+
+ᛚᛖᚷᛖᚾᛞ:
+ᛚᛖᚷᛖᚾᛞ ᛋᛈᛖᚪᚲᛋ ᚢᚠ ᚦᛖ ᛗᚩᛗᛖᚾᛏ ᚾᚪᛏᚺᚪᚾᚩᛚᛚ ᚪᛋᚲᛖᚾᛞᛖᛞ ᛏᚩ ᚦᛖ ᚺᛖᚪᚢᛖᚾᛋ, ᚠᛁᚾᛞᛁᛜ ᚺᛁᛗᛋᛖᛚᚠ ᚠᚪᚲᛖ-ᛏᚩ-ᚠᚪᚲᛖ ᚹᛁᛏᚺ ᚦᛖ ᚲᛖᛚᛖᛋᛏᛁᚪᛚ ᛒᚢᛚᛚ.
+`;
+
+const NOLL_TEXT_SA = `
+नोल घन इति एकः त्रि-आयामी गोलकजालः यः घन-ढाञ्चे व्यवस्थितः अस्ति, यत्र प्रत्येकं गोलके विपरीत-घूर्णन-चतुष्फलकयोः (Merkaba) युग्मं भवति। प्रणाली पूर्णतया गतिशीला अस्ति: चतुष्फलकानां घूर्णन-दराः परिवर्तनीयाः सन्ति, तथा च समीपस्थ-गोलकानां मध्ये परस्परक्रियाः उद्भवन्तः चरण-सम्बन्धाः अनुनाद-प्रतिमानानि च जनयन्ति।
+
+मुख्य विशेषताएँ
+
+गोलकानां घन-जालः:
+एकं स्थिरं, विस्तारणीयं ३D स्थानिकं ढाञ्चं प्रदाति।
+प्रत्येकं ग्रन्थिः (गोलकः) एकं स्थानीय-क्षेत्र-डोमेन-रूपेण कार्यं करोति यत् गतिशील-आन्तरिक-ज्यामितिम् आश्रययितुं समर्थं भवति।
+
+विपर्ययेन घूर्णमानाः चतुष्फलकाः:
+द्वौ परस्परबद्धौ चतुष्फलकौ प्रत्येकं गोलके विपरीतदिशि भ्रमन्ति।
+घूर्णनं परिवर्तनशीलम् अस्ति, यत् विभिन्नाः चरण-आवृत्ति-सम्बन्धाः उद्भवितुं शक्नोति।
+घूर्णनानि प्रत्येकं गोलके ऊर्जां, चक्रणं, कोणीय-संवेगं च सङ्केतयन्ति।
+
+किंवदन्ती:
+किंवदन्ती तस्य क्षणस्य विषयं वदति यदा नाथानोलः स्वर्गे आरूढवान्, आत्मानं दिव्यवृषभेण सह मुखाभिमुखं प्राप्तवान्। कम्पनस्य स्थाने स तं शृङ्गाभ्यां गृहीत्वा नक्षत्रेभ्यः एव घनस्य रहस्यं मल्लयुद्धं कृतवान्।
+`;
+
+const NOLL_TEXT_LA = `
+Cubus Noll est reticulum sphaerarum trium dimensionum in compage cubica dispositum, ubi unaquaeque sphaera par tetrahedrorum contra-rotantium (Merkaba) continet. Systema est plene dynamicum: celeritates rotationis tetrahedrorum sunt variabiles, et interactiones inter sphaeras vicinas relationes phasis emergentes et formas resonantiae producunt.
+
+Characteres Principales
+
+Reticulum Cubicum Sphaerarum:
+Praebet compagem spatialem 3D stabilem et scalabilem.
+Unusquisque nodus (sphaera) fungitur ut dominium campi localis capax geometriae internae dynamicae hospitandae.
+
+Tetrahedra Contra-Rotantia:
+Duo tetrahedra inter se iuncta in directiones oppositas intra unamquamque sphaeram rotant.
+Rotatio est variabilis, permittens relationes phasis et frequentiae diversas emergere.
+Rotationes energiam, spin, et momentum angulare intra unamquamque sphaeram codificant.
+
+Formae Undarum Emergentes per Proiectiones 2D:
+Proiectiones orthographicae vel planae rotationis tetrahedrorum formas undulatas revelant quae ab axe, phasi, et ratione rotationis dependent.
+"Permutatio" mentalis vel visualis rotationis 3D ex prospectu 2D observatoribus permittit extrahere mores dynamicos multiplices ex uno systemate.
+Hae proiectiones in formas geometricas recognoscibiles ad certas frequentias stabiliuntur, analogae undis stantibus, statibus propriis, vel formationibus particularum quantizatarum.
+
+Tempus ut Pons Dimensiva:
+Dum tetrahedra per tempus rotant, proiectiones eorum mappas temporales statuum rotationis 3D creant.
+Hoc tempus facit partem intrinsecam interpretationis geometricae, ubi proiectiones 2D informationem dynamicam de structura et interactionibus 3D codificant.
+
+Cubus Noll, igitur, permittit visualizationem directam resonantiae dynamicae, distributionis energiae, et alignmenti phasis, perceptionem et physicam abstractam coniungens.
+
+Legenda:
+Legenda narrat de momento quo Nathanoll in caelos ascendit, se facie ad faciem cum Tauro caelesti inveniens. Pro trepidando, eum cornibus arripuit, et arcana Cubi ab ipsis stellis luctatus est.
+`;
+
+const NOLL_TEXT_AR = `
+مكعب نول هو شبكة ثلاثية الأبعاد من المجالات مرتبة في إطار مكعب، حيث يحتوي كل مجال على زوج من رباعي الأسطح المتناوب الدوران (ميركابا). النظام ديناميكي بالكامل: معدلات دوران رباعي الأسطح متغيرة، والتفاعلات بين المجالات المجاورة تنتج علاقات طورية وأنماط رنين ناشئة.
+
+الميزات الأساسية
+
+شبكة مكعبة من المجالات:
+توفر إطارًا مكانيًا ثلاثي الأبعاد مستقرًا وقابلاً للتطوير.
+تعمل كل عقدة (مجال) كنطاق حقل محلي قادر على استضافة هندسة داخلية ديناميكية.
+
+رباعي الأسطح المتناوب الدوران:
+يدور اثنان من رباعي الأسطح المتشابكة في اتجاهين متعاكسين داخل كل مجال.
+الدوران متغير، مما يسمح بظهور علاقات طور وتردد مختلفة.
+تشفر الدورات الطاقة والدوران والزخم الزاوي داخل كل مجال.
+
+أسطورة:
+تتحدث الأسطورة عن اللحظة التي صعد فيها ناثانول إلى السماوات، ليجد نفسه وجهًا لوجه مع الثور السماوي. بدلاً من الارتجاف، أمسك به من قرنيه، وانتزع أسرار المكعب من النجوم نفسها.
+`;
+
+const NOLL_TEXT_DE = `
+Der Noll-Würfel ist ein dreidimensionales Gitter aus Sphären, die in einem kubischen Rahmen angeordnet sind, wobei jede Sphäre ein Paar gegenläufig rotierender Tetraeder (Merkaba) enthält. Das System ist vollständig dynamisch: Die Rotationsraten der Tetraeder sind variabel, und Wechselwirkungen zwischen benachbarten Sphären erzeugen emergente Phasenbeziehungen und Resonanzmuster.
+
+Kernmerkmale
+
+Kubisches Gitter aus Sphären:
+Bietet einen stabilen, skalierbaren räumlichen 3D-Rahmen.
+Jeder Knoten (Sphäre) fungiert als lokale Felddomäne, die in der Lage ist, dynamische interne Geometrie zu beherbergen.
+
+Gegenläufig rotierende Tetraeder:
+Zwei ineinandergreifende Tetraeder drehen sich in entgegengesetzte Richtungen innerhalb jeder Sphäre.
+Die Rotation ist variabel, was das Entstehen unterschiedlicher Phasen- und Frequenzbeziehungen ermöglicht.
+Rotationen kodieren Energie, Spin und Drehimpuls innerhalb jeder Sphäre.
+
+Legende:
+Die Legende erzählt von dem Moment, als Nathanoll in den Himmel aufstieg und sich dem himmlischen Stier gegenübersah. Anstatt zu zittern, packte er ihn bei den Hörnern und rang den Sternen selbst die Geheimnisse des Würfels ab.
+`;
+
+const NOLL_TEXT_ES = `
+El Cubo de Noll es una red tridimensional de esferas dispuestas en un marco cúbico, donde cada esfera contiene un par de tetraedros que giran en sentido contrario (Merkaba). El sistema es totalmente dinámico: las tasas de rotación de los tetraedros son variables, y las interacciones entre esferas vecinas producen relaciones de fase emergentes y patrones de resonancia.
+
+Características Principales
+
+Red Cúbica de Esferas:
+Proporciona un marco espacial 3D estable y escalable.
+Cada nodo (esfera) funciona como un dominio de campo local capaz de albergar geometría interna dinámica.
+
+Tetraedros de Rotación Contraria:
+Dos tetraedros entrelazados giran en direcciones opuestas dentro de cada esfera.
+La rotación es variable, permitiendo que surjan diferentes relaciones de fase y frecuencia.
+Las rotaciones codifican energía, espín y momento angular dentro de cada esfera.
+
+Leyenda:
+La leyenda habla del momento en que Nathanoll ascendió a los cielos, encontrándose cara a cara con el Toro celestial. En lugar de temblar, lo agarró por los cuernos y luchó para arrancar los secretos del Cubo de las mismas estrellas.
+`;
+
+const NOLL_TEXT_FA = `
+مکعب نول یک شبکه سه‌بعدی از کره‌ها است که در یک چارچوب مکعبی مرتب شده‌اند، جایی که هر کره شامل یک جفت چهاروجهی با چرخش مخالف (مرکابا) است. سیستم کاملاً پویا است: نرخ چرخش چهاروجهی‌ها متغیر است و تعاملات بین کره‌های همسایه روابط فاز و الگوهای رزونانس نوظهور را تولید می‌کند.
+
+ویژگی‌های اصلی
+
+شبکه مکعبی کره‌ها:
+یک چارچوب فضایی سه‌بعدی پایدار و مقیاس‌پذیر را فراهم می‌کند.
+هر گره (کره) به عنوان یک دامنه میدان محلی عمل می‌کند که قادر به میزبانی هندسه داخلی پویا است.
+
+چهاروجهی‌های با چرخش مخالف:
+دو چهاروجهی درهم‌تنیده در جهت‌های مخالف در داخل هر کره می‌چرخند.
+چرخش متغیر است و اجازه می‌دهد تا روابط فاز و فرکانس مختلف ظاهر شوند.
+چرخش‌ها انرژی، چرخش و تکانه زاویه‌ای را در داخل هر کره کدگذاری می‌کنند.
+
+افسانه:
+افسانه از لحظه‌ای سخن می‌گوید که ناتانول به آسمان‌ها صعود کرد و خود را رودررو با گاو آسمانی یافت. به جای لرزیدن، او را از شاخ‌هایش گرفت و رازهای مکعب را از خود ستارگان بیرون کشید.
+`;
+
+const NOLL_TEXTS: Record<Language, string> = {
+    'EN': NOLL_TEXT_EN,
+    'HE': NOLL_TEXT_HE,
+    'GR': NOLL_TEXT_GR,
+    'AM': NOLL_TEXT_AM,
+    'HI': NOLL_TEXT_HI,
+    'NO': NOLL_TEXT_NO,
+    'SA': NOLL_TEXT_SA,
+    'LA': NOLL_TEXT_LA,
+    'AR': NOLL_TEXT_AR,
+    'DE': NOLL_TEXT_DE,
+    'ES': NOLL_TEXT_ES,
+    'FA': NOLL_TEXT_FA
+};
+
+export const getNollCubeText = (lang: Language): string => {
+    return NOLL_TEXTS[lang] || NOLL_TEXT_EN;
 };
