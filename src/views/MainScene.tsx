@@ -1,7 +1,7 @@
 import React, { Suspense, useEffect, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, OrthographicCamera, PerspectiveCamera } from '@react-three/drei';
-import { useSceneController } from '../controllers/SceneController';
+import { useSceneController, IMPORTANT_ANGLES } from '../controllers/SceneController';
 
 // Only Import what we use
 import { MetatronGeometry } from './geometries/Metatron';
@@ -36,34 +36,36 @@ export const MainScene: React.FC<Props> = ({ controller }) => {
     useEffect(() => {
         if (controlsRef.current) {
             const controls = controlsRef.current;
-            // 0=Front, 1=Iso, 2=Top, 3=Right, 4=Back, 5=Left
-            switch (controller.activeViewIndex) {
-                case 0: // Front (N)
-                    controls.setPolarAngle(Math.PI / 2); // 90 deg
-                    controls.setAzimuthalAngle(0); // 0 deg
-                    break;
-                case 1: // Isometric (Cube Corner) ~35.264 deg elevation
-                    // Elevation angle from horizon is 35.264
-                    // Polar angle is from Zenith (90 - 35.264) = 54.736
-                    controls.setPolarAngle(54.736 * Math.PI / 180);
-                    controls.setAzimuthalAngle(Math.PI / 4); // 45 deg (NE)
-                    break;
-                case 2: // Top (Zenith)
-                    controls.setPolarAngle(0); // 0 deg
-                    controls.setAzimuthalAngle(0);
-                    break;
-                case 3: // Right (E)
-                    controls.setPolarAngle(Math.PI / 2);
-                    controls.setAzimuthalAngle(Math.PI / 2); // 90 deg
-                    break;
-                case 4: // Back (S)
-                    controls.setPolarAngle(Math.PI / 2);
-                    controls.setAzimuthalAngle(Math.PI); // 180 deg
-                    break;
-                case 5: // Left (W)
-                    controls.setPolarAngle(Math.PI / 2);
-                    controls.setAzimuthalAngle(-Math.PI / 2); // -90 deg
-                    break;
+
+
+            // Use the imported constant for full 26-angle support
+            const angle = IMPORTANT_ANGLES[controller.activeViewIndex];
+            if (angle) {
+
+                // OrbitControls uses:
+                // Polar Angle: 0 (Top) to PI (Bottom). Horizon is PI/2.
+                // Azimuth: Radians.
+
+                // Convert our "Geographic" coords to Spherical Radians
+                // EL: 90 (Top) -> Polar 0
+                // EL: 0 (Front) -> Polar PI/2
+                // EL: -90 (Bottom) -> Polar PI
+                const polar = (90 - angle.el) * (Math.PI / 180);
+
+                // AZ: 0 (Front) -> 0
+                // AZ: 90 (Right/East) -> PI/2 OR -PI/2?
+                // In ThreeJS default: +Z is front.
+                // Let's match typical math: 0 is +Z? 
+                // Let's rely on the previous switch case values to calibrate.
+                // Case 0 (Front, 0,0) -> Polar PI/2, Azimuth 0. Matches.
+                // Case 3 (Right, 90,0) -> Polar PI/2, Azimuth PI/2. Matches.
+                // Case 5 (Left, 270 or -90) -> Azimuth -PI/2.
+
+                const azimuth = angle.az * (Math.PI / 180);
+
+                controls.setPolarAngle(polar);
+                controls.setAzimuthalAngle(azimuth);
+                controls.update();
             }
         }
     }, [controller.activeViewIndex]);

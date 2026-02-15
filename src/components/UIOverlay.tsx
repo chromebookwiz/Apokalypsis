@@ -163,7 +163,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     width: '90%',
                     maxWidth: '800px',
                     height: '80vh',
-                    backgroundColor: '#fdfbf7', // Off-white/Cream background
+                    backgroundColor: controller.darkMode ? '#000000' : '#fdfbf7', // Dark Mode: Black
                     border: '4px solid #d4af37', // Gold Border
                     borderRadius: '15px',
                     boxShadow: '0 0 50px rgba(0,0,0,0.8), 0 0 20px rgba(212, 175, 55, 0.5)',
@@ -181,7 +181,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         flex: 1,
                         overflowY: 'auto',
                         padding: '40px',
-                        color: '#1a1a1a', // Dark text for contrast
+                        color: controller.darkMode ? '#ffd700' : '#1a1a1a', // Dark Mode: Gold Text
                         fontFamily: controller.language === 'HI' ? 'sans-serif' : 'Inter, sans-serif',
                         fontSize: '1.1rem',
                         lineHeight: '1.8',
@@ -196,7 +196,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                                 position: 'sticky',
                                 top: '0',
                                 float: 'right',
-                                background: 'rgba(255,255,255,0.8)',
+                                background: controller.darkMode ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.8)',
                                 border: '1px solid #d4af37',
                                 borderRadius: '50%',
                                 width: '30px',
@@ -363,26 +363,62 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     </button>
                 </div>
 
-                {/* BOTTOM CENTER: THE CROSS */}
+                {/* BOTTOM CENTER: THE CROSS NAVIGATION */}
                 <div style={{
                     position: 'fixed',
                     bottom: '40px',
                     left: '50%',
                     transform: 'translateX(-50%)',
                     pointerEvents: 'auto',
-                    zIndex: 100
+                    zIndex: 100,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '20px'
                 }}>
+                    {/* PREV CROSS (Small) */}
                     <button
                         className="sacred-text-btn"
-                        onClick={() => controller.cycleCameraView()}
+                        onClick={() => controller.prevCameraView()}
+                        style={{
+                            background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+                            color: 'rgba(255, 215, 0, 0.7)',
+                            textShadow: '0 0 10px rgba(255,215,0,0.3)',
+                            marginTop: '10px' // Align visual center
+                        }}
+                        title="Previous Angle"
+                    >
+                        <h1 style={{ margin: 0, fontSize: '2.5rem', lineHeight: 1 }}>☩</h1>
+                    </button>
+
+                    {/* CENTER CROSS (Big - Reset) */}
+                    <button
+                        className="sacred-text-btn"
+                        onClick={() => controller.resetCameraView()}
                         style={{
                             background: 'none', border: 'none', cursor: 'pointer', padding: 0,
                             color: '#ffd700',
                             textShadow: '0 0 15px rgba(255,215,0,0.5)',
-                            transition: 'all 0.5s ease'
+                            transition: 'all 0.5s ease',
+                            transform: 'scale(1.2)'
                         }}
+                        title="Reset to Front"
                     >
                         <h1 style={{ margin: 0, fontSize: '4rem', lineHeight: 1 }}>☩</h1>
+                    </button>
+
+                    {/* NEXT CROSS (Small) */}
+                    <button
+                        className="sacred-text-btn"
+                        onClick={() => controller.nextCameraView()}
+                        style={{
+                            background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+                            color: 'rgba(255, 215, 0, 0.7)',
+                            textShadow: '0 0 10px rgba(255,215,0,0.3)',
+                            marginTop: '10px'
+                        }}
+                        title="Next Angle"
+                    >
+                        <h1 style={{ margin: 0, fontSize: '2.5rem', lineHeight: 1 }}>☩</h1>
                     </button>
                 </div>
 

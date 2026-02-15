@@ -9,6 +9,47 @@ export type MetatronShape = 'NONE' | 'MERKABA' | 'CUBE' | 'OCTAHEDRON' | 'ICOSAH
 export type ViewMode = '2D' | '3D' | '4D';
 export type CameraType = 'PERSPECTIVE' | 'ORTHOGRAPHIC';
 
+// --- CAMERA ANGLES (Face, Edge, Corner) ---
+// 26 Total: 6 Faces + 12 Edges + 8 Corners
+export const IMPORTANT_ANGLES = [
+    // 1. FACES (6) - Distance closest
+    { az: 0, el: 0, label: 'FRONT' },
+    { az: 90, el: 0, label: 'RIGHT' },
+    { az: 180, el: 0, label: 'BACK' },
+    { az: 270, el: 0, label: 'LEFT' },
+    { az: 0, el: 90, label: 'TOP' },
+    { az: 0, el: -90, label: 'BOTTOM' },
+
+    // 2. EDGES (12) - Mid-distance
+    // Equatorial Edges (4)
+    { az: 45, el: 0, label: 'EDGE FL' },
+    { az: 135, el: 0, label: 'EDGE BL' },
+    { az: 225, el: 0, label: 'EDGE BR' },
+    { az: 315, el: 0, label: 'EDGE FR' },
+    // Top Edges (4)
+    { az: 0, el: 45, label: 'EDGE TOP-F' },
+    { az: 90, el: 45, label: 'EDGE TOP-R' },
+    { az: 180, el: 45, label: 'EDGE TOP-B' },
+    { az: 270, el: 45, label: 'EDGE TOP-L' },
+    // Bottom Edges (4)
+    { az: 0, el: -45, label: 'EDGE BOT-F' },
+    { az: 90, el: -45, label: 'EDGE BOT-R' },
+    { az: 180, el: -45, label: 'EDGE BOT-B' },
+    { az: 270, el: -45, label: 'EDGE BOT-L' },
+
+    // 3. CORNERS (8) - Furthest
+    // Top Corners (4) - Isometric Elevation ~35.264
+    { az: 45, el: 35.264, label: 'CORNER FL-T' },
+    { az: 135, el: 35.264, label: 'CORNER BL-T' },
+    { az: 225, el: 35.264, label: 'CORNER BR-T' },
+    { az: 315, el: 35.264, label: 'CORNER FR-T' },
+    // Bottom Corners (4)
+    { az: 45, el: -35.264, label: 'CORNER FL-B' },
+    { az: 135, el: -35.264, label: 'CORNER BL-B' },
+    { az: 225, el: -35.264, label: 'CORNER BR-B' },
+    { az: 315, el: -35.264, label: 'CORNER FR-B' }
+];
+
 export const useSceneController = () => {
     // --- STATE DEFINITIONS (Must be first) ---
     const [geometryType, setGeometryType] = useState<GeometryType>('METATRON');
@@ -152,6 +193,24 @@ export const useSceneController = () => {
     }, [isPlaying, geometryType, rotationSpeed]); // Add rotationSpeed to dependencies
 
 
+
+    // --- CAMERA ANGLES (Face, Edge, Corner) ---
+    // 26 Total: 6 Faces + 12 Edges + 8 Corners
+
+    useEffect(() => {
+        // Sync view state with active index
+        const target = IMPORTANT_ANGLES[activeViewIndex];
+        if (target) {
+            console.log('Camera Target:', target);
+            setAzimuthAngle(target.az);
+            setViewAngle(target.el);
+        } else {
+            console.warn('Camera Target Undefined for index:', activeViewIndex);
+            setActiveViewIndex(0); // Fallback
+        }
+    }, [activeViewIndex]);
+
+
     return {
         // State
         geometryType,
@@ -212,8 +271,21 @@ export const useSceneController = () => {
         stopSpeaking,
         setTesseractPreset,
         triggerCameraReset,
+
+
+
+
         cycleCameraView: () => {
-            setActiveViewIndex(prev => (prev + 1) % 6); // Cycle 0-5
+            setActiveViewIndex(prev => (prev + 1) % IMPORTANT_ANGLES.length);
+        },
+        nextCameraView: () => {
+            setActiveViewIndex(prev => (prev + 1) % IMPORTANT_ANGLES.length);
+        },
+        prevCameraView: () => {
+            setActiveViewIndex(prev => (prev - 1 + IMPORTANT_ANGLES.length) % IMPORTANT_ANGLES.length);
+        },
+        resetCameraView: () => {
+            setActiveViewIndex(0); // Index 0 is FRONT (0,0)
         },
         activeViewIndex,
         azimuthAngle,
