@@ -146,76 +146,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     </div>
                 </div>
 
-                {/* TOP RIGHT: Controls (Book + Language Dropdown + Dark Mode) */}
-                <div className={`corner-tr ${isRTL ? 'rtl-override-tr' : ''}`} style={{
-                    position: 'fixed',
-                    top: '40px',
-                    right: '40px',
-                    pointerEvents: 'auto',
-                    zIndex: 100,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '10px',
-                    alignItems: 'flex-end'
-                }}>
-                    {/* Golden Book Icon */}
-                    <button
-                        className="sacred-btn"
-                        onClick={() => controller.setLibraryOpen(!controller.libraryOpen)}
-                        title="Toggle Sacred Text"
-                        style={{
-                            fontSize: '1.5rem',
-                            background: 'none',
-                            border: 'none',
-                            color: controller.libraryOpen ? '#ffd700' : '#555',
-                            cursor: 'pointer',
-                            filter: controller.libraryOpen ? 'drop-shadow(0 0 5px #ffd700)' : 'none'
-                        }}
-                    >
-                        📖
-                    </button>
 
-                    {/* Language Dropdown */}
-                    <select
-                        value={controller.language}
-                        onChange={(e) => controller.setLang(e.target.value as any)}
-                        style={{
-                            fontSize: '1rem',
-                            background: 'rgba(0,0,0,0.8)',
-                            border: '1px solid #ffd700',
-                            color: '#ffd700',
-                            cursor: 'pointer',
-                            padding: '5px 10px',
-                            fontFamily: 'Orbitron, sans-serif',
-                            appearance: 'none', // Remove default arrow
-                            textAlign: 'right',
-                            width: '150px',
-                            outline: 'none'
-                        }}
-                    >
-                        {Object.entries(LANG_NAMES).map(([code, name]) => (
-                            <option key={code} value={code} style={{ background: '#000', color: '#ffd700' }}>
-                                {name}
-                            </option>
-                        ))}
-                    </select>
-
-                    {/* Dark Mode Toggle */}
-                    <button
-                        className="sacred-btn"
-                        onClick={controller.toggleDarkMode}
-                        title="Toggle Dark Mode"
-                        style={{
-                            fontSize: '1.5rem',
-                            background: 'none',
-                            border: 'none',
-                            color: controller.darkMode ? '#ffd700' : '#555',
-                            cursor: 'pointer'
-                        }}
-                    >
-                        {controller.darkMode ? '☀' : '☾'}
-                    </button>
-                </div>
 
                 {/* BOTTOM CENTER: THE CROSS */}
                 <div style={{
@@ -261,7 +192,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     </div>
                 </div>
 
-                {/* BR: Controls (Grid, Speed) */}
+                {/* BR: Controls (Book, Lang, Dark, Grid, Speed) */}
                 <div className={`corner-br ${isRTL ? 'rtl-override-br' : ''}`} style={{
                     bottom: '40px',
                     left: isRTL ? '40px' : 'auto',
@@ -272,6 +203,64 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     alignItems: 'flex-end',
                     gap: '15px'
                 }}>
+                    {/* Dark Mode Toggle */}
+                    <button
+                        className="sacred-btn"
+                        onClick={controller.toggleDarkMode}
+                        title="Toggle Dark Mode"
+                        style={{
+                            fontSize: '1.5rem',
+                            background: 'none',
+                            border: 'none',
+                            color: controller.darkMode ? '#ffd700' : '#555',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        {controller.darkMode ? '☀' : '☾'}
+                    </button>
+
+                    {/* Language Dropdown */}
+                    <select
+                        value={controller.language}
+                        onChange={(e) => controller.setLang(e.target.value as any)}
+                        style={{
+                            fontSize: '1rem',
+                            background: 'rgba(0,0,0,0.8)',
+                            border: '1px solid #ffd700',
+                            color: '#ffd700',
+                            cursor: 'pointer',
+                            padding: '5px 10px',
+                            fontFamily: 'Orbitron, sans-serif',
+                            appearance: 'none', // Remove default arrow
+                            textAlign: 'right',
+                            width: '150px',
+                            outline: 'none'
+                        }}
+                    >
+                        {Object.entries(LANG_NAMES).map(([code, name]) => (
+                            <option key={code} value={code} style={{ background: '#000', color: '#ffd700' }}>
+                                {name}
+                            </option>
+                        ))}
+                    </select>
+
+                    {/* Golden Book Icon */}
+                    <button
+                        className="sacred-btn"
+                        onClick={() => controller.setLibraryOpen(!controller.libraryOpen)}
+                        title="Toggle Sacred Text"
+                        style={{
+                            fontSize: '1.5rem',
+                            background: 'none',
+                            border: 'none',
+                            color: controller.libraryOpen ? '#ffd700' : '#555',
+                            cursor: 'pointer',
+                            filter: controller.libraryOpen ? 'drop-shadow(0 0 5px #ffd700)' : 'none'
+                        }}
+                    >
+                        📖
+                    </button>
+
                     {/* GRID SIZE CONTROLS */}
                     <div style={{ display: 'flex', gap: '5px' }}>
                         {[1, 2, 3, 4].map((size) => (
