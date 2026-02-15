@@ -57,6 +57,7 @@ export const useSceneController = () => {
     const [viewAngle, setViewAngle] = useState(0); // Polar (N/S)
     const [azimuthAngle, setAzimuthAngle] = useState(0); // Azimuth (E/W)
     const [activeViewIndex, setActiveViewIndex] = useState(0); // 0=Front, 1=Iso, 2=Top...
+    const [uiVisible, setUiVisible] = useState(false);
 
     // Speech Ref - Removed
     // const synthesis = window.speechSynthesis;
@@ -200,6 +201,8 @@ export const useSceneController = () => {
         setGridSize,
         viewAngle,
         setViewAngle,
+        uiVisible,
+        setUiVisible,
 
         // Actions
         toggleGeometry,
