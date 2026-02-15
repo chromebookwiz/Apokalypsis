@@ -32,14 +32,41 @@ const CameraManager: React.FC<{ controller: any }> = ({ controller }) => {
 export const MainScene: React.FC<Props> = ({ controller }) => {
     const controlsRef = useRef<any>(null);
 
-    // Camera Reset Logic
+    // Camera View Cycling Logic
     useEffect(() => {
-        if (controller.cameraResetTrigger > 0 && controlsRef.current) {
-            controlsRef.current.reset(); // Reset to initial position
-            controlsRef.current.setPolarAngle(Math.PI / 2); // 90 degrees (Equator)
-            controlsRef.current.setAzimuthalAngle(0); // 0 degrees
+        if (controlsRef.current) {
+            const controls = controlsRef.current;
+            // 0=Front, 1=Iso, 2=Top, 3=Right, 4=Back, 5=Left
+            switch (controller.activeViewIndex) {
+                case 0: // Front (N)
+                    controls.setPolarAngle(Math.PI / 2); // 90 deg
+                    controls.setAzimuthalAngle(0); // 0 deg
+                    break;
+                case 1: // Isometric (Cube Corner) ~35.264 deg elevation
+                    // Elevation angle from horizon is 35.264
+                    // Polar angle is from Zenith (90 - 35.264) = 54.736
+                    controls.setPolarAngle(54.736 * Math.PI / 180);
+                    controls.setAzimuthalAngle(Math.PI / 4); // 45 deg (NE)
+                    break;
+                case 2: // Top (Zenith)
+                    controls.setPolarAngle(0); // 0 deg
+                    controls.setAzimuthalAngle(0);
+                    break;
+                case 3: // Right (E)
+                    controls.setPolarAngle(Math.PI / 2);
+                    controls.setAzimuthalAngle(Math.PI / 2); // 90 deg
+                    break;
+                case 4: // Back (S)
+                    controls.setPolarAngle(Math.PI / 2);
+                    controls.setAzimuthalAngle(Math.PI); // 180 deg
+                    break;
+                case 5: // Left (W)
+                    controls.setPolarAngle(Math.PI / 2);
+                    controls.setAzimuthalAngle(-Math.PI / 2); // -90 deg
+                    break;
+            }
         }
-    }, [controller.cameraResetTrigger]);
+    }, [controller.activeViewIndex]);
 
     // Simple Dark Mode Logic
     const bgColor = controller.darkMode ? '#000000' : '#ffffff';
@@ -70,14 +97,23 @@ export const MainScene: React.FC<Props> = ({ controller }) => {
                 enableDamping
                 onChange={(e) => {
                     if (e?.target) {
-                        // getPolarAngle returns 0 (Top) to PI (Bottom)
-                        // User wants: +90 (Top), 0 (Equator), -90 (Bottom)
-                        const angle = e.target.getPolarAngle();
-                        const deg = Math.round(90 - (angle * 180 / Math.PI));
+                        // Polar: 0 (Top) -> PI (Bottom)
+                        // User view: +90 (Top), 0 (Equator), -90 (Bottom)
+                        const polar = e.target.getPolarAngle();
+                        const degLat = Math.round(90 - (polar * 180 / Math.PI));
+
+                        // Azimuth: 0 (Front/Z), + (Left), - (Right)
+                        // We map: 0=N, -90=E, 90=W, 180=S (Standard Compass)
+                        // Actually OrbitControls default: 0 is +Z.
+                        // Rotating camera left (orbit right) gives positive azimuth?
+                        // Let's stick to raw degrees first, mapped to compass in UI
+                        const azi = e.target.getAzimuthalAngle();
+                        const degLon = Math.round(azi * 180 / Math.PI);
 
                         // Throttle updates
-                        if (Math.abs(deg - controller.viewAngle) > 0) {
-                            controller.setViewAngle(deg);
+                        if (Math.abs(degLat - controller.viewAngle) > 0 || Math.abs(degLon - controller.azimuthAngle) > 0) {
+                            controller.setViewAngle(degLat);
+                            controller.setAzimuthAngle(degLon);
                         }
                     }
                 }}

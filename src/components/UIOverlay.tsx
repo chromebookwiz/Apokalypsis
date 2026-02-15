@@ -43,7 +43,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 gap: '5px',
                 pointerEvents: 'none',
                 opacity: 0.6
-            }}>
+            }} className="greek-column">
                 {GREEK_TITLE.split('').map((char, i) => (
                     <div key={i} style={{
                         fontSize: '1.5rem',
@@ -68,7 +68,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 gap: '5px',
                 pointerEvents: 'none',
                 opacity: 0.6
-            }}>
+            }} className="greek-column">
                 {GREEK_TITLE.split('').map((char, i) => (
                     <div key={i} style={{
                         fontSize: '1.5rem',
@@ -190,7 +190,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             }}>
                 <button
                     className="sacred-text-btn"
-                    onClick={() => controller.triggerCameraReset()}
+                    onClick={() => controller.cycleCameraView()}
                     style={{
                         background: 'none', border: 'none', cursor: 'pointer', padding: 0,
                         color: '#ffd700',
@@ -217,6 +217,9 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     textShadow: '0 0 10px rgba(255, 215, 0, 0.5)'
                 }}>
                     {Math.abs(controller.viewAngle)}° {controller.viewAngle > 0 ? 'N' : (controller.viewAngle < 0 ? 'S' : 'EQ')}
+                    <div>
+                        {Math.abs(controller.azimuthAngle)}° {controller.azimuthAngle > 0 ? 'E' : (controller.azimuthAngle < 0 ? 'W' : 'Z')}
+                    </div>
                 </div>
             </div>
 
@@ -294,6 +297,9 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 .sacred-btn { transition: all 0.2s; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
                 .sacred-btn:hover { background: rgba(255,215,0,0.2) !important; color: #ffd700 !important; }
                 .sacred-text-btn:hover h1 { text-shadow: 0 0 25px rgba(255,215,0,0.8) !important; }
+                @media (max-width: 768px) {
+                    .greek-column { display: none !important; }
+                }
             `}</style>
         </div>
     );

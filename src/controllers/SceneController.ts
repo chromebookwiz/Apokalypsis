@@ -54,7 +54,9 @@ export const useSceneController = () => {
     const [showNumbers, setShowNumbers] = useState(true);
     // blackMode removed
     const [zoom, setZoom] = useState(40);
-    const [viewAngle, setViewAngle] = useState(0);
+    const [viewAngle, setViewAngle] = useState(0); // Polar (N/S)
+    const [azimuthAngle, setAzimuthAngle] = useState(0); // Azimuth (E/W)
+    const [activeViewIndex, setActiveViewIndex] = useState(0); // 0=Front, 1=Iso, 2=Top...
 
     // Speech Ref - Removed
     // const synthesis = window.speechSynthesis;
@@ -207,6 +209,12 @@ export const useSceneController = () => {
         stopSpeaking,
         setTesseractPreset,
         triggerCameraReset,
+        cycleCameraView: () => {
+            setActiveViewIndex(prev => (prev + 1) % 6); // Cycle 0-5
+        },
+        activeViewIndex,
+        azimuthAngle,
+        setAzimuthAngle,
         darkMode,
         toggleDarkMode,
         selectNumber: (n: number) => console.log('Select:', n)
