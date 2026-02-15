@@ -61,8 +61,11 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             {/* WRAPPER FOR TOGGLEABLE UI */}
             <div style={{
                 opacity: controller.uiVisible ? 1 : 0,
-                pointerEvents: controller.uiVisible ? 'auto' : 'none', // Disable interaction when hidden
-                transition: 'opacity 0.5s ease',
+                // Fix: Wrapper itself shouldn't block clicks (so canvas behind is draggable)
+                // We use visibility to ensure hidden buttons aren't clickable
+                pointerEvents: 'none',
+                visibility: controller.uiVisible ? 'visible' : 'hidden',
+                transition: 'opacity 0.5s ease, visibility 0.5s ease',
                 width: '100%',
                 height: '100%',
                 position: 'fixed',
