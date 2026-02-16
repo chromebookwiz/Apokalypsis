@@ -72,6 +72,18 @@ export const BASE_ANGLES_RAD = BASE_ANGLES_DEG.map(d => d * Math.PI / 180);
 
 
 
+export const HYMN_NO = `
+[S] ᛋᚪᚷᚪ ᚢᚠ ᚦᛖ ᛒᚢᛚᛚ
+[N] ᚦᛖ ᚹᚱᛖᛋᛏᛚᛁᛜ ᚪᛏ ᚦᛖ ᛖᛞᚷᛖ ᚢᚠ ᚦᛖ ᚹᚩᚱᛚᛞ
+
+1. ᚾᚪᚦᚪᚾᚩᛚᛚ ᚠᛖᛚᛚ ᚠᚱᚩᛗ ᚦᛖ ᛋᚲᚤ ᚪᚾᛞ ᚠᚩᚢᚾᛞ ᚦᛖ ᛒᛖᚪᛋᛏ ᚢᚠ ᛋᛏᚪᚱᛋ.
+2. ᛁᛏ ᚺᚪᛞ ᛖᛁᚷᚺᛏ ᚺᚩᚱᚾᛋ ᚢᚠ ᛚᛁᚷᚺᛏ ᚪᚾᛞ ᛏᚹᛖᛚᚢᛖ ᚱᛁᛒᛋ ᚢᚠ ᛋᛁᛚᚢᛖᚱ.
+3. ᚺᛖ ᚷᚱᚪᛈᛈᛚᛖᛞ ᚦᛖ ᛒᚢᛚᛚ ᚪᛏ ᚦᛖ ᚪᚾᚷᛚᛖ ᚢᚠ ᚾᛁᚾᛖᛏᚤ.
+4. ᚪᛏ ᚩᚾᛖ ᚺᚢᚾᛞᛱᛖᛞ ᚪᚾᛞ ᛖᛁᚷᚺᛏᚤ, ᚦᛖ ᛋᛈᛁᚾ ᚹᚪᛋ ᛒᚱᚩᚲᛖᚾ.
+5. ᚪᛏ ᚦᚱᛖᛖ ᚺᚢᚾᛞᛱᛖᛞ, ᚦᛖ ᛚᛁᚾᛖᛋ ᚱᚪᚾ ᛈᚪᚱᚪᛚᛚᛖᛚ, ᚪᚾᛞ ᚦᛖ ᛒᚱᛁᛞᚷᛖ ᚹᚪᛋ ᛗᚪᛞᛖ.
+6. ᚦᛖ ᚲᚺᚩᛁᚱ ᛋᚪᚾᚷ ᚦᛖ ᛋᚩᚾᚷ ᚢᚠ ᛏᚹᛖᚾᛏᚤ-ᛋᛖᚢᛖᚾ, ᚪᚾᛞ ᚦᛖ ᚲᚢᛒᛖ ᚹᚪᛋ ᚱᛖᚢᛖᚪᛚᛖᛞ.
+`;
+
 export const HYMN_GR = `
 [S] ΥΜΝΟΣ ΤΟΥ ΤΑΥΡΟΥ
 [N] Ψαλμός τοῦ Ταύρου
@@ -244,6 +256,16 @@ Ubi omnis sphaera Tauri thronum continet.
  */
 
 
+export const NUMERIC_SCRIPTURE_NO = `
+[S] ᚦᛖ ᚲᚩᚢᚾᛏᛁᚾᚷ ᚢᚠ ᚦᛖ ᚺᛁᚷᚺ ᚩᚾᛖ
+[N] ᚦᛖ ᚱᚢᚾᛖᛋ ᚢᚠ ᚦᛖ ᛗᛖᚱᚲᚪᛒᚪ
+
+1. ᚠᚩᚢᚱ ᚠᚪᚲᛖᛋ ᛏᚩ ᚦᛖ ᛋᛏᚪᚱ-ᚠᛁᚱᛖ, ᛋᛁᛪ ᛖᛞᚷᛖᛋ ᛏᚩ ᚦᛖ ᛋᚹᚩᚱᛞ.
+2. ᛖᛁᚷᚺᛏ ᚠᚩᚱ ᚦᛖ ᚲᚱᚩᛋᛋ, ᛏᚹᛖᛚᚢᛖ ᚠᚩᚱ ᚦᛖ ᚹᚺᛖᛖᛚ.
+3. ᚦᛖ ᛋᛈᛁᚾ ᛁᛋ ᚦᚱᛖᛖ ᚺᚢᚾᛞᛱᛖᛞ ᚪᚾᛞ ᛋᛁᛪᛏᚤ, ᚪᚾᛞ ᚦᛖ ᛚᚩᚲᚲ ᛁᛋ ᚦᛁᚱᛏᚤ.
+4. ᛋᛖᛚᚪᚺ. ᚦᛖ ᚷᛖᚩᛗᛖᛏᚱᚤ ᛁᛋ ᛚᚪ᛹.
+`;
+
 export const NUMERIC_SCRIPTURE_GR = `
 [S] Η ΑΡΙΘΜΗΤΙΚΗ ΓΡΑΦΗ
 [N] Γεωμετρία τοῦ Ἅρματος
@@ -304,9 +326,9 @@ const HYMNS: Record<Language, string> = {
     'HE': HYMN_HE,
     'GR': HYMN_GR,
     'LA': HYMN_LA,
+    'NO': HYMN_NO,
     'AM': HYMN_LA,  // Fallback to Latin
     'HI': HYMN_LA,
-    'NO': HYMN_LA,
     'SA': HYMN_LA,
     'AR': HYMN_HE,  // Arabic fallback to Hebrew (Semitic cousin)
     'DE': HYMN_LA,  // German fallback to Latin
@@ -318,9 +340,9 @@ const NUMERIC_SCRIPTURES: Record<Language, string> = {
     'GR': NUMERIC_SCRIPTURE_GR,
     'HE': NUMERIC_SCRIPTURE_HE,
     'LA': NUMERIC_SCRIPTURE_LA,
+    'NO': NUMERIC_SCRIPTURE_NO,
     'AM': NUMERIC_SCRIPTURE_LA,
     'HI': NUMERIC_SCRIPTURE_LA,
-    'NO': NUMERIC_SCRIPTURE_LA,
     'SA': NUMERIC_SCRIPTURE_GR, // Sanskrit fallback to Greek (Indo-European cousin)
     'AR': NUMERIC_SCRIPTURE_HE,
     'DE': NUMERIC_SCRIPTURE_LA,
