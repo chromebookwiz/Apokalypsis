@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useLayoutEffect } from 'react';
+import { SNAP_ANGLE_RAD } from '../../data/scripture';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useSceneController } from '../../controllers/SceneController';
@@ -86,14 +87,21 @@ const CherubimNode: React.FC<{
     // Refs for Rotation
     const upRef = useRef<THREE.Mesh>(null);
     const downRef = useRef<THREE.Mesh>(null);
+    const rawAngle = useRef(0);
 
     useFrame((_, delta) => {
         if (controller.isPlaying && upRef.current && downRef.current) {
             const speed = delta * 0.5 * (controller.rotationSpeed || 1.0);
-            // Top -> Right (Negative Y)
-            upRef.current.rotation.y -= speed;
-            // Bottom -> Left (Positive Y)
-            downRef.current.rotation.y += speed;
+            rawAngle.current += speed;
+
+            // When parallelLock is ON, snap to nearest π/6 (30°)
+            const display = controller.parallelLock
+                ? Math.round(rawAngle.current / SNAP_ANGLE_RAD) * SNAP_ANGLE_RAD
+                : rawAngle.current;
+
+            // Top -> Right (Negative Y), Bottom -> Left (Positive Y)
+            upRef.current.rotation.y = -display;
+            downRef.current.rotation.y = display;
         }
     });
 

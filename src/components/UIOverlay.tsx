@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { useSceneController } from '../controllers/SceneController';
 import { getRevelation, getNollCubeText } from '../data/revelation';
+import { getHymn, getNumericScripture } from '../data/scripture';
 import { LANG_NAMES } from '../data/translations';
 
 const NollCubeContent = ({ language }: { language: any }) => {
@@ -217,6 +218,27 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         </button>
 
                         <NollCubeContent language={controller.language} />
+
+                        {/* Numeric Scripture */}
+                        <div style={{
+                            marginTop: '30px',
+                            borderTop: '2px solid #d4af37',
+                            paddingTop: '20px',
+                            whiteSpace: 'pre-wrap'
+                        }}>
+                            {getNumericScripture(controller.language)}
+                        </div>
+
+                        {/* Hymn of the Bull */}
+                        <div style={{
+                            marginTop: '30px',
+                            borderTop: '2px solid #d4af37',
+                            paddingTop: '20px',
+                            whiteSpace: 'pre-wrap',
+                            fontStyle: 'italic'
+                        }}>
+                            {getHymn(controller.language)}
+                        </div>
                     </div>
 
                     {/* Bottom Decoration */}
@@ -227,8 +249,6 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             {/* WRAPPER FOR TOGGLEABLE UI */}
             <div style={{
                 opacity: controller.uiVisible ? 1 : 0,
-                // Fix: Wrapper itself shouldn't block clicks (so canvas behind is draggable)
-                // We use visibility to ensure hidden buttons aren't clickable
                 pointerEvents: 'none',
                 visibility: controller.uiVisible ? 'visible' : 'hidden',
                 transition: 'opacity 0.5s ease, visibility 0.5s ease',
@@ -238,6 +258,39 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 top: 0,
                 left: 0
             }}>
+
+                {/* TOP CENTER: PARALLEL LOCK BUTTON */}
+                <div style={{
+                    position: 'fixed',
+                    top: '40px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    pointerEvents: 'auto',
+                    zIndex: 100
+                }}>
+                    <button
+                        onClick={() => controller.toggleParallelLock()}
+                        title={controller.parallelLock ? 'Unlock Parallel Lines' : 'Lock Parallel Lines'}
+                        style={{
+                            background: controller.parallelLock ? 'rgba(255, 215, 0, 0.15)' : 'none',
+                            border: controller.parallelLock ? '2px solid #ffd700' : '2px solid rgba(255, 215, 0, 0.4)',
+                            borderRadius: '10px',
+                            padding: '8px 16px',
+                            cursor: 'pointer',
+                            color: controller.parallelLock ? '#ffd700' : 'rgba(255, 215, 0, 0.6)',
+                            fontSize: '1.8rem',
+                            fontWeight: 'bold',
+                            letterSpacing: '2px',
+                            textShadow: controller.parallelLock ? '0 0 15px rgba(255,215,0,0.8)' : 'none',
+                            boxShadow: controller.parallelLock ? '0 0 20px rgba(255,215,0,0.3), inset 0 0 10px rgba(255,215,0,0.1)' : 'none',
+                            transition: 'all 0.3s ease',
+                            fontFamily: 'monospace',
+                            lineHeight: 1
+                        }}
+                    >
+                        ∥
+                    </button>
+                </div>
 
                 {/* LEFT COLUMN: GREEK TITLE (Vertical Upwards) */}
                 <div style={{

@@ -56,6 +56,7 @@ export const useSceneController = () => {
     const [colorMode, setColorMode] = useState<ColorMode>('GOLDEN');
     // bgMode removed logic
     const [autoRotate, setAutoRotate] = useState(false);
+    const [parallelLock, setParallelLock] = useState(false);
 
     // Simple Dark Mode
     const [darkMode, setDarkMode] = useState(false);
@@ -160,6 +161,10 @@ export const useSceneController = () => {
         setDarkMode(prev => !prev);
     };
 
+    const toggleParallelLock = () => {
+        setParallelLock(prev => !prev);
+    };
+
     // --- SPEECH LOGIC REMOVED ---
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const speakText = (_text: string) => {
@@ -217,6 +222,7 @@ export const useSceneController = () => {
         colorMode,
         // bgMode removed
         autoRotate,
+        parallelLock,
         language,
         libraryOpen,
         currentBookId,
@@ -241,6 +247,7 @@ export const useSceneController = () => {
         setColorMode,
         // setBgMode removed
         setAutoRotate,
+        setParallelLock,
         setLanguage,
         setLibraryOpen,
         setCurrentBookId,
@@ -271,6 +278,7 @@ export const useSceneController = () => {
         stopSpeaking,
         setTesseractPreset,
         triggerCameraReset,
+        toggleParallelLock,
 
 
 
