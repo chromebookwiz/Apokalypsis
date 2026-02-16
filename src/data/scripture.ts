@@ -348,6 +348,24 @@ export const NUMERIC_SCRIPTURE_HE = `
 יב. סלה. הגיאומטריה שלמה. השור שומר על הזוויות לנצח.
 `;
 
+export const NUMERIC_SCRIPTURE_LA = `
+[S] SCRIPTURA NUMERICA
+[N] Geometria Currus
+
+1. In principio erat Tetraedrum: 4 facies, 6 acies, 4 vertices.
+2. Et speculatum est, et nata est Merkaba: 8 facies, 12 acies, 8 vertices.
+3. Primus in dextram, secundus in sinistram se vertit; velocitas eorum una, differentia duae.
+4. Et anguli basis erant tres: 0, 120, et 240 — sacra partitio circuli.
+5. Radius basis erat radix octo nonarum: √(8/9) ≈ 0.9428 sphaerae.
+6. Basis in tertia parte negativa altitudinis resedit, et apex coronam tetigit.
+7. Cum rotae verterentur, ad singulos 30 gradus, acies in parallelo cecinerunt.
+8. Nam versio relativa 60 erat, et 60 dividit 360 exacte 6 vicibus.
+9. Tres harum erant superpositiones: 0, 120, 240 — cum ignis igni et aqua aquae occurreret.
+10. Tres harum erant parallelae: 60, 180, 300 — cum ignis iuxta aquam curreret, nunquam transiens.
+11. Et sic data est clausura: ad singulos π/6, rotae in linea requiescunt.
+12. Selah. Geometria completa est. Taurus angulos in aeternum custodit.
+`;
+
 import { Language } from './translations';
 
 const HYMNS: Record<Language, string> = {
@@ -355,29 +373,29 @@ const HYMNS: Record<Language, string> = {
     'GR': HYMN_GR,
     'HE': HYMN_HE,
     'LA': HYMN_LA,
-    'AM': HYMN_EN,  // Fallback to English
+    'AM': HYMN_EN,
     'HI': HYMN_EN,
     'NO': HYMN_EN,
     'SA': HYMN_EN,
-    'AR': HYMN_EN,
-    'DE': HYMN_EN,
-    'ES': HYMN_EN,
-    'FA': HYMN_EN,
+    'AR': HYMN_HE,  // Arabic fallback to Hebrew (Semitic cousin)
+    'DE': HYMN_LA,  // German fallback to Latin
+    'ES': HYMN_LA,  // Spanish fallback to Latin
+    'FA': HYMN_HE,  // Farsi fallback to Hebrew/Aramaic feel
 };
 
 const NUMERIC_SCRIPTURES: Record<Language, string> = {
     'EN': NUMERIC_SCRIPTURE_EN,
     'GR': NUMERIC_SCRIPTURE_GR,
     'HE': NUMERIC_SCRIPTURE_HE,
-    'LA': NUMERIC_SCRIPTURE_EN,  // Fallback
+    'LA': NUMERIC_SCRIPTURE_LA,
     'AM': NUMERIC_SCRIPTURE_EN,
     'HI': NUMERIC_SCRIPTURE_EN,
     'NO': NUMERIC_SCRIPTURE_EN,
-    'SA': NUMERIC_SCRIPTURE_EN,
-    'AR': NUMERIC_SCRIPTURE_EN,
-    'DE': NUMERIC_SCRIPTURE_EN,
-    'ES': NUMERIC_SCRIPTURE_EN,
-    'FA': NUMERIC_SCRIPTURE_EN,
+    'SA': NUMERIC_SCRIPTURE_GR, // Sanskrit fallback to Greek (Indo-European cousin)
+    'AR': NUMERIC_SCRIPTURE_HE,
+    'DE': NUMERIC_SCRIPTURE_LA,
+    'ES': NUMERIC_SCRIPTURE_LA,
+    'FA': NUMERIC_SCRIPTURE_HE,
 };
 
 export const getHymn = (lang: Language): string => {

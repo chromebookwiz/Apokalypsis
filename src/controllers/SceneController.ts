@@ -59,6 +59,7 @@ export const useSceneController = () => {
     const [autoRotate, setAutoRotate] = useState(false);
     const [parallelLock, setParallelLock] = useState(false);
     const [toneEnabled, setToneEnabled] = useState(false);
+    const [variedMode, setVariedMode] = useState(false);
     const [toneScale, setToneScale] = useState<ToneScale>('MERKABA');
 
     // Simple Dark Mode
@@ -180,6 +181,10 @@ export const useSceneController = () => {
         });
     };
 
+    const toggleVariedMode = () => {
+        setVariedMode(prev => !prev);
+    };
+
     // --- SPEECH LOGIC REMOVED ---
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const speakText = (_text: string) => {
@@ -239,6 +244,7 @@ export const useSceneController = () => {
         autoRotate,
         parallelLock,
         toneEnabled,
+        variedMode,
         toneScale,
         language,
         libraryOpen,
@@ -266,6 +272,7 @@ export const useSceneController = () => {
         setAutoRotate,
         setParallelLock,
         setToneEnabled,
+        setVariedMode,
         setToneScale,
         setLanguage,
         setLibraryOpen,
@@ -300,6 +307,7 @@ export const useSceneController = () => {
         toggleParallelLock,
         toggleTone,
         cycleToneScale,
+        toggleVariedMode,
 
 
 

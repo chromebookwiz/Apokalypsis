@@ -336,6 +336,27 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                             {controller.toneScale}
                         </button>
                     )}
+                    {controller.toneEnabled && (
+                        <button
+                            onClick={() => controller.toggleVariedMode()}
+                            title={controller.variedMode ? 'Disable Varied Mode' : 'Enable Varied Mode (Steps)'}
+                            style={{
+                                background: controller.variedMode ? 'rgba(255, 215, 0, 0.15)' : 'rgba(255, 215, 0, 0.05)',
+                                border: controller.variedMode ? '1px solid #ffd700' : '1px solid rgba(255, 215, 0, 0.3)',
+                                borderRadius: '8px',
+                                padding: '6px 10px',
+                                cursor: 'pointer',
+                                color: controller.variedMode ? '#ffd700' : 'rgba(255, 215, 0, 0.6)',
+                                fontSize: '1rem',
+                                transition: 'all 0.3s ease',
+                                lineHeight: 1,
+                                textShadow: controller.variedMode ? '0 0 10px rgba(255,215,0,0.5)' : 'none',
+                                boxShadow: controller.variedMode ? '0 0 15px rgba(255,215,0,0.2)' : 'none'
+                            }}
+                        >
+                            ▤
+                        </button>
+                    )}
                 </div>
 
                 {/* LEFT COLUMN: GREEK TITLE (Vertical Upwards) */}

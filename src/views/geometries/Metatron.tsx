@@ -89,7 +89,8 @@ const CherubimNode: React.FC<{
     // --- CHOIR TONE (per-node) ---
     const oscillatorsRef = useRef<OscillatorNode[]>([]);
     const gainNodeRef = useRef<GainNode | null>(null);
-    const prevToneState = useRef({ enabled: false, scale: '', speed: 0 });
+    const pannerRef = useRef<PannerNode | null>(null);
+    const prevToneState = useRef({ enabled: false, scale: '', speed: 0, varied: false });
 
     // Each cherubim gets a unique detune: spread evenly across ±3% of base
     const detuneRatio = useMemo(() => {
@@ -104,20 +105,45 @@ const CherubimNode: React.FC<{
 
         const masterGain = ctx.createGain();
         // Scale volume by number of nodes so choir doesn't clip
-        masterGain.gain.value = 0.06 / Math.sqrt(totalNodes);
-        masterGain.connect(ctx.destination);
-        gainNodeRef.current = masterGain;
+        masterGain.gain.value = 0.08 / Math.sqrt(totalNodes);
 
-        const harmonics = SCALE_HARMONICS[scale] || [1];
+        const panner = ctx.createPanner();
+        panner.panningModel = 'HRTF';
+        panner.distanceModel = 'inverse';
+        panner.refDistance = 1;
+        panner.maxDistance = 10000;
+        panner.rolloffFactor = 1;
+        panner.coneInnerAngle = 360;
+        panner.coneOuterAngle = 360;
+        panner.coneOuterGain = 0;
+        panner.positionX.value = position.x;
+        panner.positionY.value = position.y;
+        panner.positionZ.value = position.z;
+
+        panner.connect(ctx.destination);
+        masterGain.connect(panner);
+        gainNodeRef.current = masterGain;
+        pannerRef.current = panner;
+
+        const allHarmonics = SCALE_HARMONICS[scale] || [1];
+        const harmonics = controller.variedMode
+            ? [allHarmonics[nodeIndex % allHarmonics.length]]
+            : allHarmonics;
+
         const baseFreq = Math.max(20, Math.min(speed * BASE_HZ * detuneRatio, 4000));
         const oscs: OscillatorNode[] = [];
 
         harmonics.forEach((ratio, i) => {
             const osc = ctx.createOscillator();
             const harmGain = ctx.createGain();
-            osc.type = i === 0 ? 'sine' : 'triangle';
+            // If varied, we might be playing a higher harmonic but it's our only one, 
+            // so we use index i for type but maybe offset it if we want variety.
+            // Let's use the actual harmonic index for timbre:
+            const actualHarmonicIndex = controller.variedMode ? (nodeIndex % allHarmonics.length) : i;
+
+            osc.type = actualHarmonicIndex === 0 ? 'sine' : 'triangle';
             osc.frequency.value = baseFreq * ratio;
-            harmGain.gain.value = 1 / (i + 1);
+            harmGain.gain.value = 1 / (actualHarmonicIndex + 1);
             osc.connect(harmGain);
             harmGain.connect(masterGain);
             osc.start();
@@ -136,11 +162,19 @@ const CherubimNode: React.FC<{
             gainNodeRef.current.disconnect();
             gainNodeRef.current = null;
         }
+        if (pannerRef.current) {
+            pannerRef.current.disconnect();
+            pannerRef.current = null;
+        }
     };
 
     const updateFrequency = (speed: number, scale: string) => {
         const baseFreq = Math.max(20, Math.min(speed * BASE_HZ * detuneRatio, 4000));
-        const harmonics = SCALE_HARMONICS[scale] || [1];
+        const allHarmonics = SCALE_HARMONICS[scale] || [1];
+        const harmonics = controller.variedMode
+            ? [allHarmonics[nodeIndex % allHarmonics.length]]
+            : allHarmonics;
+
         oscillatorsRef.current.forEach((osc, i) => {
             if (i < harmonics.length) {
                 osc.frequency.value = baseFreq * harmonics[i];
@@ -180,7 +214,7 @@ const CherubimNode: React.FC<{
             if (Math.abs(rotSpeed - prev.speed) > 0.01) {
                 updateFrequency(rotSpeed, controller.toneScale);
             }
-            if (controller.toneScale !== prev.scale) {
+            if (controller.toneScale !== prev.scale || controller.variedMode !== prev.varied) {
                 startTone(rotSpeed, controller.toneScale);
             }
         }
@@ -188,7 +222,8 @@ const CherubimNode: React.FC<{
         prevToneState.current = {
             enabled: shouldPlay,
             scale: controller.toneScale,
-            speed: rotSpeed
+            speed: rotSpeed,
+            varied: controller.variedMode
         };
     });
 
@@ -274,6 +309,36 @@ export const MetatronGeometry: React.FC<Props> = ({ controller }) => {
     // --- 3. COLORS ---
     const sphereColor = "#b8860b";
     const gridColor = "#ffd700";
+
+    const worldPos = useMemo(() => new THREE.Vector3(), []);
+    const worldDir = useMemo(() => new THREE.Vector3(), []);
+
+    useFrame(({ camera }) => {
+        if (!sharedAudioCtx) return;
+        const listener = sharedAudioCtx.listener;
+
+        camera.getWorldPosition(worldPos);
+        camera.getWorldDirection(worldDir);
+        camera.up.clone().applyQuaternion(camera.quaternion).normalize();
+
+        // AudioContext.listener uses standard right-handed coordinates
+        // Orientation is: (forwardX, forwardY, forwardZ, upX, upY, upZ)
+        if (listener.positionX) {
+            listener.positionX.setTargetAtTime(worldPos.x, sharedAudioCtx.currentTime, 0.1);
+            listener.positionY.setTargetAtTime(worldPos.y, sharedAudioCtx.currentTime, 0.1);
+            listener.positionZ.setTargetAtTime(worldPos.z, sharedAudioCtx.currentTime, 0.1);
+            listener.forwardX.setTargetAtTime(worldDir.x, sharedAudioCtx.currentTime, 0.1);
+            listener.forwardY.setTargetAtTime(worldDir.y, sharedAudioCtx.currentTime, 0.1);
+            listener.forwardZ.setTargetAtTime(worldDir.z, sharedAudioCtx.currentTime, 0.1);
+            listener.upX.setTargetAtTime(camera.up.x, sharedAudioCtx.currentTime, 0.1);
+            listener.upY.setTargetAtTime(camera.up.y, sharedAudioCtx.currentTime, 0.1);
+            listener.upZ.setTargetAtTime(camera.up.z, sharedAudioCtx.currentTime, 0.1);
+        } else {
+            // Fallback for older browsers
+            listener.setPosition(worldPos.x, worldPos.y, worldPos.z);
+            listener.setOrientation(worldDir.x, worldDir.y, worldDir.z, camera.up.x, camera.up.y, camera.up.z);
+        }
+    });
 
     return (
         <group key={`metatron-${size}`}>
