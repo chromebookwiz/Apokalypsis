@@ -1,7 +1,6 @@
-export type Language = 'EN' | 'HE' | 'GR' | 'AM' | 'HI' | 'NO' | 'SA' | 'LA' | 'AR' | 'DE' | 'ES' | 'FA';
+export type Language = 'HE' | 'GR' | 'AM' | 'HI' | 'NO' | 'SA' | 'LA' | 'AR' | 'DE' | 'ES' | 'FA';
 
 export const LANG_NAMES: Record<Language, string> = {
-    'EN': 'English',
     'HE': 'עִבְרִית', // Hebrew
     'GR': 'ΕΛΛΗΝΙΚΑ', // Greek
     'AM': 'አማርኛ', // Amharic

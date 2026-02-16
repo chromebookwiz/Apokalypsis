@@ -1,11 +1,6 @@
 import { Language } from './translations';
 
-const REVELATION_EN = `
-[S] THE REVELATION
-[N] The Vision of the Merkaba
-1. After this I looked, and, behold, a door was opened in heaven...
-8. Holy, holy, holy, Lord God Almighty, which was, and is, and is to come.
-`;
+
 
 const REVELATION_HE = `
 [S] חזון יוחנן
@@ -97,52 +92,11 @@ export const getRevelation = (lang: Language): string => {
         case 'DE': return REVELATION_DE;
         case 'ES': return REVELATION_ES;
         case 'FA': return REVELATION_FA;
-        case 'EN':
-        default: return REVELATION_EN;
+        default: return REVELATION_LA;
     }
 };
 
-const NOLL_TEXT_EN = `
-The Noll Cube is a three-dimensional lattice of spheres arranged in a cubic framework, where each sphere contains a pair of counter-rotating tetrahedra (Merkaba). The system is fully dynamic: the rotation rates of the tetrahedra are variable, and interactions between neighboring spheres produce emergent phase relationships and resonance patterns.
 
-Core Features
-
-Cubic Lattice of Spheres:
-Provides a stable, scalable 3D spatial framework.
-Each node (sphere) functions as a local field domain capable of hosting dynamic internal geometry.
-
-Counter-Rotating Tetrahedra:
-Two interlocking tetrahedra spin in opposite directions inside each sphere.
-The rotation is variable, allowing different phase and frequency relationships to emerge.
-Rotations encode energy, spin, and angular momentum within each sphere.
-
-Emergent Waveforms through 2D Projections:
-Orthographic or planar projections of the tetrahedra’s rotation reveal wave-like patterns that depend on axis, phase, and rotation ratio.
-Mental or visual “swapping” of 3D rotation from a 2D perspective allows observers to extract multiple dynamic behaviors from a single system.
-These projections stabilize into recognizable geometric patterns at certain frequencies, analogous to standing waves, eigenstates, or quantized particle formations.
-
-Time as a Dimensional Bridge:
-As the tetrahedra rotate over time, their projections create temporal mappings of 3D rotational states.
-This makes time an intrinsic part of the geometric interpretation, where 2D projections encode dynamic information about 3D structure and interactions.
-
-The Noll Cube, therefore, allows a direct visualization of dynamic resonance, energy distribution, and phase alignment, bridging perception and abstract physics.
-
-Significance
-
-Intuitive Understanding: The Noll Cube enables observers to perceive complex rotational dynamics and emergent patterns without mathematics, making abstract concepts like spin networks, field interactions, and particle resonance visually accessible.
-
-Scalable Framework: It is inherently fractal-like; as the lattice grows, larger-scale interactions preserve the same geometric rules, illustrating self-similarity and universality.
-
-Bridge Between Physics and Geometry: The combination of 3D rotation, variable phase, and stabilizing projections serves as a visual model for the emergence of stable structures in fields, magnetism, and quantum phenomena.
-
-Potential Insight into Reality: By highlighting how patterns stabilize through frequency, phase, and perspective, the Noll Cube hints at fundamental principles of quantization and resonance, offering a geometric lens to understand the behavior of matter and energy.
-
-Summary:
-The Noll Cube is more than a shape — it is a dynamic geometric framework where time, rotation, and projection intersect to reveal the underlying structures of energy, resonance, and emergent order. By encoding 3D rotational dynamics in visually accessible 2D waveforms, it transforms abstract physics into an intuitive, interactive experience.
-
-Legend:
-Legend speaks of the moment Nathanoll ascended to the heavens, finding himself face-to-face with the celestial Bull. Instead of trembling, he grabbed it by the horns, and wrestled the secrets of the Cube from the stars themselves.
-`;
 
 const NOLL_TEXT_HE = `
 הקוביה של נול היא סריג תלת-ממדי של כדורים המסודרים במסגרת מעוקבת, שבה כל כדור מכיל זוג טטרהדרונים המסתובבים נגד כיוון השעון (מרכבה). המערכת היא דינמית לחלוטין: קצבי הסיבוב של הטטרהדרונים משתנים, והאינטראקציות בין כדורים סמוכים מייצרות יחסי פאזה מתהווים ודפוסי תהודה.
@@ -364,7 +318,6 @@ const NOLL_TEXT_FA = `
 `;
 
 const NOLL_TEXTS: Record<Language, string> = {
-    'EN': NOLL_TEXT_EN,
     'HE': NOLL_TEXT_HE,
     'GR': NOLL_TEXT_GR,
     'AM': NOLL_TEXT_AM,
@@ -379,5 +332,5 @@ const NOLL_TEXTS: Record<Language, string> = {
 };
 
 export const getNollCubeText = (lang: Language): string => {
-    return NOLL_TEXTS[lang] || NOLL_TEXT_EN;
+    return NOLL_TEXTS[lang] || NOLL_TEXT_LA;
 };

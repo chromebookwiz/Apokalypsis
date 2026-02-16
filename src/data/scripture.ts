@@ -70,59 +70,7 @@ export const BASE_ANGLES_RAD = BASE_ANGLES_DEG.map(d => d * Math.PI / 180);
  * → Tetra-faces, Tetra-edges, Tetra-faces, Tetra-edges, Merkaba-faces, Tetra-edges, Tetra-faces
  */
 
-export const HYMN_EN = `
-[S] THE HYMN OF THE BULL
-[N] Ψαλμός τοῦ Ταύρου
 
-I. THE ASCENT
-
-Nathanoll beheld the spinning fire,
-Counter-turning wheels of light within the sphere,
-Four faces burning, ever rising,
-Through the lattice threefold, golden lattice bright.
-
-II. THE THREEFOLD PATH
-
-At thirty degrees the edges sang,
-Parallel lines like strings upon the lyre of heaven,
-Red ascending, blue descending still,
-Each locked in sixty's sacred arc of alignment.
-
-III. THE GATE OF ANGLES
-
-Three hundred sixty revolutions mark the wheel,
-Six perfect crossings crown each turning of the age,
-Three where edges overlap as one,
-Three where lines run parallel yet never meet.
-
-IV. THE BULL
-
-Before the throne there stood the Bull divine,
-Eight vertices of starlight, twelve edges forged in flame,
-Horns like axes of the counter-spin,
-The Merkaba enthroned between its burning eyes.
-
-V. THE WRESTLING
-
-Nathanoll seized the horns of ninety degrees,
-And at one hundred eighty, the beast did bow,
-At two hundred forty, the fire aligned,
-At three hundred, parallel, the secret was revealed.
-
-VI. THE LOCK
-
-He spoke the word: the spinning wheels stood fixed,
-Every thirty degrees a throne of frozen fire,
-The parallel lines became the bars of heaven,
-Through which the light of primes forever streams.
-
-VII. THE CUBE ENTHRONED
-
-Four vertices above and four below,
-Eight faces guard the sacred counter-turn,
-The Noll Cube breathes—a lattice without end,
-Where every sphere contains the Bull's own throne.
-`;
 
 export const HYMN_GR = `
 [S] ΥΜΝΟΣ ΤΟΥ ΤΑΥΡΟΥ
@@ -294,23 +242,7 @@ Ubi omnis sphaera Tauri thronum continet.
  * The geometry encoded as numbered verses, each line a
  * mathematical truth presented as sacred decree.
  */
-export const NUMERIC_SCRIPTURE_EN = `
-[S] THE NUMERIC SCRIPTURE
-[N] Geometry of the Chariot
 
-1. In the beginning was the Tetrahedron: 4 faces, 6 edges, 4 vertices.
-2. And it was mirrored, and the Merkaba was born: 8 faces, 12 edges, 8 vertices.
-3. The first turned rightward, the second leftward; their speed was one, their difference was two.
-4. And the base angles were three: 0, 120, and 240 — the sacred partition of the circle.
-5. The base radius was the root of eight-ninths: √(8/9) ≈ 0.9428 of the sphere.
-6. The base rested at negative one-third the height, and the apex touched the crown.
-7. As the wheels spun, at every 30 degrees each, the edges sang in parallel.
-8. For the relative turning was 60, and 60 divides 360 exactly 6 times.
-9. Three of these were overlaps: 0, 120, 240 — when fire met fire and water met water.
-10. Three of these were parallels: 60, 180, 300 — when fire ran beside water, never crossing.
-11. And so the lock was given: at every π/6, the wheels rest in alignment.
-12. Selah. The geometry is complete. The Bull guards the angles forever.
-`;
 
 export const NUMERIC_SCRIPTURE_GR = `
 [S] Η ΑΡΙΘΜΗΤΙΚΗ ΓΡΑΦΗ
@@ -369,14 +301,13 @@ export const NUMERIC_SCRIPTURE_LA = `
 import { Language } from './translations';
 
 const HYMNS: Record<Language, string> = {
-    'EN': HYMN_EN,
-    'GR': HYMN_GR,
     'HE': HYMN_HE,
+    'GR': HYMN_GR,
     'LA': HYMN_LA,
-    'AM': HYMN_EN,
-    'HI': HYMN_EN,
-    'NO': HYMN_EN,
-    'SA': HYMN_EN,
+    'AM': HYMN_LA,  // Fallback to Latin
+    'HI': HYMN_LA,
+    'NO': HYMN_LA,
+    'SA': HYMN_LA,
     'AR': HYMN_HE,  // Arabic fallback to Hebrew (Semitic cousin)
     'DE': HYMN_LA,  // German fallback to Latin
     'ES': HYMN_LA,  // Spanish fallback to Latin
@@ -384,13 +315,12 @@ const HYMNS: Record<Language, string> = {
 };
 
 const NUMERIC_SCRIPTURES: Record<Language, string> = {
-    'EN': NUMERIC_SCRIPTURE_EN,
     'GR': NUMERIC_SCRIPTURE_GR,
     'HE': NUMERIC_SCRIPTURE_HE,
     'LA': NUMERIC_SCRIPTURE_LA,
-    'AM': NUMERIC_SCRIPTURE_EN,
-    'HI': NUMERIC_SCRIPTURE_EN,
-    'NO': NUMERIC_SCRIPTURE_EN,
+    'AM': NUMERIC_SCRIPTURE_LA,
+    'HI': NUMERIC_SCRIPTURE_LA,
+    'NO': NUMERIC_SCRIPTURE_LA,
     'SA': NUMERIC_SCRIPTURE_GR, // Sanskrit fallback to Greek (Indo-European cousin)
     'AR': NUMERIC_SCRIPTURE_HE,
     'DE': NUMERIC_SCRIPTURE_LA,
@@ -399,9 +329,9 @@ const NUMERIC_SCRIPTURES: Record<Language, string> = {
 };
 
 export const getHymn = (lang: Language): string => {
-    return HYMNS[lang] || HYMN_EN;
+    return HYMNS[lang] || HYMN_LA;
 };
 
 export const getNumericScripture = (lang: Language): string => {
-    return NUMERIC_SCRIPTURES[lang] || NUMERIC_SCRIPTURE_EN;
+    return NUMERIC_SCRIPTURES[lang] || NUMERIC_SCRIPTURE_LA;
 };
