@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useSceneController } from '../controllers/SceneController';
 import { getRevelation, getNollCubeText } from '../data/revelation';
 import { getHymn, getNumericScripture } from '../data/scripture';
-import { LANG_NAMES } from '../data/translations';
+import { LANG_NAMES, UI_STRINGS } from '../data/translations';
 
 const NollCubeContent = ({ language }: { language: any }) => {
     const text = getNollCubeText(language);
@@ -23,7 +23,8 @@ interface Props {
 export const UIOverlay: React.FC<Props> = ({ controller }) => {
     const isRTL = controller.language === 'HE';
     const isAmharic = controller.language === 'AM';
-    const GREEK_TITLE = "ΑΠΟΚΑΛΥΨΙΣ"; // Always Greek Title
+    const ui = UI_STRINGS[controller.language] || UI_STRINGS['LA'];
+    const GREEK_TITLE = "ΑΠΟΚΑΛΥΨΙΣ"; // Base title, but side columns can be localized
 
     // Local state for Info Modal
     const [showInfo, setShowInfo] = React.useState(false);
@@ -87,7 +88,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 <button
                     className="sacred-btn"
                     onClick={() => controller.setUiVisible(!controller.uiVisible)}
-                    title={controller.uiVisible ? "Hide UI" : "Show UI"}
+                    title={controller.uiVisible ? ui.hide_ui : ui.show_ui}
                     style={{
                         fontSize: '1.5rem',
                         background: 'none',
@@ -108,7 +109,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         <button
                             className="sacred-btn"
                             onClick={() => setShowInfo(!showInfo)}
-                            title="The Noll Cube Info"
+                            title={ui.info}
                             style={{
                                 fontSize: '1.5rem',
                                 background: 'none',
@@ -273,7 +274,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 }}>
                     <button
                         onClick={() => controller.toggleParallelLock()}
-                        title={controller.parallelLock ? 'Unlock Parallel Lines' : 'Lock Parallel Lines'}
+                        title={controller.parallelLock ? ui.unlock_parallel : ui.lock_parallel}
                         style={{
                             background: controller.parallelLock ? 'rgba(255, 215, 0, 0.15)' : 'none',
                             border: controller.parallelLock ? '2px solid #ffd700' : '2px solid rgba(255, 215, 0, 0.4)',
@@ -295,7 +296,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     </button>
                     <button
                         onClick={() => controller.toggleTone()}
-                        title={controller.toneEnabled ? 'Mute Tones' : 'Enable Tones'}
+                        title={controller.toneEnabled ? ui.mute_tones : ui.enable_tones}
                         style={{
                             background: controller.toneEnabled ? 'rgba(255, 215, 0, 0.15)' : 'none',
                             border: controller.toneEnabled ? '2px solid #ffd700' : '2px solid rgba(255, 215, 0, 0.4)',
@@ -316,7 +317,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     {controller.toneEnabled && (
                         <button
                             onClick={() => controller.cycleToneScale()}
-                            title={`Scale: ${controller.toneScale}`}
+                            title={`${ui.scale}: ${controller.toneScale}`}
                             style={{
                                 background: 'rgba(255, 215, 0, 0.1)',
                                 border: '1px solid rgba(255, 215, 0, 0.5)',
@@ -339,7 +340,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     {controller.toneEnabled && (
                         <button
                             onClick={() => controller.toggleVariedMode()}
-                            title={controller.variedMode ? 'Disable Varied Mode' : 'Enable Varied Mode (Steps)'}
+                            title={controller.variedMode ? ui.disable_varied : ui.enable_varied}
                             style={{
                                 background: controller.variedMode ? 'rgba(255, 215, 0, 0.15)' : 'rgba(255, 215, 0, 0.05)',
                                 border: controller.variedMode ? '1px solid #ffd700' : '1px solid rgba(255, 215, 0, 0.3)',
@@ -451,7 +452,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     <button
                         className="sacred-btn"
                         onClick={() => controller.setLibraryOpen(!controller.libraryOpen)}
-                        title="Toggle Sacred Text"
+                        title={ui.toggle_text}
                         style={{
                             fontSize: '1.5rem',
                             background: 'none',
@@ -470,7 +471,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     <button
                         className="sacred-btn"
                         onClick={controller.toggleDarkMode}
-                        title="Toggle Dark Mode"
+                        title={ui.toggle_dark}
                         style={{
                             fontSize: '1.5rem',
                             background: 'none',
@@ -505,7 +506,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                             textShadow: '0 0 10px rgba(255,215,0,0.3)',
                             marginTop: '10px' // Align visual center
                         }}
-                        title="Previous Angle"
+                        title={ui.prev}
                     >
                         <h1 style={{ margin: 0, fontSize: '2.5rem', lineHeight: 1 }}>☩</h1>
                     </button>
@@ -521,7 +522,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                             transition: 'all 0.5s ease',
                             transform: 'scale(1.2)'
                         }}
-                        title="Reset to Front"
+                        title={ui.reset}
                     >
                         <h1 style={{ margin: 0, fontSize: '4rem', lineHeight: 1 }}>☩</h1>
                     </button>
@@ -536,7 +537,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                             textShadow: '0 0 10px rgba(255,215,0,0.3)',
                             marginTop: '10px'
                         }}
-                        title="Next Angle"
+                        title={ui.next}
                     >
                         <h1 style={{ margin: 0, fontSize: '2.5rem', lineHeight: 1 }}>☩</h1>
                     </button>
@@ -578,7 +579,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     <button
                         className="sacred-btn desktop-only"
                         onClick={controller.toggleDarkMode}
-                        title="Toggle Dark Mode"
+                        title={ui.toggle_dark}
                         style={{
                             fontSize: '1.5rem',
                             background: 'none',
@@ -596,7 +597,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     <button
                         className="sacred-btn desktop-only"
                         onClick={() => controller.setLibraryOpen(!controller.libraryOpen)}
-                        title="Toggle Sacred Text"
+                        title={ui.toggle_text}
                         style={{
                             fontSize: '1.5rem',
                             background: 'none',

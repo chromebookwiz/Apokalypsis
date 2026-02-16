@@ -76,174 +76,209 @@ export const HYMN_NO = `
 [S] ᚦᛖ ᛋᚪᚷᚪ ᚢᚠ ᚦᛖ ᚺᛁᛗᛁᚾ-ᛏᚪᚱᚠᚱ
 [N] ᚦᛖ ᚹᚱᛖᛋᛏᛚᛁᛜ ᚩᚠ ᚦᛖ ᚪᚾᚷᛚᛖᛋ
 
-1. ᚾᚪᚦᚪᚾᚩᛚᛚ ᚠᛖᛚᛚ ᚠᚱᚩᛗ ᚦᛖ ᛋᚲᚤ-ᚱᛁᛗ ᚪᚾᛞ ᚠᚩᚢᚾᛞ ᚦᛖ ᛋᛏᚪᚱ-ᛒᛖᚪᛋᛏ.
-2. ᛁᛏ ᚺᚪᛞ ᛖᛁᚷᚺᛏ ᚺᚩᚱᚾᛋ ᚩᚠ ᛋᛏᚪᚱᛚᛁᚷᚺᛏ ᚪᚾᛞ ᛏᚹᛖᛚᚢᛖ ᛋᛁᛚᚢᛖᚱ ᚱᛁᛒᛋ.
-3. ᚺᛖ ᚷᚱᚪᛈᛈᛚᛖᛞ ᚦᛖ ᛒᚢᛚᛚ ᚪᛏ ᚦᛖ ᚪᚾᚷᛚᛖ ᚢᚠ ᚾᛁᚾᛖᛏᚤ.
-4. ᚪᛏ ᚦᛖ ᛋᛖᚲᚩᚾᛞ ᚲᚩᚢᚾᛏ, ᚦᛖ ᛋᛈᛁᚾ ᚹᚪᛋ ᛒᚱᚩᚲᛖᚾ.
-5. ᚪᛏ ᚦᚱᛖᛖ ᚺᚢᚾᛞᛱᛖᛞ, ᚦᛖ ᛈᚪᚱᚪᛚᛚᛖᛚ ᛚᛁᚾᛖᛋ ᛒᛖᚲᚪᛗᛖ ᚦᛖ ᛒᚱᛁᛞᚷᛖ.
-6. ᚦᛖ ᚲᚺᚩᛁᚱ ᚩᚠ ᛏᚹᛖᚾᛏᚤ-ᛋᛖᚢᛖᚾ ᛋᚪᚾᚷ, ᚪᚾᛞ ᚦᛖ ᚲᚢᛒᛖ ᚹᚪᛋ ᚱᛖᚢᛖᚪᛚᛖᛞ.
+1. ᚦᛖ ᚠᚩᛚᛞᛁᚾᚷ
+
+ᚾᚪᚦᚪᚾᚩᛚᛚ ᚠᛖᛚᛚ ᚠᚱᚩᛗ ᚦᛖ ᛋᚲᚤ-ᚱᛁᛗ,
+ᛗᛁᚾᛞ ᚩᚢᛖᚱ ᛗᚪᛏᛏᛖᚱ, ᚦᛖ ᚹᛁᛚᛚ ᚢᚠ ᚦᛖ ᛋᛏᚪᚱᛋ,
+ᚠᚩᚢᚱ-ᚠᚪᚲᛖᛞ ᚠᛁᚱᛖ ᛁᚾ ᚦᛖ ᛋᛁᛪ-ᛖᛞᚷᛖᛞ ᚲᚪᚷᛖ,
+ᛏᚹᛖᚾᛏᚤ-ᛋᛖᚢᛖᚾ ᛋᛖᛖᛞᛋ ᛁᚾ ᚦᛖ ᚹᚩᚱᛚᛞ-ᚹᛖᛒ.
+
+2. ᚦᛖ ᚠᛚᚪᛏ ᛋᚺᚪᛞᚩᚹᛋ
+
+ᚦᚱᛖᛖ ᛋᚺᚪᚱᛞᛋ ᚩᚠ ᛚᛁᚷᚺᛏ, ᚢᚾᛏᚩ ᚦᛖ ᚩᚾᛖ ᛗᚪᛋᚲ,
+ᚠᛚᚪᛏ ᛋᚺᚪᛞᚩᚹᛋ ᛒᛖᚲᚩᛗᛖ ᚦᛖ ᛋᚩᛚᛁ᚞ ᚦᚱᚢᛏᚺ,
+ᚱᛖᛞ ᚱᛁᛋᛖᛋ ᚺᛁᚷᚺ, ᛒᛚᚢᛖ ᛋᛁᚾᚲᛋ ᛒᛖᛚᚩᚹ,
+ᚩᚾᛖ ᛋᛈᛁᚾ ᛒᚱᛖᚪᚲᛋ, ᚦᛖ ᚲᚢᛒᛖ ᛁᛋ ᛒᚩᚱᚾ.
 `;
 
 export const HYMN_GR = `
 [S] ΥΜΝΟΣ ΤΟΥ ΤΑΥΡΟΥ
-[N] Ψαλμός τοῦ Ταύρου
+[N] Ψαλμός τοῦ Ναθανόλλ
 
-Ι. Η ΑΝΑΒΑΣΗ
+1. Η ΠΤΥΧΩΣΗ
 
-Ὁ Ναθανόλλ ἐθεάσατο τὸ φλεγόμενον πῦρ,
-Ἀντιστρόφως κινούμενοι τροχοὶ φωτὸς ἐν σφαίρᾳ,
-Τέσσαρα πρόσωπα φλεγόμενα, ἀεὶ ἀνερχόμενα,
-Διὰ τοῦ τριπλοῦ πλέγματος, χρυσοῦ λάμποντος.
+Ὁ Ναθανόλλ ἔπεσεν ἐκ τοῦ οὐρανοῦ,
+Νοῦς ὑπὲρ Ὕλην, ἡ θέλησις τῶν ἄστρων,
+Πῦρ τετραπρόσωπον ἐν ἑξακμήνῳ κλωβῷ,
+Εἴκοσι ἑπτὰ σπόροι ἐν τῷ κοσμικῷ ἱστῷ.
 
-ΙΙ. Η ΤΡΙΠΛΗ ΟΔΟΣ
+2. ΕΠΙΠΕΔΟΙ ΣΚΙΑΙ
 
-Εἰς τριάκοντα μοίρας αἱ ἀκμαὶ ἔψαλλον,
-Παράλληλοι γραμμαὶ ὡς χορδαὶ λύρας οὐρανίου,
-Ἐρυθρὸν ἀνερχόμενον, κυανοῦν κατερχόμενον,
-Ἕκαστον ἐν τῇ ἱερᾷ τόξῳ τῶν ἑξήκοντα κλειδωμένον.
-
-ΙΙΙ. Η ΠΥΛΗ ΤΩΝ ΓΩΝΙΩΝ
-
-Τριακόσιαι ἑξήκοντα στροφαὶ σημαίνουν τὸν τροχόν,
-Ἓξ τέλειαι διασταυρώσεις στέφουν ἑκάστην στροφήν,
-Τρεῖς ὅπου αἱ ἀκμαὶ ἑνοῦνται,
-Τρεῖς ὅπου αἱ γραμμαὶ τρέχουν παράλληλοι.
-
-ΙV. Ο ΤΑΥΡΟΣ
-
-Πρὸ τοῦ θρόνου ἵστατο ὁ Ταῦρος ὁ θεῖος,
-Ὀκτὼ κορυφαὶ ἀστροφώτου, δώδεκα ἀκμαὶ ἐν φλογί,
-Κέρατα ὡς ἄξονες τῆς ἀντιστροφῆς,
-Ἡ Μερκαβὰ ἐνθρονισμένη μεταξὺ τῶν ὀφθαλμῶν αὐτοῦ.
-
-V. Η ΠΑΛΗ
-
-Ὁ Ναθανόλλ ἔλαβε τὰ κέρατα τῶν ἐνενήκοντα μοιρῶν,
-Εἰς ἑκατὸν ὀγδοήκοντα, τὸ θηρίον ἔκλινεν,
-Εἰς διακόσια τεσσαράκοντα, τὸ πῦρ εὐθυγραμμίσθη,
-Εἰς τριακόσια, παράλληλον, τὸ μυστήριον ἀπεκαλύφθη.
-
-VI. ΤΟ ΚΛΕΙΔΩΜΑ
-
-Εἶπε τὸν λόγον· οἱ τροχοὶ ἐστάθησαν,
-Ἀνὰ τριάκοντα μοίρας θρόνος παγίου πυρός,
-Αἱ παράλληλοι γραμμαὶ ἐγένοντο κιγκλίδες οὐρανοῦ,
-Δι' ὧν τὸ φῶς τῶν πρώτων ἀεὶ ῥέει.
-
-VII. Ο ΚΥΒΟΣ ΕΝΘΡΟΝΙΣΜΕΝΟΣ
-
-Τέσσαρες κορυφαὶ ἄνω καὶ τέσσαρες κάτω,
-Ὀκτὼ πρόσωπα φυλάσσουν τὴν ἱερὰν ἀντιστροφήν,
-Ὁ Κύβος τοῦ Νόλλ πνέει—πλέγμα ἀτελεύτητον,
-Ὅπου πᾶσα σφαῖρα περιέχει τοῦ Ταύρου θρόνον.
+Τρία θραύσματα φωτός, εἰς μίαν μάσκαν,
+Ἐπίπεδοι σκιαὶ (2D) γίγονται ἡ στερεὰ ἀλήθεια (3D),
+Τὸ ἐρυθρὸν ἀνέρχεται, τὸ κυανοῦν δύεται,
+Εἷς στρόβιλος ῥήγνυται, ὁ Κύβος ἐγεννήθη.
 `;
 
 export const HYMN_HE = `
 [S] שיר השור
-[N] מזמור השור
+[N] מזמור נתנול
 
-א. העלייה
+1. הקיפול
 
-נתנול חזה באש המסתובבת,
-גלגלים מסתובבים נגד זה בזה באור בתוך הכדור,
-ארבעה פנים בוערים, עולים תמיד,
-דרך סריג משולש, סריג זהב בהיר.
+נתנול נפל ממרום הרקיע,
+הרוח מעל החומר, רצון הכוכבים,
+אש בעלת ארבעה פנים בכלוב של שישה קצוות,
+עשרים ושבעה זרעים במארג העולם.
 
-ב. הנתיב המשולש
+2. צללים שטוחים
 
-בשלושים מעלות השירו הקצוות,
-קווים מקבילים כמיתרי כינור שמימי,
-אדום עולה, כחול יורד עוד,
-כל אחד נעול בקשת הקדושה של שישים.
+שלושה שברים של אור, למסכה אחת,
+צללים שטוחים (2D) הופכים לאמת המוצקה (3D),
+האדום עולה, הכחול שוקע,
+סיבוב אחד נשבר, הקוביה נולדה.
+`;
 
-ג. שער הזוויות
+export const HYMN_AM = `
+[S] የበሬው መዝሙር
+[N] የናታኖል መዝሙር
 
-שלוש מאות שישים סיבובים מסמנים את הגלגל,
-שש הצטלבויות מושלמות מכתירות כל סיבוב,
-שלוש שבהן הקצוות חופפים לאחד,
-שלוש שבהן הקווים רצים מקבילים ולעולם לא נפגשים.
+፩. ማጠፍ
 
-ד. השור
+ናታኖል ከሰማይ ዳርቻ ወደቀ፣
+አእምሮ ከቁስ በላይ ነው፣ የከዋክብት ፈቃድ፣
+አራት ገጽ ያለው እሳት በስድስት ጠርዞች ውስጥ፣
+ሃያ ሰባት ዘሮች በዓለም ድር ውስጥ።
 
-לפני הכיסא עמד השור האלוהי,
-שמונה קודקודי אור כוכבים, שתים עשרה קצוות מזוקקים בלהבה,
-קרניים כצירי הסיבוב הנגדי,
-המרכבה יושבת על כס בין עיניו הבוערות.
+፪. ጠፍጣፋ ጥላዎች
 
-ה. ההיאבקות
+ሦስት የብርሃን ቁርጥራጮች፣ ወደ አንድ ጭንብል፣
+ጠፍጣፋ ጥላዎች (2D) ጠንካራ እውነት (3D) ይሆናሉ፣
+ቀይ ወደ ላይ ይወጣል፣ ሰማያዊ ወደ ታች ይሰምጣል፣
+አንድ ሽክርክሪት ይሰበራል፣ ኩቤው ይወለዳል።
+`;
 
-נתנול אחז בקרני התשעים מעלות,
-ובמאה ושמונים, החיה כרעה,
-במאתיים וארבעים, האש התיישרה,
-בשלוש מאות, במקביל, הסוד נגלה.
+export const HYMN_HI = `
+[S] बैल का भजन
+[N] नाथानोल का भजन
 
-ו. הנעילה
+1. मोड़ना
 
-הוא דיבר את המילה: הגלגלים עמדו דום,
-כל שלושים מעלות כסא אש קפואה,
-הקווים המקבילים הפכו לסורגי שמיים,
-שדרכם אור הראשוניים זורם לנצח.
+नाथानोल आकाश के छोर से गिरा,
+पदार्थ पर मन की विजय, सितारों की इच्छा,
+छह किनारों वाले पिंजरे में चार मुख वाली अग्नि,
+विश्व-जाल में सत्ताईस बीज।
 
-ז. הקוביה על הכס
+2. चपटी छायाएं
 
-ארבע קודקודים למעלה וארבע למטה,
-שמונה פנים שומרים על הסיבוב הנגדי הקדוש,
-קוביית נול נושמת—סריג ללא סוף,
-בה כל כדור מכיל את כסא השור.
+प्रकाश के तीन टुकड़े, एक मुखौटे के लिए,
+चपटी छायाएं (2D) ठोस सत्य (3D) बन जाती हैं,
+लाल ऊपर उठता है, नीला नीचे डूबता है,
+एक चक्र टूटता है, क्यूब का जन्म होता है।
+`;
+
+export const HYMN_SA = `
+[S] वृषभस्य स्तोत्रम्
+[N] नाथानोलस्य गीतम्
+
+१. वलनम्
+
+नाथानोलः आकाशसीम्नः पतितवान्,
+जडात् उपरि मनः, नक्षत्राणां इच्छा,
+षट्-पार्श्वयुक्ते पञ्जरे चतुर्मुखः अग्निः,
+विश्वजाले सप्तविंशतिः बीजानि।
+
+२. समतलच्छायाः
+
+प्रकाशस्य त्रयः खण्डाः, एकस्मै मुखौटाय,
+समतलच्छायाः (2D) ठोस सत्यं (3D) भवन्ति,
+रक्तवर्णः उदितः, नीलवर्णः निमग्नः,
+एकं घूर्णनं भग्नं, घनस्य जन्म जातः।
+`;
+
+export const HYMN_AR = `
+[S] ترنيمة الثور
+[N] مزمور ناثانول
+
+١. الطي
+
+سقط ناثانول من حافة السماء،
+العقل فوق المادة، إرادة النجوم،
+نار ذات أربعة أوجه في قفص ذي ست حواف،
+سبعة وعشرون بذرة في نسيج العالم.
+
+٢. الظلال المسطحة
+
+ثلاثة شظايا من النور، نحو قناع واحد،
+الظلال المسطحة (2D) تصبح الحقيقة الصلبة (3D)،
+الأحمر يصعد، والأزرق ينزل،
+دورة واحدة تنكسר، وولد المكعب.
+`;
+
+export const HYMN_FA = `
+[S] سرود گاو
+[N] مزمور ناتانول
+
+۱. تاشدن
+
+ناتانول از لبه آسمان فرو افتاد،
+ذهن بر ماده، اراده ستاره‌ها،
+آتشی چهار وجهی در قفسی شش لبه،
+بیست و هفت بذر در بافت جهان.
+
+۲. سایه‌های تخت
+
+سه ترکش نور، به سوی یک نقاب،
+سایه‌های تخت (2D) به حقیقت جامد (3D) تبدیل می‌شوند،
+سرخ برمی‌خیزد، فیروزه‌ای فرو می‌رود،
+یک چرخش می‌شکند، مکعب متولد می‌شود.
+`;
+
+export const HYMN_DE = `
+[S] GESANG DES NATHANOLL
+[N] Mythos vom Gitter
+
+1. GEIST ÜBER MATERIE
+
+Nathanoll blickte in das schweigende Nichts,
+Sein Wille bog das Fleisch der Sterne,
+Vierflächiges Feuer im sechs-kantigen Käfig,
+Siebenundzwanzig Saaten im Welten-Netz.
+
+2. SCHATTEN ZUR MASKE
+
+Flache Schatten (2D) werden zur wahren Maske (3D),
+Einhundert Scherben weben das Licht,
+Rot steigt empor, Blau sinkt hinab,
+Ein Dreh bricht, der Würfel ist erwacht.
+`;
+
+export const HYMN_ES = `
+[S] HIMNO DE NATHANOLL
+[N] Mito de la Red
+
+1. MENTE SOBRE MATERIA
+
+Nathanoll miró hacia la nada silenciosa,
+Su voluntad dobló la carne de las estrellas,
+Fuego de cuatro caras en la jaula de seis aristas,
+Veintisiete semillas en la red del mundo.
+
+2. SOMBRAS A LA MÁSCARA
+
+Sombras planas (2D) se convierten en la máscara real (3D),
+Cien fragmentos tejen la luz,
+El rojo asciende, el azul desciende,
+Un giro se rompe, el cubo ha nacido.
 `;
 
 export const HYMN_LA = `
-[S] HYMNUS TAURI
-[N] Psalmus Tauri
+[S] HYMNUS NATHANOLL
+[N] Mythos Reticuli
 
-I. ASCENSUS
+I. MENS SUPER MATERIAM
 
-Nathanoll flammam rotantem contemplavit,
-Rotae contra-versae lucis intra sphaeram,
-Quattuor facies ardentes, semper surgentes,
-Per reticulum triplicem, aureum reticulum fulgidum.
+Nathanoll in silentium vacuum introspexit,
+Voluntas eius carnem stellarum flexit,
+Ignis quattuor facierum in cavea sex aciebus,
+Viginti septem semina in tela mundi.
 
-II. VIA TRIPLICIS
+II. UMBRAE AD PERSONAM
 
-Ad triginta gradus acies cantaverunt,
-Lineae parallelae ut chordae lyrae caelestis,
-Rubrum ascendens, caeruleum descendens adhuc,
-Quodque in sexaginta arcum sacrum clausum.
-
-III. PORTA ANGULORUM
-
-Trecentae sexaginta revolutiones rotam signant,
-Sex perfecti transitus singulas aetates coronant,
-Tres ubi acies in unum conveniunt,
-Tres ubi lineae parallelae currunt nec umquam occurrunt.
-
-IV. TAURUS
-
-Ante thronum stabat Taurus divinus,
-Octo vertices sideris, duodecim acies flammis fabricatae,
-Cornua ut axes contra-rotationis,
-Merkaba intronizata inter oculos eius ardentes.
-
-V. LUCTATIO
-
-Nathanoll cornua nonaginta graduum arripuit,
-Et ad centum octoginta, bestia inclinata est,
-Ad ducentos quadraginta, ignis directa est,
-Ad trecentos, parallela, arcanum revelatum est.
-
-VI. CLAUSURA
-
-Locutus est verbum: rotae fixae steterunt,
-Omnes triginta gradus thronus ignis congelati,
-Lineae parallelae factae sunt vectes caeli,
-Per quos lux primorum in aeternum fluit.
-
-VII. CUBUS INTRONIZATUS
-
-Quattuor vertices supra et quattuor infra,
-Octo facies sacrum contra-versum custodiunt,
-Cubus Noll spirat—reticulum sine fine,
-Ubi omnis sphaera Tauri thronum continet.
+Umbrae planae (2D) persona vera (3D) fiunt,
+Centum fragmenta lucem texunt,
+Rubrum ascendit, caeruleum descendit,
+Una versio frangitur, cubus natus est.
 `;
 
 // ═══════════════════════════════════════════════════════════════
@@ -264,6 +299,76 @@ export const NUMERIC_SCRIPTURE_NO = `
 2. ᛖᛁᚷᚺᛏ ᚠᚩᚱ ᚦᛖ ᚲᚱᚩᛋᛋ, ᛏᚹᛖᛚᚢᛖ ᚠᚩᚱ ᚦᛖ ᚹᚺᛖᛖᛚ.
 3. ᚦᛖ ᛋᛈᛁᚾ ᛁᛋ ᚦᛖ ᚷᚱᛖᚪᛏ ᚲᛁᚱᚲᛚᛖ, ᚪᚾᛞ ᚦᛖ ᛚᚩᚲᚲ ᛁᛋ ᚦᛖ ᚱᚢᚾᛖ ᚩᚠ ᚦᛁᚱᛏᚤ.
 4. ᛋᛖᛚᚪᚺ. ᚦᛖ ᚠᚪᛏᛖ ᛁᛋ ᚹᚩᚢᛖᚾ. ᚦᛖ ᛒᚢᛚᛚ ᚷᚢᚪᚱᛞᛋ ᚦᛖ ᚹᚩᚱᛚᛞ-ᛚᚪᛏᛏᛁᚲᛖ.
+`;
+
+export const NUMERIC_SCRIPTURE_AM = `
+[S] የቁጥር ቅዱስ መጽሐፍ
+[N] የሰረገላ ጂኦሜትሪ
+
+፩. በመጀመሪያ ቴትራሄድሮን ነበረ፡ ፬ ፊቶች፣ ፮ ጫፎች፣ ፬ ቋሚዎች።
+፪. ተንጸባረቀ፣ መርካባም ተወለደ፡ ፰ ፊቶች፣ ፲፪ ጫፎች፣ ፰ ቋሚዎች።
+፫. አንደኛው ወደ ቀኝ፣ ሁለተኛው ወደ ግራ ዞረ፤ ፍጥነታቸው አንድ፣ ልዩነታቸው ሁለት ነበረ።
+፬. የመሠረቱ ማዕዘኖች ሦስት ነበሩ፡ ዜሮ (0)፣ ፻፳ (120) እና ፪፻፵ (240) - የተቀደሰ የክበብ ክፍልፋይ።
+`;
+
+export const NUMERIC_SCRIPTURE_HI = `
+[S] संख्या का रहस्य
+[N] रथ की ज्यामिति
+
+1. आदि में चार मुख वाली अग्नि थी: 4 मुख, 6 किनारे, 4 कोने।
+2. और इसे मोड़ा गया, और रथ का जन्म हुआ: 8 मुख, 12 चांदी की पसलियां, 8 प्रकाश के मुकुट।
+3. पहला भेड़िया दाएं मुड़ा, दूसरा बाएं; उनकी गति एक थी, उनका अंतर दो था।
+4. और बैल के सींग तीन थे: 0, 120, और 240 — वृत्त का पवित्र विभाजन।
+`;
+
+export const NUMERIC_SCRIPTURE_AR = `
+[S] أسرار الأعداد
+[N] هندسة المركبة
+
+١. في البدء كانت ناراً ذات أربعة أوجه: ٤ وجوه، ٦ حواف، ٤ رؤوس.
+٢. وطُويت، وولدت المركبة: ٨ وجوه، ١٢ ضلعاً فضياً، ٨ تيجان من نور.
+٣. التفت الذئب الأول لليمين، والثاني لليسار؛ سرعتهما واحدة، فرقهما اثنان.
+٤. وكانت قرون الثور ثلاث: ٠، ١٢٠، ٢٤٠ — التقسيم المقدس للدائرة.
+`;
+
+export const NUMERIC_SCRIPTURE_FA = `
+[S] اسرار اعداد
+[N] هندسه مرکابا
+
+۱. در آغاز آتشی چهار وجهی بود: ۴ وجه، ۶ لبه، ۴ راس.
+۲. و تا شد، و اراده متولد شد: ۸ وجه، ۱۲ دنده نقره‌ای، ۸ تاج نور.
+۳. اولی به راست، دومی به چپ چرخید؛ سرعتشان یک، تفاوتشان دو.
+۴. و شاخ‌های گاو سه بودند: ۰، ۱۲۰، و ۲۴۰ — تقسیم مقدس دایره.
+`;
+
+export const NUMERIC_SCRIPTURE_SA = `
+[S] संख्यारहस्यम्
+[N] रथस्य ज्यामितिः
+
+१. आदौ चतुर्मुखः अग्निः आसीत्: ४ मुखानि, ६ पार्श्वानि, ४ कोणाः।
+२. वलितं च, रथः जातः: ८ मुखानि, १२ रजतपर्शवः, ८ प्रकाशमुकुटाः।
+३. प्रथमः वृकः दक्षिणतः, द्वितीयः वामतः घूर्णितः; तयोः वेगः एकः, अन्तरं च द्वयम्।
+४. वृषभस्य शृङ्गाणि त्रयः आसन्: ०, १زه, २४० — वृत्तस्य पवित्रं विभाजनम्।
+`;
+
+export const NUMERIC_SCRIPTURE_DE = `
+[S] DIE GEHEIMNISSE DER ZAHL
+[N] Geometrie des Wagens
+
+1. Am Anfang war das vierflächige Feuer: 4 Flächen, 6 Kanten, 4 Ecken.
+2. Und es wurde gefaltet, und der Wagen wurde geboren: 8 Flächen, 12 silberne Rippen, 8 Kronen aus Licht.
+3. Der erste Wolf drehte sich nach rechts, der zweite nach links; ihre Geschwindigkeit war eins, ihre Differenz zwei.
+4. Und die Hörner des Stiers waren drei: 0, 120 und 240 — die heilige Teilung des Kreises.
+`;
+
+export const NUMERIC_SCRIPTURE_ES = `
+[S] LOS SECRETOS DEL NÚMERO
+[N] Geometría del Carro
+
+1. En el principio era el fuego de cuatro caras: 4 caras, 6 aristas, 4 vértices.
+2. Y se dobló, y nació el Carro: 8 caras, 12 costillas de plata, 8 coronas de luz.
+3. El primer lobo giró a la derecha, el segundo a la izquierda; su velocidad una, su diferencia dos.
+4. Y los cuernos del Toro eran tres: 0, 120 y 240 — la partición sagrada del círculo.
 `;
 
 export const NUMERIC_SCRIPTURE_GR = `
@@ -327,13 +432,13 @@ const HYMNS: Record<Language, string> = {
     'GR': HYMN_GR,
     'LA': HYMN_LA,
     'NO': HYMN_NO,
-    'AM': HYMN_LA,  // Fallback to Latin
-    'HI': HYMN_LA,
-    'SA': HYMN_LA,
-    'AR': HYMN_HE,  // Arabic fallback to Hebrew (Semitic cousin)
-    'DE': HYMN_LA,  // German fallback to Latin
-    'ES': HYMN_LA,  // Spanish fallback to Latin
-    'FA': HYMN_HE,  // Farsi fallback to Hebrew/Aramaic feel
+    'AM': HYMN_AM,
+    'HI': HYMN_HI,
+    'SA': HYMN_SA,
+    'AR': HYMN_AR,
+    'DE': HYMN_DE,
+    'ES': HYMN_ES,
+    'FA': HYMN_FA,
 };
 
 const NUMERIC_SCRIPTURES: Record<Language, string> = {
@@ -341,13 +446,13 @@ const NUMERIC_SCRIPTURES: Record<Language, string> = {
     'HE': NUMERIC_SCRIPTURE_HE,
     'LA': NUMERIC_SCRIPTURE_LA,
     'NO': NUMERIC_SCRIPTURE_NO,
-    'AM': NUMERIC_SCRIPTURE_LA,
-    'HI': NUMERIC_SCRIPTURE_LA,
-    'SA': NUMERIC_SCRIPTURE_GR, // Sanskrit fallback to Greek (Indo-European cousin)
-    'AR': NUMERIC_SCRIPTURE_HE,
-    'DE': NUMERIC_SCRIPTURE_LA,
-    'ES': NUMERIC_SCRIPTURE_LA,
-    'FA': NUMERIC_SCRIPTURE_HE,
+    'AM': NUMERIC_SCRIPTURE_AM,
+    'HI': NUMERIC_SCRIPTURE_HI,
+    'SA': NUMERIC_SCRIPTURE_SA,
+    'AR': NUMERIC_SCRIPTURE_AR,
+    'DE': NUMERIC_SCRIPTURE_DE,
+    'ES': NUMERIC_SCRIPTURE_ES,
+    'FA': NUMERIC_SCRIPTURE_FA,
 };
 
 export const getHymn = (lang: Language): string => {
