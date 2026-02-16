@@ -66,7 +66,7 @@ export const useSceneController = () => {
     const [darkMode, setDarkMode] = useState(false);
 
     // Language & Library State
-    const [language, setLanguage] = useState<Language>('LA');
+    const [language, setLanguage] = useState<Language>('NO');
     const [libraryOpen, setLibraryOpen] = useState(false);
     const [currentBookId, setCurrentBookId] = useState('revelation');
     const [isSpeaking, setIsSpeaking] = useState(false);
