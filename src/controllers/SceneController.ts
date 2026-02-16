@@ -8,6 +8,7 @@ export type ColorMode = 'PRIME' | 'ROOT' | 'ZOHAR' | 'GOLDEN';
 export type MetatronShape = 'NONE' | 'MERKABA' | 'CUBE' | 'OCTAHEDRON' | 'ICOSAHEDRON' | 'DODECAHEDRON';
 export type ViewMode = '2D' | '3D' | '4D';
 export type CameraType = 'PERSPECTIVE' | 'ORTHOGRAPHIC';
+export type ToneScale = 'FUNDAMENTAL' | 'TRIADIC' | 'MERKABA' | 'CELESTIAL';
 
 // --- CAMERA ANGLES (Face, Edge, Corner) ---
 // 26 Total: 6 Faces + 12 Edges + 8 Corners
@@ -57,6 +58,8 @@ export const useSceneController = () => {
     // bgMode removed logic
     const [autoRotate, setAutoRotate] = useState(false);
     const [parallelLock, setParallelLock] = useState(false);
+    const [toneEnabled, setToneEnabled] = useState(false);
+    const [toneScale, setToneScale] = useState<ToneScale>('MERKABA');
 
     // Simple Dark Mode
     const [darkMode, setDarkMode] = useState(false);
@@ -165,6 +168,18 @@ export const useSceneController = () => {
         setParallelLock(prev => !prev);
     };
 
+    const toggleTone = () => {
+        setToneEnabled(prev => !prev);
+    };
+
+    const cycleToneScale = () => {
+        const scales: ToneScale[] = ['FUNDAMENTAL', 'TRIADIC', 'MERKABA', 'CELESTIAL'];
+        setToneScale(prev => {
+            const idx = scales.indexOf(prev);
+            return scales[(idx + 1) % scales.length];
+        });
+    };
+
     // --- SPEECH LOGIC REMOVED ---
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const speakText = (_text: string) => {
@@ -223,6 +238,8 @@ export const useSceneController = () => {
         // bgMode removed
         autoRotate,
         parallelLock,
+        toneEnabled,
+        toneScale,
         language,
         libraryOpen,
         currentBookId,
@@ -248,6 +265,8 @@ export const useSceneController = () => {
         // setBgMode removed
         setAutoRotate,
         setParallelLock,
+        setToneEnabled,
+        setToneScale,
         setLanguage,
         setLibraryOpen,
         setCurrentBookId,
@@ -279,6 +298,8 @@ export const useSceneController = () => {
         setTesseractPreset,
         triggerCameraReset,
         toggleParallelLock,
+        toggleTone,
+        cycleToneScale,
 
 
 

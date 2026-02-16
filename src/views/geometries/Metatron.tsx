@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useLayoutEffect } from 'react';
+import React, { useMemo, useRef, useLayoutEffect, useEffect } from 'react';
 import { SNAP_ANGLE_RAD } from '../../data/scripture';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
@@ -9,42 +9,43 @@ interface Props {
     controller: ReturnType<typeof useSceneController>;
 }
 
+// --- SHARED AUDIO CONTEXT (singleton — all cherubim share one) ---
+let sharedAudioCtx: AudioContext | null = null;
+const getAudioCtx = (): AudioContext => {
+    if (!sharedAudioCtx) sharedAudioCtx = new AudioContext();
+    if (sharedAudioCtx.state === 'suspended') sharedAudioCtx.resume();
+    return sharedAudioCtx;
+};
+
+const BASE_HZ = 110; // A2 — root vibration at speed 1.0
+
+const SCALE_HARMONICS: Record<string, number[]> = {
+    'FUNDAMENTAL': [1],
+    'TRIADIC': [1, 3],
+    'MERKABA': [1, 2, 3, 6],
+    'CELESTIAL': [1, 1.5, 2, 3, 4],
+};
+
 // --- GEOMETRY HELPERS ---
 
-
-// Manual Star Tetrahedron Geometry (Apex Up/Down)
 const createMerkabaGeometries = (radius: number) => {
-    // Helper to create tetra vertices
-    // Apex: (0, 1, 0) * R
-    // Base: circle at y = -1/3 * R
-    // Base Radius: sqrt(8/9) * R = 0.9428 * R
     const rBase = Math.sqrt(8 / 9) * radius;
     const yBase = -radius / 3;
 
-    // Angles for base (0, 120, 240 degrees)
     const a1 = 0;
     const a2 = (2 * Math.PI) / 3;
     const a3 = (4 * Math.PI) / 3;
 
-    // Up Vertices (Apex Up)
     const vUp = [
-        new THREE.Vector3(0, radius, 0), // Apex
+        new THREE.Vector3(0, radius, 0),
         new THREE.Vector3(rBase * Math.cos(a1), yBase, rBase * Math.sin(a1)),
         new THREE.Vector3(rBase * Math.cos(a2), yBase, rBase * Math.sin(a2)),
         new THREE.Vector3(rBase * Math.cos(a3), yBase, rBase * Math.sin(a3))
     ];
 
-    // Down Vertices (Inverted)
     const vDown = vUp.map(v => v.clone().multiplyScalar(-1));
 
-    // Indices for Tetrahedron (4 faces)
-    // 0-1-2, 0-2-3, 0-3-1, 1-3-2 (Base is 1-2-3, winding)
-    const indices = [
-        0, 1, 2,
-        0, 2, 3,
-        0, 3, 1,
-        2, 1, 3
-    ];
+    const indices = [0, 1, 2, 0, 2, 3, 0, 3, 1, 2, 1, 3];
 
     const geoUp = new THREE.BufferGeometry().setFromPoints(vUp);
     geoUp.setIndex(indices);
@@ -57,20 +58,18 @@ const createMerkabaGeometries = (radius: number) => {
     return { tetraUp: geoUp, tetraDown: geoDown };
 };
 
-// --- CHERUBIM NODE (Small Merkaba) ---
+// --- CHERUBIM NODE (each one sings its own detuned tone) ---
 const CherubimNode: React.FC<{
     position: THREE.Vector3;
     color: string;
     controller: any;
-}> = ({ position, color, controller }) => {
+    nodeIndex: number;
+    totalNodes: number;
+}> = ({ position, color, controller, nodeIndex, totalNodes }) => {
 
-    // Geometry
     const { tetraUp, tetraDown } = useMemo(() => createMerkabaGeometries(2.0), []);
     const sphereGeo = useMemo(() => new THREE.SphereGeometry(2.0, 24, 24), []);
 
-    // Materials
-    // A. Spheres: More transparent (User request: "surrounding spheres need to be more transparent")
-    // opacity reduced from 0.4 to 0.08 for very faint "Holy" wireframe
     const wireMat = useMemo(() => new THREE.MeshBasicMaterial({
         color: color,
         wireframe: true,
@@ -80,43 +79,125 @@ const CherubimNode: React.FC<{
         depthWrite: false
     }), [color]);
 
-    // B. Tangible Triangles (User request: "seen very well", "tiny bit thicker")
-    // We use an invisible material for the mesh faces, and render <Edges /> for thickened wireframe.
     const invisibleMat = useMemo(() => new THREE.MeshBasicMaterial({ visible: false }), []);
 
-    // Refs for Rotation
+    // Rotation refs
     const upRef = useRef<THREE.Mesh>(null);
     const downRef = useRef<THREE.Mesh>(null);
     const rawAngle = useRef(0);
 
+    // --- CHOIR TONE (per-node) ---
+    const oscillatorsRef = useRef<OscillatorNode[]>([]);
+    const gainNodeRef = useRef<GainNode | null>(null);
+    const prevToneState = useRef({ enabled: false, scale: '', speed: 0 });
+
+    // Each cherubim gets a unique detune: spread evenly across ±3% of base
+    const detuneRatio = useMemo(() => {
+        if (totalNodes <= 1) return 1;
+        const spread = 0.03; // ±3% — creates a rich choir shimmer
+        return 1 + (nodeIndex / (totalNodes - 1) - 0.5) * 2 * spread;
+    }, [nodeIndex, totalNodes]);
+
+    const startTone = (speed: number, scale: string) => {
+        stopTone();
+        const ctx = getAudioCtx();
+
+        const masterGain = ctx.createGain();
+        // Scale volume by number of nodes so choir doesn't clip
+        masterGain.gain.value = 0.06 / Math.sqrt(totalNodes);
+        masterGain.connect(ctx.destination);
+        gainNodeRef.current = masterGain;
+
+        const harmonics = SCALE_HARMONICS[scale] || [1];
+        const baseFreq = Math.max(20, Math.min(speed * BASE_HZ * detuneRatio, 4000));
+        const oscs: OscillatorNode[] = [];
+
+        harmonics.forEach((ratio, i) => {
+            const osc = ctx.createOscillator();
+            const harmGain = ctx.createGain();
+            osc.type = i === 0 ? 'sine' : 'triangle';
+            osc.frequency.value = baseFreq * ratio;
+            harmGain.gain.value = 1 / (i + 1);
+            osc.connect(harmGain);
+            harmGain.connect(masterGain);
+            osc.start();
+            oscs.push(osc);
+        });
+
+        oscillatorsRef.current = oscs;
+    };
+
+    const stopTone = () => {
+        oscillatorsRef.current.forEach(osc => {
+            try { osc.stop(); osc.disconnect(); } catch (_) { /* already stopped */ }
+        });
+        oscillatorsRef.current = [];
+        if (gainNodeRef.current) {
+            gainNodeRef.current.disconnect();
+            gainNodeRef.current = null;
+        }
+    };
+
+    const updateFrequency = (speed: number, scale: string) => {
+        const baseFreq = Math.max(20, Math.min(speed * BASE_HZ * detuneRatio, 4000));
+        const harmonics = SCALE_HARMONICS[scale] || [1];
+        oscillatorsRef.current.forEach((osc, i) => {
+            if (i < harmonics.length) {
+                osc.frequency.value = baseFreq * harmonics[i];
+            }
+        });
+    };
+
+    // Cleanup on unmount
+    useEffect(() => {
+        return () => { stopTone(); };
+    }, []);
+
     useFrame((_, delta) => {
+        // Rotation
         if (controller.isPlaying && upRef.current && downRef.current) {
             const speed = delta * 0.5 * (controller.rotationSpeed || 1.0);
             rawAngle.current += speed;
 
-            // When parallelLock is ON, snap to nearest π/6 (30°)
             const display = controller.parallelLock
                 ? Math.round(rawAngle.current / SNAP_ANGLE_RAD) * SNAP_ANGLE_RAD
                 : rawAngle.current;
 
-            // Top -> Right (Negative Y), Bottom -> Left (Positive Y)
             upRef.current.rotation.y = -display;
             downRef.current.rotation.y = display;
         }
+
+        // Tone management
+        const rotSpeed = controller.rotationSpeed || 1.0;
+        const shouldPlay = controller.toneEnabled && controller.isPlaying;
+        const prev = prevToneState.current;
+
+        if (shouldPlay && !prev.enabled) {
+            startTone(rotSpeed, controller.toneScale);
+        } else if (!shouldPlay && prev.enabled) {
+            stopTone();
+        } else if (shouldPlay) {
+            if (Math.abs(rotSpeed - prev.speed) > 0.01) {
+                updateFrequency(rotSpeed, controller.toneScale);
+            }
+            if (controller.toneScale !== prev.scale) {
+                startTone(rotSpeed, controller.toneScale);
+            }
+        }
+
+        prevToneState.current = {
+            enabled: shouldPlay,
+            scale: controller.toneScale,
+            speed: rotSpeed
+        };
     });
 
     return (
         <group position={position}>
-            {/* Sphere (Faint Wireframe) */}
             <mesh geometry={sphereGeo} material={wireMat} />
-
-            {/* Merkaba - Thicker Lines via Edges */}
-            {/* Upper Tetra (Fire/Red) */}
             <mesh ref={upRef} geometry={tetraUp} material={invisibleMat}>
                 <Edges threshold={15} color="#ff0000" linewidth={2} transparent opacity={0.8} />
             </mesh>
-
-            {/* Lower Tetra (Water/Blue) */}
             <mesh ref={downRef} geometry={tetraDown} material={invisibleMat}>
                 <Edges threshold={15} color="#0000ff" linewidth={2} transparent opacity={0.8} />
             </mesh>
@@ -126,8 +207,6 @@ const CherubimNode: React.FC<{
 
 
 export const MetatronGeometry: React.FC<Props> = ({ controller }) => {
-    // const isLight = controller.bgMode === 'LIGHT'; // REMOVED
-    // const blackMode = controller.blackMode; // REMOVED
     const spacing = 4.0;
     const size = controller.gridSize || 3;
 
@@ -159,13 +238,8 @@ export const MetatronGeometry: React.FC<Props> = ({ controller }) => {
 
     // --- 2. INSTANCED LINES ---
     const meshRef = useRef<THREE.InstancedMesh>(null);
-    // const glowRef = useRef<THREE.InstancedMesh>(null); // REMOVED glow ref for simplification or keep it? 
-    // User didn't explicitly ask to remove glow lines, but standardizing. 
-    // Let's keep the lines simple.
 
-    // 24 vertical segments (radial) and 8 horizontal segments (height)
     const cylinderGeo = useMemo(() => new THREE.CylinderGeometry(0.008, 0.008, 1, 8, 1), []);
-    // Glow geometry - thicker but less segments needed - REMOVED for clean film look
 
     useLayoutEffect(() => {
         if (!meshRef.current) return;
@@ -192,17 +266,14 @@ export const MetatronGeometry: React.FC<Props> = ({ controller }) => {
             tempObj.updateMatrix();
 
             meshRef.current!.setMatrixAt(i, tempObj.matrix);
-            // if (glowRef.current) glowRef.current.setMatrixAt(i, tempObj.matrix);
         });
 
         meshRef.current.instanceMatrix.needsUpdate = true;
-        // if (glowRef.current) glowRef.current.instanceMatrix.needsUpdate = true;
     }, [nodes, connections]);
 
     // --- 3. COLORS ---
-    // Holy Artifact Mode: All Gold/Light
-    const sphereColor = "#b8860b"; // Darker Gold for visibility
-    const gridColor = "#ffd700"; // Bright Gold lines
+    const sphereColor = "#b8860b";
+    const gridColor = "#ffd700";
 
     return (
         <group key={`metatron-${size}`}>
@@ -212,6 +283,8 @@ export const MetatronGeometry: React.FC<Props> = ({ controller }) => {
                     position={pos}
                     color={sphereColor}
                     controller={controller}
+                    nodeIndex={i}
+                    totalNodes={nodes.length}
                 />
             ))}
 

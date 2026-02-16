@@ -259,14 +259,17 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 left: 0
             }}>
 
-                {/* TOP CENTER: PARALLEL LOCK BUTTON */}
+                {/* TOP CENTER: PARALLEL LOCK + TONE BUTTONS */}
                 <div style={{
                     position: 'fixed',
                     top: '40px',
                     left: '50%',
                     transform: 'translateX(-50%)',
                     pointerEvents: 'auto',
-                    zIndex: 100
+                    zIndex: 100,
+                    display: 'flex',
+                    gap: '10px',
+                    alignItems: 'center'
                 }}>
                     <button
                         onClick={() => controller.toggleParallelLock()}
@@ -290,6 +293,49 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     >
                         ∥
                     </button>
+                    <button
+                        onClick={() => controller.toggleTone()}
+                        title={controller.toneEnabled ? 'Mute Tones' : 'Enable Tones'}
+                        style={{
+                            background: controller.toneEnabled ? 'rgba(255, 215, 0, 0.15)' : 'none',
+                            border: controller.toneEnabled ? '2px solid #ffd700' : '2px solid rgba(255, 215, 0, 0.4)',
+                            borderRadius: '10px',
+                            padding: '8px 14px',
+                            cursor: 'pointer',
+                            color: controller.toneEnabled ? '#ffd700' : 'rgba(255, 215, 0, 0.6)',
+                            fontSize: '1.5rem',
+                            fontWeight: 'bold',
+                            textShadow: controller.toneEnabled ? '0 0 15px rgba(255,215,0,0.8)' : 'none',
+                            boxShadow: controller.toneEnabled ? '0 0 20px rgba(255,215,0,0.3), inset 0 0 10px rgba(255,215,0,0.1)' : 'none',
+                            transition: 'all 0.3s ease',
+                            lineHeight: 1
+                        }}
+                    >
+                        ♪
+                    </button>
+                    {controller.toneEnabled && (
+                        <button
+                            onClick={() => controller.cycleToneScale()}
+                            title={`Scale: ${controller.toneScale}`}
+                            style={{
+                                background: 'rgba(255, 215, 0, 0.1)',
+                                border: '1px solid rgba(255, 215, 0, 0.5)',
+                                borderRadius: '8px',
+                                padding: '6px 10px',
+                                cursor: 'pointer',
+                                color: '#ffd700',
+                                fontSize: '0.65rem',
+                                fontFamily: 'Cinzel, serif',
+                                letterSpacing: '1px',
+                                textShadow: '0 0 8px rgba(255,215,0,0.4)',
+                                transition: 'all 0.3s ease',
+                                lineHeight: 1,
+                                textTransform: 'uppercase'
+                            }}
+                        >
+                            {controller.toneScale}
+                        </button>
+                    )}
                 </div>
 
                 {/* LEFT COLUMN: GREEK TITLE (Vertical Upwards) */}
