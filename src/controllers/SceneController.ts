@@ -48,7 +48,10 @@ export const IMPORTANT_ANGLES = [
     { az: 45, el: -35.264, label: 'CORNER FL-B' },
     { az: 135, el: -35.264, label: 'CORNER BL-B' },
     { az: 225, el: -35.264, label: 'CORNER BR-B' },
-    { az: 315, el: -35.264, label: 'CORNER FR-B' }
+    { az: 315, el: -35.264, label: 'CORNER FR-B' },
+
+    // 4. SECRET (1)
+    { az: 0, el: 54, label: 'SECRET' }
 ];
 
 export const useSceneController = () => {
@@ -159,6 +162,10 @@ export const useSceneController = () => {
 
     const triggerCameraReset = () => {
         setCameraResetTrigger(prev => prev + 1);
+    };
+
+    const toggleCameraType = () => {
+        setCameraType(prev => prev === 'ORTHOGRAPHIC' ? 'PERSPECTIVE' : 'ORTHOGRAPHIC');
     };
 
     const toggleDarkMode = () => {
@@ -304,6 +311,7 @@ export const useSceneController = () => {
         stopSpeaking,
         setTesseractPreset,
         triggerCameraReset,
+        toggleCameraType,
         toggleParallelLock,
         toggleTone,
         cycleToneScale,

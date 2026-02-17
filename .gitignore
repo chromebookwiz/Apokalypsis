@@ -135,4 +135,6 @@ dist-ssr
 *.ntvs*
 *.njsproj
 *.sln
-*.sw?
+
+# Secret Documentation
+MASTER_SECRET.txt

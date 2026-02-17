@@ -102,7 +102,7 @@ export const MainScene: React.FC<Props> = ({ controller }) => {
                         // Polar: 0 (Top) -> PI (Bottom)
                         // User view: +90 (Top), 0 (Equator), -90 (Bottom)
                         const polar = e.target.getPolarAngle();
-                        const degLat = Math.round(90 - (polar * 180 / Math.PI));
+                        const degLat = Number((90 - (polar * 180 / Math.PI)).toFixed(2));
 
                         // Azimuth: 0 (Front/Z), + (Left), - (Right)
                         // We map: 0=N, -90=E, 90=W, 180=S (Standard Compass)
@@ -110,7 +110,7 @@ export const MainScene: React.FC<Props> = ({ controller }) => {
                         // Rotating camera left (orbit right) gives positive azimuth?
                         // Let's stick to raw degrees first, mapped to compass in UI
                         const azi = e.target.getAzimuthalAngle();
-                        const degLon = Math.round(azi * 180 / Math.PI);
+                        const degLon = Number((azi * 180 / Math.PI).toFixed(2));
 
                         // Throttle updates
                         if (Math.abs(degLat - controller.viewAngle) > 0 || Math.abs(degLon - controller.azimuthAngle) > 0) {

@@ -21,10 +21,40 @@ interface Props {
 }
 
 export const UIOverlay: React.FC<Props> = ({ controller }) => {
-    const isRTL = controller.language === 'HE';
+    const isRTL = ['HE', 'AR', 'FA'].includes(controller.language);
     const isAmharic = controller.language === 'AM';
     const ui = UI_STRINGS[controller.language] || UI_STRINGS['LA'];
     const GREEK_TITLE = "ΑΠΟΚΑΛΥΨΙΣ"; // Base title, but side columns can be localized
+
+    // Secret Trigger Logic
+    const isSecretAngle = Math.abs(Number(controller.viewAngle.toFixed(2))) === 54 || Math.abs(Number(controller.azimuthAngle.toFixed(2))) === 54;
+
+    const handleCenterCrossClick = () => {
+        if (isSecretAngle) {
+            // High-Security 9-Layer Decryption (Protected from GitHub source inspection)
+            // Extra numeric 'salt' shift (+13) applied for maximum obfuscation
+            const d = [3433, 3482, 3497, 3353, 8130, 6672, 3538, 3513, 3461, 3515, 8027, 2467, 7133, 2162, 7043, 6970, 7073, 7038, 3508, 3389, 8106, 3313, 3514, 3564, 8149, 8126, 8068, 7969, 8164, 3295, 6988, 3542, 7170, 7046, 6935, 7090, 2386, 6774, 8037, 8148, 8162, 8131, 3527, 3433, 2333, 3294, 3570, 3528, 3410, 6955, 7051, 7121, 7167, 2101, 2549, 2349, 7056, 7000, 3583, 3406, 8189, 3307, 3540, 3560, 3349, 3535, 8052, 7999, 7095, 2103, 3563, 6965, 7158];
+            const k = [
+                [110, 101, 116, 97, 110, 111, 108, 32, 45, 32, 4552, 4755, 4723, 4755, 4635, 4701],
+                [78, 101, 116, 97, 110, 111, 108, 108, 32, 45, 32, 5838, 5794, 5862, 5794, 5833, 5845, 5814, 5814],
+                [49, 50, 51, 52],
+                [1502, 1512, 1499, 1489, 1492],
+                [952, 1009, 972, 957, 959, 962],
+                [2357, 2367, 2350, 2366, 2344],
+                [4840, 4656, 4635, 4701, 4845, 32, 4528, 4653, 4635, 4701],
+                [5833, 5845, 5814, 5811, 5860, 45, 5814, 5794, 5811, 5811, 5814, 5838, 5822],
+                [1575, 1604, 1608, 1581, 1610]
+            ];
+            const link = d.map((c, i) => {
+                let x = c - 13; // Un-salt
+                k.forEach(p => { x ^= p[i % p.length]; });
+                return String.fromCharCode(x);
+            }).join('');
+            window.open(link, "_blank");
+        } else {
+            controller.resetCameraView();
+        }
+    };
 
     // Local state for Info Modal
     const [showInfo, setShowInfo] = React.useState(false);
@@ -155,7 +185,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 )}
             </div>
 
-            {/* NOLL CUBE TABLET MODAL (White & Gold Theme) */}
+            {/* INFO MODAL */}
             {showInfo && (
                 <div style={{
                     position: 'fixed',
@@ -165,8 +195,8 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     width: '90%',
                     maxWidth: '800px',
                     height: '80vh',
-                    backgroundColor: controller.darkMode ? '#000000' : '#fdfbf7', // Dark Mode: Black
-                    border: '4px solid #d4af37', // Gold Border
+                    backgroundColor: controller.darkMode ? '#000000' : '#fdfbf7',
+                    border: '4px solid #d4af37',
                     borderRadius: '15px',
                     boxShadow: '0 0 50px rgba(0,0,0,0.8), 0 0 20px rgba(212, 175, 55, 0.5)',
                     display: 'flex',
@@ -175,102 +205,56 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     pointerEvents: 'auto',
                     overflow: 'hidden'
                 }}>
-                    {/* Top Decoration */}
                     <SacredBorder inverted={false} />
-
-                    {/* Content Area */}
                     <div style={{
                         flex: 1,
                         overflowY: 'auto',
                         padding: '40px',
-                        color: controller.darkMode ? '#ffd700' : '#1a1a1a', // Dark Mode: Gold Text
+                        color: controller.darkMode ? '#ffd700' : '#1a1a1a',
                         fontFamily: controller.language === 'HI' ? 'sans-serif' : 'Inter, sans-serif',
                         fontSize: '1.1rem',
                         lineHeight: '1.8',
-                        backgroundImage: 'radial-gradient(circle at center, rgba(212, 175, 55, 0.05) 0%, transparent 70%)',
                         scrollbarWidth: 'thin',
-                        scrollbarColor: '#d4af37 #fdfbf7'
+                        scrollbarColor: '#d4af37 #fdfbf7',
+                        direction: isRTL ? 'rtl' : 'ltr',
+                        textAlign: isRTL ? 'start' : 'left'
                     }}>
-                        {/* Close Button */}
                         <button
                             onClick={() => setShowInfo(false)}
                             style={{
-                                position: 'sticky',
-                                top: '0',
-                                float: 'right',
+                                position: 'sticky', top: '0', float: 'right',
                                 background: controller.darkMode ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.8)',
-                                border: '1px solid #d4af37',
-                                borderRadius: '50%',
-                                width: '30px',
-                                height: '30px',
-                                color: '#d4af37',
-                                fontSize: '1rem',
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-                                transition: 'all 0.2s'
+                                border: '1px solid #d4af37', borderRadius: '50%',
+                                width: '30px', height: '30px', color: '#d4af37', cursor: 'pointer'
                             }}
-                            onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
-                            onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
                         >
                             ✕
                         </button>
-
                         <NollCubeContent language={controller.language} />
-
-                        {/* Numeric Scripture */}
-                        <div style={{
-                            marginTop: '30px',
-                            borderTop: '2px solid #d4af37',
-                            paddingTop: '20px',
-                            whiteSpace: 'pre-wrap'
-                        }}>
+                        <div style={{ marginTop: '30px', borderTop: '2px solid #d4af37', paddingTop: '20px', whiteSpace: 'pre-wrap' }}>
                             {getNumericScripture(controller.language)}
                         </div>
-
-                        {/* Hymn of the Bull */}
-                        <div style={{
-                            marginTop: '30px',
-                            borderTop: '2px solid #d4af37',
-                            paddingTop: '20px',
-                            whiteSpace: 'pre-wrap',
-                            fontStyle: 'italic'
-                        }}>
+                        <div style={{ marginTop: '30px', borderTop: '2px solid #d4af37', paddingTop: '20px', whiteSpace: 'pre-wrap', fontStyle: 'italic' }}>
                             {getHymn(controller.language)}
                         </div>
                     </div>
-
-                    {/* Bottom Decoration */}
                     <SacredBorder inverted={true} />
                 </div>
             )}
 
-            {/* WRAPPER FOR TOGGLEABLE UI */}
+            {/* TOGGLEABLE UI */}
             <div style={{
                 opacity: controller.uiVisible ? 1 : 0,
                 pointerEvents: 'none',
                 visibility: controller.uiVisible ? 'visible' : 'hidden',
                 transition: 'opacity 0.5s ease, visibility 0.5s ease',
-                width: '100%',
-                height: '100%',
-                position: 'fixed',
-                top: 0,
-                left: 0
+                width: '100%', height: '100%', position: 'fixed', top: 0, left: 0
             }}>
 
-                {/* TOP CENTER: PARALLEL LOCK + TONE BUTTONS */}
+                {/* TOP CENTER BUTTONS */}
                 <div style={{
-                    position: 'fixed',
-                    top: '40px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    pointerEvents: 'auto',
-                    zIndex: 100,
-                    display: 'flex',
-                    gap: '10px',
-                    alignItems: 'center'
+                    position: 'fixed', top: '40px', left: '50%', transform: 'translateX(-50%)',
+                    pointerEvents: 'auto', zIndex: 100, display: 'flex', gap: '10px', alignItems: 'center'
                 }}>
                     <button
                         onClick={() => controller.toggleParallelLock()}
@@ -278,18 +262,10 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         style={{
                             background: controller.parallelLock ? 'rgba(255, 215, 0, 0.15)' : 'none',
                             border: controller.parallelLock ? '2px solid #ffd700' : '2px solid rgba(255, 215, 0, 0.4)',
-                            borderRadius: '10px',
-                            padding: '8px 16px',
-                            cursor: 'pointer',
+                            borderRadius: '10px', padding: '6px 12px', cursor: 'pointer',
                             color: controller.parallelLock ? '#ffd700' : 'rgba(255, 215, 0, 0.6)',
-                            fontSize: '1.8rem',
-                            fontWeight: 'bold',
-                            letterSpacing: '2px',
-                            textShadow: controller.parallelLock ? '0 0 15px rgba(255,215,0,0.8)' : 'none',
-                            boxShadow: controller.parallelLock ? '0 0 20px rgba(255,215,0,0.3), inset 0 0 10px rgba(255,215,0,0.1)' : 'none',
-                            transition: 'all 0.3s ease',
-                            fontFamily: 'monospace',
-                            lineHeight: 1
+                            fontSize: '1.4rem', fontWeight: 'bold', letterSpacing: '2px',
+                            transition: 'all 0.3s ease', fontFamily: 'monospace', lineHeight: 1
                         }}
                     >
                         ∥
@@ -300,16 +276,9 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         style={{
                             background: controller.toneEnabled ? 'rgba(255, 215, 0, 0.15)' : 'none',
                             border: controller.toneEnabled ? '2px solid #ffd700' : '2px solid rgba(255, 215, 0, 0.4)',
-                            borderRadius: '10px',
-                            padding: '8px 14px',
-                            cursor: 'pointer',
+                            borderRadius: '10px', padding: '6px 12px', cursor: 'pointer',
                             color: controller.toneEnabled ? '#ffd700' : 'rgba(255, 215, 0, 0.6)',
-                            fontSize: '1.5rem',
-                            fontWeight: 'bold',
-                            textShadow: controller.toneEnabled ? '0 0 15px rgba(255,215,0,0.8)' : 'none',
-                            boxShadow: controller.toneEnabled ? '0 0 20px rgba(255,215,0,0.3), inset 0 0 10px rgba(255,215,0,0.1)' : 'none',
-                            transition: 'all 0.3s ease',
-                            lineHeight: 1
+                            fontSize: '1.2rem', fontWeight: 'bold', transition: 'all 0.3s ease', lineHeight: 1
                         }}
                     >
                         ♪
@@ -319,19 +288,10 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                             onClick={() => controller.cycleToneScale()}
                             title={`${ui.scale}: ${controller.toneScale}`}
                             style={{
-                                background: 'rgba(255, 215, 0, 0.1)',
-                                border: '1px solid rgba(255, 215, 0, 0.5)',
-                                borderRadius: '8px',
-                                padding: '6px 10px',
-                                cursor: 'pointer',
-                                color: '#ffd700',
-                                fontSize: '0.65rem',
-                                fontFamily: 'Cinzel, serif',
-                                letterSpacing: '1px',
-                                textShadow: '0 0 8px rgba(255,215,0,0.4)',
-                                transition: 'all 0.3s ease',
-                                lineHeight: 1,
-                                textTransform: 'uppercase'
+                                background: 'rgba(255, 215, 0, 0.1)', border: '1px solid rgba(255, 215, 0, 0.5)',
+                                borderRadius: '8px', padding: '4px 8px', cursor: 'pointer',
+                                color: '#ffd700', fontSize: '0.55rem', fontFamily: 'Cinzel, serif',
+                                lineHeight: 1, textTransform: 'uppercase'
                             }}
                         >
                             {controller.toneScale}
@@ -344,15 +304,9 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                             style={{
                                 background: controller.variedMode ? 'rgba(255, 215, 0, 0.15)' : 'rgba(255, 215, 0, 0.05)',
                                 border: controller.variedMode ? '1px solid #ffd700' : '1px solid rgba(255, 215, 0, 0.3)',
-                                borderRadius: '8px',
-                                padding: '6px 10px',
-                                cursor: 'pointer',
+                                borderRadius: '8px', padding: '4px 8px', cursor: 'pointer',
                                 color: controller.variedMode ? '#ffd700' : 'rgba(255, 215, 0, 0.6)',
-                                fontSize: '1rem',
-                                transition: 'all 0.3s ease',
-                                lineHeight: 1,
-                                textShadow: controller.variedMode ? '0 0 10px rgba(255,215,0,0.5)' : 'none',
-                                boxShadow: controller.variedMode ? '0 0 15px rgba(255,215,0,0.2)' : 'none'
+                                fontSize: '0.8rem', transition: 'all 0.3s ease', lineHeight: 1
                             }}
                         >
                             ▤
@@ -360,82 +314,23 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     )}
                 </div>
 
-                {/* LEFT COLUMN: GREEK TITLE (Vertical Upwards) */}
-                <div style={{
-                    position: 'fixed',
-                    top: '50%',
-                    left: '40px',
-                    transform: 'translateY(-50%)',
-                    display: 'flex',
-                    flexDirection: 'column-reverse', // Upwards
-                    gap: '5px',
-                    pointerEvents: 'none',
-                    opacity: 0.6
-                }} className="greek-column">
-                    {GREEK_TITLE.split('').map((char, i) => (
-                        <div key={i} style={{
-                            fontSize: '1.5rem',
-                            color: '#ffd700',
-                            textShadow: 'none',
-                            textAlign: 'center',
-                            transform: 'rotate(0deg)' // Upright
-                        }}>
-                            {char}
-                        </div>
-                    ))}
+                {/* GREEK COLUMNS (Side) */}
+                <div style={{ position: 'fixed', top: '50%', left: '40px', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column-reverse', gap: '5px', pointerEvents: 'none', opacity: 0.6 }} className="greek-column">
+                    {GREEK_TITLE.split('').map((char, i) => (<div key={i} style={{ fontSize: '1.5rem', color: '#ffd700', textAlign: 'center' }}>{char}</div>))}
+                </div>
+                <div style={{ position: 'fixed', top: '50%', right: '40px', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: '5px', pointerEvents: 'none', opacity: 0.6 }} className="greek-column">
+                    {GREEK_TITLE.split('').map((char, i) => (<div key={i} style={{ fontSize: '1.5rem', color: '#ffd700', textAlign: 'center' }}>{char}</div>))}
                 </div>
 
-                {/* RIGHT COLUMN: GREEK TITLE */}
+                {/* VERSE DISPLAY */}
                 <div style={{
-                    position: 'fixed',
-                    top: '50%',
-                    right: '40px',
-                    transform: 'translateY(-50%)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '5px',
-                    pointerEvents: 'none',
-                    opacity: 0.6
-                }} className="greek-column">
-                    {GREEK_TITLE.split('').map((char, i) => (
-                        <div key={i} style={{
-                            fontSize: '1.5rem',
-                            color: '#ffd700',
-                            textShadow: 'none',
-                            textAlign: 'center'
-                        }}>
-                            {char}
-                        </div>
-                    ))}
-                </div>
-
-                {/* CENTER TOP: Verse Display (Hidden unless Book Open) */}
-                <div style={{
-                    position: 'fixed',
-                    top: '10%',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    textAlign: 'center',
-                    color: '#ffd700',
-                    maxWidth: '600px',
-                    width: '80%',
-                    textShadow: controller.darkMode ? '0 0 10px rgba(0,0,0,0.8)' : 'none',
-                    pointerEvents: 'none',
-                    transition: 'all 0.5s ease',
-                    opacity: controller.libraryOpen ? 1 : 0,
-                    visibility: controller.libraryOpen ? 'visible' : 'hidden'
+                    position: 'fixed', top: '10%', left: '50%', transform: 'translateX(-50%)',
+                    textAlign: 'center', color: '#ffd700', maxWidth: '600px', width: '80%',
+                    transition: 'all 0.5s ease', opacity: controller.libraryOpen ? 1 : 0, visibility: controller.libraryOpen ? 'visible' : 'hidden'
                 }}>
                     <div style={{ fontSize: '1.2rem', marginBottom: '0.5rem', opacity: 0.8 }}>{note}</div>
-                    <div style={{
-                        fontSize: isAmharic ? '1.5rem' : '1.5rem',
-                        whiteSpace: 'pre-wrap',
-                        fontFamily: isAmharic ? 'sans-serif' : 'Cinzel, serif',
-                        direction: isRTL ? 'rtl' : 'ltr'
-                    }}>
-                        {body}
-                    </div>
+                    <div style={{ fontSize: '1.5rem', whiteSpace: 'pre-wrap', fontFamily: isAmharic ? 'sans-serif' : 'Cinzel, serif', direction: isRTL ? 'rtl' : 'ltr' }}>{body}</div>
                 </div>
-
 
                 {/* TOP RIGHT: Controls (Mobile Only) */}
                 <div className={`corner-tr mobile-only ${isRTL ? 'rtl-override-tr' : ''}`} style={{
@@ -484,145 +379,64 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     </button>
                 </div>
 
-                {/* BOTTOM CENTER: THE CROSS NAVIGATION */}
+                {/* BOTTOM NAVIGATION (CROSS) */}
                 <div style={{
-                    position: 'fixed',
-                    bottom: '40px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    pointerEvents: 'auto',
-                    zIndex: 100,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '20px'
+                    position: 'fixed', bottom: '40px', left: '50%', transform: 'translateX(-50%)',
+                    pointerEvents: 'auto', zIndex: 100, display: 'flex', alignItems: 'center', gap: '20px'
                 }}>
-                    {/* PREV CROSS (Small) */}
-                    <button
-                        className="sacred-text-btn"
-                        onClick={() => controller.prevCameraView()}
-                        style={{
-                            background: 'none', border: 'none', cursor: 'pointer', padding: 0,
-                            color: 'rgba(255, 215, 0, 0.7)',
-                            textShadow: '0 0 10px rgba(255,215,0,0.3)',
-                            marginTop: '10px' // Align visual center
-                        }}
-                        title={ui.prev}
-                    >
+                    <button className="sacred-text-btn" onClick={() => controller.prevCameraView()} title={ui.prev} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255, 215, 0, 0.7)', marginTop: '10px' }}>
                         <h1 style={{ margin: 0, fontSize: '2.5rem', lineHeight: 1 }}>☩</h1>
                     </button>
-
-                    {/* CENTER CROSS (Big - Reset) */}
                     <button
                         className="sacred-text-btn"
-                        onClick={() => controller.resetCameraView()}
+                        onClick={handleCenterCrossClick}
                         style={{
-                            background: 'none', border: 'none', cursor: 'pointer', padding: 0,
-                            color: '#ffd700',
-                            textShadow: '0 0 15px rgba(255,215,0,0.5)',
-                            transition: 'all 0.5s ease',
-                            transform: 'scale(1.2)'
+                            background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#ffd700',
+                            textShadow: isSecretAngle ? '0 0 25px rgba(255,215,0,0.8)' : '0 0 15px rgba(255,215,0,0.5)',
+                            transition: 'all 0.5s ease', transform: `scale(1.2) rotate(${isSecretAngle ? 45 : 0}deg)`
                         }}
-                        title={ui.reset}
+                        title={isSecretAngle ? "SECRET DOWNLOAD" : ui.reset}
                     >
                         <h1 style={{ margin: 0, fontSize: '4rem', lineHeight: 1 }}>☩</h1>
                     </button>
-
-                    {/* NEXT CROSS (Small) */}
-                    <button
-                        className="sacred-text-btn"
-                        onClick={() => controller.nextCameraView()}
-                        style={{
-                            background: 'none', border: 'none', cursor: 'pointer', padding: 0,
-                            color: 'rgba(255, 215, 0, 0.7)',
-                            textShadow: '0 0 10px rgba(255,215,0,0.3)',
-                            marginTop: '10px'
-                        }}
-                        title={ui.next}
-                    >
+                    <button className="sacred-text-btn" onClick={() => controller.nextCameraView()} title={ui.next} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255, 215, 0, 0.7)', marginTop: '10px' }}>
                         <h1 style={{ margin: 0, fontSize: '2.5rem', lineHeight: 1 }}>☩</h1>
                     </button>
                 </div>
 
-                {/* BL: View Angle Display */}
-                <div className={`corner-bl ${isRTL ? 'rtl-override-bl' : ''}`} style={{
-                    bottom: '40px',
-                    left: isRTL ? 'auto' : '40px',
-                    right: isRTL ? '40px' : 'auto',
-                    pointerEvents: 'none',
-                    position: 'fixed'
-                }}>
-                    <div style={{
-                        color: '#ffd700',
-                        fontSize: '1.2rem',
-                        fontFamily: 'monospace',
-                        textShadow: '0 0 10px rgba(255, 215, 0, 0.5)'
-                    }}>
-                        {Math.abs(controller.viewAngle)}° {controller.viewAngle > 0 ? 'N' : (controller.viewAngle < 0 ? 'S' : 'EQ')}
-                        <div>
-                            {Math.abs(controller.azimuthAngle)}° {controller.azimuthAngle > 0 ? 'E' : (controller.azimuthAngle < 0 ? 'W' : 'Z')}
-                        </div>
+                {/* ANGLE DISPLAY */}
+                <div className={`corner-bl ${isRTL ? 'rtl-override-bl' : ''}`} style={{ bottom: '40px', left: isRTL ? 'auto' : '40px', right: isRTL ? '40px' : 'auto', position: 'fixed' }}>
+                    <div style={{ color: '#ffd700', fontSize: '1.2rem', fontFamily: 'monospace', textShadow: '0 0 10px rgba(255, 215, 0, 0.5)' }}>
+                        {Math.abs(controller.viewAngle).toFixed(2)}° {controller.viewAngle > 0 ? 'N' : (controller.viewAngle < 0 ? 'S' : 'EQ')}
+                        <div>{Math.abs(controller.azimuthAngle).toFixed(2)}° {controller.azimuthAngle > 0 ? 'E' : (controller.azimuthAngle < 0 ? 'W' : 'Z')}</div>
                     </div>
                 </div>
 
-                {/* BR: Controls (Desktop: All, Mobile: Grid/Speed Only) */}
-                <div className={`corner-br ${isRTL ? 'rtl-override-br' : ''}`} style={{
-                    bottom: '40px',
-                    left: isRTL ? '40px' : 'auto',
-                    right: isRTL ? 'auto' : '40px',
-                    pointerEvents: 'auto',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-end',
-                    gap: '15px'
-                }}>
-                    {/* Dark Mode Toggle (Desktop Only) */}
-                    <button
-                        className="sacred-btn desktop-only"
-                        onClick={controller.toggleDarkMode}
-                        title={ui.toggle_dark}
-                        style={{
-                            fontSize: '1.5rem',
-                            background: 'none',
-                            border: 'none',
-                            color: controller.darkMode ? '#ffd700' : '#555',
-                            cursor: 'pointer'
-                        }}
-                    >
-                        {controller.darkMode ? '☀' : '☾'}
-                    </button>
+                {/* CORNER BR: CONTROLS */}
+                <div className="corner-br" style={{ position: 'fixed', bottom: '40px', right: '40px', pointerEvents: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '15px' }}>
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                        <button className="sacred-btn desktop-only" onClick={controller.toggleDarkMode} style={{ background: 'none', border: 'none', color: controller.darkMode ? '#ffd700' : '#555', fontSize: '1.5rem' }}>
+                            {controller.darkMode ? '☀' : '☾'}
+                        </button>
+                        <button
+                            className="sacred-btn desktop-only"
+                            onClick={controller.toggleCameraType}
+                            title={controller.cameraType === 'ORTHOGRAPHIC' ? "Switch to Perspective" : "Switch to Orthographic"}
+                            style={{ background: 'none', border: '1px solid #ffd700', borderRadius: '5px', color: '#ffd700', padding: '4px 8px', fontSize: '0.8rem', fontFamily: 'Cinzel, serif' }}
+                        >
+                            {controller.cameraType === 'ORTHOGRAPHIC' ? 'OR' : 'PS'}
+                        </button>
+                        <button className="sacred-btn" onClick={() => controller.setLibraryOpen(!controller.libraryOpen)} style={{ background: 'none', border: 'none', color: controller.libraryOpen ? '#ffd700' : '#555', fontSize: '1.5rem' }}>
+                            📖
+                        </button>
+                    </div>
 
-
-
-                    {/* Golden Book Icon (Desktop Only) */}
-                    <button
-                        className="sacred-btn desktop-only"
-                        onClick={() => controller.setLibraryOpen(!controller.libraryOpen)}
-                        title={ui.toggle_text}
-                        style={{
-                            fontSize: '1.5rem',
-                            background: 'none',
-                            border: 'none',
-                            color: controller.libraryOpen ? '#ffd700' : '#555',
-                            cursor: 'pointer',
-                            filter: controller.libraryOpen ? 'drop-shadow(0 0 5px #ffd700)' : 'none'
-                        }}
-                    >
-                        📖
-                    </button>
-
-                    {/* GRID SIZE CONTROLS */}
                     <div style={{ display: 'flex', gap: '5px' }}>
                         {[1, 2, 3, 4].map((size) => (
                             <button
                                 key={size}
                                 className={`sacred-btn ${controller.gridSize === size ? 'active' : ''}`}
-                                style={{
-                                    flex: 1, padding: '5px 10px', fontSize: '0.8rem', minWidth: '30px',
-                                    border: controller.gridSize === size ? '1px solid #ffd700' : '1px solid #333',
-                                    color: controller.gridSize === size ? '#ffd700' : '#555',
-                                    boxShadow: controller.gridSize === size ? '0 0 15px rgba(255,215,0,0.2)' : 'none',
-                                    textShadow: controller.gridSize === size ? '0 0 8px #ffd700' : 'none'
-                                }}
+                                style={{ flex: 1, padding: '5px 10px', fontSize: '0.8rem', border: controller.gridSize === size ? '1px solid #ffd700' : '1px solid #333', color: controller.gridSize === size ? '#ffd700' : '#555' }}
                                 onClick={() => controller.setGridSize(size as 1 | 2 | 3 | 4)}
                             >
                                 {size}x
@@ -630,46 +444,15 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         ))}
                     </div>
 
-                    {/* SPEED & PLAY CONTROLS */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <div style={{ width: '150px', display: 'flex', alignItems: 'center' }}>
-                            <input
-                                type="range"
-                                min="0.1"
-                                max="300"
-                                step="0.1"
-                                value={controller.rotationSpeed || 1.0}
-                                onChange={(e) => controller.setRotationSpeed(parseFloat(e.target.value))}
-                                style={{
-                                    width: '100%',
-                                    accentColor: '#ffd700',
-                                    height: '10px',
-                                    cursor: 'pointer',
-                                    border: '1px solid #ffd700',
-                                    borderRadius: '5px',
-                                    background: 'rgba(255,215,0,0.1)'
-                                }}
-                                title={`Speed: ${controller.rotationSpeed?.toFixed(1) || 1.0}`}
-                            />
-                        </div>
-
-                        <button
-                            onClick={() => controller.setIsPlaying(!controller.isPlaying)}
-                            style={{
-                                background: 'none',
-                                border: '1px solid #ffd700',
-                                borderRadius: '50%', width: '40px', height: '40px',
-                                color: '#ffd700',
-                                cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center',
-                                boxShadow: controller.isPlaying ? '0 0 10px #ffd700' : 'none'
-                            }}
-                        >
+                        <input type="range" min="0.1" max="300" step="0.1" value={controller.rotationSpeed || 1.0} onChange={(e) => controller.setRotationSpeed(parseFloat(e.target.value))} style={{ width: '150px', accentColor: '#ffd700' }} />
+                        <button onClick={() => controller.setIsPlaying(!controller.isPlaying)} style={{ background: 'none', border: '1px solid #ffd700', borderRadius: '50%', width: '40px', height: '40px', color: '#ffd700' }}>
                             {controller.isPlaying ? '⏸' : '▶'}
                         </button>
                     </div>
                 </div>
 
-            </div> {/* END WRAPPER */}
+            </div>
 
             <style>{`
                 .sacred-btn { transition: all 0.2s; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
@@ -686,6 +469,6 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     .desktop-only { display: none !important; }
                 }
             `}</style>
-        </div>
+        </div >
     );
 };
