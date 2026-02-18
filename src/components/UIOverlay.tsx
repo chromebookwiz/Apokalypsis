@@ -22,19 +22,80 @@ interface Props {
     controller: ReturnType<typeof useSceneController>;
 }
 
+// Draggable Helper Component
+interface DraggablePanelProps {
+    controller?: any; // strict typing skipped for now
+    children: React.ReactNode;
+    initialStyle?: React.CSSProperties;
+    className?: string; // class name
+}
+
+const DraggablePanel = ({ children, initialStyle, className }: DraggablePanelProps) => {
+    const [position, setPosition] = React.useState({ x: 0, y: 0 });
+    const isDragging = React.useRef(false);
+    const dragStart = React.useRef({ x: 0, y: 0 });
+    const panelRef = React.useRef<HTMLDivElement>(null);
+
+    const handleMouseDown = (e: React.MouseEvent) => {
+        // Only drag if clicking the background or a specific handle, not buttons
+        if ((e.target as HTMLElement).tagName === 'BUTTON' || (e.target as HTMLElement).closest('button')) return;
+
+        isDragging.current = true;
+        dragStart.current = { x: e.clientX - position.x, y: e.clientY - position.y };
+    };
+
+    React.useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            if (!isDragging.current) return;
+            setPosition({
+                x: e.clientX - dragStart.current.x,
+                y: e.clientY - dragStart.current.y
+            });
+        };
+        const handleMouseUp = () => {
+            isDragging.current = false;
+        };
+
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseup', handleMouseUp);
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, []);
+
+    const style: React.CSSProperties = {
+        ...initialStyle,
+        transform: `${initialStyle?.transform || ''} translate(${position.x}px, ${position.y}px)`,
+        cursor: isDragging.current ? 'grabbing' : 'grab',
+        transition: isDragging.current ? 'none' : initialStyle?.transition
+    };
+
+    return (
+        <div
+            ref={panelRef}
+            style={style}
+            className={className}
+            onMouseDown={handleMouseDown}
+        >
+            {children}
+        </div>
+    );
+};
+
 export const UIOverlay: React.FC<Props> = ({ controller }) => {
+    // ... (rest of imports/logic)
     const isRTL = ['HE', 'AR', 'FA'].includes(controller.language);
     const isAmharic = controller.language === 'AM';
     const ui = UI_STRINGS[controller.language] || UI_STRINGS['LA'];
-    const GREEK_TITLE = "ΑΠΟΚΑΛΥΨΙΣ"; // Base title, but side columns can be localized
+    const GREEK_TITLE = "ΑΠΟΚΑΛΥΨΙΣ";
 
     // Secret Trigger Logic
     const isSecretAngle = Math.abs(Number(controller.viewAngle.toFixed(2))) === 69.33 || Math.abs(Number(controller.azimuthAngle.toFixed(2))) === 69.33;
 
     const handleCenterCrossClick = () => {
         if (isSecretAngle) {
-            // High-Security 9-Layer Decryption (Protected from GitHub source inspection)
-            // Extra numeric 'salt' shift (+13) applied for maximum obfuscation
+            // ... (Secret Link Logic) ...
             const d = [3433, 3482, 3497, 3353, 8130, 6672, 3538, 3513, 3461, 3515, 8027, 2467, 7133, 2162, 7043, 6970, 7073, 7038, 3508, 3389, 8106, 3313, 3514, 3564, 8149, 8126, 8068, 7969, 8164, 3295, 6988, 3542, 7170, 7046, 6935, 7090, 2386, 6774, 8037, 8148, 8162, 8131, 3527, 3433, 2333, 3294, 3570, 3528, 3410, 6955, 7051, 7121, 7167, 2101, 2549, 2349, 7056, 7000, 3583, 3406, 8189, 3307, 3540, 3560, 3349, 3535, 8052, 7999, 7095, 2103, 3563, 6965, 7158];
             const k = [
                 [110, 101, 116, 97, 110, 111, 108, 32, 45, 32, 4552, 4755, 4723, 4755, 4635, 4701],
@@ -58,15 +119,14 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
         }
     };
 
-    // Local state for Info Modal
+    // ... (rest of setup) ...
     const [showInfo, setShowInfo] = React.useState(false);
 
     // Parse Revelation Text
     const { note, body } = useMemo(() => {
+        // ... (same parsing) ...
         const raw = getRevelation(controller.language);
         const lines = raw.split('\n').filter(l => l.trim() !== '');
-        // We ignore the title from the text file for the side columns
-        // But we parse note and body
         let n = "";
         let b = "";
 
@@ -107,7 +167,6 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
 
     return (
         <div className="ui-overlay" style={{ fontFamily: 'Cinzel, serif', pointerEvents: 'none' }}>
-
             {/* LEFT CORNER: EYE ICON ONLY */}
             <div className="corner-tl" style={{
                 position: 'fixed', top: '20px', left: '20px', zIndex: 1100, pointerEvents: 'auto',
@@ -126,15 +185,17 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 >👁</button>
             </div>
 
-            {/* INFO MODAL - Remained as is, but adjusted colors */}
+            {/* INFO MODAL - WRAPPED IN DRAGGABLE PANEL */}
             {showInfo && (
-                <div style={{
-                    position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-                    width: '90%', maxWidth: '800px', height: '80vh',
-                    backgroundColor: '#fdfbf7', border: '4px solid #d4af37', borderRadius: '15px',
-                    boxShadow: '0 0 50px rgba(0,0,0,0.8), 0 0 20px rgba(212, 175, 55, 0.5)',
-                    display: 'flex', flexDirection: 'column', zIndex: 2000, pointerEvents: 'auto', overflow: 'hidden'
-                }}>
+                <DraggablePanel
+                    initialStyle={{
+                        position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+                        width: '90%', maxWidth: '800px', height: '80vh',
+                        backgroundColor: '#fdfbf7', border: '4px solid #d4af37', borderRadius: '15px',
+                        boxShadow: '0 0 50px rgba(0,0,0,0.8), 0 0 20px rgba(212, 175, 55, 0.5)',
+                        display: 'flex', flexDirection: 'column', zIndex: 2000, pointerEvents: 'auto', overflow: 'hidden'
+                    }}
+                >
                     <SacredBorder inverted={false} />
                     <div style={{
                         flex: 1, overflowY: 'auto', padding: '40px', color: '#1a1a1a',
@@ -168,19 +229,23 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         </div>
                     </div>
                     <SacredBorder inverted={true} />
-                </div>
+                </DraggablePanel>
             )}
 
             {/* THE CONSOLIDATED PANEL */}
-            <div style={{
-                position: 'fixed', right: controller.uiVisible ? '40px' : '-450px',
-                top: '50%', transform: `translateY(-50%)`,
-                maxHeight: '85vh',
-                width: '320px', backgroundColor: '#fdfbf7', border: '2px solid #d4af37', borderRadius: '15px',
-                boxShadow: '0 0 40px rgba(0,0,0,0.3)', pointerEvents: 'auto', zIndex: 900,
-                transition: 'right 0.6s cubic-bezier(0.4, 0, 0.2, 1)', display: 'flex', flexDirection: 'column',
-                overflow: 'hidden', padding: '40px 20px'
-            }}>
+            <DraggablePanel
+                initialStyle={{
+                    position: 'fixed', right: controller.uiVisible ? '40px' : '-450px',
+                    top: '50%',
+                    transform: 'translateY(-50%)', // Centering logic
+                    maxHeight: '85vh',
+                    width: '320px', backgroundColor: '#fdfbf7', border: '2px solid #d4af37', borderRadius: '15px',
+                    boxShadow: '0 0 40px rgba(0,0,0,0.3)', pointerEvents: 'auto', zIndex: 900,
+                    transition: 'right 0.6s cubic-bezier(0.4, 0, 0.2, 1)', display: 'flex', flexDirection: 'column',
+                    overflow: 'hidden', padding: '40px 20px'
+                }}
+            >
+                {/* Background Pattern */}
                 <div style={{
                     position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
                     opacity: 0.05, pointerEvents: 'none', zIndex: -1
@@ -208,6 +273,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         right: pos.includes('right') ? '5px' : 'auto',
                     }}>☩</div>
                 ))}
+
 
                 <div className="custom-scrollbar" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '25px', paddingRight: '10px' }}>
 
@@ -310,65 +376,65 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     </div>
 
                 </div>
-            </div>
+        </div>
 
-            {/* BOTTOM NAVIGATION (CROSS) */}
-            <div style={{
-                position: 'fixed', bottom: '40px', left: '50%', transform: 'translateX(-50%)',
-                pointerEvents: 'auto', zIndex: 100, display: 'flex', alignItems: 'center', gap: '30px'
-            }}>
-                <button onClick={() => controller.prevCameraView()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37', fontSize: '2.5rem' }}>☩</button>
-                <button
-                    onClick={handleCenterCrossClick}
-                    style={{
-                        background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37',
-                        fontSize: '4.5rem', transform: isSecretAngle ? 'rotate(45deg)' : 'none',
-                        textShadow: isSecretAngle ? '0 0 25px rgba(212, 175, 55, 0.8)' : '0 0 15px rgba(212, 175, 55, 0.5)',
-                        transition: 'all 0.5s ease'
-                    }}
-                >☩</button>
-                <button onClick={() => controller.nextCameraView()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37', fontSize: '2.5rem' }}>☩</button>
-            </div>
+                {/* BOTTOM NAVIGATION (CROSS) */ }
+    <div style={{
+        position: 'fixed', bottom: '40px', left: '50%', transform: 'translateX(-50%)',
+        pointerEvents: 'auto', zIndex: 100, display: 'flex', alignItems: 'center', gap: '30px'
+    }}>
+        <button onClick={() => controller.prevCameraView()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37', fontSize: '2.5rem' }}>☩</button>
+        <button
+            onClick={handleCenterCrossClick}
+            style={{
+                background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37',
+                fontSize: '4.5rem', transform: isSecretAngle ? 'rotate(45deg)' : 'none',
+                textShadow: isSecretAngle ? '0 0 25px rgba(212, 175, 55, 0.8)' : '0 0 15px rgba(212, 175, 55, 0.5)',
+                transition: 'all 0.5s ease'
+            }}
+        >☩</button>
+        <button onClick={() => controller.nextCameraView()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37', fontSize: '2.5rem' }}>☩</button>
+    </div>
 
-            {/* ANGLE DISPLAY */}
-            <div style={{
-                position: 'fixed', bottom: '40px', left: isRTL ? 'auto' : '40px', right: isRTL ? '40px' : 'auto',
-                color: '#d4af37', fontSize: '1rem', fontFamily: 'monospace', textShadow: '0 0 10px rgba(212, 175, 55, 0.3)',
-                pointerEvents: 'none'
-            }}>
-                {Math.abs(controller.viewAngle).toFixed(2)}°{controller.viewAngle > 0 ? 'N' : 'S'}
-                <div>{Math.abs(controller.azimuthAngle).toFixed(2)}°{controller.azimuthAngle > 0 ? 'E' : 'W'}</div>
-            </div>
+    {/* ANGLE DISPLAY */ }
+    <div style={{
+        position: 'fixed', bottom: '40px', left: isRTL ? 'auto' : '40px', right: isRTL ? '40px' : 'auto',
+        color: '#d4af37', fontSize: '1rem', fontFamily: 'monospace', textShadow: '0 0 10px rgba(212, 175, 55, 0.3)',
+        pointerEvents: 'none'
+    }}>
+        {Math.abs(controller.viewAngle).toFixed(2)}°{controller.viewAngle > 0 ? 'N' : 'S'}
+        <div>{Math.abs(controller.azimuthAngle).toFixed(2)}°{controller.azimuthAngle > 0 ? 'E' : 'W'}</div>
+    </div>
 
-            {/* SIDE GREEK COLUMNS - Refined opacity */}
-            <div style={{ position: 'fixed', top: '50%', left: '120px', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column-reverse', gap: '5px', pointerEvents: 'none', opacity: 0.1, zIndex: 0 }} className="greek-column">
-                {GREEK_TITLE.split('').map((char, i) => (<div key={i} style={{ fontSize: '1.5rem', color: '#d4af37', textAlign: 'center' }}>{char}</div>))}
-            </div>
+    {/* SIDE GREEK COLUMNS - Refined opacity */ }
+    <div style={{ position: 'fixed', top: '50%', left: '120px', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column-reverse', gap: '5px', pointerEvents: 'none', opacity: 0.1, zIndex: 0 }} className="greek-column">
+        {GREEK_TITLE.split('').map((char, i) => (<div key={i} style={{ fontSize: '1.5rem', color: '#d4af37', textAlign: 'center' }}>{char}</div>))}
+    </div>
 
-            {/* VERSE DISPLAY */}
-            <div style={{
-                position: 'fixed', top: '10%', left: '50%', transform: 'translateX(-50%)',
-                textAlign: 'center', color: '#d4af37', maxWidth: '600px', width: '80%',
-                transition: 'all 0.5s ease', opacity: (controller.libraryOpen && controller.uiVisible) ? 1 : 0, visibility: (controller.libraryOpen && controller.uiVisible) ? 'visible' : 'hidden',
-                zIndex: 800
-            }}>
-                <div style={{ fontSize: '1.2rem', marginBottom: '0.5rem', opacity: 0.8 }}>{note}</div>
-                <div style={{ fontSize: '1.5rem', whiteSpace: 'pre-wrap', fontFamily: isAmharic ? 'sans-serif' : 'Cinzel, serif', direction: isRTL ? 'rtl' : 'ltr' }}>{body}</div>
-            </div>
+    {/* VERSE DISPLAY */ }
+    <div style={{
+        position: 'fixed', top: '10%', left: '50%', transform: 'translateX(-50%)',
+        textAlign: 'center', color: '#d4af37', maxWidth: '600px', width: '80%',
+        transition: 'all 0.5s ease', opacity: (controller.libraryOpen && controller.uiVisible) ? 1 : 0, visibility: (controller.libraryOpen && controller.uiVisible) ? 'visible' : 'hidden',
+        zIndex: 800
+    }}>
+        <div style={{ fontSize: '1.2rem', marginBottom: '0.5rem', opacity: 0.8 }}>{note}</div>
+        <div style={{ fontSize: '1.5rem', whiteSpace: 'pre-wrap', fontFamily: isAmharic ? 'sans-serif' : 'Cinzel, serif', direction: isRTL ? 'rtl' : 'ltr' }}>{body}</div>
+    </div>
 
-            {/* NOLL CUBE OVERLAY */}
-            <div style={{
-                position: 'fixed', bottom: '150px', left: '40px', zIndex: 100, pointerEvents: 'auto',
-                display: controller.metatronShape === 'MERKABA' ? 'block' : 'none',
-                opacity: controller.uiVisible ? 1 : 0, transition: 'opacity 0.5s'
-            }}>
-                <div style={{
-                    backgroundColor: '#fdfbf7', padding: '20px', borderRadius: '15px', border: '1px solid #d4af37',
-                    maxWidth: '300px', boxShadow: '0 4px 30px rgba(0, 0, 0, 0.2)', color: '#1a1a1a'
-                }}>
-                    <NollCubeContent language={controller.language} isRTL={isRTL} />
-                </div>
-            </div>
+    {/* NOLL CUBE OVERLAY */ }
+    <div style={{
+        position: 'fixed', bottom: '150px', left: '40px', zIndex: 100, pointerEvents: 'auto',
+        display: controller.metatronShape === 'MERKABA' ? 'block' : 'none',
+        opacity: controller.uiVisible ? 1 : 0, transition: 'opacity 0.5s'
+    }}>
+        <div style={{
+            backgroundColor: '#fdfbf7', padding: '20px', borderRadius: '15px', border: '1px solid #d4af37',
+            maxWidth: '300px', boxShadow: '0 4px 30px rgba(0, 0, 0, 0.2)', color: '#1a1a1a'
+        }}>
+            <NollCubeContent language={controller.language} isRTL={isRTL} />
+        </div>
+    </div>
 
         </div >
     );

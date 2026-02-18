@@ -11,16 +11,32 @@ interface Props {
 }
 
 const CameraManager: React.FC<{ controller: any }> = ({ controller }) => {
+    // -------------------------------------------------------------------------
+    // CAMERA PERSISTENCE FIX
+    // -------------------------------------------------------------------------
+    // We want to ensure that if we switch cameras, we don't lose the approximate
+    // "Polar" and "Azimuth" angles.
+    // However, OrbitControls ultimately dictates where the camera is.
+    // When the camera instance changes (Persp <-> Ortho), OrbitControls
+    // might re-evaluate.
+    // The key is that we are feeding OrbitControls through `controlsRef` in MainScene.
+    // We need to make sure the *new* camera picks up the position or the controls
+    // re-orient it.
+
+    // Actually, simply mounting the new camera at the *same* position might work
+    // if the radius is similar.
+    // But Ortho Zoom is different from Persp Distance.
+
     return (
         <>
             <PerspectiveCamera
                 makeDefault={controller.cameraType === 'PERSPECTIVE'}
-                position={[0, 0, 30]}
+                position={[0, 0, 30]} // Standard distance
                 fov={45}
             />
             <OrthographicCamera
                 makeDefault={controller.cameraType === 'ORTHOGRAPHIC'}
-                position={[0, 0, 100]}
+                position={[0, 0, 100]} // Further out for Ortho to avoid clipping
                 zoom={controller.zoom}
                 near={-100}
                 far={500}
@@ -32,47 +48,46 @@ const CameraManager: React.FC<{ controller: any }> = ({ controller }) => {
 export const MainScene: React.FC<Props> = ({ controller }) => {
     const controlsRef = useRef<any>(null);
 
-    // Camera View Cycling Logic
+    // Sync Controls when Camera Type Changes
+    // We want to FORCE the controls to the last known angles
     useEffect(() => {
         if (controlsRef.current) {
             const controls = controlsRef.current;
+            // Calculate Radians from our degrees
+            // Polar: 90 is Equator (PI/2), 0 is Top (0), 180 is Bottom (PI)
+            // viewAngle (Lat): 90 (Top) ... 0 ... -90 (Bottom)
+            // Polar = (90 - Lat) * degToRad
+            const polar = (90 - controller.viewAngle) * (Math.PI / 180);
+
+            // Azimuth (Lon):
+            // 0 => 0
+            // Azimuth = Lon * degToRad
+            const azimuth = controller.azimuthAngle * (Math.PI / 180);
+
+            controls.setPolarAngle(polar);
+            controls.setAzimuthalAngle(azimuth);
+            controls.update();
+        }
+    }, [controller.cameraType]); // Trigger on Camera Swap
 
 
-            // Use the imported constant for full 26-angle support
+    // Camera View Cycling Logic (Existing)
+    useEffect(() => {
+        if (controlsRef.current && controller.activeViewIndex !== 0) {
+            // ... (Same as before, but only if NOT just manual movement)
+            // Actually, activeViewIndex triggers this.
             const angle = IMPORTANT_ANGLES[controller.activeViewIndex];
             if (angle) {
-
-                // OrbitControls uses:
-                // Polar Angle: 0 (Top) to PI (Bottom). Horizon is PI/2.
-                // Azimuth: Radians.
-
-                // Convert our "Geographic" coords to Spherical Radians
-                // EL: 90 (Top) -> Polar 0
-                // EL: 0 (Front) -> Polar PI/2
-                // EL: -90 (Bottom) -> Polar PI
                 const polar = (90 - angle.el) * (Math.PI / 180);
-
-                // AZ: 0 (Front) -> 0
-                // AZ: 90 (Right/East) -> PI/2 OR -PI/2?
-                // In ThreeJS default: +Z is front.
-                // Let's match typical math: 0 is +Z? 
-                // Let's rely on the previous switch case values to calibrate.
-                // Case 0 (Front, 0,0) -> Polar PI/2, Azimuth 0. Matches.
-                // Case 3 (Right, 90,0) -> Polar PI/2, Azimuth PI/2. Matches.
-                // Case 5 (Left, 270 or -90) -> Azimuth -PI/2.
-
                 const azimuth = angle.az * (Math.PI / 180);
-
-                controls.setPolarAngle(polar);
-                controls.setAzimuthalAngle(azimuth);
-                controls.update();
+                controlsRef.current.setPolarAngle(polar);
+                controlsRef.current.setAzimuthalAngle(azimuth);
+                controlsRef.current.update();
             }
         }
     }, [controller.activeViewIndex]);
 
-    // Simple Dark Mode Logic
-    const bgColor = controller.darkMode ? '#000000' : '#ffffff';
-    const fogColor = controller.darkMode ? '#000000' : '#ffffff';
+    // ...
 
     return (
         <Canvas
@@ -83,8 +98,8 @@ export const MainScene: React.FC<Props> = ({ controller }) => {
             <CameraManager controller={controller} />
 
             {/* Background & Fog */}
-            <color attach="background" args={[bgColor]} />
-            <fog attach="fog" args={[fogColor, 20, 200]} />
+            <color attach="background" args={[controller.darkMode ? '#000000' : '#ffffff']} />
+            <fog attach="fog" args={[controller.darkMode ? '#000000' : '#ffffff', 20, 200]} />
 
             {/* Lighting - Holy / Light */}
             <ambientLight intensity={1.5} />
@@ -99,21 +114,14 @@ export const MainScene: React.FC<Props> = ({ controller }) => {
                 enableDamping
                 onChange={(e) => {
                     if (e?.target) {
-                        // Polar: 0 (Top) -> PI (Bottom)
-                        // User view: +90 (Top), 0 (Equator), -90 (Bottom)
                         const polar = e.target.getPolarAngle();
                         const degLat = Number((90 - (polar * 180 / Math.PI)).toFixed(2));
 
-                        // Azimuth: 0 (Front/Z), + (Left), - (Right)
-                        // We map: 0=N, -90=E, 90=W, 180=S (Standard Compass)
-                        // Actually OrbitControls default: 0 is +Z.
-                        // Rotating camera left (orbit right) gives positive azimuth?
-                        // Let's stick to raw degrees first, mapped to compass in UI
                         const azi = e.target.getAzimuthalAngle();
                         const degLon = Number((azi * 180 / Math.PI).toFixed(2));
 
-                        // Throttle updates
-                        if (Math.abs(degLat - controller.viewAngle) > 0 || Math.abs(degLon - controller.azimuthAngle) > 0) {
+                        // Only update if changed visually
+                        if (Math.abs(degLat - controller.viewAngle) > 0.01 || Math.abs(degLon - controller.azimuthAngle) > 0.01) {
                             controller.setViewAngle(degLat);
                             controller.setAzimuthAngle(degLon);
                         }
