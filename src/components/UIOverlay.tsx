@@ -303,8 +303,9 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         <button className="sacred-btn" onClick={() => controller.setIsPlaying(!controller.isPlaying)} style={{ background: 'none', border: '1px solid #d4af37', borderRadius: '50%', width: '45px', height: '45px', color: '#d4af37', flexShrink: 0, textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             {controller.isPlaying ? '⏸' : '▶'}
                         </button>
-                        <div style={{ flex: 1 }}>
+                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '2px' }}>
                             <input type="range" min="0.1" max="300" step="0.1" value={controller.rotationSpeed || 1.0} onChange={(e) => controller.setRotationSpeed(parseFloat(e.target.value))} style={{ width: '100%', accentColor: '#d4af37' }} />
+                            <div style={{ fontSize: '0.6rem', color: '#d4af37', textAlign: 'right' }}>{controller.rotationSpeed?.toFixed(1)} Hz</div>
                         </div>
                     </div>
 
@@ -343,7 +344,9 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
 
                     {/* PHASES */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                        <button className="sacred-btn" onClick={() => controller.setSplitMode(!controller.splitMode)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: controller.splitMode ? '#fdfbf7' : '#d4af37', background: controller.splitMode ? '#d4af37' : 'none', textAlign: 'center' }}>SPLIT {controller.splitMode ? 'ON' : 'OFF'}</button>
+                        <button className="sacred-btn" onClick={() => controller.setSplitMode(!controller.splitMode)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: controller.splitMode ? '#fdfbf7' : '#d4af37', background: controller.splitMode ? '#d4af37' : 'none', textAlign: 'center' }}>
+                            SPLIT {controller.splitMode ? `(${(controller.frequencyA / (controller.frequencyB || 1)).toFixed(2)})` : 'OFF'}
+                        </button>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
