@@ -316,6 +316,19 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     >
                         ♪
                     </button>
+                    <button
+                        onClick={() => controller.setInfiniteTriangle(!controller.infiniteTriangle)}
+                        title="Infinite Triangle Mode"
+                        style={{
+                            background: controller.infiniteTriangle ? 'rgba(255, 215, 0, 0.15)' : 'none',
+                            border: controller.infiniteTriangle ? '2px solid #ffd700' : '2px solid rgba(255, 215, 0, 0.4)',
+                            borderRadius: '10px', padding: '6px 12px', cursor: 'pointer',
+                            color: controller.infiniteTriangle ? '#ffd700' : 'rgba(255, 215, 0, 0.6)',
+                            fontSize: '1.4rem', fontWeight: 'bold', transition: 'all 0.3s ease', lineHeight: 1
+                        }}
+                    >
+                        ∆
+                    </button>
                     {controller.toneEnabled && (
                         <button
                             onClick={() => controller.cycleToneScale()}
@@ -487,21 +500,186 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
 
             </div>
 
-            <style>{`
-                .sacred-btn { transition: all 0.2s; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
-                .sacred-btn:hover { background: rgba(255,215,0,0.2) !important; color: #ffd700 !important; }
-                .sacred-text-btn:hover h1 { text-shadow: 0 0 25px rgba(255,215,0,0.8) !important; }
-                
-                /* Responsive Logic */
-                .mobile-only { display: none !important; }
-                .desktop-only { display: block; }
+            {/* NOLL CUBE OVERLAY */}
+            <div style={{
+                position: 'fixed',
+                bottom: '80px',
+                right: '40px',
+                zIndex: 100,
+                pointerEvents: 'auto',
+                display: controller.metatronShape === 'MERKABA' ? 'block' : 'none'
+            }}>
+                <div style={{
+                    backgroundColor: 'rgba(0,0,0,0.85)',
+                    padding: '20px',
+                    borderRadius: '15px',
+                    border: '1px solid #d4af37',
+                    maxWidth: '300px',
+                    boxShadow: '0 4px 30px rgba(0, 0, 0, 0.7)',
+                    backdropFilter: 'blur(5px)',
+                    color: '#d4af37'
+                }}>
+                    <NollCubeContent language={controller.language} isRTL={isRTL} />
+                </div>
+            </div>
 
-                @media (max-width: 768px) {
-                    .greek-column { display: none !important; }
-                    .mobile-only { display: flex !important; }
-                    .desktop-only { display: none !important; }
-                }
-            `}</style>
+            {/* --- THEORY OF EVERYTHING & REVEAL TOOLS --- */}
+            <div style={{
+                position: 'absolute',
+                top: '50%',
+                right: '20px',
+                transform: 'translateY(-50%)',
+                display: controller.uiVisible ? 'flex' : 'none',
+                flexDirection: 'column',
+                gap: '10px',
+                backgroundColor: 'rgba(0,0,0,0.85)',
+                padding: '15px',
+                borderRadius: '10px',
+                border: '1px solid #d4af37',
+                maxHeight: '80vh',
+                overflowY: 'auto',
+                pointerEvents: 'auto',
+                zIndex: 1000,
+                boxShadow: '0 4px 30px rgba(0, 0, 0, 0.5)',
+                backdropFilter: 'blur(5px)'
+            }}>
+                <div style={{ color: '#d4af37', fontSize: '0.82rem', fontWeight: 'bold', marginBottom: '5px', textAlign: 'center', letterSpacing: '1px' }}>THEORY OF EVERYTHING</div>
+
+                <button
+                    onClick={() => controller.setSplitMode(!controller.splitMode)}
+                    style={{
+                        padding: '8px',
+                        backgroundColor: controller.splitMode ? '#d4af37' : 'transparent',
+                        color: controller.splitMode ? '#000' : '#d4af37',
+                        border: '1px solid #d4af37',
+                        borderRadius: '5px',
+                        cursor: 'pointer',
+                        fontSize: '0.7rem',
+                        transition: 'all 0.2s'
+                    }}
+                >
+                    SPLIT MODE {controller.splitMode ? 'ON' : 'OFF'}
+                </button>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                    <div style={{ color: '#fff', fontSize: '0.62rem', opacity: 0.8 }}>FREQ A (UP): {controller.frequencyA.toFixed(2)} Hz</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                        <input
+                            type="range" min="0" max="5" step="0.01"
+                            value={controller.frequencyA}
+                            onChange={(e) => controller.setFrequencyA(parseFloat(e.target.value))}
+                            style={{ flex: 1, accentColor: '#d4af37' }}
+                        />
+                        <input
+                            type="number" step="0.01"
+                            value={controller.frequencyA}
+                            onChange={(e) => controller.setFrequencyA(parseFloat(e.target.value) || 0)}
+                            style={{ width: '45px', fontSize: '0.7rem', backgroundColor: '#222', color: '#fff', border: '1px solid #444', padding: '2px' }}
+                        />
+                    </div>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                    <div style={{ color: '#fff', fontSize: '0.62rem', opacity: 0.8 }}>FREQ B (DOWN): {controller.frequencyB.toFixed(2)} Hz</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                        <input
+                            type="range" min="0" max="5" step="0.01"
+                            value={controller.frequencyB}
+                            onChange={(e) => controller.setFrequencyB(parseFloat(e.target.value))}
+                            style={{ flex: 1, accentColor: '#d4af37' }}
+                        />
+                        <input
+                            type="number" step="0.01"
+                            value={controller.frequencyB}
+                            onChange={(e) => controller.setFrequencyB(parseFloat(e.target.value) || 0)}
+                            style={{ width: '45px', fontSize: '0.7rem', backgroundColor: '#222', color: '#fff', border: '1px solid #444', padding: '2px' }}
+                        />
+                    </div>
+                </div>
+
+                <button
+                    onClick={() => controller.setAudioSync(!controller.audioSync)}
+                    style={{
+                        padding: '8px',
+                        backgroundColor: controller.audioSync ? '#d4af37' : 'transparent',
+                        color: controller.audioSync ? '#000' : '#d4af37',
+                        border: '1px solid #d4af37',
+                        borderRadius: '5px',
+                        cursor: 'pointer',
+                        fontSize: '0.7rem',
+                        marginTop: '5px',
+                        transition: 'all 0.2s'
+                    }}
+                >
+                    SYNC TO SOUND {controller.audioSync ? 'ON' : 'OFF'}
+                </button>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginTop: '5px' }}>
+                    <div style={{ color: '#fff', fontSize: '0.62rem', opacity: 0.8 }}>WAVE TYPE (EMERGENT)</div>
+                    <select
+                        value={controller.waveType}
+                        onChange={(e) => controller.setWaveType(e.target.value as any)}
+                        style={{
+                            padding: '5px',
+                            backgroundColor: '#222',
+                            color: '#d4af37',
+                            border: '1px solid #d4af37',
+                            borderRadius: '5px',
+                            fontSize: '0.7rem'
+                        }}
+                    >
+                        <option value="SINE">SINE (RESONANCE)</option>
+                        <option value="SAWTOOTH">SAWTOOTH (MOD SPIN)</option>
+                        <option value="SQUARE">SQUARE (POLARITY)</option>
+                        <option value="FRACTAL">FRACTAL (MULTIVERSE)</option>
+                    </select>
+                </div>
+
+                <div style={{ height: '1px', backgroundColor: '#d4af3733', margin: '10px 0' }} />
+                <div style={{ color: '#d4af37', fontSize: '0.82rem', fontWeight: 'bold', marginBottom: '5px', textAlign: 'center', letterSpacing: '1px' }}>REVEAL TOOLS</div>
+
+                <button
+                    onClick={() => controller.setRevealSymmetry(!controller.revealSymmetry)}
+                    style={{
+                        padding: '8px',
+                        backgroundColor: controller.revealSymmetry ? '#d4af37' : 'transparent',
+                        color: controller.revealSymmetry ? '#000' : '#d4af37',
+                        border: '1px solid #d4af37',
+                        borderRadius: '5px',
+                        cursor: 'pointer',
+                        fontSize: '0.7rem',
+                        transition: 'all 0.2s'
+                    }}
+                >
+                    SYMMETRY PLANES {controller.revealSymmetry ? 'ON' : 'OFF'}
+                </button>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                    <div style={{ color: '#fff', fontSize: '0.62rem', opacity: 0.8 }}>INNER VISION (SLICE): {controller.innerVision.toFixed(1)}</div>
+                    <input
+                        type="range" min="-10" max="10" step="0.1"
+                        value={controller.innerVision}
+                        onChange={(e) => controller.setInnerVision(parseFloat(e.target.value))}
+                        style={{ accentColor: '#d4af37' }}
+                    />
+                </div>
+
+                <button
+                    onClick={() => controller.setShow4DShadow(!controller.show4DShadow)}
+                    style={{
+                        padding: '8px',
+                        backgroundColor: controller.show4DShadow ? '#d4af37' : 'transparent',
+                        color: controller.show4DShadow ? '#000' : '#d4af37',
+                        border: '1px solid #d4af37',
+                        borderRadius: '5px',
+                        cursor: 'pointer',
+                        fontSize: '0.7rem',
+                        transition: 'all 0.2s'
+                    }}
+                >
+                    4D SHADOW TRACERS {controller.show4DShadow ? 'ON' : 'OFF'}
+                </button>
+            </div>
         </div >
     );
 };

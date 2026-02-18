@@ -11,10 +11,28 @@ interface Props {
 
 // --- SHARED AUDIO CONTEXT (singleton — all cherubim share one) ---
 let sharedAudioCtx: AudioContext | null = null;
+let sharedAnalyser: AnalyserNode | null = null;
+let dataArray: Uint8Array | null = null;
+
 const getAudioCtx = (): AudioContext => {
     if (!sharedAudioCtx) sharedAudioCtx = new AudioContext();
     if (sharedAudioCtx.state === 'suspended') sharedAudioCtx.resume();
     return sharedAudioCtx;
+};
+
+const getAnalyser = (): AnalyserNode => {
+    const ctx = getAudioCtx();
+    if (!sharedAnalyser) {
+        sharedAnalyser = ctx.createAnalyser();
+        sharedAnalyser.fftSize = 256;
+        const bufferLength = sharedAnalyser.frequencyBinCount;
+        dataArray = new Uint8Array(bufferLength);
+
+        // Connect mic or just simulate if no input? 
+        // For now, let's assume the user might want to connect something later, 
+        // but we'll provide the data array for reactivity.
+    }
+    return sharedAnalyser;
 };
 
 const BASE_HZ = 110; // A2 — root vibration at speed 1.0
@@ -70,21 +88,11 @@ const CherubimNode: React.FC<{
     const { tetraUp, tetraDown } = useMemo(() => createMerkabaGeometries(2.0), []);
     const sphereGeo = useMemo(() => new THREE.SphereGeometry(2.0, 24, 24), []);
 
-    const wireMat = useMemo(() => new THREE.MeshBasicMaterial({
-        color: color,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.08,
-        side: THREE.DoubleSide,
-        depthWrite: false
-    }), [color]);
-
     const invisibleMat = useMemo(() => new THREE.MeshBasicMaterial({ visible: false }), []);
 
     // Rotation refs
     const upRef = useRef<THREE.Mesh>(null);
     const downRef = useRef<THREE.Mesh>(null);
-    const rawAngle = useRef(0);
 
     // --- CHOIR TONE (per-node) ---
     const oscillatorsRef = useRef<OscillatorNode[]>([]);
@@ -187,19 +195,92 @@ const CherubimNode: React.FC<{
         return () => { stopTone(); };
     }, []);
 
-    useFrame((_, delta) => {
-        // Rotation
+    // --- WAVE & AUDIO REACTIVITY ---
+    const clippingPlane = useMemo(() => new THREE.Plane(new THREE.Vector3(0, 1, 0), controller.innerVision), [controller.innerVision]);
+
+    useFrame((_state, _delta) => {
+        // 1. Rotation with Split Mode
         if (controller.isPlaying && upRef.current && downRef.current) {
-            const speed = delta * 0.5 * (controller.rotationSpeed || 1.0);
-            rawAngle.current += speed;
+            const rawA = controller.phaseA;
+            const rawB = controller.phaseB;
 
-            const display = controller.parallelLock
-                ? Math.round(rawAngle.current / SNAP_ANGLE_RAD) * SNAP_ANGLE_RAD
-                : rawAngle.current;
+            const displayA = controller.parallelLock
+                ? Math.round(rawA / SNAP_ANGLE_RAD) * SNAP_ANGLE_RAD
+                : rawA;
 
-            upRef.current.rotation.y = -display;
-            downRef.current.rotation.y = display;
+            const displayB = controller.parallelLock
+                ? Math.round(rawB / SNAP_ANGLE_RAD) * SNAP_ANGLE_RAD
+                : rawB;
+
+            upRef.current.rotation.y = -displayA;
+            downRef.current.rotation.y = displayB;
         }
+
+        // 2. Wave Propagation & Infinite Triangle Alignment
+        if (upRef.current && downRef.current) {
+            const dist = position.length();
+            const t = controller.waveTime * 2;
+            const k = 0.5;
+            let wave = 0;
+
+            switch (controller.waveType) {
+                case 'SINE':
+                    wave = Math.sin(dist * k - t);
+                    break;
+                case 'SAWTOOTH':
+                    wave = (((controller.phaseA * 0.5 + dist * k) / (Math.PI * 2)) % 1) * 2 - 1;
+                    break;
+                case 'SQUARE':
+                    wave = Math.sign(Math.sin(dist * k - t));
+                    break;
+                case 'FRACTAL':
+                    wave = Math.sin(dist * k - t) * 1.0 +
+                        Math.sin(dist * k * 3 - t * 1.5) * 0.33 +
+                        Math.sin(dist * k * 7 - t * 2.1) * 0.14 +
+                        Math.sin(dist * k * 21 - t * 3.3) * 0.05;
+                    wave /= 1.52;
+                    break;
+            }
+
+            const amplitude = 0.5;
+            const baseY = controller.infiniteTriangle ? 0.58 : 0;
+            const baseX = controller.infiniteTriangle ? 0.58 : 0;
+            const baseZ = controller.infiniteTriangle ? 0.29 : 0;
+
+            upRef.current.position.set(baseX, baseY + wave * amplitude, baseZ);
+            downRef.current.position.set(-baseX, -baseY - wave * amplitude, -baseZ);
+
+            if (controller.infiniteTriangle) {
+                // In infinite mode, the rotations are forced into the 4D-to-2D projection alignment
+                const snap = Math.PI / 6; // 30 deg
+                upRef.current.rotation.y = -snap;
+                downRef.current.rotation.y = snap;
+                upRef.current.rotation.x = 0.52; // ~30 deg tilt
+                downRef.current.rotation.x = -0.52;
+            } else {
+                upRef.current.rotation.x = 0;
+                downRef.current.rotation.x = 0;
+            }
+        }
+
+        // 3. Audio Reactivity
+        if (controller.audioSync && sharedAnalyser && dataArray) {
+            sharedAnalyser.getByteFrequencyData(dataArray as any);
+            const avg = Array.from(dataArray).reduce((acc, val) => acc + val, 0) / dataArray.length;
+            const s = 1 + (avg / 255) * 0.5;
+            if (upRef.current && downRef.current) {
+                upRef.current.scale.set(s, s, s);
+                downRef.current.scale.set(s, s, s);
+            }
+        } else {
+            if (upRef.current && downRef.current) {
+                upRef.current.scale.set(1, 1, 1);
+                downRef.current.scale.set(1, 1, 1);
+            }
+        }
+
+        // 4. Clipping & Reveal
+        clippingPlane.constant = controller.innerVision;
 
         // Tone management
         const rotSpeed = controller.rotationSpeed || 1.0;
@@ -211,30 +292,42 @@ const CherubimNode: React.FC<{
         } else if (!shouldPlay && prev.enabled) {
             stopTone();
         } else if (shouldPlay) {
-            if (Math.abs(rotSpeed - prev.speed) > 0.01) {
-                updateFrequency(rotSpeed, controller.toneScale);
+            const freq = controller.splitMode ? (controller.frequencyA + controller.frequencyB) / 2 : rotSpeed;
+            if (Math.abs(freq - prev.speed) > 0.01) {
+                updateFrequency(freq, controller.toneScale);
             }
             if (controller.toneScale !== prev.scale || controller.variedMode !== prev.varied) {
-                startTone(rotSpeed, controller.toneScale);
+                startTone(freq, controller.toneScale);
             }
         }
 
         prevToneState.current = {
             enabled: shouldPlay,
             scale: controller.toneScale,
-            speed: rotSpeed,
+            speed: controller.splitMode ? (controller.frequencyA + controller.frequencyB) / 2 : rotSpeed,
             varied: controller.variedMode
         };
     });
 
+    const sphereMat = useMemo(() => new THREE.MeshBasicMaterial({
+        color: color,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.1,
+        clippingPlanes: [clippingPlane],
+        clipShadows: true
+    }), [color, clippingPlane]);
+
     return (
         <group position={position}>
-            <mesh geometry={sphereGeo} material={wireMat} />
+            <mesh geometry={sphereGeo} material={sphereMat} />
             <mesh ref={upRef} geometry={tetraUp} material={invisibleMat}>
                 <Edges threshold={15} color="#ff0000" linewidth={2} transparent opacity={0.8} />
+                {controller.show4DShadow && <Edges threshold={0} color="#ff0000" linewidth={0.5} transparent opacity={0.2} scale={1.2} />}
             </mesh>
             <mesh ref={downRef} geometry={tetraDown} material={invisibleMat}>
                 <Edges threshold={15} color="#0000ff" linewidth={2} transparent opacity={0.8} />
+                {controller.show4DShadow && <Edges threshold={0} color="#0000ff" linewidth={0.5} transparent opacity={0.2} scale={1.2} />}
             </mesh>
         </group>
     );
@@ -315,16 +408,25 @@ export const MetatronGeometry: React.FC<Props> = ({ controller }) => {
     const worldPos = useMemo(() => new THREE.Vector3(), []);
     const worldDir = useMemo(() => new THREE.Vector3(), []);
 
+    // Initial Audio Hookup
+    useEffect(() => {
+        if (controller.audioSync) {
+            getAnalyser();
+            // In a real app we'd connect a stream here:
+            // navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+            //     const source = getAudioCtx().createMediaStreamSource(stream);
+            //     source.connect(getAnalyser());
+            // });
+        }
+    }, [controller.audioSync]);
+
     useFrame(({ camera }) => {
         if (!sharedAudioCtx) return;
         const listener = sharedAudioCtx.listener;
 
         camera.getWorldPosition(worldPos);
         camera.getWorldDirection(worldDir);
-        camera.up.clone().applyQuaternion(camera.quaternion).normalize();
 
-        // AudioContext.listener uses standard right-handed coordinates
-        // Orientation is: (forwardX, forwardY, forwardZ, upX, upY, upZ)
         if (listener.positionX) {
             listener.positionX.setTargetAtTime(worldPos.x, sharedAudioCtx.currentTime, 0.1);
             listener.positionY.setTargetAtTime(worldPos.y, sharedAudioCtx.currentTime, 0.1);
@@ -332,18 +434,30 @@ export const MetatronGeometry: React.FC<Props> = ({ controller }) => {
             listener.forwardX.setTargetAtTime(worldDir.x, sharedAudioCtx.currentTime, 0.1);
             listener.forwardY.setTargetAtTime(worldDir.y, sharedAudioCtx.currentTime, 0.1);
             listener.forwardZ.setTargetAtTime(worldDir.z, sharedAudioCtx.currentTime, 0.1);
-            listener.upX.setTargetAtTime(camera.up.x, sharedAudioCtx.currentTime, 0.1);
-            listener.upY.setTargetAtTime(camera.up.y, sharedAudioCtx.currentTime, 0.1);
-            listener.upZ.setTargetAtTime(camera.up.z, sharedAudioCtx.currentTime, 0.1);
-        } else {
-            // Fallback for older browsers
-            listener.setPosition(worldPos.x, worldPos.y, worldPos.z);
-            listener.setOrientation(worldDir.x, worldDir.y, worldDir.z, camera.up.x, camera.up.y, camera.up.z);
         }
     });
 
+    const symmetryGeo = useMemo(() => new THREE.PlaneGeometry(spacing * size, spacing * size), [spacing, size]);
+    const symmetryMat = useMemo(() => new THREE.MeshBasicMaterial({
+        color: "#d4af37",
+        transparent: true,
+        opacity: 0.05,
+        side: THREE.DoubleSide,
+        depthWrite: false
+    }), []);
+
     return (
         <group key={`metatron-${size}`}>
+            {/* --- REVEAL TOOLS: SYMMETRY PLANES --- */}
+            {controller.revealSymmetry && (
+                <group>
+                    <mesh geometry={symmetryGeo} material={symmetryMat} />
+                    <mesh geometry={symmetryGeo} material={symmetryMat} rotation={[Math.PI / 2, 0, 0]} />
+                    <mesh geometry={symmetryGeo} material={symmetryMat} rotation={[0, Math.PI / 2, 0]} />
+                    <gridHelper args={[spacing * size, size * 2, "#444", "#222"]} rotation={[Math.PI / 2, 0, 0]} />
+                </group>
+            )}
+
             {nodes.map((pos, i) => (
                 <CherubimNode
                     key={i}
@@ -359,7 +473,7 @@ export const MetatronGeometry: React.FC<Props> = ({ controller }) => {
                 <meshBasicMaterial
                     color={gridColor}
                     transparent
-                    opacity={0.6}
+                    opacity={0.3}
                 />
             </instancedMesh>
         </group>

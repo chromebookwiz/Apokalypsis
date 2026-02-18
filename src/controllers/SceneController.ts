@@ -9,6 +9,7 @@ export type MetatronShape = 'NONE' | 'MERKABA' | 'CUBE' | 'OCTAHEDRON' | 'ICOSAH
 export type ViewMode = '2D' | '3D' | '4D';
 export type CameraType = 'PERSPECTIVE' | 'ORTHOGRAPHIC';
 export type ToneScale = 'FUNDAMENTAL' | 'TRIADIC' | 'MERKABA' | 'CELESTIAL';
+export type WaveType = 'SINE' | 'SAWTOOTH' | 'SQUARE' | 'FRACTAL';
 
 // --- CAMERA ANGLES (Face, Edge, Corner) ---
 // 26 Total: 6 Faces + 12 Edges + 8 Corners
@@ -100,6 +101,20 @@ export const useSceneController = () => {
     // UI State
     const [isPlaying, setIsPlaying] = useState(false);
     const [rotationSpeed, setRotationSpeed] = useState(1.0); // Speed Multiplier
+    const [splitMode, setSplitMode] = useState(false);
+    const [frequencyA, setFrequencyA] = useState(1.0);
+    const [frequencyB, setFrequencyB] = useState(1.0);
+    const [audioSync, setAudioSync] = useState(false);
+    const [revealSymmetry, setRevealSymmetry] = useState(false);
+    const [innerVision, setInnerVision] = useState(0); // clipping plane offset
+    const [show4DShadow, setShow4DShadow] = useState(false);
+    const [infiniteTriangle, setInfiniteTriangle] = useState(false);
+
+    const [phaseA, setPhaseA] = useState(0);
+    const [phaseB, setPhaseB] = useState(0);
+    const [waveTime, setWaveTime] = useState(0);
+    const [waveType, setWaveType] = useState<WaveType>('SINE');
+
     const [showNumbers, setShowNumbers] = useState(true);
     // blackMode removed
     const [zoom, setZoom] = useState(40);
@@ -211,18 +226,34 @@ export const useSceneController = () => {
         }
     }, [autoRotate4D, geometryType]);
 
-    // Animation Loop for HyperPhase
+    // Animation Loop for HyperPhase and Theory of Everything
     useEffect(() => {
         let frameId: number;
-        const animate = () => {
+        let lastTime = performance.now();
+
+        const animate = (time: number) => {
+            const delta = (time - lastTime) / 1000;
+            lastTime = time;
+
             if (isPlaying && (geometryType === 'METATRON')) {
-                setHyperPhase(prev => prev + 0.002 * rotationSpeed); // Apply rotationSpeed
+                const baseSpeed = 0.5 * rotationSpeed * delta;
+
+                if (splitMode) {
+                    setPhaseA(prev => prev + baseSpeed * frequencyA);
+                    setPhaseB(prev => prev + baseSpeed * frequencyB);
+                } else {
+                    setPhaseA(prev => prev + baseSpeed);
+                    setPhaseB(prev => prev + baseSpeed);
+                }
+
+                setWaveTime(prev => prev + delta * rotationSpeed);
+                setHyperPhase(prev => prev + 0.002 * rotationSpeed);
             }
             frameId = requestAnimationFrame(animate);
         };
-        animate();
+        frameId = requestAnimationFrame(animate);
         return () => cancelAnimationFrame(frameId);
-    }, [isPlaying, geometryType, rotationSpeed]); // Add rotationSpeed to dependencies
+    }, [isPlaying, geometryType, rotationSpeed, splitMode, frequencyA, frequencyB]);
 
 
 
@@ -266,6 +297,18 @@ export const useSceneController = () => {
         autoRotate4D,
         isPlaying,
         rotationSpeed,
+        splitMode,
+        frequencyA,
+        frequencyB,
+        audioSync,
+        revealSymmetry,
+        innerVision,
+        show4DShadow,
+        phaseA,
+        phaseB,
+        waveTime,
+        waveType,
+        infiniteTriangle,
         showNumbers,
         // blackMode removed
         zoom,
@@ -294,7 +337,17 @@ export const useSceneController = () => {
         setAutoRotate4D,
         setIsPlaying,
         setRotationSpeed,
+        setSplitMode,
+        setFrequencyA,
+        setFrequencyB,
+        setAudioSync,
+        setRevealSymmetry,
+        setInnerVision,
+        setShow4DShadow,
         setShowNumbers,
+        setWaveType,
+        setWaveTime,
+        setInfiniteTriangle,
         // setBlackMode removed
         setZoom,
         setGridSize,
