@@ -194,7 +194,9 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
 
             {/* THE CONSOLIDATED PANEL */}
             <div style={{
-                position: 'fixed', right: controller.uiVisible ? '40px' : '-450px', top: '40px', bottom: '40px',
+                position: 'fixed', right: controller.uiVisible ? '40px' : '-450px',
+                top: '50%', transform: `translateY(-50%)`,
+                maxHeight: '85vh',
                 width: '320px', backgroundColor: '#fdfbf7', border: '2px solid #d4af37', borderRadius: '15px',
                 boxShadow: '0 0 40px rgba(0,0,0,0.3)', pointerEvents: 'auto', zIndex: 900,
                 transition: 'right 0.6s cubic-bezier(0.4, 0, 0.2, 1)', display: 'flex', flexDirection: 'column',
@@ -276,11 +278,20 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     {/* PHASES */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                         <button onClick={() => controller.setSplitMode(!controller.splitMode)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>SPLIT {controller.splitMode ? 'ON' : 'OFF'}</button>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                            <input type="range" min="0" max="5" step="0.01" value={controller.frequencyA} onChange={(e) => controller.setFrequencyA(parseFloat(e.target.value))} style={{ width: '100%', accentColor: '#d4af37' }} />
-                            <input type="range" min="0" max="5" step="0.01" value={controller.frequencyB} onChange={(e) => controller.setFrequencyB(parseFloat(e.target.value))} style={{ width: '100%', accentColor: '#d4af37' }} />
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                <input type="range" min="0" max="5" step="0.01" value={controller.frequencyA} onChange={(e) => controller.setFrequencyA(parseFloat(e.target.value))} style={{ flex: 1, accentColor: '#d4af37' }} />
+                                <input type="number" min="0" max="5" step="0.01" value={controller.frequencyA.toFixed(2)} onChange={(e) => controller.setFrequencyA(parseFloat(e.target.value))} style={{ width: '60px', background: 'none', border: '1px solid #d4af37', borderRadius: '3px', color: '#1a1a1a', fontSize: '0.8rem', padding: '2px' }} />
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                <input type="range" min="0" max="5" step="0.01" value={controller.frequencyB} onChange={(e) => controller.setFrequencyB(parseFloat(e.target.value))} style={{ flex: 1, accentColor: '#ff0000' }} />
+                                <input type="number" min="0" max="5" step="0.01" value={controller.frequencyB.toFixed(2)} onChange={(e) => controller.setFrequencyB(parseFloat(e.target.value))} style={{ width: '60px', background: 'none', border: '1px solid #d4af37', borderRadius: '3px', color: '#1a1a1a', fontSize: '0.8rem', padding: '2px' }} />
+                            </div>
                         </div>
+
                         <select value={controller.waveType} onChange={(e) => controller.setWaveType(e.target.value as any)} style={{ padding: '10px', background: 'none', border: '1px solid #d4af37', color: '#d4af37', borderRadius: '5px', fontSize: '0.8rem' }}>
+                            <option value="NONE">NONE</option>
                             <option value="SINE">SINE</option>
                             <option value="SAWTOOTH">SAW</option>
                             <option value="SQUARE">SQR</option>
@@ -291,7 +302,10 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     {/* TOOLS */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '40px' }}>
                         <button onClick={() => controller.setRevealSymmetry(!controller.revealSymmetry)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>SYM</button>
-                        <input type="range" min="-10" max="10" step="0.1" value={controller.innerVision} onChange={(e) => controller.setInnerVision(parseFloat(e.target.value))} style={{ width: '100%', accentColor: '#d4af37' }} />
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                            <div style={{ fontSize: '0.6rem', color: '#d4af37', textAlign: 'center' }}>VISION</div>
+                            <input type="range" min="-10" max="10" step="0.1" value={controller.innerVision} onChange={(e) => controller.setInnerVision(parseFloat(e.target.value))} style={{ width: '100%', accentColor: '#d4af37' }} />
+                        </div>
                         <button onClick={() => controller.setShow4DShadow(!controller.show4DShadow)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>4D</button>
                     </div>
 

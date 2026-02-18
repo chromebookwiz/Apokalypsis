@@ -9,7 +9,7 @@ export type MetatronShape = 'NONE' | 'MERKABA' | 'CUBE' | 'OCTAHEDRON' | 'ICOSAH
 export type ViewMode = '2D' | '3D' | '4D';
 export type CameraType = 'PERSPECTIVE' | 'ORTHOGRAPHIC';
 export type ToneScale = 'FUNDAMENTAL' | 'TRIADIC' | 'MERKABA' | 'CELESTIAL';
-export type WaveType = 'SINE' | 'SAWTOOTH' | 'SQUARE' | 'FRACTAL';
+export type WaveType = 'NONE' | 'SINE' | 'SAWTOOTH' | 'SQUARE' | 'FRACTAL';
 
 // --- CAMERA ANGLES (Face, Edge, Corner) ---
 // 26 Total: 6 Faces + 12 Edges + 8 Corners
@@ -397,6 +397,9 @@ export const useSceneController = () => {
             setInnerVision(0);
             setShow4DShadow(false);
             setGeometryType('METATRON');
+            setFrequencyA(1.0);
+            setFrequencyB(1.0);
+            setWaveType('NONE');
         },
         activeViewIndex,
         azimuthAngle,

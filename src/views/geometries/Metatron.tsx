@@ -224,6 +224,9 @@ const CherubimNode: React.FC<{
             let wave = 0;
 
             switch (controller.waveType) {
+                case 'NONE':
+                    wave = 0;
+                    break;
                 case 'SINE':
                     wave = Math.sin(dist * k - t);
                     break;
@@ -448,13 +451,44 @@ export const MetatronGeometry: React.FC<Props> = ({ controller }) => {
 
     return (
         <group key={`metatron-${size}`}>
-            {/* --- REVEAL TOOLS: SYMMETRY PLANES --- */}
+            {/* --- REVEAL TOOLS: SYMMETRY CUBES --- */}
             {controller.revealSymmetry && (
                 <group>
                     <mesh geometry={symmetryGeo} material={symmetryMat} />
                     <mesh geometry={symmetryGeo} material={symmetryMat} rotation={[Math.PI / 2, 0, 0]} />
                     <mesh geometry={symmetryGeo} material={symmetryMat} rotation={[0, Math.PI / 2, 0]} />
-                    <gridHelper args={[spacing * size, size * 2, "#444", "#222"]} rotation={[Math.PI / 2, 0, 0]} />
+
+                    {/* BLACK CUBE FORMATION */}
+                    <mesh>
+                        <boxGeometry args={[spacing * (size - 1), spacing * (size - 1), spacing * (size - 1)]} />
+                        <meshBasicMaterial visible={false} />
+                        <Edges threshold={0} color="#000000" linewidth={2} />
+                    </mesh>
+
+                    {/* INTERIOR SEGMENTS */}
+                    {size > 2 && (
+                        <group>
+                            {[...Array(size - 2)].map((_, i) => {
+                                const offset = (i + 1 - (size - 1) / 2) * spacing;
+                                return (
+                                    <group key={i}>
+                                        <mesh position={[offset, 0, 0]}>
+                                            <boxGeometry args={[0.01, spacing * (size - 1), spacing * (size - 1)]} />
+                                            <meshBasicMaterial color="#000000" transparent opacity={0.3} />
+                                        </mesh>
+                                        <mesh position={[0, offset, 0]}>
+                                            <boxGeometry args={[spacing * (size - 1), 0.01, spacing * (size - 1)]} />
+                                            <meshBasicMaterial color="#000000" transparent opacity={0.3} />
+                                        </mesh>
+                                        <mesh position={[0, 0, offset]}>
+                                            <boxGeometry args={[spacing * (size - 1), spacing * (size - 1), 0.01]} />
+                                            <meshBasicMaterial color="#000000" transparent opacity={0.3} />
+                                        </mesh>
+                                    </group>
+                                );
+                            })}
+                        </group>
+                    )}
                 </group>
             )}
 
