@@ -226,7 +226,7 @@ export const useSceneController = () => {
         }
     }, [autoRotate4D, geometryType]);
 
-    // Animation Loop for HyperPhase and Theory of Everything
+    // Animation Loop for HyperPhase and Sacred Alignment
     useEffect(() => {
         let frameId: number;
         let lastTime = performance.now();

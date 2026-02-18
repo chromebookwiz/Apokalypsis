@@ -108,166 +108,68 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
     return (
         <div className="ui-overlay" style={{ fontFamily: 'Cinzel, serif', pointerEvents: 'none' }}>
 
-            {/* TOP LEFT CONTROLS (Eye + Info) - Always Visible */}
+            {/* EYE BUTTON (Global Toggle) - Keeps it accessible but separate if needed, 
+                OR we can put it inside. User said ALL controls on a single panel. 
+                I will put the toggle panel button itself separate, but everything else inside. */}
             <div className="corner-tl" style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '15px',
-                alignItems: 'center',
-                zIndex: 1000,
-                pointerEvents: 'auto'
+                position: 'fixed', top: '40px', left: '40px', zIndex: 1000, pointerEvents: 'auto'
             }}>
                 <button
                     className="sacred-btn"
                     onClick={() => controller.setUiVisible(!controller.uiVisible)}
                     title={controller.uiVisible ? ui.hide_ui : ui.show_ui}
                     style={{
-                        fontSize: '1.5rem',
+                        fontSize: '2rem',
                         background: 'none',
                         border: 'none',
-                        color: controller.uiVisible ? '#ffd700' : 'rgba(255, 215, 0, 0.5)',
+                        color: controller.uiVisible ? '#d4af37' : 'rgba(212, 175, 55, 0.5)',
                         cursor: 'pointer',
-                        filter: controller.uiVisible ? 'drop-shadow(0 0 5px #ffd700)' : 'none',
-                        transition: 'all 0.3s ease',
-                        opacity: controller.uiVisible ? 1 : 0.7
+                        filter: controller.uiVisible ? 'drop-shadow(0 0 10px #d4af37)' : 'none',
+                        transition: 'all 0.3s ease'
                     }}
                 >
                     👁
                 </button>
-
-                {controller.uiVisible && (
-                    <>
-                        {/* Info Button */}
-                        <button
-                            className="sacred-btn"
-                            onClick={() => setShowInfo(!showInfo)}
-                            title={ui.info}
-                            style={{
-                                fontSize: '1.5rem',
-                                background: 'none',
-                                border: 'none',
-                                color: showInfo ? '#ffd700' : 'rgba(255, 215, 0, 0.7)',
-                                cursor: 'pointer',
-                                filter: showInfo ? 'drop-shadow(0 0 5px #ffd700)' : 'none',
-                                transition: 'all 0.3s ease'
-                            }}
-                        >
-                            ℹ️
-                        </button>
-
-                        {/* Persistent Language Selector */}
-                        <div style={{ position: 'relative', marginTop: '5px' }}>
-                            <select
-                                value={controller.language}
-                                onChange={(e) => controller.setLanguage(e.target.value as any)}
-                                style={{
-                                    appearance: 'none',
-                                    background: 'rgba(0,0,0,0.5)',
-                                    border: '1px solid #d4af37',
-                                    borderRadius: '5px',
-                                    color: '#ffd700',
-                                    padding: '5px 10px',
-                                    fontFamily: 'Cinzel, serif',
-                                    fontSize: '0.8rem',
-                                    cursor: 'pointer',
-                                    textAlign: 'center',
-                                    outline: 'none',
-                                    boxShadow: '0 0 5px rgba(212, 175, 55, 0.3)',
-                                    minWidth: '80px'
-                                }}
-                            >
-                                {Object.entries(LANG_NAMES).map(([code, name]) => (
-                                    <option key={code} value={code} style={{ background: '#000', color: '#ffd700' }}>
-                                        {name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    </>
-                )}
             </div>
 
-            {/* INFO MODAL */}
+            {/* INFO MODAL - Remained as is, but adjusted colors */}
             {showInfo && (
                 <div style={{
-                    position: 'fixed',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: '90%',
-                    maxWidth: '800px',
-                    height: '80vh',
-                    backgroundColor: controller.darkMode ? '#000000' : '#fdfbf7',
-                    border: '4px solid #d4af37',
-                    borderRadius: '15px',
+                    position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+                    width: '90%', maxWidth: '800px', height: '80vh',
+                    backgroundColor: '#fdfbf7', border: '4px solid #d4af37', borderRadius: '15px',
                     boxShadow: '0 0 50px rgba(0,0,0,0.8), 0 0 20px rgba(212, 175, 55, 0.5)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    zIndex: 2000,
-                    pointerEvents: 'auto',
-                    overflow: 'hidden'
+                    display: 'flex', flexDirection: 'column', zIndex: 2000, pointerEvents: 'auto', overflow: 'hidden'
                 }}>
                     <SacredBorder inverted={false} />
                     <div style={{
-                        flex: 1,
-                        overflowY: 'auto',
-                        padding: '40px',
-                        color: controller.darkMode ? '#ffd700' : '#1a1a1a',
+                        flex: 1, overflowY: 'auto', padding: '40px', color: '#1a1a1a',
                         fontFamily: controller.language === 'HI' ? 'sans-serif' : 'Inter, sans-serif',
-                        fontSize: '1.1rem',
-                        lineHeight: '1.8',
-                        scrollbarWidth: 'thin',
-                        scrollbarColor: '#d4af37 #fdfbf7',
-                        direction: isRTL ? 'rtl' : 'ltr',
-                        textAlign: isRTL ? 'start' : 'left'
+                        fontSize: '1.1rem', lineHeight: '1.8', scrollbarWidth: 'thin',
+                        scrollbarColor: '#d4af37 #fdfbf7', direction: isRTL ? 'rtl' : 'ltr', textAlign: isRTL ? 'start' : 'left'
                     }}>
                         <button
                             onClick={() => setShowInfo(false)}
                             style={{
                                 position: 'sticky', top: '0', float: 'right',
-                                background: controller.darkMode ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.8)',
-                                border: '1px solid #d4af37', borderRadius: '50%',
-                                width: '30px', height: '30px', color: '#d4af37', cursor: 'pointer'
+                                background: 'rgba(255,255,255,0.8)', border: '1px solid #d4af37',
+                                borderRadius: '50%', width: '30px', height: '30px', color: '#d4af37', cursor: 'pointer'
                             }}
-                        >
-                            ✕
-                        </button>
+                        >✕</button>
                         <NollCubeContent language={controller.language} isRTL={isRTL} />
-
                         <div style={{
-                            marginTop: '30px',
-                            padding: '20px',
-                            border: '1px solid #d4af37',
-                            borderRadius: '10px',
-                            backgroundColor: 'rgba(212, 175, 55, 0.1)',
-                            textAlign: 'center',
-                            fontStyle: 'italic',
-                            color: '#ffd700',
-                            fontSize: '1.2rem',
-                            boxShadow: '0 0 15px rgba(212, 175, 55, 0.2)'
+                            marginTop: '30px', padding: '20px', border: '1px solid #d4af37',
+                            borderRadius: '10px', backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                            textAlign: 'center', fontStyle: 'italic', color: '#d4af37', fontSize: '1.2rem'
                         }}>
                             {controller.language === 'HE' ? 'קוביה זו היא גרסת ה-4D של חזונו המושלם של מטטרון, ומכילה את כל שהיה, הווה ויהיה על פני האדמה.' :
                                 controller.language === 'GR' ? 'Οὗτος ὁ κύβος ἐστὶν ἡ τετραδιάστατος (4D) ἔκδοσις τοῦ τελείου ὁράματος τοῦ Μετατρόνου, περιέχων πάντα τὰ γενόμενα, τὰ ὄντα καὶ τὰ ἐσόμενα ἐπὶ τῆς γῆς.' :
                                     'This cube is the 4D version of Metatron\'s perfect vision, and contains all that was, is, and will be on Earth.'}
                         </div>
-
-                        <div style={{
-                            marginTop: '30px',
-                            borderTop: '2px solid #d4af37',
-                            paddingTop: '20px',
-                            whiteSpace: 'pre-wrap',
-                            textAlign: isRTL ? 'right' : 'left'
-                        }}>
+                        <div style={{ marginTop: '30px', borderTop: '2px solid #d4af37', paddingTop: '20px', whiteSpace: 'pre-wrap', textAlign: isRTL ? 'right' : 'left' }}>
                             {getNumericScripture(controller.language)}
                         </div>
-                        <div style={{
-                            marginTop: '30px',
-                            borderTop: '2px solid #d4af37',
-                            paddingTop: '20px',
-                            whiteSpace: 'pre-wrap',
-                            fontStyle: 'italic',
-                            textAlign: isRTL ? 'right' : 'left'
-                        }}>
+                        <div style={{ marginTop: '30px', borderTop: '2px solid #d4af37', paddingTop: '20px', whiteSpace: 'pre-wrap', fontStyle: 'italic', textAlign: isRTL ? 'right' : 'left' }}>
                             {getHymn(controller.language)}
                         </div>
                     </div>
@@ -275,411 +177,200 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 </div>
             )}
 
-            {/* TOGGLEABLE UI */}
+            {/* THE CONSOLIDATED PANEL */}
             <div style={{
-                opacity: controller.uiVisible ? 1 : 0,
-                pointerEvents: 'none',
-                visibility: controller.uiVisible ? 'visible' : 'hidden',
-                transition: 'opacity 0.5s ease, visibility 0.5s ease',
-                width: '100%', height: '100%', position: 'fixed', top: 0, left: 0
+                position: 'fixed', right: controller.uiVisible ? '40px' : '-500px', top: '40px', bottom: '40px',
+                width: '380px', backgroundColor: '#fdfbf7', border: '2px solid #d4af37', borderRadius: '15px',
+                boxShadow: '0 0 40px rgba(0,0,0,0.3)', pointerEvents: 'auto', zIndex: 900,
+                transition: 'right 0.6s cubic-bezier(0.4, 0, 0.2, 1)', display: 'flex', flexDirection: 'column',
+                overflow: 'hidden', padding: '40px 20px'
             }}>
-
-                {/* TOP CENTER BUTTONS */}
+                {/* Sacred Geometry Background Pattern */}
                 <div style={{
-                    position: 'fixed', top: '40px', left: '50%', transform: 'translateX(-50%)',
-                    pointerEvents: 'auto', zIndex: 100, display: 'flex', gap: '10px', alignItems: 'center'
+                    position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                    opacity: 0.05, pointerEvents: 'none', zIndex: -1
                 }}>
-                    <button
-                        onClick={() => controller.toggleParallelLock()}
-                        title={controller.parallelLock ? ui.unlock_parallel : ui.lock_parallel}
-                        style={{
-                            background: controller.parallelLock ? 'rgba(255, 215, 0, 0.15)' : 'none',
-                            border: controller.parallelLock ? '2px solid #ffd700' : '2px solid rgba(255, 215, 0, 0.4)',
-                            borderRadius: '10px', padding: '6px 12px', cursor: 'pointer',
-                            color: controller.parallelLock ? '#ffd700' : 'rgba(255, 215, 0, 0.6)',
-                            fontSize: '1.4rem', fontWeight: 'bold', letterSpacing: '2px',
-                            transition: 'all 0.3s ease', fontFamily: 'monospace', lineHeight: 1
-                        }}
-                    >
-                        ∥
-                    </button>
-                    <button
-                        onClick={() => controller.toggleTone()}
-                        title={controller.toneEnabled ? ui.mute_tones : ui.enable_tones}
-                        style={{
-                            background: controller.toneEnabled ? 'rgba(255, 215, 0, 0.15)' : 'none',
-                            border: controller.toneEnabled ? '2px solid #ffd700' : '2px solid rgba(255, 215, 0, 0.4)',
-                            borderRadius: '10px', padding: '6px 12px', cursor: 'pointer',
-                            color: controller.toneEnabled ? '#ffd700' : 'rgba(255, 215, 0, 0.6)',
-                            fontSize: '1.2rem', fontWeight: 'bold', transition: 'all 0.3s ease', lineHeight: 1
-                        }}
-                    >
-                        ♪
-                    </button>
-                    <button
-                        onClick={() => controller.setInfiniteTriangle(!controller.infiniteTriangle)}
-                        title="Infinite Triangle Mode"
-                        style={{
-                            background: controller.infiniteTriangle ? 'rgba(255, 215, 0, 0.15)' : 'none',
-                            border: controller.infiniteTriangle ? '2px solid #ffd700' : '2px solid rgba(255, 215, 0, 0.4)',
-                            borderRadius: '10px', padding: '6px 12px', cursor: 'pointer',
-                            color: controller.infiniteTriangle ? '#ffd700' : 'rgba(255, 215, 0, 0.6)',
-                            fontSize: '1.4rem', fontWeight: 'bold', transition: 'all 0.3s ease', lineHeight: 1
-                        }}
-                    >
-                        ∆
-                    </button>
-                    {controller.toneEnabled && (
-                        <button
-                            onClick={() => controller.cycleToneScale()}
-                            title={`${ui.scale}: ${controller.toneScale}`}
+                    <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <pattern id="sacred-pattern" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+                            <circle cx="25" cy="25" r="24" fill="none" stroke="#d4af37" strokeWidth="0.5" />
+                            <circle cx="25" cy="0" r="25" fill="none" stroke="#d4af37" strokeWidth="0.5" />
+                            <circle cx="25" cy="50" r="25" fill="none" stroke="#d4af37" strokeWidth="0.5" />
+                            <circle cx="0" cy="25" r="25" fill="none" stroke="#d4af37" strokeWidth="0.5" />
+                            <circle cx="50" cy="25" r="25" fill="none" stroke="#d4af37" strokeWidth="0.5" />
+                        </pattern>
+                        <rect width="100%" height="100%" fill="url(#sacred-pattern)" />
+                    </svg>
+                </div>
+
+                {/* 45 Degree Templar Crosses in Corners */}
+                {['top-left', 'top-right', 'bottom-left', 'bottom-right'].map(pos => (
+                    <div key={pos} style={{
+                        position: 'absolute', color: '#d4af37', fontSize: '1.8rem',
+                        transform: 'rotate(45deg)', opacity: 0.8,
+                        top: pos.includes('top') ? '5px' : 'auto',
+                        bottom: pos.includes('bottom') ? '5px' : 'auto',
+                        left: pos.includes('left') ? '5px' : 'auto',
+                        right: pos.includes('right') ? '5px' : 'auto',
+                    }}>☩</div>
+                ))}
+
+                {/* HEADER */}
+                <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+                    <div style={{ color: '#d4af37', fontSize: '1.5rem', fontWeight: 'bold', letterSpacing: '3px' }}>SACRED ALIGNMENT</div>
+                    <div style={{ height: '2px', background: 'linear-gradient(90deg, transparent, #d4af37, transparent)', marginTop: '5px' }} />
+                </div>
+
+                <div className="custom-scrollbar" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '20px', paddingRight: '5px' }}>
+
+                    {/* TOP SECTION: Global Hooks & Language */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}>
+                        <select
+                            value={controller.language}
+                            onChange={(e) => controller.setLanguage(e.target.value as any)}
                             style={{
-                                background: 'rgba(255, 215, 0, 0.1)', border: '1px solid rgba(255, 215, 0, 0.5)',
-                                borderRadius: '8px', padding: '4px 8px', cursor: 'pointer',
-                                color: '#ffd700', fontSize: '0.55rem', fontFamily: 'Cinzel, serif',
-                                lineHeight: 1, textTransform: 'uppercase'
+                                appearance: 'none', background: 'none', border: '1px solid #d4af37',
+                                borderRadius: '5px', color: '#1a1a1a', padding: '5px 15px',
+                                fontFamily: 'Cinzel, serif', fontSize: '0.8rem', cursor: 'pointer', flex: 1
                             }}
                         >
-                            {controller.toneScale}
-                        </button>
-                    )}
-                    {controller.toneEnabled && (
-                        <button
-                            onClick={() => controller.toggleVariedMode()}
-                            title={controller.variedMode ? ui.disable_varied : ui.enable_varied}
-                            style={{
-                                background: controller.variedMode ? 'rgba(255, 215, 0, 0.15)' : 'rgba(255, 215, 0, 0.05)',
-                                border: controller.variedMode ? '1px solid #ffd700' : '1px solid rgba(255, 215, 0, 0.3)',
-                                borderRadius: '8px', padding: '4px 8px', cursor: 'pointer',
-                                color: controller.variedMode ? '#ffd700' : 'rgba(255, 215, 0, 0.6)',
-                                fontSize: '0.8rem', transition: 'all 0.3s ease', lineHeight: 1
-                            }}
-                        >
-                            ▤
-                        </button>
-                    )}
-                </div>
-
-                {/* GREEK COLUMNS (Side) */}
-                <div style={{ position: 'fixed', top: '50%', left: '40px', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column-reverse', gap: '5px', pointerEvents: 'none', opacity: 0.6 }} className="greek-column">
-                    {GREEK_TITLE.split('').map((char, i) => (<div key={i} style={{ fontSize: '1.5rem', color: '#ffd700', textAlign: 'center' }}>{char}</div>))}
-                </div>
-                <div style={{ position: 'fixed', top: '50%', right: '40px', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: '5px', pointerEvents: 'none', opacity: 0.6 }} className="greek-column">
-                    {GREEK_TITLE.split('').map((char, i) => (<div key={i} style={{ fontSize: '1.5rem', color: '#ffd700', textAlign: 'center' }}>{char}</div>))}
-                </div>
-
-                {/* VERSE DISPLAY */}
-                <div style={{
-                    position: 'fixed', top: '10%', left: '50%', transform: 'translateX(-50%)',
-                    textAlign: 'center', color: '#ffd700', maxWidth: '600px', width: '80%',
-                    transition: 'all 0.5s ease', opacity: controller.libraryOpen ? 1 : 0, visibility: controller.libraryOpen ? 'visible' : 'hidden'
-                }}>
-                    <div style={{ fontSize: '1.2rem', marginBottom: '0.5rem', opacity: 0.8 }}>{note}</div>
-                    <div style={{ fontSize: '1.5rem', whiteSpace: 'pre-wrap', fontFamily: isAmharic ? 'sans-serif' : 'Cinzel, serif', direction: isRTL ? 'rtl' : 'ltr' }}>{body}</div>
-                </div>
-
-                {/* TOP RIGHT: Controls (Mobile Only) */}
-                <div className={`corner-tr mobile-only ${isRTL ? 'rtl-override-tr' : ''}`} style={{
-                    position: 'fixed',
-                    top: '40px',
-                    right: '40px',
-                    pointerEvents: 'auto',
-                    zIndex: 100,
-                    flexDirection: 'column',
-                    gap: '10px',
-                    alignItems: 'flex-end'
-                }}>
-                    {/* Golden Book Icon */}
-                    <button
-                        className="sacred-btn"
-                        onClick={() => controller.setLibraryOpen(!controller.libraryOpen)}
-                        title={ui.toggle_text}
-                        style={{
-                            fontSize: '1.5rem',
-                            background: 'none',
-                            border: 'none',
-                            color: controller.libraryOpen ? '#ffd700' : '#555',
-                            cursor: 'pointer',
-                            filter: controller.libraryOpen ? 'drop-shadow(0 0 5px #ffd700)' : 'none'
-                        }}
-                    >
-                        📖
-                    </button>
-
-
-
-                    {/* Dark Mode Toggle */}
-                    <button
-                        className="sacred-btn"
-                        onClick={controller.toggleDarkMode}
-                        title={ui.toggle_dark}
-                        style={{
-                            fontSize: '1.5rem',
-                            background: 'none',
-                            border: 'none',
-                            color: controller.darkMode ? '#ffd700' : '#555',
-                            cursor: 'pointer'
-                        }}
-                    >
-                        {controller.darkMode ? '☀' : '☾'}
-                    </button>
-                </div>
-
-                {/* BOTTOM NAVIGATION (CROSS) */}
-                <div style={{
-                    position: 'fixed', bottom: '40px', left: '50%', transform: 'translateX(-50%)',
-                    pointerEvents: 'auto', zIndex: 100, display: 'flex', alignItems: 'center', gap: '20px'
-                }}>
-                    <button className="sacred-text-btn" onClick={() => controller.prevCameraView()} title={ui.prev} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255, 215, 0, 0.7)', marginTop: '10px' }}>
-                        <h1 style={{ margin: 0, fontSize: '2.5rem', lineHeight: 1 }}>☩</h1>
-                    </button>
-                    <button
-                        className="sacred-text-btn"
-                        onClick={handleCenterCrossClick}
-                        style={{
-                            background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#ffd700',
-                            textShadow: isSecretAngle ? '0 0 25px rgba(255,215,0,0.8)' : '0 0 15px rgba(255,215,0,0.5)',
-                            transition: 'all 0.5s ease', transform: `scale(1.2) rotate(${isSecretAngle ? 45 : 0}deg)`
-                        }}
-                        title={isSecretAngle ? "SECRET DOWNLOAD" : ui.reset}
-                    >
-                        <h1 style={{ margin: 0, fontSize: '4rem', lineHeight: 1 }}>☩</h1>
-                    </button>
-                    <button className="sacred-text-btn" onClick={() => controller.nextCameraView()} title={ui.next} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255, 215, 0, 0.7)', marginTop: '10px' }}>
-                        <h1 style={{ margin: 0, fontSize: '2.5rem', lineHeight: 1 }}>☩</h1>
-                    </button>
-                </div>
-
-                {/* ANGLE DISPLAY */}
-                <div className={`corner-bl ${isRTL ? 'rtl-override-bl' : ''}`} style={{ bottom: '40px', left: isRTL ? 'auto' : '40px', right: isRTL ? '40px' : 'auto', position: 'fixed' }}>
-                    <div style={{ color: '#ffd700', fontSize: '1.2rem', fontFamily: 'monospace', textShadow: '0 0 10px rgba(255, 215, 0, 0.5)' }}>
-                        {Math.abs(controller.viewAngle).toFixed(2)}° {controller.viewAngle > 0 ? 'N' : (controller.viewAngle < 0 ? 'S' : 'EQ')}
-                        <div>{Math.abs(controller.azimuthAngle).toFixed(2)}° {controller.azimuthAngle > 0 ? 'E' : (controller.azimuthAngle < 0 ? 'W' : 'Z')}</div>
-                    </div>
-                </div>
-
-                {/* CORNER BR: CONTROLS */}
-                <div className="corner-br" style={{ position: 'fixed', bottom: '40px', right: '40px', pointerEvents: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '15px' }}>
-                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                        <button className="sacred-btn desktop-only" onClick={controller.toggleDarkMode} style={{ background: 'none', border: 'none', color: controller.darkMode ? '#ffd700' : '#555', fontSize: '1.5rem' }}>
-                            {controller.darkMode ? '☀' : '☾'}
-                        </button>
-                        <button
-                            className="sacred-btn desktop-only"
-                            onClick={controller.toggleCameraType}
-                            title={controller.cameraType === 'ORTHOGRAPHIC' ? "Switch to Perspective" : "Switch to Orthographic"}
-                            style={{ background: 'none', border: '1px solid #ffd700', borderRadius: '5px', color: '#ffd700', padding: '4px 8px', fontSize: '0.8rem', fontFamily: 'Cinzel, serif' }}
-                        >
-                            {controller.cameraType === 'ORTHOGRAPHIC' ? 'OR' : 'PS'}
-                        </button>
-                        <button className="sacred-btn" onClick={() => controller.setLibraryOpen(!controller.libraryOpen)} style={{ background: 'none', border: 'none', color: controller.libraryOpen ? '#ffd700' : '#555', fontSize: '1.5rem' }}>
-                            📖
-                        </button>
+                            {Object.entries(LANG_NAMES).map(([code, name]) => (
+                                <option key={code} value={code} style={{ background: '#fdfbf7', color: '#1a1a1a' }}>{name}</option>
+                            ))}
+                        </select>
+                        <button className="sacred-btn" onClick={() => setShowInfo(!showInfo)} style={{ border: '1px solid #d4af37', borderRadius: '5px', padding: '5px 10px', color: '#d4af37' }}>ℹ️</button>
+                        <button className="sacred-btn" onClick={() => controller.setLibraryOpen(!controller.libraryOpen)} style={{ border: '1px solid #d4af37', borderRadius: '5px', padding: '5px 10px', color: controller.libraryOpen ? '#d4af37' : '#999' }}>📖</button>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '5px' }}>
-                        {[1, 2, 3, 4].map((size) => (
-                            <button
-                                key={size}
-                                className={`sacred-btn ${controller.gridSize === size ? 'active' : ''}`}
-                                style={{ flex: 1, padding: '5px 10px', fontSize: '0.8rem', border: controller.gridSize === size ? '1px solid #ffd700' : '1px solid #333', color: controller.gridSize === size ? '#ffd700' : '#555' }}
-                                onClick={() => controller.setGridSize(size as 1 | 2 | 3 | 4)}
-                            >
-                                {size}x
+                    {/* NAVIGATION SECTION */}
+                    <div style={{ padding: '10px', border: '1px solid rgba(212, 175, 55, 0.3)', borderRadius: '10px' }}>
+                        <div style={{ fontSize: '0.7rem', color: '#d4af37', textAlign: 'center', marginBottom: '10px' }}>VIEW NAVIGATION</div>
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px' }}>
+                            <button onClick={() => controller.prevCameraView()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37', fontSize: '1.5rem' }}>☩</button>
+                            <button onClick={handleCenterCrossClick} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37', fontSize: '2.5rem', transform: isSecretAngle ? 'rotate(45deg)' : 'none' }}>☩</button>
+                            <button onClick={() => controller.nextCameraView()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37', fontSize: '1.5rem' }}>☩</button>
+                        </div>
+                        <div style={{ textAlign: 'center', color: '#1a1a1a', fontSize: '0.9rem', fontFamily: 'monospace', marginTop: '10px' }}>
+                            {Math.abs(controller.viewAngle).toFixed(2)}°{controller.viewAngle > 0 ? 'N' : 'S'} / {Math.abs(controller.azimuthAngle).toFixed(2)}°{controller.azimuthAngle > 0 ? 'E' : 'W'}
+                        </div>
+                    </div>
+
+                    {/* PLAYBACK & MOTION */}
+                    <div style={{ padding: '10px', border: '1px solid rgba(212, 175, 55, 0.3)', borderRadius: '10px' }}>
+                        <div style={{ fontSize: '0.7rem', color: '#d4af37', textAlign: 'center', marginBottom: '10px' }}>TEMPORAL ROTATION</div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                            <button onClick={() => controller.setIsPlaying(!controller.isPlaying)} style={{ background: 'none', border: '1px solid #d4af37', borderRadius: '50%', width: '40px', height: '40px', color: '#d4af37', flexShrink: 0 }}>
+                                {controller.isPlaying ? '⏸' : '▶'}
                             </button>
-                        ))}
+                            <div style={{ flex: 1 }}>
+                                <input type="range" min="0.1" max="300" step="0.1" value={controller.rotationSpeed || 1.0} onChange={(e) => controller.setRotationSpeed(parseFloat(e.target.value))} style={{ width: '100%', accentColor: '#d4af37' }} />
+                                <div style={{ fontSize: '0.6rem', color: '#999', textAlign: 'center' }}>SPEED: {controller.rotationSpeed.toFixed(1)}x</div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <input type="range" min="0.1" max="300" step="0.1" value={controller.rotationSpeed || 1.0} onChange={(e) => controller.setRotationSpeed(parseFloat(e.target.value))} style={{ width: '150px', accentColor: '#ffd700' }} />
-                        <button onClick={() => controller.setIsPlaying(!controller.isPlaying)} style={{ background: 'none', border: '1px solid #ffd700', borderRadius: '50%', width: '40px', height: '40px', color: '#ffd700' }}>
-                            {controller.isPlaying ? '⏸' : '▶'}
-                        </button>
+                    {/* DISPLAY MODES */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                        <button onClick={controller.toggleDarkMode} style={{ padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.darkMode ? '#d4af37' : 'none', color: controller.darkMode ? '#fdfbf7' : '#d4af37' }}>{controller.darkMode ? 'DAY ☀' : 'NIGHT ☾'}</button>
+                        <button onClick={controller.toggleCameraType} style={{ padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>{controller.cameraType === 'ORTHOGRAPHIC' ? 'ORTHO' : 'PERSPECT'}</button>
+                        <button onClick={() => controller.setInfiniteTriangle(!controller.infiniteTriangle)} style={{ gridColumn: 'span 2', padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.infiniteTriangle ? '#d4af37' : 'none', color: controller.infiniteTriangle ? '#fdfbf7' : '#d4af37' }}>INFINITE TRIANGLE {controller.infiniteTriangle ? 'ON' : 'OFF'}</button>
                     </div>
+
+                    {/* GRID SIZE */}
+                    <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: '0.6rem', color: '#d4af37', marginBottom: '5px' }}>GRID DIMENSIONS</div>
+                        <div style={{ display: 'flex', gap: '5px' }}>
+                            {[1, 2, 3, 4].map((size) => (
+                                <button key={size} onClick={() => controller.setGridSize(size as 1 | 2 | 3 | 4)} style={{ flex: 1, padding: '5px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.gridSize === size ? '#d4af37' : 'none', color: controller.gridSize === size ? '#fdfbf7' : '#d4af37' }}>{size}x</button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* HARMONICS & TONE */}
+                    <div style={{ padding: '10px', border: '1px solid rgba(212, 175, 55, 0.3)', borderRadius: '10px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <div style={{ fontSize: '0.7rem', color: '#d4af37', textAlign: 'center' }}>CELESTIAL HARMONICS</div>
+                        <div style={{ display: 'flex', gap: '5px' }}>
+                            <button onClick={() => controller.toggleParallelLock()} style={{ flex: 1, padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>{controller.parallelLock ? 'UNLOCK ∥' : 'LOCK ∥'}</button>
+                            <button onClick={() => controller.toggleTone()} style={{ flex: 1, padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>{controller.toneEnabled ? 'MUTE ♪' : 'LISTEN ♪'}</button>
+                        </div>
+                        {controller.toneEnabled && (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                <button onClick={() => controller.cycleToneScale()} style={{ padding: '5px', border: '1px dashed #d4af37', borderRadius: '5px', color: '#d4af37', fontSize: '0.7rem' }}>SCALE: {controller.toneScale}</button>
+                                <button onClick={() => controller.toggleVariedMode()} style={{ padding: '5px', border: '1px dashed #d4af37', borderRadius: '5px', color: '#d4af37', fontSize: '0.7rem' }}>VARIATION: {controller.variedMode ? 'ON' : 'OFF'}</button>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* ADVANCED ALIGNMENT (Former Theory of Everything) */}
+                    <div style={{ padding: '10px', border: '1px solid rgba(212, 175, 55, 0.3)', borderRadius: '10px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <div style={{ fontSize: '0.7rem', color: '#d4af37', textAlign: 'center' }}>ALIGNMENT PARAMETERS</div>
+                        <button onClick={() => controller.setSplitMode(!controller.splitMode)} style={{ padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>SPLIT MODE {controller.splitMode ? 'ON' : 'OFF'}</button>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                            <span style={{ fontSize: '0.6rem', color: '#1a1a1a' }}>FREQ A: {controller.frequencyA.toFixed(2)}</span>
+                            <input type="range" min="0" max="5" step="0.01" value={controller.frequencyA} onChange={(e) => controller.setFrequencyA(parseFloat(e.target.value))} style={{ width: '100%', accentColor: '#d4af37' }} />
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                            <span style={{ fontSize: '0.6rem', color: '#1a1a1a' }}>FREQ B: {controller.frequencyB.toFixed(2)}</span>
+                            <input type="range" min="0" max="5" step="0.01" value={controller.frequencyB} onChange={(e) => controller.setFrequencyB(parseFloat(e.target.value))} style={{ width: '100%', accentColor: '#d4af37' }} />
+                        </div>
+
+                        <select value={controller.waveType} onChange={(e) => controller.setWaveType(e.target.value as any)} style={{ padding: '5px', background: 'none', border: '1px solid #d4af37', color: '#d4af37', borderRadius: '5px', fontSize: '0.7rem' }}>
+                            <option value="SINE">SINE (RESONANCE)</option>
+                            <option value="SAWTOOTH">SAWTOOTH (MOD SPIN)</option>
+                            <option value="SQUARE">SQUARE (POLARITY)</option>
+                            <option value="FRACTAL">FRACTAL (MULTIVERSE)</option>
+                        </select>
+                    </div>
+
+                    {/* REVEAL TOOLS */}
+                    <div style={{ padding: '10px', border: '1px solid rgba(212, 175, 55, 0.3)', borderRadius: '10px', display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px' }}>
+                        <div style={{ fontSize: '0.7rem', color: '#d4af37', textAlign: 'center' }}>REVEAL TOOLS</div>
+                        <button onClick={() => controller.setRevealSymmetry(!controller.revealSymmetry)} style={{ padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>SYMMETRY PLANES {controller.revealSymmetry ? 'ON' : 'OFF'}</button>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                            <span style={{ fontSize: '0.6rem', color: '#1a1a1a' }}>INNER VISION: {controller.innerVision.toFixed(1)}</span>
+                            <input type="range" min="-10" max="10" step="0.1" value={controller.innerVision} onChange={(e) => controller.setInnerVision(parseFloat(e.target.value))} style={{ width: '100%', accentColor: '#d4af37' }} />
+                        </div>
+                        <button onClick={() => controller.setShow4DShadow(!controller.show4DShadow)} style={{ padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>4D SHADOW {controller.show4DShadow ? 'ON' : 'OFF'}</button>
+                    </div>
+
                 </div>
-
             </div>
 
-            {/* NOLL CUBE OVERLAY */}
+            {/* SIDE GREEK COLUMNS - Refined opacity */}
+            <div style={{ position: 'fixed', top: '50%', left: '40px', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column-reverse', gap: '5px', pointerEvents: 'none', opacity: 0.3, zIndex: 0 }} className="greek-column">
+                {GREEK_TITLE.split('').map((char, i) => (<div key={i} style={{ fontSize: '1.5rem', color: '#d4af37', textAlign: 'center' }}>{char}</div>))}
+            </div>
+            {!controller.uiVisible && (
+                <div style={{ position: 'fixed', top: '50%', right: '40px', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: '5px', pointerEvents: 'none', opacity: 0.3, zIndex: 0 }} className="greek-column">
+                    {GREEK_TITLE.split('').map((char, i) => (<div key={i} style={{ fontSize: '1.5rem', color: '#d4af37', textAlign: 'center' }}>{char}</div>))}
+                </div>
+            )}
+
+            {/* VERSE DISPLAY - Centered top */}
             <div style={{
-                position: 'fixed',
-                bottom: '80px',
-                right: '40px',
-                zIndex: 100,
-                pointerEvents: 'auto',
-                display: controller.metatronShape === 'MERKABA' ? 'block' : 'none'
+                position: 'fixed', top: '10%', left: '50%', transform: 'translateX(-50%)',
+                textAlign: 'center', color: '#d4af37', maxWidth: '600px', width: '80%',
+                transition: 'all 0.5s ease', opacity: (controller.libraryOpen && controller.uiVisible) ? 1 : 0, visibility: (controller.libraryOpen && controller.uiVisible) ? 'visible' : 'hidden',
+                zIndex: 800
+            }}>
+                <div style={{ fontSize: '1.2rem', marginBottom: '0.5rem', opacity: 0.8 }}>{note}</div>
+                <div style={{ fontSize: '1.5rem', whiteSpace: 'pre-wrap', fontFamily: isAmharic ? 'sans-serif' : 'Cinzel, serif', direction: isRTL ? 'rtl' : 'ltr' }}>{body}</div>
+            </div>
+
+            {/* NOLL CUBE OVERLAY - Kept separate as it's a specific data readout */}
+            <div style={{
+                position: 'fixed', bottom: '80px', left: '40px', zIndex: 100, pointerEvents: 'auto',
+                display: controller.metatronShape === 'MERKABA' ? 'block' : 'none',
+                opacity: controller.uiVisible ? 1 : 0, transition: 'opacity 0.5s'
             }}>
                 <div style={{
-                    backgroundColor: 'rgba(0,0,0,0.85)',
-                    padding: '20px',
-                    borderRadius: '15px',
-                    border: '1px solid #d4af37',
-                    maxWidth: '300px',
-                    boxShadow: '0 4px 30px rgba(0, 0, 0, 0.7)',
-                    backdropFilter: 'blur(5px)',
-                    color: '#d4af37'
+                    backgroundColor: '#fdfbf7', padding: '20px', borderRadius: '15px', border: '1px solid #d4af37',
+                    maxWidth: '300px', boxShadow: '0 4px 30px rgba(0, 0, 0, 0.2)', color: '#1a1a1a'
                 }}>
                     <NollCubeContent language={controller.language} isRTL={isRTL} />
                 </div>
             </div>
 
-            {/* --- THEORY OF EVERYTHING & REVEAL TOOLS --- */}
-            <div style={{
-                position: 'absolute',
-                top: '50%',
-                right: '20px',
-                transform: 'translateY(-50%)',
-                display: controller.uiVisible ? 'flex' : 'none',
-                flexDirection: 'column',
-                gap: '10px',
-                backgroundColor: 'rgba(0,0,0,0.85)',
-                padding: '15px',
-                borderRadius: '10px',
-                border: '1px solid #d4af37',
-                maxHeight: '80vh',
-                overflowY: 'auto',
-                pointerEvents: 'auto',
-                zIndex: 1000,
-                boxShadow: '0 4px 30px rgba(0, 0, 0, 0.5)',
-                backdropFilter: 'blur(5px)'
-            }}>
-                <div style={{ color: '#d4af37', fontSize: '0.82rem', fontWeight: 'bold', marginBottom: '5px', textAlign: 'center', letterSpacing: '1px' }}>THEORY OF EVERYTHING</div>
-
-                <button
-                    onClick={() => controller.setSplitMode(!controller.splitMode)}
-                    style={{
-                        padding: '8px',
-                        backgroundColor: controller.splitMode ? '#d4af37' : 'transparent',
-                        color: controller.splitMode ? '#000' : '#d4af37',
-                        border: '1px solid #d4af37',
-                        borderRadius: '5px',
-                        cursor: 'pointer',
-                        fontSize: '0.7rem',
-                        transition: 'all 0.2s'
-                    }}
-                >
-                    SPLIT MODE {controller.splitMode ? 'ON' : 'OFF'}
-                </button>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                    <div style={{ color: '#fff', fontSize: '0.62rem', opacity: 0.8 }}>FREQ A (UP): {controller.frequencyA.toFixed(2)} Hz</div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                        <input
-                            type="range" min="0" max="5" step="0.01"
-                            value={controller.frequencyA}
-                            onChange={(e) => controller.setFrequencyA(parseFloat(e.target.value))}
-                            style={{ flex: 1, accentColor: '#d4af37' }}
-                        />
-                        <input
-                            type="number" step="0.01"
-                            value={controller.frequencyA}
-                            onChange={(e) => controller.setFrequencyA(parseFloat(e.target.value) || 0)}
-                            style={{ width: '45px', fontSize: '0.7rem', backgroundColor: '#222', color: '#fff', border: '1px solid #444', padding: '2px' }}
-                        />
-                    </div>
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                    <div style={{ color: '#fff', fontSize: '0.62rem', opacity: 0.8 }}>FREQ B (DOWN): {controller.frequencyB.toFixed(2)} Hz</div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                        <input
-                            type="range" min="0" max="5" step="0.01"
-                            value={controller.frequencyB}
-                            onChange={(e) => controller.setFrequencyB(parseFloat(e.target.value))}
-                            style={{ flex: 1, accentColor: '#d4af37' }}
-                        />
-                        <input
-                            type="number" step="0.01"
-                            value={controller.frequencyB}
-                            onChange={(e) => controller.setFrequencyB(parseFloat(e.target.value) || 0)}
-                            style={{ width: '45px', fontSize: '0.7rem', backgroundColor: '#222', color: '#fff', border: '1px solid #444', padding: '2px' }}
-                        />
-                    </div>
-                </div>
-
-                <button
-                    onClick={() => controller.setAudioSync(!controller.audioSync)}
-                    style={{
-                        padding: '8px',
-                        backgroundColor: controller.audioSync ? '#d4af37' : 'transparent',
-                        color: controller.audioSync ? '#000' : '#d4af37',
-                        border: '1px solid #d4af37',
-                        borderRadius: '5px',
-                        cursor: 'pointer',
-                        fontSize: '0.7rem',
-                        marginTop: '5px',
-                        transition: 'all 0.2s'
-                    }}
-                >
-                    SYNC TO SOUND {controller.audioSync ? 'ON' : 'OFF'}
-                </button>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginTop: '5px' }}>
-                    <div style={{ color: '#fff', fontSize: '0.62rem', opacity: 0.8 }}>WAVE TYPE (EMERGENT)</div>
-                    <select
-                        value={controller.waveType}
-                        onChange={(e) => controller.setWaveType(e.target.value as any)}
-                        style={{
-                            padding: '5px',
-                            backgroundColor: '#222',
-                            color: '#d4af37',
-                            border: '1px solid #d4af37',
-                            borderRadius: '5px',
-                            fontSize: '0.7rem'
-                        }}
-                    >
-                        <option value="SINE">SINE (RESONANCE)</option>
-                        <option value="SAWTOOTH">SAWTOOTH (MOD SPIN)</option>
-                        <option value="SQUARE">SQUARE (POLARITY)</option>
-                        <option value="FRACTAL">FRACTAL (MULTIVERSE)</option>
-                    </select>
-                </div>
-
-                <div style={{ height: '1px', backgroundColor: '#d4af3733', margin: '10px 0' }} />
-                <div style={{ color: '#d4af37', fontSize: '0.82rem', fontWeight: 'bold', marginBottom: '5px', textAlign: 'center', letterSpacing: '1px' }}>REVEAL TOOLS</div>
-
-                <button
-                    onClick={() => controller.setRevealSymmetry(!controller.revealSymmetry)}
-                    style={{
-                        padding: '8px',
-                        backgroundColor: controller.revealSymmetry ? '#d4af37' : 'transparent',
-                        color: controller.revealSymmetry ? '#000' : '#d4af37',
-                        border: '1px solid #d4af37',
-                        borderRadius: '5px',
-                        cursor: 'pointer',
-                        fontSize: '0.7rem',
-                        transition: 'all 0.2s'
-                    }}
-                >
-                    SYMMETRY PLANES {controller.revealSymmetry ? 'ON' : 'OFF'}
-                </button>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                    <div style={{ color: '#fff', fontSize: '0.62rem', opacity: 0.8 }}>INNER VISION (SLICE): {controller.innerVision.toFixed(1)}</div>
-                    <input
-                        type="range" min="-10" max="10" step="0.1"
-                        value={controller.innerVision}
-                        onChange={(e) => controller.setInnerVision(parseFloat(e.target.value))}
-                        style={{ accentColor: '#d4af37' }}
-                    />
-                </div>
-
-                <button
-                    onClick={() => controller.setShow4DShadow(!controller.show4DShadow)}
-                    style={{
-                        padding: '8px',
-                        backgroundColor: controller.show4DShadow ? '#d4af37' : 'transparent',
-                        color: controller.show4DShadow ? '#000' : '#d4af37',
-                        border: '1px solid #d4af37',
-                        borderRadius: '5px',
-                        cursor: 'pointer',
-                        fontSize: '0.7rem',
-                        transition: 'all 0.2s'
-                    }}
-                >
-                    4D SHADOW TRACERS {controller.show4DShadow ? 'ON' : 'OFF'}
-                </button>
-            </div>
         </div >
     );
 };
