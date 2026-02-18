@@ -1,4 +1,4 @@
-export type Language = 'HE' | 'GR' | 'AM' | 'HI' | 'NO' | 'SA' | 'LA' | 'AR' | 'DE' | 'ES' | 'FA';
+export type Language = 'HE' | 'GR' | 'AM' | 'HI' | 'NO' | 'SA' | 'LA' | 'AR' | 'DE' | 'ES' | 'FA' | 'CU';
 
 export const LANG_NAMES: Record<Language, string> = {
     'HE': 'עִבְרִית', // Hebrew
@@ -11,7 +11,8 @@ export const LANG_NAMES: Record<Language, string> = {
     'AR': 'العربية', // Arabic
     'DE': 'Deutsch', // German
     'ES': 'Español', // Spanish
-    'FA': 'فارسی' // Persian (Farsi)
+    'FA': 'فارسی', // Persian (Farsi)
+    'CU': '𒅴𒂠' // Cuneiform (Sumerian)
 };
 
 export const UI_STRINGS: Record<Language, any> = {
@@ -172,16 +173,31 @@ export const UI_STRINGS: Record<Language, any> = {
     'FA': {
         hide_ui: "پنهان کردن حجاب",
         show_ui: "نمایش حجاب",
-        info: "افسانه گاو و شبکه",
-        lock_parallel: "بستن ارابه",
-        unlock_parallel: "رها کردن ارابه",
-        mute_tones: "خاموشی گروه کر",
-        enable_tones: "بیداری گروه کر",
-        scale: "گام مقدس",
-        prev: "بازگשת",
-        reset: "مرکز",
-        next: "پیشروی",
-        toggle_text: "تغییر کتیبه",
-        toggle_dark: "روز / شب"
+        info: "افסانه گاو וסריג",
+        lock_parallel: "بستן ארابه",
+        unlock_parallel: "רها کردن ארابه",
+        mute_tones: "خמוש גרופ כר",
+        enable_tones: "בידאר גרופ כר",
+        scale: "גאם מקדש",
+        prev: "באזגשת",
+        reset: "מרכז",
+        next: "פישרוי",
+        toggle_text: "תגייר כתיבה",
+        toggle_dark: "רוז / שב"
+    },
+    'CU': {
+        hide_ui: "HIDE  transparence",
+        show_ui: "SHOW transparence",
+        info: "LEGEND 🐂",
+        lock_parallel: "🔒 MERKABA",
+        unlock_parallel: "🔓 MERKABA",
+        mute_tones: "🔇 CHORUS",
+        enable_tones: "🔊 CHORUS",
+        scale: "📏 SCALE",
+        prev: "⬅️",
+        reset: "⏺",
+        next: "➡️",
+        toggle_text: "✍️",
+        toggle_dark: "🌓"
     }
 };

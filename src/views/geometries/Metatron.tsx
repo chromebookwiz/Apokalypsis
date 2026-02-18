@@ -245,6 +245,8 @@ export const MetatronGeometry: React.FC<Props> = ({ controller }) => {
     const spacing = 4.0;
     const size = controller.gridSize || 3;
 
+    // Metatron Invocation: "This cube is the 4D version of his perfect vision, and contains all that was, is, and will be on Earth."
+
     // --- 1. DYNAMIC GRID ---
     const { nodes, connections } = useMemo(() => {
         const _nodes: THREE.Vector3[] = [];

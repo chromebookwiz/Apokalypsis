@@ -51,7 +51,7 @@ export const IMPORTANT_ANGLES = [
     { az: 315, el: -35.264, label: 'CORNER FR-B' },
 
     // 4. SECRET (1)
-    { az: 0, el: 54, label: 'SECRET' }
+    { az: 0, el: 69.33, label: 'SECRET' }
 ];
 
 export const useSceneController = () => {

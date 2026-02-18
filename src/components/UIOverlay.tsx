@@ -4,13 +4,15 @@ import { getRevelation, getNollCubeText } from '../data/revelation';
 import { getHymn, getNumericScripture } from '../data/scripture';
 import { LANG_NAMES, UI_STRINGS } from '../data/translations';
 
-const NollCubeContent = ({ language }: { language: any }) => {
+const NollCubeContent = ({ language, isRTL }: { language: any, isRTL: boolean }) => {
     const text = getNollCubeText(language);
 
-    // Split text for simple formatting
-    // Assuming the text has double newlines for paragraphs
     return (
-        <div style={{ whiteSpace: 'pre-wrap' }}>
+        <div style={{
+            whiteSpace: 'pre-wrap',
+            direction: isRTL ? 'rtl' : 'ltr',
+            textAlign: isRTL ? 'right' : 'left'
+        }}>
             {text}
         </div>
     );
@@ -27,7 +29,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
     const GREEK_TITLE = "ΑΠΟΚΑΛΥΨΙΣ"; // Base title, but side columns can be localized
 
     // Secret Trigger Logic
-    const isSecretAngle = Math.abs(Number(controller.viewAngle.toFixed(2))) === 54 || Math.abs(Number(controller.azimuthAngle.toFixed(2))) === 54;
+    const isSecretAngle = Math.abs(Number(controller.viewAngle.toFixed(2))) === 69.33 || Math.abs(Number(controller.azimuthAngle.toFixed(2))) === 69.33;
 
     const handleCenterCrossClick = () => {
         if (isSecretAngle) {
@@ -230,11 +232,42 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         >
                             ✕
                         </button>
-                        <NollCubeContent language={controller.language} />
-                        <div style={{ marginTop: '30px', borderTop: '2px solid #d4af37', paddingTop: '20px', whiteSpace: 'pre-wrap' }}>
+                        <NollCubeContent language={controller.language} isRTL={isRTL} />
+
+                        <div style={{
+                            marginTop: '30px',
+                            padding: '20px',
+                            border: '1px solid #d4af37',
+                            borderRadius: '10px',
+                            backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                            textAlign: 'center',
+                            fontStyle: 'italic',
+                            color: '#ffd700',
+                            fontSize: '1.2rem',
+                            boxShadow: '0 0 15px rgba(212, 175, 55, 0.2)'
+                        }}>
+                            {controller.language === 'HE' ? 'קוביה זו היא גרסת ה-4D של חזונו המושלם של מטטרון, ומכילה את כל שהיה, הווה ויהיה על פני האדמה.' :
+                                controller.language === 'GR' ? 'Οὗτος ὁ κύβος ἐστὶν ἡ τετραδιάστατος (4D) ἔκδοσις τοῦ τελείου ὁράματος τοῦ Μετατρόνου, περιέχων πάντα τὰ γενόμενα, τὰ ὄντα καὶ τὰ ἐσόμενα ἐπὶ τῆς γῆς.' :
+                                    'This cube is the 4D version of Metatron\'s perfect vision, and contains all that was, is, and will be on Earth.'}
+                        </div>
+
+                        <div style={{
+                            marginTop: '30px',
+                            borderTop: '2px solid #d4af37',
+                            paddingTop: '20px',
+                            whiteSpace: 'pre-wrap',
+                            textAlign: isRTL ? 'right' : 'left'
+                        }}>
                             {getNumericScripture(controller.language)}
                         </div>
-                        <div style={{ marginTop: '30px', borderTop: '2px solid #d4af37', paddingTop: '20px', whiteSpace: 'pre-wrap', fontStyle: 'italic' }}>
+                        <div style={{
+                            marginTop: '30px',
+                            borderTop: '2px solid #d4af37',
+                            paddingTop: '20px',
+                            whiteSpace: 'pre-wrap',
+                            fontStyle: 'italic',
+                            textAlign: isRTL ? 'right' : 'left'
+                        }}>
                             {getHymn(controller.language)}
                         </div>
                     </div>
