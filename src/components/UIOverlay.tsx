@@ -243,14 +243,14 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     </div>
 
                     {/* MODES */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
                         <button onClick={controller.toggleDarkMode} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.darkMode ? '#d4af37' : 'none', color: controller.darkMode ? '#fdfbf7' : '#d4af37' }}>
                             {controller.darkMode ? '☀' : '☾'}
                         </button>
                         <button onClick={controller.toggleCameraType} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>
                             {controller.cameraType === 'ORTHOGRAPHIC' ? 'OR' : 'PS'}
                         </button>
-                        <button onClick={() => controller.setInfiniteTriangle(!controller.infiniteTriangle)} style={{ gridColumn: 'span 2', padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.infiniteTriangle ? '#d4af37' : 'none', color: controller.infiniteTriangle ? '#fdfbf7' : '#d4af37', fontSize: '1.5rem' }}>
+                        <button onClick={() => controller.setInfiniteTriangle(!controller.infiniteTriangle)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.infiniteTriangle ? '#d4af37' : 'none', color: controller.infiniteTriangle ? '#fdfbf7' : '#d4af37', fontSize: '1.2rem' }}>
                             ∆
                         </button>
                     </div>
@@ -281,11 +281,11 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                <input type="range" min="0" max="5" step="0.01" value={controller.frequencyA} onChange={(e) => controller.setFrequencyA(parseFloat(e.target.value))} style={{ flex: 1, accentColor: '#d4af37' }} />
+                                <input type="range" className="red-slider" min="0" max="5" step="0.01" value={controller.frequencyA} onChange={(e) => controller.setFrequencyA(parseFloat(e.target.value))} style={{ flex: 1 }} />
                                 <input type="number" min="0" max="5" step="0.01" value={controller.frequencyA.toFixed(2)} onChange={(e) => controller.setFrequencyA(parseFloat(e.target.value))} style={{ width: '60px', background: 'none', border: '1px solid #d4af37', borderRadius: '3px', color: '#1a1a1a', fontSize: '0.8rem', padding: '2px' }} />
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                <input type="range" min="0" max="5" step="0.01" value={controller.frequencyB} onChange={(e) => controller.setFrequencyB(parseFloat(e.target.value))} style={{ flex: 1, accentColor: '#ff0000' }} />
+                                <input type="range" className="blue-slider" min="0" max="5" step="0.01" value={controller.frequencyB} onChange={(e) => controller.setFrequencyB(parseFloat(e.target.value))} style={{ flex: 1 }} />
                                 <input type="number" min="0" max="5" step="0.01" value={controller.frequencyB.toFixed(2)} onChange={(e) => controller.setFrequencyB(parseFloat(e.target.value))} style={{ width: '60px', background: 'none', border: '1px solid #d4af37', borderRadius: '3px', color: '#1a1a1a', fontSize: '0.8rem', padding: '2px' }} />
                             </div>
                         </div>

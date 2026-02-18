@@ -232,19 +232,41 @@ input[type=range] {
 input[type=range]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    height: 12px;
-    width: 12px;
+    height: 14px;
+    width: 14px;
     border-radius: 50%;
     background: var(--c-gold);
     cursor: pointer;
-    margin-top: -5px;
-    box-shadow: 0 0 10px var(--c-gold);
+    margin-top: -6px;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.red-slider::-webkit-slider-thumb {
+    background: #ff4444 !important;
+    box-shadow: 0 0 10px rgba(255, 68, 68, 0.5) !important;
+}
+
+.blue-slider::-webkit-slider-thumb {
+    background: #4444ff !important;
+    box-shadow: 0 0 10px rgba(68, 68, 255, 0.5) !important;
 }
 
 input[type=range]::-webkit-slider-runnable-track {
     width: 100%;
-    height: 2px;
-    background: var(--c-text-dim);
+    height: 4px;
+    background: #e0d9c0;
+    border-radius: 2px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.red-slider::-webkit-slider-runnable-track {
+    background: #ffecec;
+}
+
+.blue-slider::-webkit-slider-runnable-track {
+    background: #ececff;
 }
 
 /* --- INSPECTOR --- */
