@@ -280,7 +280,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     {/* UTILITIES */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1.5fr', gap: '10px', alignItems: 'center' }}>
                         <button className="sacred-btn" onClick={() => setShowInfo(!showInfo)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37', textAlign: 'center' }}>ℹ️</button>
-                        <button className="sacred-btn" onClick={() => controller.setLibraryOpen(!controller.libraryOpen)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: controller.libraryOpen ? '#fdfbf7' : '#d4af37', background: controller.libraryOpen ? '#d4af37' : 'none', textAlign: 'center' }}>📖</button>
+                        <button className="sacred-btn" onClick={() => controller.setLibraryOpen(!controller.libraryOpen)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: controller.libraryOpen ? '#fdfbf7' : '#d4af37', background: controller.libraryOpen ? '#d4af37' : 'none', textAlign: 'center', fontSize: '0.8rem' }}>APOKALYPSIS</button>
                         <div style={{ position: 'relative' }}>
                             <select
                                 value={controller.language}
@@ -379,65 +379,68 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     </div>
 
                 </div>
-        </div>
+            </DraggablePanel>
 
-                {/* BOTTOM NAVIGATION (CROSS) */ }
-    <div style={{
-        position: 'fixed', bottom: '40px', left: '50%', transform: 'translateX(-50%)',
-        pointerEvents: 'auto', zIndex: 100, display: 'flex', alignItems: 'center', gap: '30px'
-    }}>
-        <button onClick={() => controller.prevCameraView()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37', fontSize: '2.5rem' }}>☩</button>
-        <button
-            onClick={handleCenterCrossClick}
-            style={{
-                background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37',
-                fontSize: '4.5rem', transform: isSecretAngle ? 'rotate(45deg)' : 'none',
-                textShadow: isSecretAngle ? '0 0 25px rgba(212, 175, 55, 0.8)' : '0 0 15px rgba(212, 175, 55, 0.5)',
-                transition: 'all 0.5s ease'
-            }}
-        >☩</button>
-        <button onClick={() => controller.nextCameraView()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37', fontSize: '2.5rem' }}>☩</button>
-    </div>
+            {/* BOTTOM NAVIGATION (CROSS) */}
+            <div style={{
+                position: 'fixed', bottom: '40px', left: '50%', transform: 'translateX(-50%)',
+                pointerEvents: 'auto', zIndex: 100, display: 'flex', alignItems: 'center', gap: '30px'
+            }}>
+                <button onClick={() => controller.prevCameraView()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37', fontSize: '2.5rem' }}>☩</button>
+                <button
+                    onClick={handleCenterCrossClick}
+                    style={{
+                        background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37',
+                        fontSize: '4.5rem', transform: isSecretAngle ? 'rotate(45deg)' : 'none',
+                        textShadow: isSecretAngle ? '0 0 25px rgba(212, 175, 55, 0.8)' : '0 0 15px rgba(212, 175, 55, 0.5)',
+                        transition: 'all 0.5s ease'
+                    }}
+                >☩</button>
+                <button onClick={() => controller.nextCameraView()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37', fontSize: '2.5rem' }}>☩</button>
+            </div>
 
-    {/* ANGLE DISPLAY */ }
-    <div style={{
-        position: 'fixed', bottom: '40px', left: isRTL ? 'auto' : '40px', right: isRTL ? '40px' : 'auto',
-        color: '#d4af37', fontSize: '1rem', fontFamily: 'monospace', textShadow: '0 0 10px rgba(212, 175, 55, 0.3)',
-        pointerEvents: 'none'
-    }}>
-        {Math.abs(controller.viewAngle).toFixed(2)}°{controller.viewAngle > 0 ? 'N' : 'S'}
-        <div>{Math.abs(controller.azimuthAngle).toFixed(2)}°{controller.azimuthAngle > 0 ? 'E' : 'W'}</div>
-    </div>
+            {/* ANGLE DISPLAY */}
+            <div style={{
+                position: 'fixed', bottom: '40px', left: isRTL ? 'auto' : '40px', right: isRTL ? '40px' : 'auto',
+                color: '#d4af37', fontSize: '1rem', fontFamily: 'monospace', textShadow: '0 0 10px rgba(212, 175, 55, 0.3)',
+                pointerEvents: 'none'
+            }}>
+                {Math.abs(controller.viewAngle).toFixed(2)}°{controller.viewAngle > 0 ? 'N' : 'S'}
+                <div>{Math.abs(controller.azimuthAngle).toFixed(2)}°{controller.azimuthAngle > 0 ? 'E' : 'W'}</div>
+            </div>
 
-    {/* SIDE GREEK COLUMNS - Refined opacity */ }
-    <div style={{ position: 'fixed', top: '50%', left: '120px', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column-reverse', gap: '5px', pointerEvents: 'none', opacity: 0.1, zIndex: 0 }} className="greek-column">
-        {GREEK_TITLE.split('').map((char, i) => (<div key={i} style={{ fontSize: '1.5rem', color: '#d4af37', textAlign: 'center' }}>{char}</div>))}
-    </div>
+            {/* SIDE GREEK COLUMNS - Refined opacity */}
+            <div style={{ position: 'fixed', top: '50%', left: '0px', transform: 'translateY(-50%)', display: window.innerWidth < 768 ? 'none' : 'flex', flexDirection: 'column-reverse', gap: '5px', pointerEvents: 'none', opacity: 0.1, zIndex: 0, paddingLeft: '20px' }} className="greek-column-left">
+                {GREEK_TITLE.split('').map((char, i) => (<div key={i} style={{ fontSize: '1.5rem', color: '#d4af37', textAlign: 'center' }}>{char}</div>))}
+            </div>
+            <div style={{ position: 'fixed', top: '50%', right: '0px', transform: 'translateY(-50%)', display: window.innerWidth < 768 ? 'none' : 'flex', flexDirection: 'column-reverse', gap: '5px', pointerEvents: 'none', opacity: 0.1, zIndex: 0, paddingRight: '20px' }} className="greek-column-right">
+                {GREEK_TITLE.split('').map((char, i) => (<div key={i} style={{ fontSize: '1.5rem', color: '#d4af37', textAlign: 'center' }}>{char}</div>))}
+            </div>
 
-    {/* VERSE DISPLAY */ }
-    <div style={{
-        position: 'fixed', top: '10%', left: '50%', transform: 'translateX(-50%)',
-        textAlign: 'center', color: '#d4af37', maxWidth: '600px', width: '80%',
-        transition: 'all 0.5s ease', opacity: (controller.libraryOpen && controller.uiVisible) ? 1 : 0, visibility: (controller.libraryOpen && controller.uiVisible) ? 'visible' : 'hidden',
-        zIndex: 800
-    }}>
-        <div style={{ fontSize: '1.2rem', marginBottom: '0.5rem', opacity: 0.8 }}>{note}</div>
-        <div style={{ fontSize: '1.5rem', whiteSpace: 'pre-wrap', fontFamily: isAmharic ? 'sans-serif' : 'Cinzel, serif', direction: isRTL ? 'rtl' : 'ltr' }}>{body}</div>
-    </div>
+            {/* VERSE DISPLAY */}
+            <div style={{
+                position: 'fixed', top: '10%', left: '50%', transform: 'translateX(-50%)',
+                textAlign: 'center', color: '#d4af37', maxWidth: '600px', width: '80%',
+                transition: 'all 0.5s ease', opacity: (controller.libraryOpen && controller.uiVisible) ? 1 : 0, visibility: (controller.libraryOpen && controller.uiVisible) ? 'visible' : 'hidden',
+                zIndex: 800
+            }}>
+                <div style={{ fontSize: '1.2rem', marginBottom: '0.5rem', opacity: 0.8 }}>{note}</div>
+                <div style={{ fontSize: '1.5rem', whiteSpace: 'pre-wrap', fontFamily: isAmharic ? 'sans-serif' : 'Cinzel, serif', direction: isRTL ? 'rtl' : 'ltr' }}>{body}</div>
+            </div>
 
-    {/* NOLL CUBE OVERLAY */ }
-    <div style={{
-        position: 'fixed', bottom: '150px', left: '40px', zIndex: 100, pointerEvents: 'auto',
-        display: controller.metatronShape === 'MERKABA' ? 'block' : 'none',
-        opacity: controller.uiVisible ? 1 : 0, transition: 'opacity 0.5s'
-    }}>
-        <div style={{
-            backgroundColor: '#fdfbf7', padding: '20px', borderRadius: '15px', border: '1px solid #d4af37',
-            maxWidth: '300px', boxShadow: '0 4px 30px rgba(0, 0, 0, 0.2)', color: '#1a1a1a'
-        }}>
-            <NollCubeContent language={controller.language} isRTL={isRTL} />
-        </div>
-    </div>
+            {/* NOLL CUBE OVERLAY */}
+            <div style={{
+                position: 'fixed', bottom: '150px', left: '40px', zIndex: 100, pointerEvents: 'auto',
+                display: controller.metatronShape === 'MERKABA' ? 'block' : 'none',
+                opacity: controller.uiVisible ? 1 : 0, transition: 'opacity 0.5s'
+            }}>
+                <div style={{
+                    backgroundColor: '#fdfbf7', padding: '20px', borderRadius: '15px', border: '1px solid #d4af37',
+                    maxWidth: '300px', boxShadow: '0 4px 30px rgba(0, 0, 0, 0.2)', color: '#1a1a1a'
+                }}>
+                    <NollCubeContent language={controller.language} isRTL={isRTL} />
+                </div>
+            </div>
 
         </div >
     );
