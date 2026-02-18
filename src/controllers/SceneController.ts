@@ -384,6 +384,19 @@ export const useSceneController = () => {
         },
         resetCameraView: () => {
             setActiveViewIndex(0); // Index 0 is FRONT (0,0)
+            setPhaseA(0);
+            setPhaseB(0);
+            setWaveTime(0);
+            setHyperPhase(0);
+            setIsPlaying(false);
+            setRotationSpeed(1.0);
+            setInfiniteTriangle(false);
+            setSplitMode(false);
+            setAudioSync(false);
+            setRevealSymmetry(false);
+            setInnerVision(0);
+            setShow4DShadow(false);
+            setGeometryType('METATRON');
         },
         activeViewIndex,
         azimuthAngle,

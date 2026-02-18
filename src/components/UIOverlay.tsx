@@ -108,28 +108,43 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
     return (
         <div className="ui-overlay" style={{ fontFamily: 'Cinzel, serif', pointerEvents: 'none' }}>
 
-            {/* EYE BUTTON (Global Toggle) - Keeps it accessible but separate if needed, 
-                OR we can put it inside. User said ALL controls on a single panel. 
-                I will put the toggle panel button itself separate, but everything else inside. */}
+            {/* LEFT COLUMN: EYE + INFO + LIBRARY + LANGUAGE */}
             <div className="corner-tl" style={{
-                position: 'fixed', top: '40px', left: '40px', zIndex: 1000, pointerEvents: 'auto'
+                position: 'fixed', top: '40px', left: '40px', zIndex: 1000, pointerEvents: 'auto',
+                display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center'
             }}>
                 <button
                     className="sacred-btn"
                     onClick={() => controller.setUiVisible(!controller.uiVisible)}
                     title={controller.uiVisible ? ui.hide_ui : ui.show_ui}
                     style={{
-                        fontSize: '2rem',
-                        background: 'none',
-                        border: 'none',
-                        color: controller.uiVisible ? '#d4af37' : 'rgba(212, 175, 55, 0.5)',
-                        cursor: 'pointer',
-                        filter: controller.uiVisible ? 'drop-shadow(0 0 10px #d4af37)' : 'none',
-                        transition: 'all 0.3s ease'
+                        fontSize: '2rem', background: 'none', border: 'none',
+                        color: controller.uiVisible ? '#d4af37' : 'rgba(212, 175, 55, 0.5)', cursor: 'pointer',
+                        filter: controller.uiVisible ? 'drop-shadow(0 0 10px #d4af37)' : 'none', transition: 'all 0.3s ease'
                     }}
-                >
-                    👁
-                </button>
+                >👁</button>
+
+                {controller.uiVisible && (
+                    <>
+                        <button className="sacred-btn" onClick={() => setShowInfo(!showInfo)} style={{ fontSize: '1.5rem', color: '#d4af37' }}>ℹ️</button>
+                        <button className="sacred-btn" onClick={() => controller.setLibraryOpen(!controller.libraryOpen)} style={{ fontSize: '1.5rem', color: controller.libraryOpen ? '#d4af37' : '#999' }}>📖</button>
+                        <div style={{ position: 'relative' }}>
+                            <select
+                                value={controller.language}
+                                onChange={(e) => controller.setLanguage(e.target.value as any)}
+                                style={{
+                                    appearance: 'none', background: 'none', border: '1px solid #d4af37',
+                                    borderRadius: '5px', color: '#1a1a1a', padding: '5px 10px',
+                                    fontFamily: 'Cinzel, serif', fontSize: '0.7rem', cursor: 'pointer', textAlign: 'center'
+                                }}
+                            >
+                                {Object.entries(LANG_NAMES).map(([code, name]) => (
+                                    <option key={code} value={code} style={{ background: '#fdfbf7', color: '#1a1a1a' }}>{name}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </>
+                )}
             </div>
 
             {/* INFO MODAL - Remained as is, but adjusted colors */}
@@ -179,24 +194,23 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
 
             {/* THE CONSOLIDATED PANEL */}
             <div style={{
-                position: 'fixed', right: controller.uiVisible ? '40px' : '-500px', top: '40px', bottom: '40px',
-                width: '380px', backgroundColor: '#fdfbf7', border: '2px solid #d4af37', borderRadius: '15px',
+                position: 'fixed', right: controller.uiVisible ? '40px' : '-450px', top: '40px', bottom: '40px',
+                width: '320px', backgroundColor: '#fdfbf7', border: '2px solid #d4af37', borderRadius: '15px',
                 boxShadow: '0 0 40px rgba(0,0,0,0.3)', pointerEvents: 'auto', zIndex: 900,
                 transition: 'right 0.6s cubic-bezier(0.4, 0, 0.2, 1)', display: 'flex', flexDirection: 'column',
                 overflow: 'hidden', padding: '40px 20px'
             }}>
-                {/* Sacred Geometry Background Pattern */}
                 <div style={{
                     position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
                     opacity: 0.05, pointerEvents: 'none', zIndex: -1
                 }}>
                     <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
-                        <pattern id="sacred-pattern" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
-                            <circle cx="25" cy="25" r="24" fill="none" stroke="#d4af37" strokeWidth="0.5" />
-                            <circle cx="25" cy="0" r="25" fill="none" stroke="#d4af37" strokeWidth="0.5" />
-                            <circle cx="25" cy="50" r="25" fill="none" stroke="#d4af37" strokeWidth="0.5" />
-                            <circle cx="0" cy="25" r="25" fill="none" stroke="#d4af37" strokeWidth="0.5" />
-                            <circle cx="50" cy="25" r="25" fill="none" stroke="#d4af37" strokeWidth="0.5" />
+                        <pattern id="sacred-pattern" x="50%" y="50%" width="100" height="100" patternUnits="userSpaceOnUse" patternTransform="translate(-50,-50)">
+                            <circle cx="50" cy="50" r="48" fill="none" stroke="#d4af37" strokeWidth="0.5" />
+                            <circle cx="50" cy="2" r="48" fill="none" stroke="#d4af37" strokeWidth="0.5" />
+                            <circle cx="50" cy="98" r="48" fill="none" stroke="#d4af37" strokeWidth="0.5" />
+                            <circle cx="2" cy="50" r="48" fill="none" stroke="#d4af37" strokeWidth="0.5" />
+                            <circle cx="98" cy="50" r="48" fill="none" stroke="#d4af37" strokeWidth="0.5" />
                         </pattern>
                         <rect width="100%" height="100%" fill="url(#sacred-pattern)" />
                     </svg>
@@ -214,139 +228,110 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     }}>☩</div>
                 ))}
 
-                {/* HEADER */}
-                <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-                    <div style={{ color: '#d4af37', fontSize: '1.5rem', fontWeight: 'bold', letterSpacing: '3px' }}>SACRED ALIGNMENT</div>
-                    <div style={{ height: '2px', background: 'linear-gradient(90deg, transparent, #d4af37, transparent)', marginTop: '5px' }} />
-                </div>
+                <div className="custom-scrollbar" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '25px', paddingRight: '10px' }}>
 
-                <div className="custom-scrollbar" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '20px', paddingRight: '5px' }}>
-
-                    {/* TOP SECTION: Global Hooks & Language */}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}>
-                        <select
-                            value={controller.language}
-                            onChange={(e) => controller.setLanguage(e.target.value as any)}
-                            style={{
-                                appearance: 'none', background: 'none', border: '1px solid #d4af37',
-                                borderRadius: '5px', color: '#1a1a1a', padding: '5px 15px',
-                                fontFamily: 'Cinzel, serif', fontSize: '0.8rem', cursor: 'pointer', flex: 1
-                            }}
-                        >
-                            {Object.entries(LANG_NAMES).map(([code, name]) => (
-                                <option key={code} value={code} style={{ background: '#fdfbf7', color: '#1a1a1a' }}>{name}</option>
-                            ))}
-                        </select>
-                        <button className="sacred-btn" onClick={() => setShowInfo(!showInfo)} style={{ border: '1px solid #d4af37', borderRadius: '5px', padding: '5px 10px', color: '#d4af37' }}>ℹ️</button>
-                        <button className="sacred-btn" onClick={() => controller.setLibraryOpen(!controller.libraryOpen)} style={{ border: '1px solid #d4af37', borderRadius: '5px', padding: '5px 10px', color: controller.libraryOpen ? '#d4af37' : '#999' }}>📖</button>
-                    </div>
-
-                    {/* NAVIGATION SECTION */}
-                    <div style={{ padding: '10px', border: '1px solid rgba(212, 175, 55, 0.3)', borderRadius: '10px' }}>
-                        <div style={{ fontSize: '0.7rem', color: '#d4af37', textAlign: 'center', marginBottom: '10px' }}>VIEW NAVIGATION</div>
-                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px' }}>
-                            <button onClick={() => controller.prevCameraView()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37', fontSize: '1.5rem' }}>☩</button>
-                            <button onClick={handleCenterCrossClick} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37', fontSize: '2.5rem', transform: isSecretAngle ? 'rotate(45deg)' : 'none' }}>☩</button>
-                            <button onClick={() => controller.nextCameraView()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37', fontSize: '1.5rem' }}>☩</button>
-                        </div>
-                        <div style={{ textAlign: 'center', color: '#1a1a1a', fontSize: '0.9rem', fontFamily: 'monospace', marginTop: '10px' }}>
-                            {Math.abs(controller.viewAngle).toFixed(2)}°{controller.viewAngle > 0 ? 'N' : 'S'} / {Math.abs(controller.azimuthAngle).toFixed(2)}°{controller.azimuthAngle > 0 ? 'E' : 'W'}
+                    {/* MOTION */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                        <button onClick={() => controller.setIsPlaying(!controller.isPlaying)} style={{ background: 'none', border: '1px solid #d4af37', borderRadius: '50%', width: '45px', height: '45px', color: '#d4af37', flexShrink: 0 }}>
+                            {controller.isPlaying ? '⏸' : '▶'}
+                        </button>
+                        <div style={{ flex: 1 }}>
+                            <input type="range" min="0.1" max="300" step="0.1" value={controller.rotationSpeed || 1.0} onChange={(e) => controller.setRotationSpeed(parseFloat(e.target.value))} style={{ width: '100%', accentColor: '#d4af37' }} />
                         </div>
                     </div>
 
-                    {/* PLAYBACK & MOTION */}
-                    <div style={{ padding: '10px', border: '1px solid rgba(212, 175, 55, 0.3)', borderRadius: '10px' }}>
-                        <div style={{ fontSize: '0.7rem', color: '#d4af37', textAlign: 'center', marginBottom: '10px' }}>TEMPORAL ROTATION</div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                            <button onClick={() => controller.setIsPlaying(!controller.isPlaying)} style={{ background: 'none', border: '1px solid #d4af37', borderRadius: '50%', width: '40px', height: '40px', color: '#d4af37', flexShrink: 0 }}>
-                                {controller.isPlaying ? '⏸' : '▶'}
-                            </button>
-                            <div style={{ flex: 1 }}>
-                                <input type="range" min="0.1" max="300" step="0.1" value={controller.rotationSpeed || 1.0} onChange={(e) => controller.setRotationSpeed(parseFloat(e.target.value))} style={{ width: '100%', accentColor: '#d4af37' }} />
-                                <div style={{ fontSize: '0.6rem', color: '#999', textAlign: 'center' }}>SPEED: {controller.rotationSpeed.toFixed(1)}x</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* DISPLAY MODES */}
+                    {/* MODES */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                        <button onClick={controller.toggleDarkMode} style={{ padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.darkMode ? '#d4af37' : 'none', color: controller.darkMode ? '#fdfbf7' : '#d4af37' }}>{controller.darkMode ? 'DAY ☀' : 'NIGHT ☾'}</button>
-                        <button onClick={controller.toggleCameraType} style={{ padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>{controller.cameraType === 'ORTHOGRAPHIC' ? 'ORTHO' : 'PERSPECT'}</button>
-                        <button onClick={() => controller.setInfiniteTriangle(!controller.infiniteTriangle)} style={{ gridColumn: 'span 2', padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.infiniteTriangle ? '#d4af37' : 'none', color: controller.infiniteTriangle ? '#fdfbf7' : '#d4af37' }}>INFINITE TRIANGLE {controller.infiniteTriangle ? 'ON' : 'OFF'}</button>
+                        <button onClick={controller.toggleDarkMode} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.darkMode ? '#d4af37' : 'none', color: controller.darkMode ? '#fdfbf7' : '#d4af37' }}>
+                            {controller.darkMode ? '☀' : '☾'}
+                        </button>
+                        <button onClick={controller.toggleCameraType} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>
+                            {controller.cameraType === 'ORTHOGRAPHIC' ? 'OR' : 'PS'}
+                        </button>
+                        <button onClick={() => controller.setInfiniteTriangle(!controller.infiniteTriangle)} style={{ gridColumn: 'span 2', padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.infiniteTriangle ? '#d4af37' : 'none', color: controller.infiniteTriangle ? '#fdfbf7' : '#d4af37', fontSize: '1.5rem' }}>
+                            ∆
+                        </button>
                     </div>
 
-                    {/* GRID SIZE */}
-                    <div style={{ textAlign: 'center' }}>
-                        <div style={{ fontSize: '0.6rem', color: '#d4af37', marginBottom: '5px' }}>GRID DIMENSIONS</div>
-                        <div style={{ display: 'flex', gap: '5px' }}>
-                            {[1, 2, 3, 4].map((size) => (
-                                <button key={size} onClick={() => controller.setGridSize(size as 1 | 2 | 3 | 4)} style={{ flex: 1, padding: '5px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.gridSize === size ? '#d4af37' : 'none', color: controller.gridSize === size ? '#fdfbf7' : '#d4af37' }}>{size}x</button>
-                            ))}
-                        </div>
+                    <div style={{ display: 'flex', gap: '5px' }}>
+                        {[1, 2, 3, 4].map((size) => (
+                            <button key={size} onClick={() => controller.setGridSize(size as 1 | 2 | 3 | 4)} style={{ flex: 1, padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.gridSize === size ? '#d4af37' : 'none', color: controller.gridSize === size ? '#fdfbf7' : '#d4af37' }}>{size}x</button>
+                        ))}
                     </div>
 
-                    {/* HARMONICS & TONE */}
-                    <div style={{ padding: '10px', border: '1px solid rgba(212, 175, 55, 0.3)', borderRadius: '10px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                        <div style={{ fontSize: '0.7rem', color: '#d4af37', textAlign: 'center' }}>CELESTIAL HARMONICS</div>
-                        <div style={{ display: 'flex', gap: '5px' }}>
-                            <button onClick={() => controller.toggleParallelLock()} style={{ flex: 1, padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>{controller.parallelLock ? 'UNLOCK ∥' : 'LOCK ∥'}</button>
-                            <button onClick={() => controller.toggleTone()} style={{ flex: 1, padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>{controller.toneEnabled ? 'MUTE ♪' : 'LISTEN ♪'}</button>
+                    {/* HARMONICS */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <div style={{ display: 'flex', gap: '10px' }}>
+                            <button onClick={() => controller.toggleParallelLock()} style={{ flex: 1, padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>∥</button>
+                            <button onClick={() => controller.toggleTone()} style={{ flex: 1, padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>♪</button>
                         </div>
                         {controller.toneEnabled && (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                                <button onClick={() => controller.cycleToneScale()} style={{ padding: '5px', border: '1px dashed #d4af37', borderRadius: '5px', color: '#d4af37', fontSize: '0.7rem' }}>SCALE: {controller.toneScale}</button>
-                                <button onClick={() => controller.toggleVariedMode()} style={{ padding: '5px', border: '1px dashed #d4af37', borderRadius: '5px', color: '#d4af37', fontSize: '0.7rem' }}>VARIATION: {controller.variedMode ? 'ON' : 'OFF'}</button>
+                                <button onClick={() => controller.cycleToneScale()} style={{ padding: '8px', border: '1px dashed #d4af37', borderRadius: '5px', color: '#d4af37', fontSize: '0.7rem' }}>{controller.toneScale}</button>
+                                <button onClick={() => controller.toggleVariedMode()} style={{ padding: '8px', border: '1px dashed #d4af37', borderRadius: '5px', color: '#d4af37', fontSize: '0.7rem' }}>VAR {controller.variedMode ? '+' : '-'}</button>
                             </div>
                         )}
                     </div>
 
-                    {/* ADVANCED ALIGNMENT (Former Theory of Everything) */}
-                    <div style={{ padding: '10px', border: '1px solid rgba(212, 175, 55, 0.3)', borderRadius: '10px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                        <div style={{ fontSize: '0.7rem', color: '#d4af37', textAlign: 'center' }}>ALIGNMENT PARAMETERS</div>
-                        <button onClick={() => controller.setSplitMode(!controller.splitMode)} style={{ padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>SPLIT MODE {controller.splitMode ? 'ON' : 'OFF'}</button>
-
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                            <span style={{ fontSize: '0.6rem', color: '#1a1a1a' }}>FREQ A: {controller.frequencyA.toFixed(2)}</span>
+                    {/* PHASES */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <button onClick={() => controller.setSplitMode(!controller.splitMode)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>SPLIT {controller.splitMode ? 'ON' : 'OFF'}</button>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                             <input type="range" min="0" max="5" step="0.01" value={controller.frequencyA} onChange={(e) => controller.setFrequencyA(parseFloat(e.target.value))} style={{ width: '100%', accentColor: '#d4af37' }} />
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                            <span style={{ fontSize: '0.6rem', color: '#1a1a1a' }}>FREQ B: {controller.frequencyB.toFixed(2)}</span>
                             <input type="range" min="0" max="5" step="0.01" value={controller.frequencyB} onChange={(e) => controller.setFrequencyB(parseFloat(e.target.value))} style={{ width: '100%', accentColor: '#d4af37' }} />
                         </div>
-
-                        <select value={controller.waveType} onChange={(e) => controller.setWaveType(e.target.value as any)} style={{ padding: '5px', background: 'none', border: '1px solid #d4af37', color: '#d4af37', borderRadius: '5px', fontSize: '0.7rem' }}>
-                            <option value="SINE">SINE (RESONANCE)</option>
-                            <option value="SAWTOOTH">SAWTOOTH (MOD SPIN)</option>
-                            <option value="SQUARE">SQUARE (POLARITY)</option>
-                            <option value="FRACTAL">FRACTAL (MULTIVERSE)</option>
+                        <select value={controller.waveType} onChange={(e) => controller.setWaveType(e.target.value as any)} style={{ padding: '10px', background: 'none', border: '1px solid #d4af37', color: '#d4af37', borderRadius: '5px', fontSize: '0.8rem' }}>
+                            <option value="SINE">SINE</option>
+                            <option value="SAWTOOTH">SAW</option>
+                            <option value="SQUARE">SQR</option>
+                            <option value="FRACTAL">FRC</option>
                         </select>
                     </div>
 
-                    {/* REVEAL TOOLS */}
-                    <div style={{ padding: '10px', border: '1px solid rgba(212, 175, 55, 0.3)', borderRadius: '10px', display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px' }}>
-                        <div style={{ fontSize: '0.7rem', color: '#d4af37', textAlign: 'center' }}>REVEAL TOOLS</div>
-                        <button onClick={() => controller.setRevealSymmetry(!controller.revealSymmetry)} style={{ padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>SYMMETRY PLANES {controller.revealSymmetry ? 'ON' : 'OFF'}</button>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                            <span style={{ fontSize: '0.6rem', color: '#1a1a1a' }}>INNER VISION: {controller.innerVision.toFixed(1)}</span>
-                            <input type="range" min="-10" max="10" step="0.1" value={controller.innerVision} onChange={(e) => controller.setInnerVision(parseFloat(e.target.value))} style={{ width: '100%', accentColor: '#d4af37' }} />
-                        </div>
-                        <button onClick={() => controller.setShow4DShadow(!controller.show4DShadow)} style={{ padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>4D SHADOW {controller.show4DShadow ? 'ON' : 'OFF'}</button>
+                    {/* TOOLS */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '40px' }}>
+                        <button onClick={() => controller.setRevealSymmetry(!controller.revealSymmetry)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>SYM</button>
+                        <input type="range" min="-10" max="10" step="0.1" value={controller.innerVision} onChange={(e) => controller.setInnerVision(parseFloat(e.target.value))} style={{ width: '100%', accentColor: '#d4af37' }} />
+                        <button onClick={() => controller.setShow4DShadow(!controller.show4DShadow)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>4D</button>
                     </div>
 
                 </div>
             </div>
 
+            {/* BOTTOM NAVIGATION (CROSS) */}
+            <div style={{
+                position: 'fixed', bottom: '40px', left: '50%', transform: 'translateX(-50%)',
+                pointerEvents: 'auto', zIndex: 100, display: 'flex', alignItems: 'center', gap: '30px'
+            }}>
+                <button onClick={() => controller.prevCameraView()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(212, 175, 55, 0.7)', fontSize: '2.5rem' }}>☩</button>
+                <button
+                    onClick={handleCenterCrossClick}
+                    style={{
+                        background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37',
+                        fontSize: '4.5rem', transform: isSecretAngle ? 'rotate(45deg)' : 'none',
+                        textShadow: isSecretAngle ? '0 0 25px rgba(212, 175, 55, 0.8)' : '0 0 15px rgba(212, 175, 55, 0.5)',
+                        transition: 'all 0.5s ease'
+                    }}
+                >☩</button>
+                <button onClick={() => controller.nextCameraView()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(212, 175, 55, 0.7)', fontSize: '2.5rem' }}>☩</button>
+            </div>
+
+            {/* ANGLE DISPLAY */}
+            <div style={{
+                position: 'fixed', bottom: '40px', left: isRTL ? 'auto' : '40px', right: isRTL ? '40px' : 'auto',
+                color: '#d4af37', fontSize: '1rem', fontFamily: 'monospace', textShadow: '0 0 10px rgba(212, 175, 55, 0.3)',
+                pointerEvents: 'none'
+            }}>
+                {Math.abs(controller.viewAngle).toFixed(2)}°{controller.viewAngle > 0 ? 'N' : 'S'}
+                <div>{Math.abs(controller.azimuthAngle).toFixed(2)}°{controller.azimuthAngle > 0 ? 'E' : 'W'}</div>
+            </div>
+
             {/* SIDE GREEK COLUMNS - Refined opacity */}
-            <div style={{ position: 'fixed', top: '50%', left: '40px', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column-reverse', gap: '5px', pointerEvents: 'none', opacity: 0.3, zIndex: 0 }} className="greek-column">
+            <div style={{ position: 'fixed', top: '50%', left: '120px', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column-reverse', gap: '5px', pointerEvents: 'none', opacity: 0.1, zIndex: 0 }} className="greek-column">
                 {GREEK_TITLE.split('').map((char, i) => (<div key={i} style={{ fontSize: '1.5rem', color: '#d4af37', textAlign: 'center' }}>{char}</div>))}
             </div>
-            {!controller.uiVisible && (
-                <div style={{ position: 'fixed', top: '50%', right: '40px', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: '5px', pointerEvents: 'none', opacity: 0.3, zIndex: 0 }} className="greek-column">
-                    {GREEK_TITLE.split('').map((char, i) => (<div key={i} style={{ fontSize: '1.5rem', color: '#d4af37', textAlign: 'center' }}>{char}</div>))}
-                </div>
-            )}
 
-            {/* VERSE DISPLAY - Centered top */}
+            {/* VERSE DISPLAY */}
             <div style={{
                 position: 'fixed', top: '10%', left: '50%', transform: 'translateX(-50%)',
                 textAlign: 'center', color: '#d4af37', maxWidth: '600px', width: '80%',
@@ -357,9 +342,9 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 <div style={{ fontSize: '1.5rem', whiteSpace: 'pre-wrap', fontFamily: isAmharic ? 'sans-serif' : 'Cinzel, serif', direction: isRTL ? 'rtl' : 'ltr' }}>{body}</div>
             </div>
 
-            {/* NOLL CUBE OVERLAY - Kept separate as it's a specific data readout */}
+            {/* NOLL CUBE OVERLAY */}
             <div style={{
-                position: 'fixed', bottom: '80px', left: '40px', zIndex: 100, pointerEvents: 'auto',
+                position: 'fixed', bottom: '150px', left: '40px', zIndex: 100, pointerEvents: 'auto',
                 display: controller.metatronShape === 'MERKABA' ? 'block' : 'none',
                 opacity: controller.uiVisible ? 1 : 0, transition: 'opacity 0.5s'
             }}>
