@@ -165,7 +165,7 @@ h1.app-title {
 .sacred-btn {
     background: transparent;
     border: none;
-    color: var(--c-text-dim);
+    color: var(--c-gold);
     font-family: var(--f-sacred);
     font-size: 0.75rem;
     letter-spacing: 0.2em;

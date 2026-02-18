@@ -108,43 +108,22 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
     return (
         <div className="ui-overlay" style={{ fontFamily: 'Cinzel, serif', pointerEvents: 'none' }}>
 
-            {/* LEFT COLUMN: EYE + INFO + LIBRARY + LANGUAGE */}
+            {/* LEFT CORNER: EYE ICON ONLY */}
             <div className="corner-tl" style={{
-                position: 'fixed', top: '40px', left: '40px', zIndex: 1000, pointerEvents: 'auto',
-                display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center'
+                position: 'fixed', top: '20px', left: '20px', zIndex: 1100, pointerEvents: 'auto',
+                display: 'flex', flexDirection: 'column', alignItems: 'center'
             }}>
                 <button
                     className="sacred-btn"
                     onClick={() => controller.setUiVisible(!controller.uiVisible)}
                     title={controller.uiVisible ? ui.hide_ui : ui.show_ui}
                     style={{
-                        fontSize: '2rem', background: 'none', border: 'none',
-                        color: controller.uiVisible ? '#d4af37' : 'rgba(212, 175, 55, 0.5)', cursor: 'pointer',
-                        filter: controller.uiVisible ? 'drop-shadow(0 0 10px #d4af37)' : 'none', transition: 'all 0.3s ease'
+                        fontSize: '2.4rem', background: 'none', border: 'none',
+                        color: controller.uiVisible ? '#d4af37' : 'rgba(212, 175, 55, 0.4)', cursor: 'pointer',
+                        filter: controller.uiVisible ? 'drop-shadow(0 0 10px #d4af37)' : 'none', transition: 'all 0.3s ease',
+                        padding: '10px'
                     }}
                 >👁</button>
-
-                {controller.uiVisible && (
-                    <>
-                        <button className="sacred-btn" onClick={() => setShowInfo(!showInfo)} style={{ fontSize: '1.5rem', color: '#d4af37' }}>ℹ️</button>
-                        <button className="sacred-btn" onClick={() => controller.setLibraryOpen(!controller.libraryOpen)} style={{ fontSize: '1.5rem', color: controller.libraryOpen ? '#d4af37' : '#999' }}>📖</button>
-                        <div style={{ position: 'relative' }}>
-                            <select
-                                value={controller.language}
-                                onChange={(e) => controller.setLanguage(e.target.value as any)}
-                                style={{
-                                    appearance: 'none', background: 'none', border: '1px solid #d4af37',
-                                    borderRadius: '5px', color: '#1a1a1a', padding: '5px 10px',
-                                    fontFamily: 'Cinzel, serif', fontSize: '0.7rem', cursor: 'pointer', textAlign: 'center'
-                                }}
-                            >
-                                {Object.entries(LANG_NAMES).map(([code, name]) => (
-                                    <option key={code} value={code} style={{ background: '#fdfbf7', color: '#1a1a1a' }}>{name}</option>
-                                ))}
-                            </select>
-                        </div>
-                    </>
-                )}
             </div>
 
             {/* INFO MODAL - Remained as is, but adjusted colors */}
@@ -232,6 +211,27 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
 
                 <div className="custom-scrollbar" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '25px', paddingRight: '10px' }}>
 
+                    {/* UTILITIES */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1.5fr', gap: '10px', alignItems: 'center' }}>
+                        <button className="sacred-btn" onClick={() => setShowInfo(!showInfo)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37', textAlign: 'center' }}>ℹ️</button>
+                        <button className="sacred-btn" onClick={() => controller.setLibraryOpen(!controller.libraryOpen)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: controller.libraryOpen ? '#fdfbf7' : '#d4af37', background: controller.libraryOpen ? '#d4af37' : 'none', textAlign: 'center' }}>📖</button>
+                        <div style={{ position: 'relative' }}>
+                            <select
+                                value={controller.language}
+                                onChange={(e) => controller.setLanguage(e.target.value as any)}
+                                style={{
+                                    appearance: 'none', background: 'none', border: '1px solid #d4af37', width: '100%',
+                                    borderRadius: '5px', color: '#d4af37', padding: '10px 5px',
+                                    fontFamily: 'Cinzel, serif', fontSize: '0.7rem', cursor: 'pointer', textAlign: 'center'
+                                }}
+                            >
+                                {Object.entries(LANG_NAMES).map(([code, name]) => (
+                                    <option key={code} value={code} style={{ background: '#fdfbf7', color: '#1a1a1a' }}>{name}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+
                     {/* MOTION */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                         <button onClick={() => controller.setIsPlaying(!controller.isPlaying)} style={{ background: 'none', border: '1px solid #d4af37', borderRadius: '50%', width: '45px', height: '45px', color: '#d4af37', flexShrink: 0 }}>
@@ -317,7 +317,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 position: 'fixed', bottom: '40px', left: '50%', transform: 'translateX(-50%)',
                 pointerEvents: 'auto', zIndex: 100, display: 'flex', alignItems: 'center', gap: '30px'
             }}>
-                <button onClick={() => controller.prevCameraView()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(212, 175, 55, 0.7)', fontSize: '2.5rem' }}>☩</button>
+                <button onClick={() => controller.prevCameraView()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37', fontSize: '2.5rem' }}>☩</button>
                 <button
                     onClick={handleCenterCrossClick}
                     style={{
@@ -327,7 +327,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         transition: 'all 0.5s ease'
                     }}
                 >☩</button>
-                <button onClick={() => controller.nextCameraView()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(212, 175, 55, 0.7)', fontSize: '2.5rem' }}>☩</button>
+                <button onClick={() => controller.nextCameraView()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37', fontSize: '2.5rem' }}>☩</button>
             </div>
 
             {/* ANGLE DISPLAY */}
