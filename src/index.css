@@ -192,13 +192,7 @@ h1.app-title {
 .sacred-btn:hover,
 .sacred-btn.active {
     color: var(--c-gold);
-    text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
-    padding-left: 10px;
-}
-
-.sacred-btn:hover::before,
-.sacred-btn.active::before {
-    width: 20px;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
 
 .btn-group-v {

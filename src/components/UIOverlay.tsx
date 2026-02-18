@@ -234,7 +234,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
 
                     {/* MOTION */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                        <button onClick={() => controller.setIsPlaying(!controller.isPlaying)} style={{ background: 'none', border: '1px solid #d4af37', borderRadius: '50%', width: '45px', height: '45px', color: '#d4af37', flexShrink: 0 }}>
+                        <button className="sacred-btn" onClick={() => controller.setIsPlaying(!controller.isPlaying)} style={{ background: 'none', border: '1px solid #d4af37', borderRadius: '50%', width: '45px', height: '45px', color: '#d4af37', flexShrink: 0, textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             {controller.isPlaying ? '⏸' : '▶'}
                         </button>
                         <div style={{ flex: 1 }}>
@@ -244,49 +244,49 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
 
                     {/* MODES */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
-                        <button onClick={controller.toggleDarkMode} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.darkMode ? '#d4af37' : 'none', color: controller.darkMode ? '#fdfbf7' : '#d4af37' }}>
+                        <button className="sacred-btn" onClick={controller.toggleDarkMode} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.darkMode ? '#d4af37' : 'none', color: controller.darkMode ? '#fdfbf7' : '#d4af37', textAlign: 'center' }}>
                             {controller.darkMode ? '☀' : '☾'}
                         </button>
-                        <button onClick={controller.toggleCameraType} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>
+                        <button className="sacred-btn" onClick={controller.toggleCameraType} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37', textAlign: 'center' }}>
                             {controller.cameraType === 'ORTHOGRAPHIC' ? 'OR' : 'PS'}
                         </button>
-                        <button onClick={() => controller.setInfiniteTriangle(!controller.infiniteTriangle)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.infiniteTriangle ? '#d4af37' : 'none', color: controller.infiniteTriangle ? '#fdfbf7' : '#d4af37', fontSize: '1.2rem' }}>
+                        <button className="sacred-btn" onClick={() => controller.setInfiniteTriangle(!controller.infiniteTriangle)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.infiniteTriangle ? '#d4af37' : 'none', color: controller.infiniteTriangle ? '#fdfbf7' : '#d4af37', fontSize: '1.2rem', textAlign: 'center' }}>
                             ∆
                         </button>
                     </div>
 
                     <div style={{ display: 'flex', gap: '5px' }}>
                         {[1, 2, 3, 4].map((size) => (
-                            <button key={size} onClick={() => controller.setGridSize(size as 1 | 2 | 3 | 4)} style={{ flex: 1, padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.gridSize === size ? '#d4af37' : 'none', color: controller.gridSize === size ? '#fdfbf7' : '#d4af37' }}>{size}x</button>
+                            <button key={size} className="sacred-btn" onClick={() => controller.setGridSize(size as 1 | 2 | 3 | 4)} style={{ flex: 1, padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.gridSize === size ? '#d4af37' : 'none', color: controller.gridSize === size ? '#fdfbf7' : '#d4af37', textAlign: 'center' }}>{size}x</button>
                         ))}
                     </div>
 
                     {/* HARMONICS */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                         <div style={{ display: 'flex', gap: '10px' }}>
-                            <button onClick={() => controller.toggleParallelLock()} style={{ flex: 1, padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>∥</button>
-                            <button onClick={() => controller.toggleTone()} style={{ flex: 1, padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>♪</button>
+                            <button className="sacred-btn" onClick={() => controller.toggleParallelLock()} style={{ flex: 1, padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: controller.parallelLock ? '#fdfbf7' : '#d4af37', background: controller.parallelLock ? '#d4af37' : 'none', textAlign: 'center' }}>∥</button>
+                            <button className="sacred-btn" onClick={() => controller.toggleTone()} style={{ flex: 1, padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: controller.toneEnabled ? '#fdfbf7' : '#d4af37', background: controller.toneEnabled ? '#d4af37' : 'none', textAlign: 'center' }}>♪</button>
                         </div>
                         {controller.toneEnabled && (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                                <button onClick={() => controller.cycleToneScale()} style={{ padding: '8px', border: '1px dashed #d4af37', borderRadius: '5px', color: '#d4af37', fontSize: '0.7rem' }}>{controller.toneScale}</button>
-                                <button onClick={() => controller.toggleVariedMode()} style={{ padding: '8px', border: '1px dashed #d4af37', borderRadius: '5px', color: '#d4af37', fontSize: '0.7rem' }}>VAR {controller.variedMode ? '+' : '-'}</button>
+                                <button className="sacred-btn" onClick={() => controller.cycleToneScale()} style={{ padding: '8px', border: '1px dashed #d4af37', borderRadius: '5px', color: '#d4af37', fontSize: '0.7rem', textAlign: 'center' }}>{controller.toneScale}</button>
+                                <button className="sacred-btn" onClick={() => controller.toggleVariedMode()} style={{ padding: '8px', border: '1px dashed #d4af37', borderRadius: '5px', color: controller.variedMode ? '#fdfbf7' : '#d4af37', background: controller.variedMode ? '#d4af37' : 'none', fontSize: '0.7rem', textAlign: 'center' }}>VAR {controller.variedMode ? '+' : '-'}</button>
                             </div>
                         )}
                     </div>
 
                     {/* PHASES */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                        <button onClick={() => controller.setSplitMode(!controller.splitMode)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>SPLIT {controller.splitMode ? 'ON' : 'OFF'}</button>
+                        <button className="sacred-btn" onClick={() => controller.setSplitMode(!controller.splitMode)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: controller.splitMode ? '#fdfbf7' : '#d4af37', background: controller.splitMode ? '#d4af37' : 'none', textAlign: 'center' }}>SPLIT {controller.splitMode ? 'ON' : 'OFF'}</button>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                 <input type="range" className="red-slider" min="0" max="5" step="0.01" value={controller.frequencyA} onChange={(e) => controller.setFrequencyA(parseFloat(e.target.value))} style={{ flex: 1 }} />
-                                <input type="number" min="0" max="5" step="0.01" value={controller.frequencyA.toFixed(2)} onChange={(e) => controller.setFrequencyA(parseFloat(e.target.value))} style={{ width: '60px', background: 'none', border: '1px solid #d4af37', borderRadius: '3px', color: '#1a1a1a', fontSize: '0.8rem', padding: '2px' }} />
+                                <input type="number" min="0" max="5" step="0.01" value={controller.frequencyA.toFixed(2)} onChange={(e) => controller.setFrequencyA(parseFloat(e.target.value))} style={{ width: '60px', background: 'none', border: '1px solid #ff4444', borderRadius: '3px', color: '#ff4444', fontSize: '0.8rem', padding: '2px' }} />
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                 <input type="range" className="blue-slider" min="0" max="5" step="0.01" value={controller.frequencyB} onChange={(e) => controller.setFrequencyB(parseFloat(e.target.value))} style={{ flex: 1 }} />
-                                <input type="number" min="0" max="5" step="0.01" value={controller.frequencyB.toFixed(2)} onChange={(e) => controller.setFrequencyB(parseFloat(e.target.value))} style={{ width: '60px', background: 'none', border: '1px solid #d4af37', borderRadius: '3px', color: '#1a1a1a', fontSize: '0.8rem', padding: '2px' }} />
+                                <input type="number" min="0" max="5" step="0.01" value={controller.frequencyB.toFixed(2)} onChange={(e) => controller.setFrequencyB(parseFloat(e.target.value))} style={{ width: '60px', background: 'none', border: '1px solid #4444ff', borderRadius: '3px', color: '#4444ff', fontSize: '0.8rem', padding: '2px' }} />
                             </div>
                         </div>
 
@@ -301,12 +301,12 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
 
                     {/* TOOLS */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '40px' }}>
-                        <button onClick={() => controller.setRevealSymmetry(!controller.revealSymmetry)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>SYM</button>
+                        <button className="sacred-btn" onClick={() => controller.setRevealSymmetry(!controller.revealSymmetry)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: controller.revealSymmetry ? '#fdfbf7' : '#d4af37', background: controller.revealSymmetry ? '#d4af37' : 'none', textAlign: 'center' }}>SYM</button>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                             <div style={{ fontSize: '0.6rem', color: '#d4af37', textAlign: 'center' }}>VISION</div>
                             <input type="range" min="-10" max="10" step="0.1" value={controller.innerVision} onChange={(e) => controller.setInnerVision(parseFloat(e.target.value))} style={{ width: '100%', accentColor: '#d4af37' }} />
                         </div>
-                        <button onClick={() => controller.setShow4DShadow(!controller.show4DShadow)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37' }}>4D</button>
+                        <button className="sacred-btn" onClick={() => controller.setShow4DShadow(!controller.show4DShadow)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: controller.show4DShadow ? '#fdfbf7' : '#d4af37', background: controller.show4DShadow ? '#d4af37' : 'none', textAlign: 'center' }}>4D</button>
                     </div>
 
                 </div>
