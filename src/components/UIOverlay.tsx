@@ -22,6 +22,35 @@ interface Props {
     controller: ReturnType<typeof useSceneController>;
 }
 
+// Copy Button Component
+const CopyButton = ({ text }: { text: string }) => {
+    const [copied, setCopied] = React.useState(false);
+
+    const handleCopy = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        navigator.clipboard.writeText(text).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        });
+    };
+
+    return (
+        <button
+            onClick={handleCopy}
+            title="Copy to Clipboard"
+            style={{
+                background: 'none', border: '1px solid #d4af37', borderRadius: '5px',
+                color: copied ? '#fdfbf7' : '#d4af37',
+                backgroundColor: copied ? '#d4af37' : 'transparent',
+                cursor: 'pointer', padding: '5px 10px', fontSize: '0.8rem',
+                marginLeft: '10px', transition: 'all 0.3s ease'
+            }}
+        >
+            {copied ? 'COPIED' : 'COPY'}
+        </button>
+    );
+};
+
 // Draggable Helper Component
 interface DraggablePanelProps {
     controller?: any; // strict typing skipped for now
@@ -37,8 +66,11 @@ const DraggablePanel = ({ children, initialStyle, className }: DraggablePanelPro
     const panelRef = React.useRef<HTMLDivElement>(null);
 
     const handleMouseDown = (e: React.MouseEvent) => {
-        // Only drag if clicking the background or a specific handle, not buttons
-        if ((e.target as HTMLElement).tagName === 'BUTTON' || (e.target as HTMLElement).closest('button')) return;
+        // Only drag if clicking the header (marked with class 'drag-handle')
+        if (!(e.target as HTMLElement).closest('.drag-handle')) return;
+
+        // Prevent default text selection during drag
+        e.preventDefault();
 
         isDragging.current = true;
         dragStart.current = { x: e.clientX - position.x, y: e.clientY - position.y };
@@ -196,6 +228,23 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         display: 'flex', flexDirection: 'column', zIndex: 2000, pointerEvents: 'auto', overflow: 'hidden'
                     }}
                 >
+                    <div className="drag-handle" style={{
+                        padding: '15px', background: 'rgba(212, 175, 55, 0.05)', borderBottom: '1px solid #d4af37',
+                        cursor: 'grab', display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+                    }}>
+                        <span style={{ fontFamily: 'Cinzel, serif', color: '#d4af37', fontWeight: 'bold' }}>NOLL CUBE REVELATION</span>
+                        <div style={{ display: 'flex', gap: '10px' }}>
+                            <CopyButton text={getNollCubeText(controller.language) + "\n\n" + getNumericScripture(controller.language) + "\n\n" + getHymn(controller.language)} />
+                            <button
+                                onClick={() => setShowInfo(false)}
+                                style={{
+                                    background: 'none', border: '1px solid #d4af37', borderRadius: '50%',
+                                    width: '30px', height: '30px', color: '#d4af37', cursor: 'pointer',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                }}
+                            >✕</button>
+                        </div>
+                    </div>
                     <SacredBorder inverted={false} />
                     <div style={{
                         flex: 1, overflowY: 'auto', padding: '40px', color: '#1a1a1a',
@@ -203,14 +252,6 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         fontSize: '1.1rem', lineHeight: '1.8', scrollbarWidth: 'thin',
                         scrollbarColor: '#d4af37 #fdfbf7', direction: isRTL ? 'rtl' : 'ltr', textAlign: isRTL ? 'start' : 'left'
                     }}>
-                        <button
-                            onClick={() => setShowInfo(false)}
-                            style={{
-                                position: 'sticky', top: '0', float: 'right',
-                                background: 'rgba(255,255,255,0.8)', border: '1px solid #d4af37',
-                                borderRadius: '50%', width: '30px', height: '30px', color: '#d4af37', cursor: 'pointer'
-                            }}
-                        >✕</button>
                         <NollCubeContent language={controller.language} isRTL={isRTL} />
                         <div style={{
                             marginTop: '30px', padding: '20px', border: '1px solid #d4af37',
@@ -230,7 +271,8 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     </div>
                     <SacredBorder inverted={true} />
                 </DraggablePanel>
-            )}
+            )
+            }
 
             {/* THE CONSOLIDATED PANEL */}
             <DraggablePanel
@@ -244,9 +286,17 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     transition: 'right 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
                     display: controller.uiVisible ? 'flex' : 'none',
                     flexDirection: 'column',
-                    overflow: 'hidden', padding: '40px 20px'
+                    overflow: 'hidden', padding: '0'
                 }}
             >
+                {/* Drag Handle Header */}
+                <div className="drag-handle" style={{
+                    padding: '10px', background: 'rgba(212, 175, 55, 0.1)', borderBottom: '1px solid #d4af37',
+                    cursor: 'grab', textAlign: 'center', color: '#d4af37', fontFamily: 'Cinzel, serif', fontSize: '0.8rem',
+                    letterSpacing: '2px', zIndex: 10
+                }}>
+                    PRIME CONTROL
+                </div>
                 {/* Background Pattern */}
                 <div style={{
                     position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
@@ -277,7 +327,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 ))}
 
 
-                <div className="custom-scrollbar" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '25px', paddingRight: '10px' }}>
+                <div className="custom-scrollbar" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '25px', padding: '20px' }}>
 
                     {/* UTILITIES */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1.5fr', gap: '10px', alignItems: 'center' }}>
@@ -427,7 +477,12 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 zIndex: 800
             }}>
                 <div style={{ fontSize: '1.2rem', marginBottom: '0.5rem', opacity: 0.8 }}>{note}</div>
-                <div style={{ fontSize: '1.5rem', whiteSpace: 'pre-wrap', fontFamily: isAmharic ? 'sans-serif' : 'Cinzel, serif', direction: isRTL ? 'rtl' : 'ltr' }}>{body}</div>
+                <div style={{ fontSize: '1.5rem', whiteSpace: 'pre-wrap', fontFamily: isAmharic ? 'sans-serif' : 'Cinzel, serif', direction: isRTL ? 'rtl' : 'ltr' }}>
+                    {body}
+                    <div style={{ marginTop: '10px', opacity: 0.5, transform: 'scale(0.8)' }}>
+                        <CopyButton text={note + "\n\n" + body} />
+                    </div>
+                </div>
             </div>
 
             {/* NOLL CUBE OVERLAY */}
