@@ -186,7 +186,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             </div>
 
             {/* INFO MODAL - WRAPPED IN DRAGGABLE PANEL */}
-            {showInfo && (
+            {showInfo && controller.uiVisible && (
                 <DraggablePanel
                     initialStyle={{
                         position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
@@ -241,7 +241,9 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     maxHeight: '85vh',
                     width: '320px', backgroundColor: '#fdfbf7', border: '2px solid #d4af37', borderRadius: '15px',
                     boxShadow: '0 0 40px rgba(0,0,0,0.3)', pointerEvents: 'auto', zIndex: 900,
-                    transition: 'right 0.6s cubic-bezier(0.4, 0, 0.2, 1)', display: 'flex', flexDirection: 'column',
+                    transition: 'right 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+                    display: controller.uiVisible ? 'flex' : 'none',
+                    flexDirection: 'column',
                     overflow: 'hidden', padding: '40px 20px'
                 }}
             >
@@ -384,7 +386,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             {/* BOTTOM NAVIGATION (CROSS) */}
             <div style={{
                 position: 'fixed', bottom: '40px', left: '50%', transform: 'translateX(-50%)',
-                pointerEvents: 'auto', zIndex: 100, display: 'flex', alignItems: 'center', gap: '30px'
+                pointerEvents: 'auto', zIndex: 100, display: controller.uiVisible ? 'flex' : 'none', alignItems: 'center', gap: '30px'
             }}>
                 <button onClick={() => controller.prevCameraView()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37', fontSize: '2.5rem' }}>☩</button>
                 <button
@@ -403,17 +405,17 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             <div style={{
                 position: 'fixed', bottom: '40px', left: isRTL ? 'auto' : '40px', right: isRTL ? '40px' : 'auto',
                 color: '#d4af37', fontSize: '1rem', fontFamily: 'monospace', textShadow: '0 0 10px rgba(212, 175, 55, 0.3)',
-                pointerEvents: 'none'
+                pointerEvents: 'none', display: controller.uiVisible ? 'block' : 'none'
             }}>
                 {Math.abs(controller.viewAngle).toFixed(2)}°{controller.viewAngle > 0 ? 'N' : 'S'}
                 <div>{Math.abs(controller.azimuthAngle).toFixed(2)}°{controller.azimuthAngle > 0 ? 'E' : 'W'}</div>
             </div>
 
             {/* SIDE GREEK COLUMNS - Refined opacity */}
-            <div style={{ position: 'fixed', top: '50%', left: '0px', transform: 'translateY(-50%)', display: window.innerWidth < 768 ? 'none' : 'flex', flexDirection: 'column-reverse', gap: '5px', pointerEvents: 'none', opacity: 0.1, zIndex: 0, paddingLeft: '20px' }} className="greek-column-left">
+            <div style={{ position: 'fixed', top: '50%', left: '0px', transform: 'translateY(-50%)', display: (!controller.uiVisible || window.innerWidth < 768) ? 'none' : 'flex', flexDirection: 'column-reverse', gap: '5px', pointerEvents: 'none', opacity: 0.1, zIndex: 0, paddingLeft: '20px' }} className="greek-column-left">
                 {GREEK_TITLE.split('').map((char, i) => (<div key={i} style={{ fontSize: '1.5rem', color: '#d4af37', textAlign: 'center' }}>{char}</div>))}
             </div>
-            <div style={{ position: 'fixed', top: '50%', right: '0px', transform: 'translateY(-50%)', display: window.innerWidth < 768 ? 'none' : 'flex', flexDirection: 'column-reverse', gap: '5px', pointerEvents: 'none', opacity: 0.1, zIndex: 0, paddingRight: '20px' }} className="greek-column-right">
+            <div style={{ position: 'fixed', top: '50%', right: '0px', transform: 'translateY(-50%)', display: (!controller.uiVisible || window.innerWidth < 768) ? 'none' : 'flex', flexDirection: 'column-reverse', gap: '5px', pointerEvents: 'none', opacity: 0.1, zIndex: 0, paddingRight: '20px' }} className="greek-column-right">
                 {GREEK_TITLE.split('').map((char, i) => (<div key={i} style={{ fontSize: '1.5rem', color: '#d4af37', textAlign: 'center' }}>{char}</div>))}
             </div>
 
@@ -431,8 +433,8 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             {/* NOLL CUBE OVERLAY */}
             <div style={{
                 position: 'fixed', bottom: '150px', left: '40px', zIndex: 100, pointerEvents: 'auto',
-                display: controller.metatronShape === 'MERKABA' ? 'block' : 'none',
-                opacity: controller.uiVisible ? 1 : 0, transition: 'opacity 0.5s'
+                display: (controller.metatronShape === 'MERKABA' && controller.uiVisible) ? 'block' : 'none',
+                opacity: 1, transition: 'opacity 0.5s'
             }}>
                 <div style={{
                     backgroundColor: '#fdfbf7', padding: '20px', borderRadius: '15px', border: '1px solid #d4af37',
