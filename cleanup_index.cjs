@@ -9,16 +9,16 @@ const theoryText = fs.readFileSync('detailed_theory.txt', 'utf8');
 
 // Format the theory text into HTML
 const formattedTheory = theoryText.split('\n').map(l => {
-    l = l.trim();
-    if (l === '') return '<br/>';
+  l = l.trim().replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  if (l === '') return '<br/>';
 
-    // Headers
-    if (l.match(/^[\d\.]+\s[A-Z]/) || l.match(/^(Abstract|References|End of Paper|Figure 1|Conjecture|Theorem|Corollary|Lemma|Remark)/)) {
-        return `<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">${l}</h3>`;
-    }
+  // Headers
+  if (l.match(/^[\d\.]+\s[A-Z]/) || l.match(/^(Abstract|References|End of Paper|Figure 1|Conjecture|Theorem|Corollary|Lemma|Remark)/)) {
+    return `<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">${l}</h3>`;
+  }
 
-    // Regular text
-    return `<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">${l}</p>`;
+  // Regular text
+  return `<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">${l}</p>`;
 }).join('\n');
 
 // Construct the new article
