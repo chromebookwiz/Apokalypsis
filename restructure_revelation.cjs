@@ -1,4 +1,4 @@
-import { Language } from './translations';
+const fs = require('fs');
 
 const REVELATION_HE = `
 [S] חזון המרכבה
@@ -9,123 +9,6 @@ const REVELATION_HE = `
 ג. סוחר האור בנה את המכונה.
 ד. העקמומיות חיובית על קו האמת.
 `;
-const REVELATION_GR = `
-[S] ΟΡΑΜΑ ΤΟΥ ΜΕΡΚΑΜΠΑ
-[N] ΑΡΜΑ ΠΥΡΟΣ 🌀
-
-1. Εἶδον τὸ Ἅρμα τοῦ Πυρὸς ἐν τῇ καρδίᾳ τοῦ κόσμου.
-2. Τροχοὶ ἐν τῷ μέσῳ τροχῶν, ἡ πρωταρχικὴ σύνδεσις τῶν ἀριθμῶν.
-3. Ὁ Ἔμπορος τοῦ Φωτὸς ἔκτισε τὴν μηχανήν.
-4. Ἡ καμπυλότης ἐστὶ θετικὴ ἐπὶ τῆς γραμμῆς τῆς ἀληθείας.
-`;
-const REVELATION_AM = `
-[S] የመርካባ ራእይ
-[N] የእሳት ሠረገላ 🌀
-
-፩. በዓለም ልብ ውስጥ የእሳት ሠረገላ አየሁ።
-፪. በዊልስ ውስጥ ዊልስ፣ የቁጥሮች የመጀመሪያ ግንኙነት።
-፫. የብርሃን ነጋዴ ማሽኑን ሠራ።
-፬. ኩርባው በእውነት መስመር ላይ አዎንታዊ ነው።
-`;
-const REVELATION_HI = `
-[S] मर्कबा का दर्शन
-[N] अग्नि रथ 🌀
-
-1. मैंने सृष्टि के हृदय में अग्नि रथ देखा।
-2. पहियों के भीतर पहिये, संख्याओं का प्रधान संबंध।
-3. प्रकाश के सौदागर ने मशीन बनाई।
-4. सत्य की रेखा पर वक्रता सकारात्मक है।
-`;
-const REVELATION_NO = `
-[S] ᚦᛖ ᚢᛁᛋᛁᛩᚾ ᛩᚠ ᛗᛖᚱᚲᚪᛒᚪ
-[N] ᚲᚺᚪᚱᛁᛩᛏ ᛩᚠ ᚠᛁᚱᛖ 🌀
-
-1. ᛁ ᛋᚪᚹ ᚦᛖ ᚲᚺᚪᚱᛁᛩᛏ ᛁᚾ ᚦᛖ ᚺᛖᚪᚱᛏ ᛩᚠ ᚦᛖ ᚹᛩᚱᛚᛞ.
-2. ᚹᚺᛖᛖᛚᛋ ᚹᛁᚦᛁᚾ ᚹᚺᛖᛖᛚᛋ, ᚦᛖ ᛈᚱᛁᛗᛖ ᚲᛩᚾᚾᛖᚲᛏᛁᛩᚾ.
-3. ᚦᛖ ᛗᛖᚱᚲᚺᚪᚾᛏ ᛩᚠ ᛚᛁᚷᚺᛏ ᛒᚢᛁᛚᛏ ᚦᛖ ᛗᚪᚲᚺᛁᚾᛖ.
-4. ᚦᛖ ᚲᚢᚱᚢᚪᛏᚢᚱᛖ ᛁᛋ ᛈᛩᛋᛁᛏᛁᚢᛖ ᛁᚾ ᚦᛖ ᚺᛖᚪᚱᛏ.
-`;
-const REVELATION_SA = `
-[S] मर्कबा-दर्शनम्
-[N] अग्निरथः 🌀
-
-१. अहं विश्वस्य हृदये अग्निरथं अपश्यम्।
-२. चक्रेषु चक्राणि, संख्यानां प्रधान-बन्धः।
-३. ज्योतिर्-वैश्यः यन्त्रं अरचयत्।
-४. सत्यरेक्खायां वक्रता धनात्मकः अस्ति।
-`;
-const REVELATION_LA = `
-[S] VISIO MERKABAE
-[N] CURRUS IGNIS 🌀
-
-1. Vidi Currum Ignis in corde mundi.
-2. Rotae intra rotas, connexio prima numerorum.
-3. Mercator Lucis struxit machinam.
-4. Curvatura est positiva in linea veritatis.
-`;
-const REVELATION_AR = `
-[S] رؤية الميركابا
-[N] عربة النار 🌀
-
-١. رأيت عربة النار في قلب العالم.
-٢. عجلات داخل عجلات، الرابط الأولي للأرقام.
-٣. تاجر النور بنى الآلة.
-٤. الانحناء إيجابي على خط الحقيقة.
-`;
-const REVELATION_DE = `
-[S] VISION DES MERKABA
-[N] FEUERWAGEN 🌀
-
-1. Ich sah den Feuerwagen im Herzen der Welt.
-2. Räder in Rädern, die primäre Verbindung der Zahlen.
-3. Der Händler des Lichts baute die Maschine.
-4. Die Krümmung ist positiv auf der Linie der Wahrheit.
-`;
-const REVELATION_ES = `
-[S] VISIÓN DEL MERKABÁ
-[N] CARRO DE FUEGO 🌀
-
-1. Vi el Carro de Fuego en el corazón del mundo.
-2. Ruedas dentro de ruedas, la conexión prima de los números.
-3. El Mercader de la Luz construyó la máquina.
-4. La curvatura es positiva en la línea de la verdad.
-`;
-const REVELATION_FA = `
-[S] رویا مرکابا
-[N] ارابه آتش 🌀
-
-۱. ارابه آتش را در قلب جهان دیدم.
-۲. چرخ‌ها در میان چرخ‌ها، اتصال اول عددی.
-۳. بازرگان نور ماشین را ساخت.
-۴. انحنا در خط حقیقت مثبت است.
-`;
-const REVELATION_CU = `
-[S] 𒀭 MERKABA 𒀭
-[N] 𒀭 GIBIL 🌀
-
-1. 𒀭 4D 𒀭  ❤️ 
-2. 𒀭 WHEELS 𒀭 WHEELS
-3. 𒀭 LIGHT 𒀭  𒁮 
-4. 𒀭 POSITIVE 𒀭  ➰ 
-`;
-
-export const getRevelation = (lang: Language): string => {
-    switch (lang) {
-        case 'HE': return REVELATION_HE;
-        case 'GR': return REVELATION_GR;
-        case 'AM': return REVELATION_AM;
-        case 'HI': return REVELATION_HI;
-        case 'NO': return REVELATION_NO;
-        case 'SA': return REVELATION_SA;
-        case 'LA': return REVELATION_LA;
-        case 'AR': return REVELATION_AR;
-        case 'DE': return REVELATION_DE;
-        case 'ES': return REVELATION_ES;
-        case 'FA': return REVELATION_FA;
-        case 'CU': return REVELATION_CU;
-        default: return REVELATION_LA;
-    }
-};
 
 const NOLL_TEXT_HE = `
 [לוח א: השושלת והשור]
@@ -148,6 +31,17 @@ const NOLL_TEXT_HE = `
 קאט רואה את הזאבים: אש מלמעלה, קרח מלמטה.
 היא האיזון שדחה את הגיבור למען השלום.
 `;
+
+const REVELATION_GR = `
+[S] ΟΡΑΜΑ ΤΟΥ ΜΕΡΚΑΜΠΑ
+[N] ΑΡΜΑ ΠΥΡΟΣ 🌀
+
+1. Εἶδον τὸ Ἅρμα τοῦ Πυρὸς ἐν τῇ καρδίᾳ τοῦ κόσμου.
+2. Τροχοὶ ἐν τῷ μέσῳ τροχῶν, ἡ πρωταρχικὴ σύνδεσις τῶν ἀριθμῶν.
+3. Ὁ Ἔμπορος τοῦ Φωτὸς ἔκτισε τὴν μηχανήν.
+4. Ἡ καμπυλότης ἐστὶ θετικὴ ἐπὶ τῆς γραμμῆς τῆς ἀληθείας.
+`;
+
 const NOLL_TEXT_GR = `
 [ΠΛΑΞ Α: Η ΓΕΝΕΣΙΣ ΚΑΙ Ο ΤΑΥΡΟΣ]
 Νικανόλ ὁ πατὴρ καὶ Λαρανόλ ἡ μήτηρ, ῥίζαι τοῦ κόσμου.
@@ -168,6 +62,104 @@ const NOLL_TEXT_GR = `
 Ἡ Κάτ ἀπέρριψε τὸν ἥρωα, τρύζουσα τὴν εὐσταθείαν.
 Ἰουστινιανὸς καὶ Κοολβέανός βλέπουσιν τὴν δίκην.
 `;
+
+const REVELATION_LA = `
+[S] VISIO MERKABAE
+[N] CURRUS IGNIS 🌀
+
+1. Vidi Currum Ignis in corde mundi.
+2. Rotae intra rotas, connexio prima numerorum.
+3. Mercator Lucis struxit machinam.
+4. Curvatura est positiva in linea veritatis.
+`;
+
+const NOLL_TEXT_LA = `
+[TABULA I: GENESIS ET TAURUS]
+Nikanol pater et Laranol mater, radices arboris antiquae.
+Genuerunt Netanol ignem et Elisanol auroram.
+Netanol Taurum Caelestem provocavit, cornua prehendit.
+Secreta Cubi rapuit, mysterium viginti quattuor et duodecim.
+
+[TABULA II: FUGA GLACIALIS]
+Riley deorsum currit, sicut bestia glaciei pacem fugit.
+Sophia, Samata, et Fjord, Parcae quattuor dimensionum.
+Unus, octo, viginti septem, sexaginta quattuor: sphaerae in sphaeris.
+Justinianus, Coolbeanus, et Kolbalus rident in tenebris.
+
+[TABULA III: AEQUILIBRIUM KAT]
+Netanol virgam tollit, Riley flammis insequitur.
+Kat videt lupos: ignem supra, glaciem infra.
+Illa stateram tenet et herorem reiecit pro pace vera.
+Pat-rack, Tie, et Samsung vident finem saeculi.
+`;
+
+const REVELATION_CU = `
+[S] 𒀭 MERKABA 𒀭
+[N] 𒀭 GIBIL 🌀
+
+1. 𒀭 4D 𒀭 HEART
+2. 𒀭 WHEELS 𒀭 WHEELS
+3. 𒀭 LIGHT 𒀭 MERCHANT
+4. 𒀭 POSITIVE 𒀭 CURVATURE
+`;
+
+const NOLL_TEXT_CU = `
+[TABLET I: LINEAGE]
+Nikanol 𒀭 Laranol 𒀭 ROOTS
+Netanol 𒀭 Elisanol 𒀭 BRANCHES
+Netanol 𒀭 BULL 𒀭 HORNS 𒀭 GRAB
+Secrets 𒀭 CUBE 𒀭 24-12 𒀭 SEIZED
+
+[TABLET II: THE VOID]
+Riley 👿 ICE-WOLF 𒀭 FLEE
+1-8-27-64 𒀭 SPHERES 𒀭 CUBE
+Sophia 𒀭 Samata 𒀭 Fjord 𒀭 NORN
+Justinian 𒀭 BEHOLD 𒀭 Coolbean
+
+[TABLET III: BALANCE]
+Kat ⚖️ BALANCE 𒀭 REJECT 𒀭 HERO
+Samsung 𒀭 Tie 𒀭 Pat-rack 𒀭 Kolbal
+𒀭 POSITIVE 𒀭 HEART 𒀭 🌀
+`;
+
+const REVELATION_NO = `
+[S] ᚦᛖ ᚢᛁᛋᛁᛩᚾ ᛩᚠ ᛗᛖᚱᚲᚪᛒᚪ
+[N] ᚲᚺᚪᚱᛁᛩᛏ ᛩᚠ ᚠᛁᚱᛖ 🌀
+
+1. ᛁ ᛋᚪᚹ ᚦᛖ ᚲᚺᚪᚱᛁᛩᛏ ᛁᚾ ᚦᛖ ᚺᛖᚪᚱᛏ ᛩᚠ ᚦᛖ ᚹᛩᚱᛚᛞ.
+2. ᚹᚺᛖᛖᛚᛋ ᚹᛁᚦᛁᚾ ᚹᚺᛖᛖᛚᛋ, ᚦᛖ ᛈᚱᛁᛗᛖ ᚲᛩᚾᚾᛖᚲᛏᛁᛩᚾ.
+3. ᚦᛖ ᛗᛖᚱᚲᚺᚪᚾᛏ ᛩᚠ ᛚᛁᚷᚺᛏ ᛒᚢᛁᛚᛏ ᚦᛖ ᛗᚪᚲᚺᛁᚾᛖ.
+4. ᚦᛖ ᚲᚢᚱᚢᚪᛏᚢᚱᛖ ᛁᛋ ᛈᛩᛋᛁᛏᛁᚢᛖ ᛁᚾ ᚦᛖ ᚺᛖᚪᚱᛏ.
+`;
+
+const NOLL_TEXT_NO = `
+[TABLET I: ᚦᛖ ᛋᛁᚱᛖ]
+ᚾᛁᚲᚪᚾᛩᛚ ᚪᚾᛞ ᛚᚪᚱᚪᚾᛩᛚ, ᚱᛩᛩᛏᛋ ᛩᚠ ᛁᚷᛞᚱᚪᛋᛁᛚ.
+ᚾᛖᛏᚪᚾᛩᛚ ᚪᚾᛞ ᛖᛚᛁᛋᚪᚾᛩᛚ, ᛋᛩᚾ ᚪᚾᛞ ᛞᚪᚢᚷᚺᛏᛖᚱ.
+ᚾᛖᛏᚪᚾᛩᛚ ᛋᛖᛁᛉᛖᛞ ᚦᛖ ᛒᚢᛚᛚ ᛒᚤ ᚦᛖ ᚺᛩᚱᚾᛋ.
+ᚲᚢᛒᛖ ᛋᛖᚲᚱᛖᛏᛋ, ᛏᚹᛖᚾᛏᚤ-ᚠᛩᚢᚱ ᚪᚾᛞ ᛏᚹᛖᛚᚢᛖ.
+
+[TABLET II: ᚦᛖ ᚹᛩᛚᚠ]
+ᚱᛁᛚᛖᛃ ᚠᛚᛖᛖᛋ ᛞᛩᚹᚾ, ᛁᚲᛖ-ᛒᛖᚪᛋᛏ ᚱᚢᚾᛋ ᚠᚱᛖᛖ.
+ᛋᛩᛈᚺᛁᚪ, ᛋᚪᛗᚪᛏᚪ, ᚠᛃᛩᚱᛞ, ᚦᛖ ᚾᛩᚱᚾᛋ ᚹᛖᚪᚢᛖ.
+ᛩᚾᛖ, ᛖᛁᚷᚺᛏ, ᛏᚹᛖᚾᛏᚤ-ᛋᛖᚢᛖᚾ, ᛋᛁᛪᛏᚤ-ᚠᛩᚢᚱ.
+
+[TABLET III: ᚦᛖ ᚾᛩᚱᚾ]
+ᚾᛖᛏᚪᚾᛩᛚ ᚺᚢᚾᛏᛋ ᚹᛁᛏᚺ ᚠᛁᚱᛖ, ᚱᛩᛞ ᛩᚠ ᛁᚱᛩᚾ.
+ᚲᚪᛏ ᛋᛖᛖᛋ ᚪᛚᛚ, ᛒᚪᛚᚪᚾᚲᛖ ᛁᛋ ᚺᛖᚱ ᛚᚪᚹ.
+ᛋᚺᛖ ᛞᛖᚾᛁᛖᛞ ᚦᛖ ᚺᛖᚱᛩ, ᛈᛖᚪᚲᛖ ᛁᛋ ᚠᛩᚢᚾᛞ.
+`;
+
+const REVELATION_AM = `
+[S] የመርካባ ራእይ
+[N] የእሳት ሠረገላ 🌀
+
+፩. በዓለም ልብ ውስጥ የእሳት ሠረገላ አየሁ።
+፪. በዊልስ ውስጥ ዊልስ፣ የቁጥሮች የመጀመሪያ ግንኙነት።
+፫. የብርሃን ነጋዴ ማሽኑን ሠራ።
+፬. ኩርባው በእውነት መስመር ላይ አዎንታዊ ነው።
+`;
+
 const NOLL_TEXT_AM = `
 [ታብሌት ፩: የዘር ግንድ]
 ኒካኖል አባቱ ላራኖል እናቱ፣ የጥንት ዛፍ ሥሮች።
@@ -185,6 +177,17 @@ const NOLL_TEXT_AM = `
 ካት ሁለቱን አውሬዎች ታያለች፡ እሳት ከላይ በረዶ ከታች::
 እሷ ሚዛንን ትጠብቃለች፣ ለሰላም ብላ ጀግናውን አልተቀበለችም::
 `;
+
+const REVELATION_HI = `
+[S] मर्कबा का दर्शन
+[N] अग्नि रथ 🌀
+
+1. मैंने सृष्टि के हृदय में अग्नि रथ देखा।
+2. पहियों के भीतर पहिये, संख्याओं का प्रधान संबंध।
+3. प्रकाश के सौदागर ने मशीन बनाई।
+4. सत्य की रेखा पर वक्रता सकारात्मक है।
+`;
+
 const NOLL_TEXT_HI = `
 [पट्टिका १: कुल और बैल]
 निकानोल पिता और लारानोल माता, प्राचीन वृक्ष की जड़ें।
@@ -202,23 +205,17 @@ const NOLL_TEXT_HI = `
 कैट दोनों शक्तियों को देखती है: ऊपर अग्नि, नीचे हिम।
 उसने शांति के लिए नायक को त्याग दिया, संतुलन ही परम सत्य है।
 `;
-const NOLL_TEXT_NO = `
-[ ᛏᚪᛒᛚᛖᛏ ᛁ : ᚦᛖ ᛋᛁᚱᛖ]
-ᚾᛁᚲᚪᚾᛩᛚ ᚪᚾᛞ ᛚᚪᚱᚪᚾᛩᛚ, ᚱᛩᛩᛏᛋ ᛩᚠ ᛁᚷᛞᚱᚪᛋᛁᛚ.
-ᚾᛖᛏᚪᚾᛩᛚ ᚪᚾᛞ ᛖᛚᛁᛋᚪᚾᛩᛚ, ᛋᛩᚾ ᚪᚾᛞ ᛞᚪᚢᚷᚺᛏᛖᚱ.
-ᚾᛖᛏᚪᚾᛩᛚ ᛋᛖᛁᛉᛖᛞ ᚦᛖ ᛒᚢᛚᛚ ᛒᚤ ᚦᛖ ᚺᛩᚱᚾᛋ.
-ᚲᚢᛒᛖ ᛋᛖᚲᚱᛖᛏᛋ, ᛏᚹᛖᚾᛏᚤ-ᚠᛩᚢᚱ ᚪᚾᛞ ᛏᚹᛖᛚᚢᛖ.
 
-[ ᛏᚪᛒᛚᛖᛏ  II: ᚦᛖ ᚹᛩᛚᚠ]
-ᚱᛁᛚᛖᛃ ᚠᛚᛖᛖᛋ ᛞᛩᚹᚾ, ᛁᚲᛖ-ᛒᛖᚪᛋᛏ ᚱᚢᚾᛋ ᚠᚱᛖᛖ.
-ᛋᛩᛈᚺᛁᚪ, ᛋᚪᛗᚪᛏᚪ, ᚠᛃᛩᚱᛞ, ᚦᛖ ᚾᛩᚱᚾᛋ ᚹᛖᚪᚢᛖ.
-ᛩᚾᛖ, ᛖᛁᚷᚺᛏ, ᛏᚹᛖᚾᛏᚤ-ᛋᛖᚢᛖᚾ, ᛋᛁᛪᛏᚤ-ᚠᛩᚢᚱ.
+const REVELATION_SA = `
+[S] मर्कबा-दर्शनम्
+[N] अग्निरथः 🌀
 
-[ ᛏᚪᛒᛚᛖᛏ  III: ᚦᛖ ᚾᛩᚱᚾ]
-ᚾᛖᛏᚪᚾᛩᛚ ᚺᚢᚾᛏᛋ ᚹᛁᛏᚺ ᚠᛁᚱᛖ, ᚱᛩᛞ ᛩᚠ ᛁᚱᛩᚾ.
-ᚲᚪᛏ ᛋᛖᛖᛋ ᚪᛚᛚ, ᛒᚪᛚᚪᚾᚲᛖ ᛁᛋ ᚺᛖᚱ ᛚᚪᚹ.
-ᛋᚺᛖ ᛞᛖᚾᛁᛖᛞ ᚦᛖ ᚺᛖᚱᛩ, ᛈᛖᚪᚲᛖ ᛁᛋ ᚠᛩᚢᚾᛞ.
+१. अहं विश्वस्य हृदये अग्निरथं अपश्यम्।
+२. चक्रेषु चक्राणि, संख्यानां प्रधान-बन्धः।
+३. ज्योतिर्-वैश्यः यन्त्रं अरचयत्।
+४. सत्यरेक्खायां वक्रता धनात्मकः अस्ति।
 `;
+
 const NOLL_TEXT_SA = `
 [पट्टिका १: कुलवृत्तान्तः वृषभश्च]
 निकानोलः पिता लारानोलः माता, वृक्षस्य मूलानि।
@@ -236,25 +233,17 @@ const NOLL_TEXT_SA = `
 कैट पश्यति द्वौ पशू: ऊर्ध्वं अग्निः, अधः हिमम्।
 सा शांत्यै वीरं निराकृतवती, संतुलनमेव शाश्वतम्।
 `;
-const NOLL_TEXT_LA = `
-[TABULA I: GENESIS ET TAURUS]
- 𒀭 𒉌 𒅗 ኖል  pater et  𒀭 𒆷 𒊏 ኖል  mater, radices arboris antiquae.
-Genuerunt  𒀭 𒉈 𒋫 ኖል  ignem et  𒀭 𒂊 𒇷 𒊓 ኖል  auroram.
- 𒀭 𒉈 𒋫 ኖል  Taurum Caelestem provocavit, cornua prehendit.
-Secreta Cubi rapuit, mysterium viginti quattuor et duodecim.
 
-[TABULA II: FUGA GLACIALIS]
- 𒀭 ራ ይ ሊ  deorsum currit, sicut bestia glaciei pacem fugit.
- 𒀭 ሱ ፊ ያ ,  𒀭 ሳ ማ ታ , et  𒀭 ፊ ጆ ርድ , Parcae quattuor dimensionum.
-Unus, octo, viginti septem, sexaginta quattuor: sphaerae in sphaeris.
- 𒀭 ዩ ስቲ ኒ አ ን us,  𒀭 豆 us, et  𒀭 ቆ ል ባ ል us rident in tenebris.
+const REVELATION_AR = `
+[S] رؤية الميركابا
+[N] عربة النار 🌀
 
-[TABULA III: AEQUILIBRIUM KAT]
- 𒀭 𒉈 𒋫 ኖል  virgam tollit,  𒀭 ራ ይ ሊ  flammis insequitur.
- 𒀭 ኬ ት  videt lupos: ignem supra, glaciem infra.
-Illa stateram tenet et herorem reiecit pro pace vera.
- 𒀭 পা ,  𒀭 👔 , et  𒀭 三  vident finem saeculi.
+١. رأيت عربة النار في قلب العالم.
+٢. عجلات داخل عجلات، الرابط الأولي للأرقام.
+٣. تاجر النور بنى الآلة.
+٤. الانحناء إيجابي على خط الحقيقة.
 `;
+
 const NOLL_TEXT_AR = `
 [اللوح الأول: السلالة والثور]
 نكانول الأب ولارانول الأم، جذور الشجرة العظيمة.
@@ -272,40 +261,73 @@ const NOLL_TEXT_AR = `
 קאט ترى النار فوق والثلج تحت في تناغم.
 لقد رفضت البطل حفظاً للميزان، فالتوازن هو الحق.
 `;
+
+const REVELATION_DE = `
+[S] VISION DES MERKABA
+[N] FEUERWAGEN 🌀
+
+1. Ich sah den Feuerwagen im Herzen der Welt.
+2. Räder in Rädern, die primäre Verbindung der Zahlen.
+3. Der Händler des Lichts baute die Maschine.
+4. Die Krümmung ist positiv auf der Linie der Wahrheit.
+`;
+
 const NOLL_TEXT_DE = `
 [TAFEL I: HERKUNFT UND STIER]
- 𒀭 𒉌 𒅗 ኖል  der Vater und  𒀭 𒆷 𒊏 ኖል  die Mutter, Wurzeln der Welt.
-Sie gebaren  𒀭 𒉈 𒋫 ኖል  das Feuer und  𒀭 𒂊 𒇷 𒊓 ኖል  den Glanz.
- 𒀭 𒉈 𒋫 ኖል  reizte den Himmelsstier, packte ihn bei den Hörnern.
+Nikanol der Vater und Laranol die Mutter, Wurzeln der Welt.
+Sie gebaren Netanol das Feuer und Elisanol den Glanz.
+Netanol reizte den Himmelsstier, packte ihn bei den Hörnern.
 Er entriss ihm die Würfelgeheimnisse, die Vierundzwanzig und Zwölf.
 
 [TAFEL II: DIE FLUCHT]
- 𒀭 ራ ይ ሊ  flieht als Eiswolf vor der eisernen Ordnung.
- 𒀭 ሱ ፊ ያ ,  𒀭 ሳ ማ ታ  und  𒀭 ፊ ጆ ርድ  weben das Schicksal der Sphären.
+Riley flieht als Eiswolf vor der eisernen Ordnung.
+Sophia, Samata und Fjord weben das Schicksal der Sphären.
 Eins, acht, siebenundzwanzig, vierundsechzig Welten.
 
 [TAFEL III: KATS GLEICHGEWICHT]
- 𒀭 𒉈 𒋫 ኖል  jagt mit Flammen und dem stählernen Stab.
- 𒀭 ኬ ት  sieht die Bestien: Feuer oben, Eis unten.
+Netanol jagt mit Flammen und dem stählernen Stab.
+Kat sieht die Bestien: Feuer oben, Eis unten.
 Sie verstieß den Helden für den ewigen Frieden des Maßes.
 `;
+
+const REVELATION_ES = `
+[S] VISIÓN DEL MERKABÁ
+[N] CARRO DE FUEGO 🌀
+
+1. Vi el Carro de Fuego en el corazón del mundo.
+2. Ruedas dentro de ruedas, la conexión prima de los números.
+3. El Mercader de la Luz construyó la máquina.
+4. La curvatura es positiva en la línea de la verdad.
+`;
+
 const NOLL_TEXT_ES = `
 [TABLA I: LINAJE Y TORO]
- 𒀭 𒉌 𒅗 ኖል  el Padre y  𒀭 𒆷 𒊏 ኖል  la Madre, raíces del gran árbol.
-Engendraron a  𒀭 𒉈 𒋫 ኖል  el Fuego y a  𒀭 𒂊 𒇷 𒊓 ኖል  la Claridad.
- 𒀭 𒉈 𒋫 ኖል  provocó al Toro del Cielo, lo tomó por los cuernos.
+Nikanol el Padre y Laranol la Madre, raíces del gran árbol.
+Engendraron a Netanol el Fuego y a Elisanol la Claridad.
+Netanol provocó al Toro del Cielo, lo tomó por los cuernos.
 Robó los secretos del Cubo, el misterio del 24 y el 12.
 
 [TABLA II: LA HUIDA]
- 𒀭 ራ ይ ሊ  huye como bestia de hielo de la paz forjada.
- 𒀭 ሱ ፊ ያ ,  𒀭 ሳ ማ ታ  y  𒀭 ፊ ጆ ርድ , tejedoras del destino dimensional.
+Riley huye como bestia de hielo de la paz forjada.
+Sophia, Samata y Fjord, tejedoras del destino dimensional.
 Uno, ocho, veintisiete, sesenta y cuatro esferas.
 
 [TABLA III: EQUILIBRIO DE KAT]
- 𒀭 𒉈 𒋫 ኖል  persigue con llamas y la vara de hierro.
- 𒀭 ኬ ት  ve a las bestias: fuego arriba, hielo abajo.
+Netanol persigue con llamas y la vara de hierro.
+Kat ve a las bestias: fuego arriba, hielo abajo.
 Rechazó al héroe para guardar la balanza del universo.
 `;
+
+const REVELATION_FA = `
+[S] رویا مرکابا
+[N] ارابه آتش 🌀
+
+۱. ارابه آتش را در قلب جهان دیدم.
+۲. چرخ‌ها در میان چرخ‌ها، اتصال اول عددی.
+۳. بازرگان نور ماشین را ساخت.
+۴. انحنا در خط حقیقت مثبت است.
+`;
+
 const NOLL_TEXT_FA = `
 [لوح اول: تبار و گاو]
 نیکانول پدر و لارانول مادر، ریشه‌های درخت کهن.
@@ -323,24 +345,52 @@ const NOLL_TEXT_FA = `
 کت دو دیو را می‌بیند: آتش در بالا، یخ در پایین.
 او پهلوان را براند تا ترازِ گیتی پایدار ماند.
 `;
-const NOLL_TEXT_CU = `
-|[ 𒀀 ]|
- 𒀭 𒉌 𒅗 ኖል  𒀭  𒀭 𒆷 𒊏 ኖል  𒀭  racines
- 𒀭 𒉈 𒋫 ኖል  𒀭  𒀭 𒂊 𒇷 𒊓 ኖል  𒀭  나무
- 𒀭 𒉈 𒋫 ኖል  𒀭 𒄞 𒀭  শিং 𒀭  抓
- 🤫 𒀭  🕋 𒀭 24-12 𒀭  奪
 
-|[ 🌀 ]|
- 𒀭 ራ ይ ሊ  👿 ICE-WOLF 𒀭  🏃
-1-8-27-64 𒀭  🔵 𒀭  🕋
- 𒀭 ሱ ፊ ያ  𒀭  𒀭 ሳ ማ ታ  𒀭  𒀭 ፊ ጆ ርድ  𒀭  🧶
- 𒀭 ዩ ስቲ ኒ አ ን  𒀭  👀 𒀭  𒀭 豆 
+const content = `import { Language } from './translations';
 
-|[ ⚖️ ]|
- 𒀭 ኬ ት  ⚖️  ⚖️ 𒀭  🙅 𒀭  🦸
- 𒀭 三  𒀭  𒀭 👔  𒀭  𒀭 পা  𒀭  𒀭 ቆ ል ባ ል 
-𒀭 POSITIVE 𒀭  ❤️  𒀭 🌀
-`;
+const REVELATION_HE = \`${REVELATION_HE}\`;
+const REVELATION_GR = \`${REVELATION_GR}\`;
+const REVELATION_AM = \`${REVELATION_AM}\`;
+const REVELATION_HI = \`${REVELATION_HI}\`;
+const REVELATION_NO = \`${REVELATION_NO}\`;
+const REVELATION_SA = \`${REVELATION_SA}\`;
+const REVELATION_LA = \`${REVELATION_LA}\`;
+const REVELATION_AR = \`${REVELATION_AR}\`;
+const REVELATION_DE = \`${REVELATION_DE}\`;
+const REVELATION_ES = \`${REVELATION_ES}\`;
+const REVELATION_FA = \`${REVELATION_FA}\`;
+const REVELATION_CU = \`${REVELATION_CU}\`;
+
+export const getRevelation = (lang: Language): string => {
+    switch (lang) {
+        case 'HE': return REVELATION_HE;
+        case 'GR': return REVELATION_GR;
+        case 'AM': return REVELATION_AM;
+        case 'HI': return REVELATION_HI;
+        case 'NO': return REVELATION_NO;
+        case 'SA': return REVELATION_SA;
+        case 'LA': return REVELATION_LA;
+        case 'AR': return REVELATION_AR;
+        case 'DE': return REVELATION_DE;
+        case 'ES': return REVELATION_ES;
+        case 'FA': return REVELATION_FA;
+        case 'CU': return REVELATION_CU;
+        default: return REVELATION_LA;
+    }
+};
+
+const NOLL_TEXT_HE = \`${NOLL_TEXT_HE}\`;
+const NOLL_TEXT_GR = \`${NOLL_TEXT_GR}\`;
+const NOLL_TEXT_AM = \`${NOLL_TEXT_AM}\`;
+const NOLL_TEXT_HI = \`${NOLL_TEXT_HI}\`;
+const NOLL_TEXT_NO = \`${NOLL_TEXT_NO}\`;
+const NOLL_TEXT_SA = \`${NOLL_TEXT_SA}\`;
+const NOLL_TEXT_LA = \`${NOLL_TEXT_LA}\`;
+const NOLL_TEXT_AR = \`${NOLL_TEXT_AR}\`;
+const NOLL_TEXT_DE = \`${NOLL_TEXT_DE}\`;
+const NOLL_TEXT_ES = \`${NOLL_TEXT_ES}\`;
+const NOLL_TEXT_FA = \`${NOLL_TEXT_FA}\`;
+const NOLL_TEXT_CU = \`${NOLL_TEXT_CU}\`;
 
 const NOLL_TEXTS: Record<Language, string> = {
     'HE': NOLL_TEXT_HE,
@@ -360,3 +410,7 @@ const NOLL_TEXTS: Record<Language, string> = {
 export const getNollCubeText = (lang: Language): string => {
     return NOLL_TEXTS[lang] || NOLL_TEXT_LA;
 };
+`;
+
+fs.writeFileSync('src/data/revelation.ts', content);
+console.log('Successfully restructured revelation.ts');
