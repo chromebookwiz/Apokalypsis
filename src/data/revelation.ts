@@ -209,12 +209,12 @@ const NOLL_TEXT_NO = `
 ᚾᛖᛏᚪᚾᛩᛚ ᛋᛖᛁᛉᛖᛞ ᚦᛖ ᛒᚢᛚᛚ ᛒᚤ ᚦᛖ ᚺᛩᚱᚾᛋ.
 ᚲᚢᛒᛖ ᛋᛖᚲᚱᛖᛏᛋ, ᛏᚹᛖᚾᛏᚤ-ᚠᛩᚢᚱ ᚪᚾᛞ ᛏᚹᛖᛚᚢᛖ.
 
-[ ᛏᚪᛒᛚᛖᛏ  II: ᚦᛖ ᚹᛩᛚᚠ]
+[ ᛏᚪᛒᛚᛖᛏ : ᚦᛖ ᚹᛩᛚᚠ]
 ᚱᛁᛚᛖᛃ ᚠᛚᛖᛖᛋ ᛞᛩᚹᚾ, ᛁᚲᛖ-ᛒᛖᚪᛋᛏ ᚱᚢᚾᛋ ᚠᚱᛖᛖ.
 ᛋᛩᛈᚺᛁᚪ, ᛋᚪᛗᚪᛏᚪ, ᚠᛃᛩᚱᛞ, ᚦᛖ ᚾᛩᚱᚾᛋ ᚹᛖᚪᚢᛖ.
 ᛩᚾᛖ, ᛖᛁᚷᚺᛏ, ᛏᚹᛖᚾᛏᚤ-ᛋᛖᚢᛖᚾ, ᛋᛁᛪᛏᚤ-ᚠᛩᚢᚱ.
 
-[ ᛏᚪᛒᛚᛖᛏ  III: ᚦᛖ ᚾᛩᚱᚾ]
+[ ᛏᚪᛒᛚᛖᛏ : ᚦᛖ ᚾᛩᚱᚾ]
 ᚾᛖᛏᚪᚾᛩᛚ ᚺᚢᚾᛏᛋ ᚹᛁᛏᚺ ᚠᛁᚱᛖ, ᚱᛩᛞ ᛩᚠ ᛁᚱᛩᚾ.
 ᚲᚪᛏ ᛋᛖᛖᛋ ᚪᛚᛚ, ᛒᚪᛚᚪᚾᚲᛖ ᛁᛋ ᚺᛖᚱ ᛚᚪᚹ.
 ᛋᚺᛖ ᛞᛖᚾᛁᛖᛞ ᚦᛖ ᚺᛖᚱᛩ, ᛈᛖᚪᚲᛖ ᛁᛋ ᚠᛩᚢᚾᛞ.
@@ -238,22 +238,22 @@ const NOLL_TEXT_SA = `
 `;
 const NOLL_TEXT_LA = `
 [TABULA I: GENESIS ET TAURUS]
- 𒀭 𒉌 𒅗 ኖል  pater et  𒀭 𒆷 𒊏 ኖል  mater, radices arboris antiquae.
-Genuerunt  𒀭 𒉈 𒋫 ኖል  ignem et  𒀭 𒂊 𒇷 𒊓 ኖል  auroram.
- 𒀭 𒉈 𒋫 ኖል  Taurum Caelestem provocavit, cornua prehendit.
+Nikanol pater et Laranol mater, radices arboris antiquae.
+Genuerunt Netanol ignem et Elisanol auroram.
+Netanol Taurum Caelestem provocavit, cornua prehendit.
 Secreta Cubi rapuit, mysterium viginti quattuor et duodecim.
 
 [TABULA II: FUGA GLACIALIS]
- 𒀭 ራ ይ ሊ  deorsum currit, sicut bestia glaciei pacem fugit.
- 𒀭 ሱ ፊ ያ ,  𒀭 ሳ ማ ታ , et  𒀭 ፊ ጆ ርድ , Parcae quattuor dimensionum.
+Riley deorsum currit, sicut bestia glaciei pacem fugit.
+Sophia, Samata, et Fjord, Parcae quattuor dimensionum.
 Unus, octo, viginti septem, sexaginta quattuor: sphaerae in sphaeris.
- 𒀭 ዩ ስቲ ኒ አ ን us,  𒀭 豆 us, et  𒀭 ቆ ል ባ ል us rident in tenebris.
+Justinianus, Coolbeanus, et Kolbalus rident in tenebris.
 
 [TABULA III: AEQUILIBRIUM KAT]
- 𒀭 𒉈 𒋫 ኖል  virgam tollit,  𒀭 ራ ይ ሊ  flammis insequitur.
- 𒀭 ኬ ት  videt lupos: ignem supra, glaciem infra.
-Illa stateram tenet et herorem reiecit pro pace vera.
- 𒀭 পা ,  𒀭 👔 , et  𒀭 三  vident finem saeculi.
+Netanol virgam tollit, Riley flammis insequitur.
+Kat videt lupos: ignem supra, glaciem infra.
+Illa stateram tenet et  🦸rem reiecit pro pace vera.
+Pat-rack, Tie, et Samsung vident finem saeculi.
 `;
 const NOLL_TEXT_AR = `
 [اللوح الأول: السلالة والثور]
@@ -274,36 +274,36 @@ const NOLL_TEXT_AR = `
 `;
 const NOLL_TEXT_DE = `
 [TAFEL I: HERKUNFT UND STIER]
- 𒀭 𒉌 𒅗 ኖል  der Vater und  𒀭 𒆷 𒊏 ኖል  die Mutter, Wurzeln der Welt.
-Sie gebaren  𒀭 𒉈 𒋫 ኖል  das Feuer und  𒀭 𒂊 𒇷 𒊓 ኖል  den Glanz.
- 𒀭 𒉈 𒋫 ኖል  reizte den Himmelsstier, packte ihn bei den Hörnern.
+Nikanol der Vater und Laranol die Mutter, Wurzeln der Welt.
+Sie gebaren Netanol das Feuer und Elisanol den Glanz.
+Netanol reizte den Himmelsstier, packte ihn bei den Hörnern.
 Er entriss ihm die Würfelgeheimnisse, die Vierundzwanzig und Zwölf.
 
 [TAFEL II: DIE FLUCHT]
- 𒀭 ራ ይ ሊ  flieht als Eiswolf vor der eisernen Ordnung.
- 𒀭 ሱ ፊ ያ ,  𒀭 ሳ ማ ታ  und  𒀭 ፊ ጆ ርድ  weben das Schicksal der Sphären.
+Riley flieht als Eiswolf vor der eisernen Ordnung.
+Sophia, Samata und Fjord weben das Schicksal der Sphären.
 Eins, acht, siebenundzwanzig, vierundsechzig Welten.
 
 [TAFEL III: KATS GLEICHGEWICHT]
- 𒀭 𒉈 𒋫 ኖል  jagt mit Flammen und dem stählernen Stab.
- 𒀭 ኬ ት  sieht die Bestien: Feuer oben, Eis unten.
+Netanol jagt mit Flammen und dem stählernen Stab.
+Kat sieht die Bestien: Feuer oben, Eis unten.
 Sie verstieß den Helden für den ewigen Frieden des Maßes.
 `;
 const NOLL_TEXT_ES = `
 [TABLA I: LINAJE Y TORO]
- 𒀭 𒉌 𒅗 ኖል  el Padre y  𒀭 𒆷 𒊏 ኖል  la Madre, raíces del gran árbol.
-Engendraron a  𒀭 𒉈 𒋫 ኖል  el Fuego y a  𒀭 𒂊 𒇷 𒊓 ኖል  la Claridad.
- 𒀭 𒉈 𒋫 ኖል  provocó al Toro del Cielo, lo tomó por los cuernos.
+Nikanol el Padre y Laranol la Madre, raíces del gran árbol.
+Engendraron a Netanol el Fuego y a Elisanol la Claridad.
+Netanol provocó al Toro del Cielo, lo tomó por los cuernos.
 Robó los secretos del Cubo, el misterio del 24 y el 12.
 
 [TABLA II: LA HUIDA]
- 𒀭 ራ ይ ሊ  huye como bestia de hielo de la paz forjada.
- 𒀭 ሱ ፊ ያ ,  𒀭 ሳ ማ ታ  y  𒀭 ፊ ጆ ርድ , tejedoras del destino dimensional.
+Riley huye como bestia de hielo de la paz forjada.
+Sophia, Samata y Fjord, tejedoras del destino dimensional.
 Uno, ocho, veintisiete, sesenta y cuatro esferas.
 
 [TABLA III: EQUILIBRIO DE KAT]
- 𒀭 𒉈 𒋫 ኖል  persigue con llamas y la vara de hierro.
- 𒀭 ኬ ት  ve a las bestias: fuego arriba, hielo abajo.
+Netanol persigue con llamas y la vara de hierro.
+Kat ve a las bestias: fuego arriba, hielo abajo.
 Rechazó al héroe para guardar la balanza del universo.
 `;
 const NOLL_TEXT_FA = `
@@ -325,21 +325,21 @@ const NOLL_TEXT_FA = `
 `;
 const NOLL_TEXT_CU = `
 |[ 𒀀 ]|
- 𒀭 𒉌 𒅗 ኖል  𒀭  𒀭 𒆷 𒊏 ኖል  𒀭  racines
- 𒀭 𒉈 𒋫 ኖል  𒀭  𒀭 𒂊 𒇷 𒊓 ኖል  𒀭  나무
- 𒀭 𒉈 𒋫 ኖል  𒀭 𒄞 𒀭  শিং 𒀭  抓
- 🤫 𒀭  🕋 𒀭 24-12 𒀭  奪
+ 𒀭 𒉌 𒅗 ኖል 𒀭 𒀭 𒆷 𒊏 ኖል 𒀭 
+ 𒀭 𒉈 𒋫 ኖል 𒀭 𒀭 𒂊 𒇷 𒊓 ኖል 𒀭 나무
+ 𒀭 𒉈 𒋫 ኖል 𒀭 𒄞 𒀭 শিং 𒀭 抓
+ 🤫 𒀭 🕋 𒀭 24-12 𒀭 奪
 
 |[ 🌀 ]|
- 𒀭 ራ ይ ሊ  👿 ICE-WOLF 𒀭  🏃
-1-8-27-64 𒀭  🔵 𒀭  🕋
- 𒀭 ሱ ፊ ያ  𒀭  𒀭 ሳ ማ ታ  𒀭  𒀭 ፊ ጆ ርድ  𒀭  🧶
- 𒀭 ዩ ስቲ ኒ አ ን  𒀭  👀 𒀭  𒀭 豆 
+ 𒀭 ራ ይ ሊ 👿 - 𒀭 🏃
+1-8-27-64 𒀭 🔵 𒀭 🕋
+ 𒀭 ሱ ፊ ያ 𒀭 𒀭 ሳ ማ ታ 𒀭 𒀭 ፊ ጆ ርድ 𒀭 🧶
+ 𒀭 ዩ ስቲ ኒ አ ን 𒀭 👀 𒀭 𒀭 豆 
 
 |[ ⚖️ ]|
- 𒀭 ኬ ት  ⚖️  ⚖️ 𒀭  🙅 𒀭  🦸
- 𒀭 三  𒀭  𒀭 👔  𒀭  𒀭 পা  𒀭  𒀭 ቆ ል ባ ል 
-𒀭 POSITIVE 𒀭  ❤️  𒀭 🌀
+ 𒀭 ኬ ት ⚖️ ⚖️ 𒀭 🙅 𒀭 🦸
+ 𒀭 三 𒀭 𒀭 👔 𒀭 𒀭 পা 𒀭 𒀭 ቆ ል ባ ል 
+𒀭 𒀭 ❤️ 𒀭 🌀
 `;
 
 const NOLL_TEXTS: Record<Language, string> = {

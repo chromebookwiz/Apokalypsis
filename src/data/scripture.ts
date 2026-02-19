@@ -44,11 +44,11 @@ export const HYMN_CU = `
  𒀭 𒉈 𒋫 ኖል  𒀭  𒀭 𒉌 𒅗 ኖል  𒀭  𒀭 𒆷 𒊏 ኖል 
  𒀭 𒂊 𒇷 𒊓 ኖል  𒀀 𒀀 𒉌 ኖሪስካ 
  𒀭 ሱ ፊ ያ  𒀭  𒀭 ሳ ማ ታ  𒀭  𒀭 ፊ ጆ ርድ 
-24 𒀀  ↕️  𒀭 12 𒀀  ↔️ 
-1-8-27-64 𒀭  🕋 𒀭 牦
-
- Phase A 𒀀 Phase B
- 𒀭 𒅗 𒀜 𒉈 🌀
+ 24 𒀀   ↕️   𒀭 12 𒀀   ↔️  
+ 1-8-27-64 𒀭   🕋  𒀭 牦
+ 
+  ⏳   𒀀  ⏳  
+  𒀭 𒅗 𒀜 𒉈 🌀
 `;
 
 export const HYMN_NO = `
@@ -130,14 +130,14 @@ export const HYMN_LA = `
 [S] CANTICUM KAT
 [N] Psalmus Virgae Ferreae
 
- 𒀭 𒉌 𒅗 ኖል ,  𒀭 𒆷 𒊏 ኖል ,  𒀭 𒉈 𒋫 ኖል  et  𒀭 𒂊 𒇷 𒊓 ኖል  gens.
-Viginti quattuor et duodecim in sphaeris.
-Taurum vicit, cornua prehendit, secreta tenet.
-Unus, octo, viginti septem, sexaginta quattuor.
+Ex stirpe Orionis et Tauri Mechanicus.
+Sexaginta gradus lacus Smatis virtutis.
+Serpentem occidit, triginta cornua cepit.
+Virga ferrea trecenti sexaginta nectit.
 
- 𒀭 ሱ ፊ ያ ,  𒀭 ሳ ማ ታ , et  𒀭 ፊ ጆ ርድ  telam texunt.
- 𒀭 ራ ይ ሊ  et  𒀭 ኬ ት , ignis et glacies in rota.
- 𒀭 ዩ ስቲ ኒ አ ን us,  𒀭 豆 us,  𒀭 ቆ ል ባ ል us rident.
+Cubus est lux promissa mundo.
+Nomen Dei in specie cristalli.
+Artifex Lucis telam auratam texit.
 Tessera-actus tempus in duo scidit.
 `;
 
