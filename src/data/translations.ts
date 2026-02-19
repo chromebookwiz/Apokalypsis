@@ -186,18 +186,18 @@ export const UI_STRINGS: Record<Language, any> = {
         toggle_dark: "רוז / שב"
     },
     'CU': {
-        hide_ui: "HIDE  transparence",
-        show_ui: "SHOW transparence",
-        info: "LEGEND 🐂",
-        lock_parallel: "🔒 MERKABA",
-        unlock_parallel: "🔓 MERKABA",
-        mute_tones: "🔇 CHORUS",
-        enable_tones: "🔊 CHORUS",
-        scale: "📏 SCALE",
-        prev: "⬅️",
-        reset: "⏺",
-        next: "➡️",
-        toggle_text: "✍️",
-        toggle_dark: "🌓"
+        hide_ui: "HIDE 𒀭",
+        show_ui: "SHOW 𒀭",
+        info: "LEGEND 𒀭",
+        lock_parallel: "𒀭 MERKABA",
+        unlock_parallel: "𒀭 MERKABA",
+        mute_tones: "𒀭 CHORUS",
+        enable_tones: "𒀭 CHORUS",
+        scale: "𒀭 SCALE",
+        prev: "𒀭",
+        reset: "𒀭",
+        next: "𒀭",
+        toggle_text: "𒀭",
+        toggle_dark: "𒀭"
     }
 };
