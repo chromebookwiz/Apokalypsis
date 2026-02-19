@@ -492,7 +492,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 <button
                     onClick={() => controller.setTheoryOpen(true)}
                     style={{
-                        position: 'fixed', left: '40px', top: '50%', transform: 'translateY(-50%)',
+                        position: 'fixed', left: 'clamp(10px, 4vw, 40px)', top: '50%', transform: 'translateY(-50%)',
                         background: 'none', border: '1px solid rgba(212, 175, 55, 0.4)', borderRadius: '50%',
                         width: '48px', height: '48px', cursor: 'pointer', color: '#d4af37',
                         fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -520,14 +520,15 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                             onClick={() => controller.setTheoryOpen(false)}
                             style={{
                                 background: 'none', border: 'none', color: '#d4af37',
-                                fontSize: '2rem', cursor: 'pointer', lineHeight: 1
+                                fontSize: '2.5rem', cursor: 'pointer', lineHeight: 1,
+                                padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center'
                             }}
                         >✕</button>
                     </div>
                     <div
                         className="custom-scrollbar"
                         style={{
-                            flex: 1, overflowY: 'auto', padding: '40px 60px',
+                            flex: 1, overflowY: 'auto', padding: 'clamp(20px, 5vw, 40px) clamp(10px, 8vw, 60px)',
                             color: '#e8dcc8', fontFamily: 'Cinzel, serif', fontSize: '1rem',
                             lineHeight: 1.8, maxWidth: '900px', margin: '0 auto', width: '100%'
                         }}
@@ -579,4 +580,4 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
     );
 };
 
-// Force Rebuild: Unified V10 Integration Verified
+// Force Rebuild: Unified V11 Integration Verified

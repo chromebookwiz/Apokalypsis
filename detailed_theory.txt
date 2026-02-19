@@ -680,7 +680,7 @@ The critical strip is B₂ = {s = σ + it ∈ ℂ : 0 < σ < 1} ≅ (0,1) × ℝ
         regular) + (1/(s−s₀)² + regular). Therefore: ζ''/ζ − (ζ'/ζ)²=d/ds[ζ'/ζ]=−¹/(s−s₀)² − b₁ + ⋯ Wait — more
         carefully: d/ds[ζ'/ζ]=−((ζ')² − ζ''ζ)/ζ²=ζ''/ζ − (ζ'/ζ)². And d/ds[1/(s−s₀)]=−1/(s−s₀)². So S(s)=Re(ζ''/ζ −
         (ζ'/ζ)²)=Re(d/ds[ζ'/ζ])=Re(−1/(s−s₀)² + regular)=−1 · Re(1/(s−s₀)²) + O(1). For a zero of order m, the
-        coefficient becomes −m(m+1)/2, but for a simple zero m=1: S(s)=−Re⟨1/(s−s₀)²⟩ + O(1). Hmm — let us recompute.
+        coefficient becomes −m, but for a simple zero m=1: S(s)=−Re⟨1/(s−s₀)²⟩ + O(1). Hmm — let us recompute.
         ζ'/ζ=1/(s−s₀) + h(s) where h is holomorphic at s₀. Then (ζ'/ζ)²=1/(s−s₀)² + 2h(s)/(s−s₀) + h(s)². And
         d/ds(ζ'/ζ)=−1/(s−s₀)² + h'(s). So: S=Re(ζ''/ζ − (ζ'/ζ)²)=Re(d/ds(ζ'/ζ))=Re(−1/(s−s₀)² + h'(s)). Numerically, the
         ratio S / (1/(t−t₀)²) on the critical line converges to +1, confirming the leading coefficient is −1 and
@@ -907,4 +907,4 @@ The critical strip is B₂ = {s = σ + it ∈ ℂ : 0 < σ < 1} ≅ (0,1) × ℝ
               [Wit94] E. Witten, Monopoles and four-manifolds. Math. Res. Lett. 1 (1994), 769–796.
 
 
-              End of Paper
+              End of Paper
