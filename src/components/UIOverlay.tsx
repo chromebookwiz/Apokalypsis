@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useSceneController } from '../controllers/SceneController';
 import { getRevelation, getNollCubeText } from '../data/revelation';
 import { getHymn, getNumericScripture } from '../data/scripture';
@@ -46,7 +46,7 @@ const CopyButton = ({ text }: { text: string }) => {
                 marginLeft: '10px', transition: 'all 0.3s ease'
             }}
         >
-            {copied ? 'COPIED' : 'COPY'}
+            {copied ? '𐄂' : '⧉'}
         </button>
     );
 };
@@ -99,7 +99,7 @@ const DraggablePanel = ({ children, initialStyle, className }: DraggablePanelPro
     const style: React.CSSProperties = {
         ...initialStyle,
         transform: `${initialStyle?.transform || ''} translate(${position.x}px, ${position.y}px)`,
-        cursor: isDragging.current ? 'grabbing' : 'grab',
+        cursor: 'default',
         transition: isDragging.current ? 'none' : initialStyle?.transition
     };
 
@@ -153,6 +153,33 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
 
     // ... (rest of setup) ...
     const [showInfo, setShowInfo] = React.useState(false);
+    const [secretFlash, setSecretFlash] = useState(false);
+
+    // Secret 6 click handler for degrees display
+    const handleDigitClick = (char: string) => {
+        if (char === '6' && !controller.theoryUnlocked) {
+            controller.setTheoryUnlocked(true);
+            setSecretFlash(true);
+            setTimeout(() => setSecretFlash(false), 600);
+        }
+    };
+
+    // Render angle text with clickable digits
+    const renderClickableAngle = (text: string) => {
+        return text.split('').map((char, i) => (
+            <span
+                key={i}
+                onClick={char === '6' ? () => handleDigitClick(char) : undefined}
+                style={{
+                    cursor: char === '6' ? 'pointer' : 'default',
+                    transition: 'all 0.3s ease',
+                    ...(char === '6' && secretFlash ? { color: '#fff', textShadow: '0 0 20px #ffd700, 0 0 40px #ffd700' } : {})
+                }}
+            >
+                {char}
+            </span>
+        ));
+    };
 
     // Parse Revelation Text
     const { note, body } = useMemo(() => {
@@ -214,7 +241,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         filter: controller.uiVisible ? 'drop-shadow(0 0 10px #d4af37)' : 'none', transition: 'all 0.3s ease',
                         padding: '10px'
                     }}
-                >👁</button>
+                >𓁹</button>
             </div>
 
             {/* INFO MODAL - WRAPPED IN DRAGGABLE PANEL */}
@@ -232,7 +259,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         padding: '15px', background: 'rgba(212, 175, 55, 0.05)', borderBottom: '1px solid #d4af37',
                         cursor: 'grab', display: 'flex', justifyContent: 'space-between', alignItems: 'center'
                     }}>
-                        <span style={{ fontFamily: 'Cinzel, serif', color: '#d4af37', fontWeight: 'bold' }}>NOLL CUBE REVELATION</span>
+                        <span style={{ fontFamily: 'Cinzel, serif', color: '#d4af37', fontWeight: 'bold' }}></span>
                         <div style={{ display: 'flex', gap: '10px' }}>
                             <CopyButton text={getNollCubeText(controller.language) + "\n\n" + getNumericScripture(controller.language) + "\n\n" + getHymn(controller.language)} />
                             <button
@@ -260,7 +287,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         }}>
                             {controller.language === 'HE' ? 'קוביה זו היא גרסת ה-4D של חזונו המושלם של מטטרון, ומכילה את כל שהיה, הווה ויהיה על פני האדמה.' :
                                 controller.language === 'GR' ? 'Οὗτος ὁ κύβος ἐστὶν ἡ τετραδιάστατος (4D) ἔκδοσις τοῦ τελείου ὁράματος τοῦ Μετατρόνου, περιέχων πάντα τὰ γενόμενα, τὰ ὄντα καὶ τὰ ἐσόμενα ἐπὶ τῆς γῆς.' :
-                                    'This cube is the 4D version of Metatron\'s perfect vision, and contains all that was, is, and will be on Earth.'}
+                                    '∞ ◈ 4D ◈ ∞'}
                         </div>
                         <div style={{ marginTop: '30px', borderTop: '2px solid #d4af37', paddingTop: '20px', whiteSpace: 'pre-wrap', textAlign: isRTL ? 'right' : 'left' }}>
                             {getNumericScripture(controller.language)}
@@ -295,7 +322,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     cursor: 'grab', textAlign: 'center', color: '#d4af37', fontFamily: 'Cinzel, serif', fontSize: '0.8rem',
                     letterSpacing: '2px', zIndex: 10
                 }}>
-                    PRIME CONTROL
+
                 </div>
                 {/* Background Pattern */}
                 <div style={{
@@ -331,8 +358,8 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
 
                     {/* UTILITIES */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1.5fr', gap: '10px', alignItems: 'center' }}>
-                        <button className="sacred-btn" onClick={() => setShowInfo(!showInfo)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37', textAlign: 'center' }}>ℹ️</button>
-                        <button className="sacred-btn" onClick={() => controller.setLibraryOpen(!controller.libraryOpen)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: controller.libraryOpen ? '#fdfbf7' : '#d4af37', background: controller.libraryOpen ? '#d4af37' : 'none', textAlign: 'center', fontSize: '0.8rem' }}>APOKALYPSIS</button>
+                        <button className="sacred-btn" onClick={() => setShowInfo(!showInfo)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37', textAlign: 'center' }}>𝖎</button>
+                        <button className="sacred-btn" onClick={() => controller.setLibraryOpen(!controller.libraryOpen)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: controller.libraryOpen ? '#fdfbf7' : '#d4af37', background: controller.libraryOpen ? '#d4af37' : 'none', textAlign: 'center', fontSize: '1.2rem' }}>𝕬</button>
                         <div style={{ position: 'relative' }}>
                             <select
                                 value={controller.language}
@@ -353,7 +380,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     {/* MOTION */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                         <button className="sacred-btn" onClick={() => controller.setIsPlaying(!controller.isPlaying)} style={{ background: 'none', border: '1px solid #d4af37', borderRadius: '50%', width: '45px', height: '45px', color: '#d4af37', flexShrink: 0, textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            {controller.isPlaying ? '⏸' : '▶'}
+                            {controller.isPlaying ? '‖' : '►'}
                         </button>
                         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '2px' }}>
                             <input type="range" min="0.1" max="300" step="0.1" value={controller.rotationSpeed || 1.0} onChange={(e) => controller.setRotationSpeed(parseFloat(e.target.value))} style={{ width: '100%', accentColor: '#d4af37' }} />
@@ -364,19 +391,19 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     {/* MODES */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
                         <button className="sacred-btn" onClick={controller.toggleDarkMode} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.darkMode ? '#d4af37' : 'none', color: controller.darkMode ? '#fdfbf7' : '#d4af37', textAlign: 'center' }}>
-                            {controller.darkMode ? '☀' : '☾'}
+                            {controller.darkMode ? '☼' : '☽'}
                         </button>
-                        <button className="sacred-btn" onClick={controller.toggleCameraType} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37', textAlign: 'center' }}>
-                            {controller.cameraType === 'ORTHOGRAPHIC' ? 'OR' : 'PS'}
+                        <button className="sacred-btn" onClick={controller.toggleCameraType} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37', textAlign: 'center', fontSize: '1.2rem' }}>
+                            {controller.cameraType === 'ORTHOGRAPHIC' ? '◻' : '◈'}
                         </button>
                         <button className="sacred-btn" onClick={() => controller.setInfiniteTriangle(!controller.infiniteTriangle)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.infiniteTriangle ? '#d4af37' : 'none', color: controller.infiniteTriangle ? '#fdfbf7' : '#d4af37', fontSize: '1.2rem', textAlign: 'center' }}>
-                            ∆
+                            𝝙
                         </button>
                     </div>
 
                     <div style={{ display: 'flex', gap: '5px' }}>
                         {[1, 2, 3, 4].map((size) => (
-                            <button key={size} className="sacred-btn" onClick={() => controller.setGridSize(size as 1 | 2 | 3 | 4)} style={{ flex: 1, padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.gridSize === size ? '#d4af37' : 'none', color: controller.gridSize === size ? '#fdfbf7' : '#d4af37', textAlign: 'center' }}>{size}x</button>
+                            <button key={size} className="sacred-btn" onClick={() => controller.setGridSize(size as 1 | 2 | 3 | 4)} style={{ flex: 1, padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.gridSize === size ? '#d4af37' : 'none', color: controller.gridSize === size ? '#fdfbf7' : '#d4af37', textAlign: 'center' }}>{size}</button>
                         ))}
                     </div>
 
@@ -384,20 +411,20 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                         <div style={{ display: 'flex', gap: '10px' }}>
                             <button className="sacred-btn" onClick={() => controller.toggleParallelLock()} style={{ flex: 1, padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: controller.parallelLock ? '#fdfbf7' : '#d4af37', background: controller.parallelLock ? '#d4af37' : 'none', textAlign: 'center' }}>∥</button>
-                            <button className="sacred-btn" onClick={() => controller.toggleTone()} style={{ flex: 1, padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: controller.toneEnabled ? '#fdfbf7' : '#d4af37', background: controller.toneEnabled ? '#d4af37' : 'none', textAlign: 'center' }}>♪</button>
+                            <button className="sacred-btn" onClick={() => controller.toggleTone()} style={{ flex: 1, padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: controller.toneEnabled ? '#fdfbf7' : '#d4af37', background: controller.toneEnabled ? '#d4af37' : 'none', textAlign: 'center' }}>𝝨</button>
                         </div>
                         {controller.toneEnabled && (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                                <button className="sacred-btn" onClick={() => controller.cycleToneScale()} style={{ padding: '8px', border: '1px dashed #d4af37', borderRadius: '5px', color: '#d4af37', fontSize: '0.7rem', textAlign: 'center' }}>{controller.toneScale}</button>
-                                <button className="sacred-btn" onClick={() => controller.toggleVariedMode()} style={{ padding: '8px', border: '1px dashed #d4af37', borderRadius: '5px', color: controller.variedMode ? '#fdfbf7' : '#d4af37', background: controller.variedMode ? '#d4af37' : 'none', fontSize: '0.7rem', textAlign: 'center' }}>VAR {controller.variedMode ? '+' : '-'}</button>
+                                <button className="sacred-btn" onClick={() => controller.cycleToneScale()} style={{ padding: '8px', border: '1px dashed #d4af37', borderRadius: '5px', color: '#d4af37', fontSize: '0.9rem', textAlign: 'center' }}>♯</button>
+                                <button className="sacred-btn" onClick={() => controller.toggleVariedMode()} style={{ padding: '8px', border: '1px dashed #d4af37', borderRadius: '5px', color: controller.variedMode ? '#fdfbf7' : '#d4af37', background: controller.variedMode ? '#d4af37' : 'none', fontSize: '1rem', textAlign: 'center' }}>≋</button>
                             </div>
                         )}
                     </div>
 
                     {/* PHASES */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                        <button className="sacred-btn" onClick={() => controller.setSplitMode(!controller.splitMode)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: controller.splitMode ? '#fdfbf7' : '#d4af37', background: controller.splitMode ? '#d4af37' : 'none', textAlign: 'center' }}>
-                            SPLIT {controller.splitMode ? `(${(controller.frequencyA / (controller.frequencyB || 1)).toFixed(2)})` : 'OFF'}
+                        <button className="sacred-btn" onClick={() => controller.setSplitMode(!controller.splitMode)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: controller.splitMode ? '#fdfbf7' : '#d4af37', background: controller.splitMode ? '#d4af37' : 'none', textAlign: 'center', fontSize: '1.2rem' }}>
+                            {controller.splitMode ? `⫽ ${(controller.frequencyA / (controller.frequencyB || 1)).toFixed(2)}` : '⫽'}
                         </button>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -411,20 +438,19 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                             </div>
                         </div>
 
-                        <select value={controller.waveType} onChange={(e) => controller.setWaveType(e.target.value as any)} style={{ padding: '10px', background: 'none', border: '1px solid #d4af37', color: '#d4af37', borderRadius: '5px', fontSize: '0.8rem' }}>
-                            <option value="NONE">NONE</option>
-                            <option value="SINE">SINE</option>
-                            <option value="SAWTOOTH">SAW</option>
-                            <option value="SQUARE">SQR</option>
-                            <option value="FRACTAL">FRC</option>
+                        <select value={controller.waveType} onChange={(e) => controller.setWaveType(e.target.value as any)} style={{ padding: '10px', background: 'none', border: '1px solid #d4af37', color: '#d4af37', borderRadius: '5px', fontSize: '1rem' }}>
+                            <option value="NONE">∅</option>
+                            <option value="SINE">∿</option>
+                            <option value="SAWTOOTH">⩘</option>
+                            <option value="SQUARE">⊞</option>
+                            <option value="FRACTAL">✳</option>
                         </select>
                     </div>
 
                     {/* TOOLS */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '40px' }}>
-                        <button className="sacred-btn" onClick={() => controller.setRevealSymmetry(!controller.revealSymmetry)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: controller.revealSymmetry ? '#fdfbf7' : '#d4af37', background: controller.revealSymmetry ? '#d4af37' : 'none', textAlign: 'center' }}>SYM</button>
+                        <button className="sacred-btn" onClick={() => controller.setRevealSymmetry(!controller.revealSymmetry)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: controller.revealSymmetry ? '#fdfbf7' : '#d4af37', background: controller.revealSymmetry ? '#d4af37' : 'none', textAlign: 'center', fontSize: '1.2rem' }}>⬡</button>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                            <div style={{ fontSize: '0.6rem', color: '#d4af37', textAlign: 'center' }}>VISION</div>
                             <input type="range" min="-10" max="10" step="0.1" value={controller.innerVision} onChange={(e) => controller.setInnerVision(parseFloat(e.target.value))} style={{ width: '100%', accentColor: '#d4af37' }} />
                         </div>
                         <button className="sacred-btn" onClick={() => controller.setShow4DShadow(!controller.show4DShadow)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: controller.show4DShadow ? '#fdfbf7' : '#d4af37', background: controller.show4DShadow ? '#d4af37' : 'none', textAlign: 'center' }}>4D</button>
@@ -455,11 +481,62 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             <div style={{
                 position: 'fixed', bottom: '40px', left: isRTL ? 'auto' : '40px', right: isRTL ? '40px' : 'auto',
                 color: '#d4af37', fontSize: '1rem', fontFamily: 'monospace', textShadow: '0 0 10px rgba(212, 175, 55, 0.3)',
-                pointerEvents: 'none', display: controller.uiVisible ? 'block' : 'none'
+                pointerEvents: 'auto', display: controller.uiVisible ? 'block' : 'none'
             }}>
-                {Math.abs(controller.viewAngle).toFixed(2)}°{controller.viewAngle > 0 ? 'N' : 'S'}
-                <div>{Math.abs(controller.azimuthAngle).toFixed(2)}°{controller.azimuthAngle > 0 ? 'E' : 'W'}</div>
+                {renderClickableAngle(`${Math.abs(controller.viewAngle).toFixed(2)}°${controller.viewAngle > 0 ? 'N' : 'S'}`)}
+                <div>{renderClickableAngle(`${Math.abs(controller.azimuthAngle).toFixed(2)}°${controller.azimuthAngle > 0 ? 'E' : 'W'}`)}</div>
             </div>
+
+            {/* SECRET THEORY UNLOCK BUTTON */}
+            {controller.theoryUnlocked && (
+                <button
+                    onClick={() => controller.setTheoryOpen(true)}
+                    style={{
+                        position: 'fixed', left: '40px', top: '50%', transform: 'translateY(-50%)',
+                        background: 'none', border: '1px solid rgba(212, 175, 55, 0.4)', borderRadius: '50%',
+                        width: '48px', height: '48px', cursor: 'pointer', color: '#d4af37',
+                        fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        animation: 'fadeIn 1s ease', pointerEvents: 'auto', zIndex: 900,
+                        boxShadow: '0 0 15px rgba(212, 175, 55, 0.2)',
+                        transition: 'all 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 25px rgba(212, 175, 55, 0.5)'; e.currentTarget.style.borderColor = '#d4af37'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 15px rgba(212, 175, 55, 0.2)'; e.currentTarget.style.borderColor = 'rgba(212, 175, 55, 0.4)'; }}
+                >Ω</button>
+            )}
+
+            {/* THEORY ARTICLE OVERLAY */}
+            {controller.theoryOpen && (
+                <div style={{
+                    position: 'fixed', inset: 0, zIndex: 10001, background: 'rgba(0, 0, 0, 0.92)',
+                    display: 'flex', flexDirection: 'column', pointerEvents: 'auto',
+                    animation: 'fadeIn 0.5s ease'
+                }}>
+                    <div style={{
+                        display: 'flex', justifyContent: 'flex-end', padding: '20px 30px',
+                        borderBottom: '1px solid rgba(212, 175, 55, 0.3)'
+                    }}>
+                        <button
+                            onClick={() => controller.setTheoryOpen(false)}
+                            style={{
+                                background: 'none', border: 'none', color: '#d4af37',
+                                fontSize: '2rem', cursor: 'pointer', lineHeight: 1
+                            }}
+                        >✕</button>
+                    </div>
+                    <div
+                        className="custom-scrollbar"
+                        style={{
+                            flex: 1, overflowY: 'auto', padding: '40px 60px',
+                            color: '#e8dcc8', fontFamily: 'Cinzel, serif', fontSize: '1rem',
+                            lineHeight: 1.8, maxWidth: '900px', margin: '0 auto', width: '100%'
+                        }}
+                        dangerouslySetInnerHTML={{
+                            __html: document.getElementById('theory-article')?.innerHTML || '<p>No theory found.</p>'
+                        }}
+                    />
+                </div>
+            )}
 
             {/* SIDE GREEK COLUMNS - Refined opacity */}
             <div style={{ position: 'fixed', top: '50%', left: '0px', transform: 'translateY(-50%)', display: (!controller.uiVisible || window.innerWidth < 768) ? 'none' : 'flex', flexDirection: 'column-reverse', gap: '5px', pointerEvents: 'none', opacity: 0.1, zIndex: 0, paddingLeft: '20px' }} className="greek-column-left">
@@ -476,7 +553,6 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 transition: 'all 0.5s ease', opacity: (controller.libraryOpen && controller.uiVisible) ? 1 : 0, visibility: (controller.libraryOpen && controller.uiVisible) ? 'visible' : 'hidden',
                 zIndex: 800
             }}>
-                <div style={{ fontSize: '1.2rem', marginBottom: '0.5rem', opacity: 0.8 }}>{note}</div>
                 <div style={{ fontSize: '1.5rem', whiteSpace: 'pre-wrap', fontFamily: isAmharic ? 'sans-serif' : 'Cinzel, serif', direction: isRTL ? 'rtl' : 'ltr' }}>
                     {body}
                     <div style={{ marginTop: '10px', opacity: 0.5, transform: 'scale(0.8)' }}>

@@ -122,6 +122,8 @@ export const useSceneController = () => {
     const [azimuthAngle, setAzimuthAngle] = useState(0); // Azimuth (E/W)
     const [activeViewIndex, setActiveViewIndex] = useState(0); // 0=Front, 1=Iso, 2=Top...
     const [uiVisible, setUiVisible] = useState(false);
+    const [theoryUnlocked, setTheoryUnlocked] = useState(false);
+    const [theoryOpen, setTheoryOpen] = useState(false);
 
     // Speech Ref - Removed
     // const synthesis = window.speechSynthesis;
@@ -355,6 +357,10 @@ export const useSceneController = () => {
         setViewAngle,
         uiVisible,
         setUiVisible,
+        theoryUnlocked,
+        setTheoryUnlocked,
+        theoryOpen,
+        setTheoryOpen,
 
         // Actions
         toggleGeometry,
