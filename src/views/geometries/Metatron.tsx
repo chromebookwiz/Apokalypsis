@@ -271,7 +271,9 @@ const CherubimNode: React.FC<{
 
         const baseAmplitude = 0.5;
         // The wave mode (SINE etc) plus the audio ripple plus raw jitter
-        const totalWave = wave + (controller.audioSync ? (audioWave * 2.5 + audioJitter * 0.4) : 0);
+        // LITERAL MATH: Signal Purifier reduces jitter magnitude based on purity
+        const jitterMult = controller.signalToolActive ? (1 - controller.filterPurity / 100) : 1;
+        const totalWave = wave + (controller.audioSync ? (audioWave * 2.5 + audioJitter * 0.4 * jitterMult) : 0);
         const finalDisplacement = totalWave * baseAmplitude;
 
         if (upRef.current && downRef.current) {
@@ -291,6 +293,23 @@ const CherubimNode: React.FC<{
             } else {
                 upRef.current.rotation.x = 0;
                 downRef.current.rotation.x = 0;
+            }
+
+            // LITERAL MATH: Morphogenesis breathing scale
+            if (controller.morphToolActive) {
+                const breathing = 1.0 + controller.morphEnergy * 0.1;
+                upRef.current.scale.set(breathing, breathing, breathing);
+                downRef.current.scale.set(breathing, breathing, breathing);
+            } else {
+                upRef.current.scale.set(1, 1, 1);
+                downRef.current.scale.set(1, 1, 1);
+            }
+
+            // LITERAL MATH: Lattice SVP Resonance shimmer
+            if (controller.latticeToolActive && controller.latticeSvpSolved) {
+                const shimmer = 1.0 + Math.sin(Date.now() * 0.02) * 0.05;
+                upRef.current.scale.multiplyScalar(shimmer);
+                downRef.current.scale.multiplyScalar(shimmer);
             }
         }
 
@@ -344,6 +363,12 @@ const CherubimNode: React.FC<{
                 <Edges threshold={15} color="#0000ff" linewidth={2} transparent opacity={0.8} />
                 {controller.show4DShadow && <Edges threshold={0} color="#0000ff" linewidth={0.5} transparent opacity={0.2} scale={1.2} />}
             </mesh>
+            {/* LITERAL MATH: Compression Ghost Shadow */}
+            {controller.compressionToolActive && (
+                <group scale={1.05} rotation={[0.1, 0.1, 0.1]}>
+                    <Edges threshold={0} color={color} linewidth={0.1} transparent opacity={0.1 * (1 - controller.compressionLoss)} />
+                </group>
+            )}
         </group>
     );
 };
@@ -383,8 +408,17 @@ export const MetatronGeometry: React.FC<Props> = ({ controller }) => {
 
     // --- 2. INSTANCED LINES ---
     const meshRef = useRef<THREE.InstancedMesh>(null);
+    const rsaScanRef = useRef<THREE.Mesh>(null);
 
     const cylinderGeo = useMemo(() => new THREE.CylinderGeometry(0.008, 0.008, 1, 8, 1), []);
+    const rsaScanGeo = useMemo(() => new THREE.PlaneGeometry(spacing * size * 1.5, spacing * size * 1.5), [spacing, size]);
+    const rsaScanMat = useMemo(() => new THREE.MeshBasicMaterial({
+        color: "#ffd700",
+        transparent: true,
+        opacity: 0.2,
+        side: THREE.DoubleSide,
+        depthWrite: false
+    }), []);
 
     useLayoutEffect(() => {
         if (!meshRef.current) return;
@@ -450,6 +484,11 @@ export const MetatronGeometry: React.FC<Props> = ({ controller }) => {
             listener.forwardY.setTargetAtTime(worldDir.y, sharedAudioCtx.currentTime, 0.1);
             listener.forwardZ.setTargetAtTime(worldDir.z, sharedAudioCtx.currentTime, 0.1);
         }
+
+        // RSA Scan Line Animation
+        if (controller.rsaToolActive && rsaScanRef.current) {
+            rsaScanRef.current.position.y = Math.sin(Date.now() * 0.002) * (spacing * size * 0.5);
+        }
     });
 
     const symmetryGeo = useMemo(() => new THREE.PlaneGeometry(spacing * size, spacing * size), [spacing, size]);
@@ -502,6 +541,11 @@ export const MetatronGeometry: React.FC<Props> = ({ controller }) => {
                         </group>
                     )}
                 </group>
+            )}
+
+            {/* RSA SCAN PLANE */}
+            {controller.rsaToolActive && (
+                <mesh ref={rsaScanRef} geometry={rsaScanGeo} material={rsaScanMat} rotation={[Math.PI / 2, 0, 0]} />
             )}
 
             {nodes.map((pos, i) => (

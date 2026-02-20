@@ -96,8 +96,9 @@ export const SecretEntry: React.FC<SecretEntryProps> = ({ onClose, controller })
         // 1. Pole Discovery (RSA): Curvature must be positive (> 0.8)
         // 2. Lattice Alignment: SVP must be > 95%
         // 3. Functional Equation Symmetry: Resonance must be > 99%
+        // 4. RSA Proof: Lattice Gap must be zero (Factorization verified)
 
-        if (allCorrect && controller.resonance > 99 && controller.primePole > 0.8) {
+        if (allCorrect && controller.resonance > 99 && controller.primePole > 0.8 && controller.latticeGap < 0.001) {
             // Decrypt Success
             // Re-implement the XOR link logic here (moved from UIOverlay)
             const d = [3433, 3482, 3497, 3353, 8130, 6672, 3538, 3513, 3461, 3515, 8027, 2467, 7133, 2162, 7043, 6970, 7073, 7038, 3508, 3389, 8106, 3313, 3514, 3564, 8149, 8126, 8068, 7969, 8164, 3295, 6988, 3542, 7170, 7046, 6935, 7090, 2386, 6774, 8037, 8148, 8162, 8131, 3527, 3433, 2333, 3294, 3570, 3528, 3410, 6955, 7051, 7121, 7167, 2101, 2549, 2349, 7056, 7000, 3583, 3406, 8189, 3307, 3540, 3560, 3349, 3535, 8052, 7999, 7095, 2103, 3563, 6965, 7158];
@@ -123,6 +124,8 @@ export const SecretEntry: React.FC<SecretEntryProps> = ({ onClose, controller })
             alert("RSA POLE SIGN NEGATIVE. POSITIVE CURVATURE REQUIRED.");
         } else if (controller.resonance <= 99) {
             alert("UNIFIED SEMIPOSITIVITY UNSTABLE. ALIGN FOR CERTAINTY.");
+        } else if (controller.latticeGap >= 0.001) {
+            alert("LATTICE BASIS UNSTABLE. FACTOR RSA TARGET TO UNLOCK.");
         } else {
             alert("ACCESS DENIED. SEALS REMAIN UNBROKEN.");
         }

@@ -117,6 +117,48 @@ const DraggablePanel = ({ children, initialStyle, className }: DraggablePanelPro
     );
 };
 
+// --- DIVINE CORNERS COMPONENT ---
+const DivineCorners: React.FC = () => {
+    const cornerStyle: React.CSSProperties = {
+        position: 'fixed',
+        width: '150px',
+        height: '150px',
+        pointerEvents: 'none',
+        zIndex: 50,
+        opacity: 0.12,
+        color: '#d4af37'
+    };
+
+    const renderCorner = (style: React.CSSProperties, rotation: string) => (
+        <div style={{ ...cornerStyle, ...style, transform: rotation }}>
+            <svg viewBox="0 0 100 100" width="100%" height="100%">
+                {/* Metatron fragment: Concentric circles and radial rays */}
+                <circle cx="0" cy="0" r="20" fill="none" stroke="currentColor" strokeWidth="0.5" />
+                <circle cx="0" cy="0" r="40" fill="none" stroke="currentColor" strokeWidth="0.5" />
+                <circle cx="0" cy="0" r="60" fill="none" stroke="currentColor" strokeWidth="0.5" />
+                <line x1="0" y1="0" x2="100" y2="0" stroke="currentColor" strokeWidth="0.2" />
+                <line x1="0" y1="0" x2="0" y2="100" stroke="currentColor" strokeWidth="0.2" />
+                <line x1="0" y1="0" x2="80" y2="80" stroke="currentColor" strokeWidth="0.1" />
+                <line x1="0" y1="0" x2="60" y2="90" stroke="currentColor" strokeWidth="0.05" />
+                <line x1="0" y1="0" x2="90" y2="60" stroke="currentColor" strokeWidth="0.05" />
+                {/* Sacred Dots */}
+                <circle cx="20" cy="0" r="1" fill="currentColor" />
+                <circle cx="40" cy="40" r="1" fill="currentColor" />
+                <circle cx="0" cy="20" r="1" fill="currentColor" />
+            </svg>
+        </div>
+    );
+
+    return (
+        <>
+            {renderCorner({ top: 0, left: 0 }, 'none')}
+            {renderCorner({ top: 0, right: 0 }, 'rotate(90deg)')}
+            {renderCorner({ bottom: 0, right: 0 }, 'rotate(180deg)')}
+            {renderCorner({ bottom: 0, left: 0 }, 'rotate(270deg)')}
+        </>
+    );
+};
+
 export const UIOverlay: React.FC<Props> = ({ controller }) => {
     // ... (rest of imports/logic)
     const isRTL = ['HE', 'AR', 'FA'].includes(controller.language);
@@ -140,6 +182,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
     const [secretFlash, setSecretFlash] = useState(false);
     const [introUnlocked, setIntroUnlocked] = useState(false);
     const [introOpen, setIntroOpen] = useState(false);
+    const [labTab, setLabTab] = useState<'TOOLS' | 'LAB'>('TOOLS');
     const audioRef = React.useRef<HTMLAudioElement>(null);
 
     // Audio Sync Effect for Intro
@@ -238,6 +281,9 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
 
     return (
         <div className="ui-overlay" style={{ fontFamily: 'Cinzel, serif', pointerEvents: 'none' }}>
+            {/* SUBTLE HOLY OVERLAY */}
+            <DivineCorners />
+
             {/* LEFT CORNER: EYE ICON ONLY */}
             <div className="corner-tl" style={{
                 position: 'fixed', top: '20px', left: '20px', zIndex: 1100, pointerEvents: 'auto',
@@ -254,6 +300,17 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         padding: '10px'
                     }}
                 >𓁹</button>
+                <button
+                    className="sacred-btn"
+                    onClick={() => controller.setPracticalPanelOpen(!controller.practicalPanelOpen)}
+                    title="Practical Engineering"
+                    style={{
+                        fontSize: '2.4rem', background: 'none', border: 'none',
+                        color: controller.practicalPanelOpen ? '#d4af37' : 'rgba(212, 175, 55, 0.4)', cursor: 'pointer',
+                        filter: controller.practicalPanelOpen ? 'drop-shadow(0 0 10px #d4af37)' : 'none', transition: 'all 0.3s ease',
+                        padding: '10px'
+                    }}
+                >𓁧</button>
             </div>
 
             {/* INFO MODAL - WRAPPED IN DRAGGABLE PANEL */}
@@ -313,7 +370,318 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             )
             }
 
-            {/* THE CONSOLIDATED PANEL */}
+            {/* PRACTICAL ENGINEERING PANEL - TOP CENTER */}
+            {controller.practicalPanelOpen && controller.uiVisible && (
+                <DraggablePanel
+                    initialStyle={{
+                        position: 'fixed', top: '20px', left: '50%', transform: 'translateX(-50%)',
+                        width: '90%', maxWidth: '900px', backgroundColor: '#fdfbf7', border: '2px solid #d4af37',
+                        borderRadius: '15px', boxShadow: '0 0 40px rgba(0,0,0,0.5)', zIndex: 1200,
+                        display: 'flex', flexDirection: 'column', pointerEvents: 'auto', overflow: 'hidden'
+                    }}
+                >
+                    <div className="drag-handle" style={{
+                        padding: '10px', background: 'rgba(212, 175, 55, 0.1)', borderBottom: '1px solid #d4af37',
+                        cursor: 'grab', display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+                    }}>
+                        <span style={{ fontFamily: 'Orbitron, sans-serif', color: '#d4af37', fontSize: '0.7rem', letterSpacing: '2px', fontWeight: 'bold' }}>
+                            [ GA_ENGINE_V12.0 // REAL-TIME_LITERAL_SOLVER ]
+                        </span>
+                        <div style={{ display: 'flex', gap: '10px' }}>
+                            <button
+                                onClick={() => setLabTab('TOOLS')}
+                                style={{ background: labTab === 'TOOLS' ? '#d4af37' : 'none', border: '1px solid #d4af37', color: labTab === 'TOOLS' ? '#000' : '#d4af37', fontSize: '0.6rem', padding: '2px 10px', cursor: 'pointer' }}
+                            >TOOLS</button>
+                            <button
+                                onClick={() => setLabTab('LAB')}
+                                style={{ background: labTab === 'LAB' ? '#d4af37' : 'none', border: '1px solid #d4af37', color: labTab === 'LAB' ? '#000' : '#d4af37', fontSize: '0.6rem', padding: '2px 10px', cursor: 'pointer' }}
+                            >ENC_LAB</button>
+                            <button onClick={() => controller.setPracticalPanelOpen(false)} style={{ background: 'none', border: 'none', color: '#d4af37', cursor: 'pointer' }}>✕</button>
+                        </div>
+                    </div>
+
+                    {labTab === 'TOOLS' ? (
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '15px', padding: '20px' }}>
+                            {/* RSA BREAKER */}
+                            <div style={{ border: '1px solid #d4af37', padding: '15px', borderRadius: '10px', background: controller.rsaToolActive ? 'rgba(212,175,55,0.1)' : 'none' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                                    <span style={{ fontSize: '1.5rem', color: '#d4af37' }}>𓋹</span>
+                                    <button
+                                        onClick={() => controller.setRsaToolActive(!controller.rsaToolActive)}
+                                        style={{ background: controller.rsaToolActive ? '#d4af37' : 'none', border: '1px solid #d4af37', borderRadius: '5px', color: controller.rsaToolActive ? '#fff' : '#d4af37', padding: '2px 8px', cursor: 'pointer' }}
+                                    >
+                                        {controller.rsaToolActive ? 'ON' : 'OFF'}
+                                    </button>
+                                </div>
+                                <div style={{ fontSize: '0.65rem', color: '#888', fontFamily: 'monospace' }}>RSA_LATTICE_SVP</div>
+                                <div style={{ fontSize: '0.85rem', color: '#d4af37', fontWeight: 'bold', marginTop: '5px' }}>
+                                    GAP: {controller.rsaToolActive ? controller.latticeGap.toFixed(6) : "---"}
+                                </div>
+
+                                {/* Literal Factorization readout */}
+                                {controller.rsaToolActive && (
+                                    <div style={{ borderTop: '1px solid rgba(212,175,55,0.2)', marginTop: '10px', paddingTop: '10px' }}>
+                                        <div style={{ fontSize: '0.65rem', color: '#888' }}>TARGET_N: 62615533</div>
+                                        <div style={{ fontSize: '0.9rem', color: '#d4af37', fontFamily: 'monospace', letterSpacing: '1px' }}>
+                                            P: {controller.rsaFactorP}
+                                        </div>
+                                        <div style={{ fontSize: '0.9rem', color: '#d4af37', fontFamily: 'monospace', letterSpacing: '1px' }}>
+                                            Q: {controller.rsaFactorQ}
+                                        </div>
+                                        {controller.rsaSolved && (
+                                            <div style={{ color: '#00ff00', fontSize: '0.65rem', marginTop: '5px', animation: 'blink 1s infinite' }}>
+                                                [ FACTORIZATION_SUCCESS ]
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* LATTICE SVP TOOL */}
+                            <div style={{ border: '1px solid #d4af37', padding: '15px', borderRadius: '10px', background: controller.latticeToolActive ? 'rgba(212,175,55,0.1)' : 'none' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                                    <span style={{ fontSize: '1.5rem', color: '#d4af37' }}>𓍲</span>
+                                    <button
+                                        onClick={() => controller.setLatticeToolActive(!controller.latticeToolActive)}
+                                        style={{ background: controller.latticeToolActive ? '#d4af37' : 'none', border: '1px solid #d4af37', borderRadius: '5px', color: controller.latticeToolActive ? '#fff' : '#d4af37', padding: '2px 8px', cursor: 'pointer' }}
+                                    >
+                                        {controller.latticeToolActive ? 'ON' : 'OFF'}
+                                    </button>
+                                </div>
+                                <div style={{ fontSize: '0.65rem', color: '#888', fontFamily: 'monospace' }}>LATTICE_SVP_RESONANCE</div>
+                                <div style={{ fontSize: '0.85rem', color: '#d4af37', fontWeight: 'bold', marginTop: '5px' }}>
+                                    GAP: {controller.latticeToolActive ? controller.latticeSvpGap.toFixed(4) : "---"}
+                                </div>
+                                {controller.latticeToolActive && (
+                                    <div style={{ borderTop: '1px solid rgba(212,175,55,0.2)', marginTop: '10px', paddingTop: '10px' }}>
+                                        <div style={{ fontSize: '0.65rem', color: '#888' }}>SVP_SOLVE_STATUS</div>
+                                        {controller.latticeSvpSolved ? (
+                                            <div style={{ color: '#00ff00', fontSize: '0.65rem', marginTop: '5px', animation: 'blink 1s infinite' }}>
+                                                [ RESONANCE_LOCKED ]
+                                            </div>
+                                        ) : (
+                                            <div style={{ color: '#d4af37', fontSize: '0.6rem', opacity: 0.6 }}>ALIGN 4D BASIS...</div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* SIGNAL PURIFIER */}
+                            <div style={{ border: '1px solid #d4af37', padding: '15px', borderRadius: '10px', background: controller.signalToolActive ? 'rgba(212,175,55,0.1)' : 'none' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                                    <span style={{ fontSize: '1.5rem', color: '#d4af37' }}>𓏽</span>
+                                    <button
+                                        onClick={() => controller.setSignalToolActive(!controller.signalToolActive)}
+                                        style={{ background: controller.signalToolActive ? '#d4af37' : 'none', border: '1px solid #d4af37', borderRadius: '5px', color: controller.signalToolActive ? '#fff' : '#d4af37', padding: '2px 8px', cursor: 'pointer' }}
+                                    >
+                                        {controller.signalToolActive ? 'ON' : 'OFF'}
+                                    </button>
+                                </div>
+                                <div style={{ fontSize: '0.65rem', color: '#888', fontFamily: 'monospace' }}>SU(2)_HOLONOMY</div>
+                                <div style={{ fontSize: '0.85rem', color: '#d4af37', fontWeight: 'bold', marginTop: '5px' }}>
+                                    PURITY: {controller.signalToolActive ? controller.filterPurity.toFixed(2) : "---"}%
+                                </div>
+                            </div>
+
+                            {/* HOLOGRAPHIC COMPRESSION */}
+                            <div style={{ border: '1px solid #d4af37', padding: '15px', borderRadius: '10px', background: controller.compressionToolActive ? 'rgba(212,175,55,0.1)' : 'none' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                                    <span style={{ fontSize: '1.5rem', color: '#d4af37' }}>𒀭</span>
+                                    <button
+                                        onClick={() => controller.setCompressionToolActive(!controller.compressionToolActive)}
+                                        style={{ background: controller.compressionToolActive ? '#d4af37' : 'none', border: '1px solid #d4af37', borderRadius: '5px', color: controller.compressionToolActive ? '#fff' : '#d4af37', padding: '2px 8px', cursor: 'pointer' }}
+                                    >
+                                        {controller.compressionToolActive ? 'ON' : 'OFF'}
+                                    </button>
+                                </div>
+                                <div style={{ fontSize: '0.65rem', color: '#888', fontFamily: 'monospace' }}>4D_PROJECT_MAP</div>
+                                <div style={{ fontSize: '0.85rem', color: '#d4af37', fontWeight: 'bold', marginTop: '5px' }}>
+                                    LOSS: {controller.compressionToolActive ? controller.compressionLoss.toExponential(2) : "---"}
+                                </div>
+                            </div>
+
+                            {/* MORPHOGENESIS */}
+                            <div style={{ border: '1px solid #d4af37', padding: '15px', borderRadius: '10px', background: controller.morphToolActive ? 'rgba(212,175,55,0.1)' : 'none' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                                    <span style={{ fontSize: '1.5rem', color: '#d4af37' }}>𓍲</span>
+                                    <button
+                                        onClick={() => controller.setMorphToolActive(!controller.morphToolActive)}
+                                        style={{ background: controller.morphToolActive ? '#d4af37' : 'none', border: '1px solid #d4af37', borderRadius: '5px', color: controller.morphToolActive ? '#fff' : '#d4af37', padding: '2px 8px', cursor: 'pointer' }}
+                                    >
+                                        {controller.morphToolActive ? 'ON' : 'OFF'}
+                                    </button>
+                                </div>
+                                <div style={{ fontSize: '0.65rem', color: '#888', fontFamily: 'monospace' }}>CELL_GROWTH_GA</div>
+                                <div style={{ fontSize: '0.85rem', color: '#d4af37', fontWeight: 'bold', marginTop: '5px' }}>
+                                    ΔE: {controller.morphToolActive ? controller.morphEnergy.toFixed(4) : "---"}
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        /* ENCRYPTION LAB TAB */
+                        <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                                {/* Left Side: Controls */}
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                    <div style={{ color: '#d4af37', fontSize: '0.8rem', borderBottom: '1px solid rgba(212,175,55,0.3)', paddingBottom: '5px' }}>𓋹_FILE_IN</div>
+                                    <input
+                                        type="file"
+                                        onChange={(e) => {
+                                            const file = e.target.files?.[0];
+                                            if (file) {
+                                                const reader = new FileReader();
+                                                reader.onload = (re) => {
+                                                    if (re.target?.result) {
+                                                        controller.setLabBuffer(new Uint8Array(re.target.result as ArrayBuffer));
+                                                    }
+                                                };
+                                                reader.readAsArrayBuffer(file);
+                                            }
+                                        }}
+                                        style={{ fontSize: '0.7rem', color: '#d4af37' }}
+                                    />
+                                    <div style={{ padding: '15px', borderBottom: '1px solid rgba(212,175,55,0.2)' }}>
+                                        <div style={{ fontSize: '0.65rem', color: '#888', marginBottom: '5px' }}>DIRECT_STRING_INPUT [V12_LITERAL]</div>
+                                        <textarea
+                                            value={controller.labString}
+                                            onChange={(e) => controller.setLabString(e.target.value)}
+                                            placeholder="Enter sacred text to encrypt..."
+                                            style={{
+                                                width: '100%', height: '60px', background: 'rgba(0,0,0,0.4)',
+                                                border: '1px solid rgba(212,175,55,0.3)', color: '#d4af37',
+                                                fontSize: '0.8rem', padding: '10px', borderRadius: '5px',
+                                                fontFamily: 'Orbitron, sans-serif'
+                                            }}
+                                        />
+                                    </div>
+
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginTop: '10px' }}>
+                                        {/* Row 1: Lattice */}
+                                        <button
+                                            onClick={controller.latticeEncrypt}
+                                            title="LATTICE_SVP_ENCRYPT (4D Basis Projection)"
+                                            style={{ padding: '10px', background: '#d4af37', color: '#000', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: '1.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+                                        >
+                                            <span>𓍲</span>
+                                            <span style={{ fontSize: '0.4rem', opacity: 0.8 }}>ENCRYPT</span>
+                                        </button>
+                                        <button
+                                            onClick={controller.latticeDecrypt}
+                                            disabled={!controller.processedBuffer || controller.labStatus !== 'IDLE'}
+                                            title="LATTICE_SVP_DECRYPT (4D Basis Reduction)"
+                                            style={{ padding: '10px', background: controller.latticeSvpSolved ? '#d4af37' : 'rgba(212,175,55,0.2)', color: '#000', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: '1.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+                                        >
+                                            <span>𓍲</span>
+                                            <span style={{ fontSize: '0.4rem', opacity: 0.8 }}>DECRYPT</span>
+                                        </button>
+
+                                        {/* Row 2: RSA */}
+                                        <button
+                                            onClick={controller.rsaEncrypt}
+                                            disabled={!controller.labBuffer || controller.labStatus !== 'IDLE'}
+                                            title="RSA_LATTICE_ENCRYPT (Modular Exponentiation)"
+                                            style={{ padding: '10px', background: '#d4af37', color: '#000', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: '1.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+                                        >
+                                            <span>𓋹</span>
+                                            <span style={{ fontSize: '0.4rem', opacity: 0.8 }}>ENCRYPT</span>
+                                        </button>
+                                        <button
+                                            onClick={controller.rsaDecrypt}
+                                            disabled={!controller.processedBuffer || controller.labStatus !== 'IDLE'}
+                                            title="GA_GEOMETRIC_DECRYPT (Factorization via Gap Alignment)"
+                                            style={{ padding: '10px', background: controller.rsaSolved ? '#d4af37' : 'rgba(212,175,55,0.2)', color: '#000', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: '1.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+                                        >
+                                            <span>𓏽</span>
+                                            <span style={{ fontSize: '0.4rem', opacity: 0.8 }}>DECRYPT</span>
+                                        </button>
+                                    </div>
+
+                                    <button
+                                        onClick={() => {
+                                            controller.setLabBuffer(null);
+                                            controller.setProcessedBuffer(null);
+                                            controller.setLabString("");
+                                        }}
+                                        style={{ marginTop: '10px', padding: '5px', background: 'none', border: '1px solid rgba(212,175,55,0.3)', color: 'rgba(212,175,55,0.6)', cursor: 'pointer', fontSize: '0.6rem' }}
+                                    >𓎂_CLEAR_V12_LAB</button>
+
+                                    <div style={{ fontSize: '0.6rem', color: '#888', fontStyle: 'italic', marginTop: '5px' }}>
+                                        * DECRYPTION REQUIRES RSA_POLE ALIGNMENT (LATTICE GAP &lt; 0.001)
+                                    </div>
+                                </div>
+
+                                {/* Right Side: Hex Viewer */}
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                    <div
+                                        title="STREAM_INSPECTION_POINT (Hexadecimal View)"
+                                        style={{ color: '#d4af37', fontSize: '0.8rem', borderBottom: '1px solid rgba(212,175,55,0.3)', paddingBottom: '5px', cursor: 'help' }}
+                                    >
+                                        𓏽_STREAM_OUT
+                                    </div>
+                                    <div style={{
+                                        background: '#0a0a0a', color: '#d4af37', fontFamily: 'monospace', fontSize: '0.6rem',
+                                        height: '150px', overflowY: 'auto', padding: '10px', border: '1px solid #d4af37',
+                                        lineHeight: '1.2'
+                                    }}>
+                                        {controller.processedBuffer || controller.labBuffer ? (
+                                            Array.from((controller.processedBuffer || controller.labBuffer)!.slice(0, 256)).map((b, i) => (
+                                                <span key={i} style={{ marginRight: '5px', opacity: b === 0 ? 0.2 : 1 }}>
+                                                    {b.toString(16).padStart(2, '0')}
+                                                    {(i + 1) % 8 === 0 ? <br /> : null}
+                                                </span>
+                                            ))
+                                        ) : (
+                                            "[ NO_DATA_SACRIFICED ]"
+                                        )}
+                                    </div>
+                                    {controller.processedBuffer && (
+                                        <div style={{ marginTop: '15px' }}>
+                                            <div style={{ fontSize: '0.65rem', color: '#888', marginBottom: '5px' }}>PROCESSED_RESULT [HEX_VIEW]</div>
+                                            <div
+                                                className="custom-scrollbar"
+                                                style={{
+                                                    maxHeight: '100px', overflowY: 'auto', background: 'rgba(0,0,0,0.5)',
+                                                    padding: '10px', borderRadius: '5px', wordBreak: 'break-all',
+                                                    fontFamily: 'monospace', fontSize: '0.7rem', color: '#d4af37',
+                                                    border: '1px solid rgba(212,175,55,0.2)'
+                                                }}
+                                            >
+                                                {Array.from(controller.processedBuffer).map(b => b.toString(16).padStart(2, '0')).join(' ')}
+                                            </div>
+                                            <div style={{ display: 'flex', gap: '5px', marginTop: '10px' }}>
+                                                <button
+                                                    onClick={() => {
+                                                        const blob = new Blob([controller.processedBuffer as any], { type: 'application/octet-stream' });
+                                                        const url = URL.createObjectURL(blob);
+                                                        const a = document.createElement('a');
+                                                        a.href = url;
+                                                        a.download = 'sacred_result.bin';
+                                                        a.click();
+                                                    }}
+                                                    title="DOWNLOAD_RESULT"
+                                                    style={{ flex: 1, background: 'none', border: '1px solid #d4af37', color: '#d4af37', padding: '5px', cursor: 'pointer', fontSize: '0.65rem' }}
+                                                >⤓ DOWNLOAD</button>
+
+                                                <button
+                                                    onClick={() => {
+                                                        const text = new TextDecoder().decode(controller.processedBuffer!);
+                                                        navigator.clipboard.writeText(text);
+                                                        alert("RESULT_COPIED_TO_CLIPBOARD [GA_SYNC_COMPLETE]");
+                                                    }}
+                                                    title="COPY_TO_CLIPBOARD (Decoded Text)"
+                                                    style={{ flex: 1, background: 'none', border: '1px solid #d4af37', color: '#d4af37', padding: '5px', cursor: 'pointer', fontSize: '0.65rem' }}
+                                                >⎙ COPY_TEXT</button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </DraggablePanel>
+            )}
+
+            {/* THE CONSOLIDATED PANEL (was formerly floating) */}
             <DraggablePanel
                 initialStyle={{
                     position: 'fixed', right: controller.uiVisible ? '40px' : '-450px',
@@ -674,6 +1042,49 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 }}>
                     <NollCubeContent language={controller.language} isRTL={isRTL} />
                 </div>
+            </div>
+
+            {/* BOTTOM NAVIGATION SECTION */}
+            <div className="bottom-center" style={{ position: 'fixed', bottom: '20px', left: '50%', transform: 'translateX(-50%)', zIndex: 1100, display: 'flex', gap: '20px', alignItems: 'center', pointerEvents: 'auto' }}>
+                <button
+                    className="sacred-btn"
+                    onClick={() => controller.setTheoryOpen(!controller.theoryOpen)}
+                    title="Unified Theory V12"
+                    style={{
+                        fontSize: '1.8rem', background: 'none', border: 'none',
+                        color: controller.theoryOpen ? '#d4af37' : 'rgba(212, 175, 55, 0.4)', cursor: 'pointer',
+                        filter: controller.theoryOpen ? 'drop-shadow(0 0 10px #d4af37)' : 'none', transition: 'all 0.3s ease'
+                    }}
+                >𓊈𓊉</button>
+
+                <div className="prime-cross-btn" onClick={handleCenterCrossClick} style={{
+                    width: isSecretAngle ? '100px' : '80px',
+                    height: isSecretAngle ? '100px' : '80px',
+                    borderRadius: '50%',
+                    border: '2px solid' + (isSecretAngle ? '#fff' : '#d4af37'),
+                    background: 'rgba(0,0,0,0.8)',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: isSecretAngle ? '#fff' : '#d4af37',
+                    fontSize: isSecretAngle ? '2rem' : '1.5rem',
+                    transition: 'all 0.3s ease',
+                    boxShadow: isSecretAngle ? '0 0 30px #d4af37, inset 0 0 20px #d4af37' : '0 0 10px rgba(0,0,0,0.5)',
+                    animation: isSecretAngle ? 'pulse 2s infinite' : 'none'
+                }}>
+                    {isSecretAngle ? '𓋹' : '†'}
+                </div>
+
+                <button
+                    className="sacred-btn"
+                    onClick={() => controller.setLibraryOpen(!controller.libraryOpen)}
+                    style={{
+                        fontSize: '1.8rem', background: 'none', border: 'none', visibility: controller.uiVisible ? 'visible' : 'hidden',
+                        color: controller.libraryOpen ? '#d4af37' : 'rgba(212, 175, 55, 0.4)', cursor: 'pointer',
+                        filter: controller.libraryOpen ? 'drop-shadow(0 0 10px #d4af37)' : 'none', transition: 'all 0.3s ease'
+                    }}
+                >𓉙</button>
             </div>
 
             {/* SECRET ENTRY PANEL */}
