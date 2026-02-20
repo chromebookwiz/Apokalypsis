@@ -122,30 +122,84 @@ const DraggablePanel = ({ children, initialStyle, className }: DraggablePanelPro
 const DivineCorners: React.FC = () => {
     const cornerStyle: React.CSSProperties = {
         position: 'fixed',
-        width: '150px',
-        height: '150px',
+        width: '200px',
+        height: '200px',
         pointerEvents: 'none',
         zIndex: 50,
-        opacity: 0.12,
+        opacity: 0.15,
         color: '#d4af37'
     };
 
     const renderCorner = (style: React.CSSProperties, rotation: string) => (
         <div style={{ ...cornerStyle, ...style, transform: rotation }}>
-            <svg viewBox="0 0 100 100" width="100%" height="100%">
-                {/* Metatron fragment: Concentric circles and radial rays */}
-                <circle cx="0" cy="0" r="20" fill="none" stroke="currentColor" strokeWidth="0.5" />
-                <circle cx="0" cy="0" r="40" fill="none" stroke="currentColor" strokeWidth="0.5" />
-                <circle cx="0" cy="0" r="60" fill="none" stroke="currentColor" strokeWidth="0.5" />
-                <line x1="0" y1="0" x2="100" y2="0" stroke="currentColor" strokeWidth="0.2" />
-                <line x1="0" y1="0" x2="0" y2="100" stroke="currentColor" strokeWidth="0.2" />
-                <line x1="0" y1="0" x2="80" y2="80" stroke="currentColor" strokeWidth="0.1" />
-                <line x1="0" y1="0" x2="60" y2="90" stroke="currentColor" strokeWidth="0.05" />
-                <line x1="0" y1="0" x2="90" y2="60" stroke="currentColor" strokeWidth="0.05" />
-                {/* Sacred Dots */}
-                <circle cx="20" cy="0" r="1" fill="currentColor" />
-                <circle cx="40" cy="40" r="1" fill="currentColor" />
-                <circle cx="0" cy="20" r="1" fill="currentColor" />
+            <svg viewBox="0 0 200 200" width="100%" height="100%">
+                {/* Sacred Geometry: Concentric circles representing the Noll Cube structure */}
+                <circle cx="0" cy="0" r="15" fill="none" stroke="currentColor" strokeWidth="0.4" />
+                <circle cx="0" cy="0" r="30" fill="none" stroke="currentColor" strokeWidth="0.4" />
+                <circle cx="0" cy="0" r="45" fill="none" stroke="currentColor" strokeWidth="0.3" />
+                <circle cx="0" cy="0" r="60" fill="none" stroke="currentColor" strokeWidth="0.3" />
+                <circle cx="0" cy="0" r="75" fill="none" stroke="currentColor" strokeWidth="0.2" />
+                <circle cx="0" cy="0" r="90" fill="none" stroke="currentColor" strokeWidth="0.2" />
+                
+                {/* Radial lines: 24 meridians (representing 2T group) */}
+                {Array.from({ length: 24 }).map((_, i) => {
+                    const angle = (i * 360) / 24;
+                    const rad = (angle * Math.PI) / 180;
+                    return (
+                        <line
+                            key={i}
+                            x1="0"
+                            y1="0"
+                            x2={200 * Math.cos(rad)}
+                            y2={200 * Math.sin(rad)}
+                            stroke="currentColor"
+                            strokeWidth={i % 6 === 0 ? "0.3" : "0.1"}
+                            opacity={i % 6 === 0 ? 0.8 : 0.4}
+                        />
+                    );
+                })}
+                
+                {/* Parallel circles: 12 parallels (representing A4 group) */}
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => {
+                    const radius = (i * 15);
+                    return (
+                        <circle
+                            key={i}
+                            cx="0"
+                            cy="0"
+                            r={radius}
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={i % 3 === 0 ? "0.2" : "0.1"}
+                            opacity={i % 3 === 0 ? 0.6 : 0.3}
+                        />
+                    );
+                })}
+                
+                {/* Sacred intersection points (288 cells = 24×12) */}
+                {Array.from({ length: 12 }).map((_, j) => {
+                    const radius = (j + 1) * 15;
+                    return Array.from({ length: 24 }).map((_, i) => {
+                        const angle = (i * 360) / 24;
+                        const rad = (angle * Math.PI) / 180;
+                        const x = radius * Math.cos(rad);
+                        const y = radius * Math.sin(rad);
+                        return (
+                            <circle
+                                key={`${i}-${j}`}
+                                cx={x}
+                                cy={y}
+                                r="0.8"
+                                fill="currentColor"
+                                opacity={0.4}
+                            />
+                        );
+                    });
+                })}
+                
+                {/* Corner quadrant lines */}
+                <line x1="0" y1="0" x2="200" y2="0" stroke="currentColor" strokeWidth="0.3" />
+                <line x1="0" y1="0" x2="0" y2="200" stroke="currentColor" strokeWidth="0.3" />
             </svg>
         </div>
     );
@@ -167,16 +221,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
     const ui = UI_STRINGS[controller.language] || UI_STRINGS['LA'];
     const GREEK_TITLE = "ΑΠΟΚΑΛΥΨΙΣ";
 
-    // Secret Trigger Logic
-    const isSecretAngle = Math.abs(Number(controller.viewAngle.toFixed(2))) === 69.33 || Math.abs(Number(controller.azimuthAngle.toFixed(2))) === 69.33;
-
-    const handleCenterCrossClick = () => {
-        if (isSecretAngle) {
-            controller.setSecretEntryOpen(true);
-        } else {
-            controller.resetCameraView();
-        }
-    };
+    // Secret Trigger Logic removed - center cross button removed per user request
 
     // ... (rest of setup) ...
     const [showInfo, setShowInfo] = React.useState(false);
@@ -858,21 +903,12 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 </div>
             </DraggablePanel>
 
-            {/* BOTTOM NAVIGATION (CROSS) */}
+            {/* BOTTOM NAVIGATION - Camera controls only (center cross removed) */}
             <div style={{
                 position: 'fixed', bottom: '40px', left: '50%', transform: 'translateX(-50%)',
                 pointerEvents: 'auto', zIndex: 100, display: controller.uiVisible ? 'flex' : 'none', alignItems: 'center', gap: '30px'
             }}>
                 <button onClick={() => controller.prevCameraView()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37', fontSize: '2.5rem' }}>☩</button>
-                <button
-                    onClick={handleCenterCrossClick}
-                    style={{
-                        background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37',
-                        fontSize: '4.5rem', transform: isSecretAngle ? 'rotate(45deg)' : 'none',
-                        textShadow: isSecretAngle ? '0 0 25px rgba(212, 175, 55, 0.8)' : '0 0 15px rgba(212, 175, 55, 0.5)',
-                        transition: 'all 0.5s ease'
-                    }}
-                >☩</button>
                 <button onClick={() => controller.nextCameraView()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37', fontSize: '2.5rem' }}>☩</button>
             </div>
 
@@ -1063,40 +1099,8 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 </div>
             </div>
 
-            {/* BOTTOM NAVIGATION SECTION */}
+            {/* BOTTOM NAVIGATION SECTION - Simplified without center cross */}
             <div className="bottom-center" style={{ position: 'fixed', bottom: '20px', left: '50%', transform: 'translateX(-50%)', zIndex: 1100, display: 'flex', gap: '20px', alignItems: 'center', pointerEvents: 'auto' }}>
-                <button
-                    className="sacred-btn"
-                    onClick={() => controller.setTheoryOpen(!controller.theoryOpen)}
-                    title="Unified Theory V12"
-                    style={{
-                        fontSize: '1.8rem', background: 'none', border: 'none',
-                        color: controller.theoryOpen ? '#d4af37' : 'rgba(212, 175, 55, 0.4)', cursor: 'pointer',
-                        filter: controller.theoryOpen ? 'drop-shadow(0 0 10px #d4af37)' : 'none', transition: 'all 0.3s ease'
-                    }}
-                >𓊈𓊉</button>
-
-                <div className="prime-cross-btn" onClick={handleCenterCrossClick} style={{
-                    width: isSecretAngle ? '100px' : '80px',
-                    height: isSecretAngle ? '100px' : '80px',
-                    borderRadius: '50%',
-                    border: `2px solid ${isSecretAngle ? '#ffffff' : '#d4af37'}`,
-                    background: 'rgba(253, 251, 247, 0.96)',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: isSecretAngle ? '#ffffff' : '#d4af37',
-                    fontSize: isSecretAngle ? '2rem' : '1.5rem',
-                    transition: 'all 0.3s ease',
-                    boxShadow: isSecretAngle
-                        ? '0 0 35px #d4af37, 0 0 60px rgba(212,175,55,0.9), inset 0 0 18px rgba(212,175,55,0.9)'
-                        : '0 0 14px rgba(0,0,0,0.35)',
-                    animation: isSecretAngle ? 'pulse 2s infinite' : 'none'
-                }}>
-                    {isSecretAngle ? '𓋹' : '†'}
-                </div>
-
                 <button
                     className="sacred-btn"
                     onClick={() => controller.setLibraryOpen(!controller.libraryOpen)}
@@ -1107,6 +1111,28 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     }}
                 >𓉙</button>
             </div>
+
+            {/* THEORY PAPER BUTTON - Moved to top-right corner */}
+            <button
+                className="sacred-btn"
+                onClick={() => controller.setTheoryOpen(!controller.theoryOpen)}
+                title="Unified Theory V12"
+                style={{
+                    position: 'fixed',
+                    top: '20px',
+                    right: '20px',
+                    fontSize: '1.8rem',
+                    background: 'none',
+                    border: 'none',
+                    color: controller.theoryOpen ? '#d4af37' : 'rgba(212, 175, 55, 0.4)',
+                    cursor: 'pointer',
+                    filter: controller.theoryOpen ? 'drop-shadow(0 0 10px #d4af37)' : 'none',
+                    transition: 'all 0.3s ease',
+                    zIndex: 1100,
+                    pointerEvents: 'auto',
+                    opacity: controller.uiVisible ? 1 : 0.3
+                }}
+            >𓊈𓊉</button>
 
             {/* SECRET ENTRY PANEL */}
             {controller.secretEntryOpen && (
