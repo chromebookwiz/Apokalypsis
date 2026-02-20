@@ -188,16 +188,20 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
     const renderClickableAngle = (text: string) => {
         return text.split('').map((char, i) => {
             const isClickable = char === '6' || char === '3';
+            if (!isClickable) return <span key={i}>{char}</span>;
+
             return (
                 <span
                     key={i}
-                    onClick={isClickable ? () => handleDigitClick(char) : undefined}
+                    onClick={() => handleDigitClick(char)}
                     style={{
-                        cursor: isClickable ? 'pointer' : 'default',
+                        cursor: 'pointer',
                         transition: 'all 0.3s ease',
-                        padding: isClickable ? '5px 2px' : '0', // Mobile touch target
-                        margin: isClickable ? '0 -2px' : '0',
-                        ...(isClickable && secretFlash ? { color: '#fff', textShadow: '0 0 20px #ffd700, 0 0 40px #ffd700' } : {})
+                        display: 'inline-block', // Pixel precise hitbox
+                        minWidth: '0.6em',
+                        textAlign: 'center',
+                        userSelect: 'none',
+                        ...(secretFlash ? { color: '#fff', textShadow: '0 0 20px #ffd700, 0 0 40px #ffd700' } : {})
                     }}
                 >
                     {char}
@@ -548,35 +552,56 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 >♫</button>
             )}
 
-            {/* INTRO POPUP */}
+            {/* INTRO POPUP - NOW DRAGGABLE PLAYER */}
             {introOpen && (
-                <div style={{
-                    position: 'fixed', inset: 0, zIndex: 20002, background: 'rgba(0, 0, 0, 0.95)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto',
-                    animation: 'fadeIn 0.5s ease'
-                }}>
-                    <div style={{
-                        width: '90%', maxWidth: '500px', background: '#fdfbf7', border: '2px solid #d4af37',
-                        borderRadius: '15px', padding: '30px', textAlign: 'center', position: 'relative'
+                <DraggablePanel
+                    initialStyle={{
+                        position: 'fixed', top: '150px', left: '150px', zIndex: 20002,
+                        width: '320px', background: '#fdfbf7', border: '2px solid #d4af37',
+                        borderRadius: '15px', padding: '0', textAlign: 'center', pointerEvents: 'auto',
+                        boxShadow: '0 10px 40px rgba(0,0,0,0.4)', overflow: 'hidden'
+                    }}
+                >
+                    <div className="drag-handle" style={{
+                        padding: '10px', background: 'rgba(212, 175, 55, 0.1)', borderBottom: '1px solid #d4af37',
+                        cursor: 'grab', display: 'flex', justifyContent: 'space-between', alignItems: 'center'
                     }}>
+                        <span style={{ fontSize: '0.7rem', color: '#d4af37', fontWeight: 'bold', marginLeft: '10px' }}>INTRODUCTORY PIMPING</span>
                         <button
                             onClick={() => setIntroOpen(false)}
                             style={{
-                                position: 'absolute', top: '15px', right: '15px', background: 'none',
-                                border: '1px solid #d4af37', borderRadius: '50%', width: '30px', height: '30px',
-                                color: '#d4af37', cursor: 'pointer'
+                                background: 'none', border: 'none', color: '#d4af37', cursor: 'pointer',
+                                fontSize: '1.2rem', padding: '5px 10px'
                             }}
                         >✕</button>
-                        <h2 style={{ color: '#d4af37', marginBottom: '20px', textTransform: 'uppercase' }}>Introductory Pimping</h2>
-                        <div style={{ margin: '30px 0' }}>
-                            <audio ref={audioRef} controls autoPlay style={{ width: '100%' }}>
+                    </div>
+                    <div style={{ padding: '20px' }}>
+                        <div style={{ margin: '10px 0' }}>
+                            <audio ref={audioRef} controls autoPlay style={{ width: '100%', height: '35px' }}>
                                 <source src="/INTRODUCTORY%20PIMPING.wav" type="audio/wav" />
                                 Your browser does not support the audio element.
                             </audio>
                         </div>
-                        <p style={{ color: '#1a1a1a', fontStyle: 'italic', fontSize: '0.9rem' }}>The Vision in Sound</p>
+                        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}>
+                            <a
+                                href="/INTRODUCTORY%20PIMPING.wav"
+                                download="INTRODUCTORY PIMPING.wav"
+                                style={{
+                                    color: '#d4af37', textDecoration: 'none', fontSize: '0.75rem',
+                                    border: '1px solid rgba(212,175,55,0.3)', padding: '5px 15px',
+                                    borderRadius: '20px', transition: 'all 0.3s ease',
+                                    backgroundColor: 'rgba(212,175,55,0.05)', display: 'flex',
+                                    alignItems: 'center', gap: '5px'
+                                }}
+                                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(212,175,55,0.15)'}
+                                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(212,175,55,0.05)'}
+                            >
+                                <span style={{ fontSize: '1rem' }}>⤓</span> DOWNLOAD THE SONIC KEY
+                            </a>
+                        </div>
+                        <p style={{ color: '#1a1a1a', fontStyle: 'italic', fontSize: '0.8rem', margin: '10px 0 0 0', opacity: 0.6 }}>The Vision in Sound</p>
                     </div>
-                </div>
+                </DraggablePanel>
             )}
 
             {/* THEORY ARTICLE OVERLAY */}
