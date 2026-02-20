@@ -903,13 +903,51 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 </div>
             </DraggablePanel>
 
-            {/* BOTTOM NAVIGATION - Camera controls only (center cross removed) */}
+            {/* BOTTOM NAVIGATION - Camera controls with central reset cross */}
             <div style={{
                 position: 'fixed', bottom: '40px', left: '50%', transform: 'translateX(-50%)',
                 pointerEvents: 'auto', zIndex: 100, display: controller.uiVisible ? 'flex' : 'none', alignItems: 'center', gap: '30px'
             }}>
-                <button onClick={() => controller.prevCameraView()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37', fontSize: '2.5rem' }}>☩</button>
-                <button onClick={() => controller.nextCameraView()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37', fontSize: '2.5rem' }}>☩</button>
+                {/* Step backward */}
+                <button
+                    onClick={() => controller.prevCameraView()}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37', fontSize: '2.5rem' }}
+                >
+                    ☩
+                </button>
+
+                {/* Central cross: resets view to 0,0 (Front) */}
+                <button
+                    onClick={() => controller.resetCameraView()}
+                    title="Return to 0° / 0° (Front)"
+                    style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: '#d4af37',
+                        fontSize: '4.5rem',
+                        textShadow: '0 0 18px rgba(212, 175, 55, 0.7)',
+                        transition: 'transform 0.3s ease, text-shadow 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'scale(1.05)';
+                        e.currentTarget.style.textShadow = '0 0 26px rgba(212, 175, 55, 0.9)';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'none';
+                        e.currentTarget.style.textShadow = '0 0 18px rgba(212, 175, 55, 0.7)';
+                    }}
+                >
+                    ☩
+                </button>
+
+                {/* Step forward */}
+                <button
+                    onClick={() => controller.nextCameraView()}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#d4af37', fontSize: '2.5rem' }}
+                >
+                    ☩
+                </button>
             </div>
 
             {/* ANGLE DISPLAY */}
@@ -1112,7 +1150,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 >𓉙</button>
             </div>
 
-            {/* THEORY PAPER BUTTON - Moved to top-right corner */}
+            {/* THEORY PAPER BUTTON - Invisible in top-right corner (hidden link to paper) */}
             <button
                 className="sacred-btn"
                 onClick={() => controller.setTheoryOpen(!controller.theoryOpen)}
@@ -1124,13 +1162,15 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     fontSize: '1.8rem',
                     background: 'none',
                     border: 'none',
-                    color: controller.theoryOpen ? '#d4af37' : 'rgba(212, 175, 55, 0.4)',
+                    color: 'transparent',
                     cursor: 'pointer',
-                    filter: controller.theoryOpen ? 'drop-shadow(0 0 10px #d4af37)' : 'none',
+                    filter: 'none',
                     transition: 'all 0.3s ease',
                     zIndex: 1100,
                     pointerEvents: 'auto',
-                    opacity: controller.uiVisible ? 1 : 0.3
+                    opacity: 0,
+                    width: '40px',
+                    height: '40px'
                 }}
             >𓊈𓊉</button>
 
