@@ -211,7 +211,7 @@ const CherubimNode: React.FC<{
     useFrame((_state, _delta) => {
         // 0. Update Frequency Data if syncing
         if (controller.audioSync && sharedAnalyser && dataArray) {
-            sharedAnalyser.getByteFrequencyData(dataArray);
+            sharedAnalyser.getByteFrequencyData(dataArray as any);
         }
 
         // 1. Rotation with Split Mode

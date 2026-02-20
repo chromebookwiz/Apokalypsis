@@ -584,7 +584,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         cursor: 'grab', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                         position: 'relative', zIndex: 1
                     }}>
-                        <span style={{ fontSize: '1.2rem', color: '#d4af37', fontWeight: 'bold', marginLeft: '10px' }}>𒀭  sonor - 𓋹 𒀭</span>
+                        <span style={{ fontSize: '1.2rem', color: '#d4af37', fontWeight: 'bold', marginLeft: '10px' }}>𒀭 𒀭</span>
                         <button
                             onClick={() => setIntroOpen(false)}
                             style={{
@@ -603,7 +603,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}>
                             <a
                                 href="/INTRODUCTORY%20PIMPING.wav"
-                                download="INTRODUCTORY PIMPING.wav"
+                                download="𒀭.wav"
                                 style={{
                                     color: '#d4af37', textDecoration: 'none', fontSize: '1rem',
                                     border: '1px solid rgba(212,175,55,0.3)', padding: '5px 25px',
