@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useSceneController } from '../controllers/SceneController';
 import { getRevelation, getNollCubeText } from '../data/revelation';
+import { connectAudioSource, getAudioCtx } from '../views/geometries/Metatron';
 import { getHymn, getNumericScripture } from '../data/scripture';
 import { LANG_NAMES, UI_STRINGS } from '../data/translations';
 
@@ -156,6 +157,19 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
     const [secretFlash, setSecretFlash] = useState(false);
     const [introUnlocked, setIntroUnlocked] = useState(false);
     const [introOpen, setIntroOpen] = useState(false);
+    const audioRef = React.useRef<HTMLAudioElement>(null);
+
+    // Audio Sync Effect for Intro
+    React.useEffect(() => {
+        if (introOpen && audioRef.current) {
+            getAudioCtx().resume().then(() => {
+                connectAudioSource(audioRef.current!);
+                controller.setAudioSync(true);
+            });
+        } else if (!introOpen) {
+            controller.setAudioSync(false);
+        }
+    }, [introOpen]);
 
     // Secret digit click handler
     const handleDigitClick = (char: string) => {
@@ -555,7 +569,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         >✕</button>
                         <h2 style={{ color: '#d4af37', marginBottom: '20px', textTransform: 'uppercase' }}>Introductory Pimping</h2>
                         <div style={{ margin: '30px 0' }}>
-                            <audio controls autoPlay style={{ width: '100%' }}>
+                            <audio ref={audioRef} controls autoPlay style={{ width: '100%' }}>
                                 <source src="/INTRODUCTORY%20PIMPING.wav" type="audio/wav" />
                                 Your browser does not support the audio element.
                             </audio>

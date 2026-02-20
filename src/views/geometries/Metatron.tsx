@@ -14,25 +14,35 @@ let sharedAudioCtx: AudioContext | null = null;
 let sharedAnalyser: AnalyserNode | null = null;
 let dataArray: Uint8Array | null = null;
 
-const getAudioCtx = (): AudioContext => {
+export const getAudioCtx = (): AudioContext => {
     if (!sharedAudioCtx) sharedAudioCtx = new AudioContext();
     if (sharedAudioCtx.state === 'suspended') sharedAudioCtx.resume();
     return sharedAudioCtx;
 };
 
-const getAnalyser = (): AnalyserNode => {
+export const getAnalyser = (): AnalyserNode => {
     const ctx = getAudioCtx();
     if (!sharedAnalyser) {
         sharedAnalyser = ctx.createAnalyser();
         sharedAnalyser.fftSize = 256;
         const bufferLength = sharedAnalyser.frequencyBinCount;
         dataArray = new Uint8Array(bufferLength);
-
-        // Connect mic or just simulate if no input? 
-        // For now, let's assume the user might want to connect something later, 
-        // but we'll provide the data array for reactivity.
     }
     return sharedAnalyser;
+};
+
+let audioSourceNode: MediaElementAudioSourceNode | null = null;
+
+export const connectAudioSource = (element: HTMLAudioElement) => {
+    const ctx = getAudioCtx();
+    const analyser = getAnalyser();
+
+    // Only create once per element to avoid DOMException
+    if (!audioSourceNode) {
+        audioSourceNode = ctx.createMediaElementSource(element);
+        audioSourceNode.connect(analyser);
+        analyser.connect(ctx.destination);
+    }
 };
 
 const BASE_HZ = 110; // A2 — root vibration at speed 1.0
@@ -216,7 +226,25 @@ const CherubimNode: React.FC<{
             downRef.current.rotation.y = displayB;
         }
 
-        // 2. Wave Propagation & Infinite Triangle Alignment
+        // 3. Audio Reactivity & Wave Modulation
+        let audioAmplitude = 1.0;
+        if (controller.audioSync && sharedAnalyser && dataArray) {
+            sharedAnalyser.getByteFrequencyData(dataArray as any);
+            const avg = Array.from(dataArray).reduce((acc, val) => acc + val, 0) / dataArray.length;
+            audioAmplitude = (avg / 255); // 0.0 to 1.0
+            const s = 1 + audioAmplitude * 0.5;
+            if (upRef.current && downRef.current) {
+                upRef.current.scale.set(s, s, s);
+                downRef.current.scale.set(s, s, s);
+            }
+        } else {
+            if (upRef.current && downRef.current) {
+                upRef.current.scale.set(1, 1, 1);
+                downRef.current.scale.set(1, 1, 1);
+            }
+        }
+
+        // 2. Wave Propagation & Infinite Triangle Alignment (Moved after audio for sync)
         if (upRef.current && downRef.current) {
             const dist = position.length();
             const t = controller.waveTime * 2;
@@ -225,7 +253,8 @@ const CherubimNode: React.FC<{
 
             switch (controller.waveType) {
                 case 'NONE':
-                    wave = 0;
+                    // If audio sync is on but wave type is none, we can still do a "bounce"
+                    wave = controller.audioSync ? audioAmplitude : 0;
                     break;
                 case 'SINE':
                     wave = Math.sin(dist * k - t);
@@ -245,40 +274,25 @@ const CherubimNode: React.FC<{
                     break;
             }
 
-            const amplitude = 0.5;
+            const baseAmplitude = 0.5;
+            const finalAmplitude = controller.audioSync ? (baseAmplitude + audioAmplitude * 1.5) : baseAmplitude;
+
             const baseY = controller.infiniteTriangle ? 0.58 : 0;
             const baseX = controller.infiniteTriangle ? 0.58 : 0;
             const baseZ = controller.infiniteTriangle ? 0.29 : 0;
 
-            upRef.current.position.set(baseX, baseY + wave * amplitude, baseZ);
-            downRef.current.position.set(-baseX, -baseY - wave * amplitude, -baseZ);
+            upRef.current.position.set(baseX, baseY + wave * finalAmplitude, baseZ);
+            downRef.current.position.set(-baseX, -baseY - wave * finalAmplitude, -baseZ);
 
             if (controller.infiniteTriangle) {
-                // In infinite mode, the rotations are forced into the 4D-to-2D projection alignment
-                const snap = Math.PI / 6; // 30 deg
+                const snap = Math.PI / 6;
                 upRef.current.rotation.y = -snap;
                 downRef.current.rotation.y = snap;
-                upRef.current.rotation.x = 0.52; // ~30 deg tilt
+                upRef.current.rotation.x = 0.52;
                 downRef.current.rotation.x = -0.52;
             } else {
                 upRef.current.rotation.x = 0;
                 downRef.current.rotation.x = 0;
-            }
-        }
-
-        // 3. Audio Reactivity
-        if (controller.audioSync && sharedAnalyser && dataArray) {
-            sharedAnalyser.getByteFrequencyData(dataArray as any);
-            const avg = Array.from(dataArray).reduce((acc, val) => acc + val, 0) / dataArray.length;
-            const s = 1 + (avg / 255) * 0.5;
-            if (upRef.current && downRef.current) {
-                upRef.current.scale.set(s, s, s);
-                downRef.current.scale.set(s, s, s);
-            }
-        } else {
-            if (upRef.current && downRef.current) {
-                upRef.current.scale.set(1, 1, 1);
-                downRef.current.scale.set(1, 1, 1);
             }
         }
 
