@@ -209,6 +209,11 @@ const CherubimNode: React.FC<{
     const clippingPlane = useMemo(() => new THREE.Plane(new THREE.Vector3(0, 1, 0), controller.innerVision), [controller.innerVision]);
 
     useFrame((_state, _delta) => {
+        // 0. Update Frequency Data if syncing
+        if (controller.audioSync && sharedAnalyser && dataArray) {
+            sharedAnalyser.getByteFrequencyData(dataArray);
+        }
+
         // 1. Rotation with Split Mode
         if (controller.isPlaying && upRef.current && downRef.current) {
             const rawA = controller.phaseA;
@@ -226,57 +231,41 @@ const CherubimNode: React.FC<{
             downRef.current.rotation.y = displayB;
         }
 
-        // 3. Audio Reactivity & Wave Modulation
-        let audioAmplitude = 1.0;
-        if (controller.audioSync && sharedAnalyser && dataArray) {
-            sharedAnalyser.getByteFrequencyData(dataArray as any);
-            const avg = Array.from(dataArray).reduce((acc, val) => acc + val, 0) / dataArray.length;
-            audioAmplitude = (avg / 255); // 0.0 to 1.0
-            const s = 1 + audioAmplitude * 0.5;
-            if (upRef.current && downRef.current) {
-                upRef.current.scale.set(s, s, s);
-                downRef.current.scale.set(s, s, s);
-            }
-        } else {
-            if (upRef.current && downRef.current) {
-                upRef.current.scale.set(1, 1, 1);
-                downRef.current.scale.set(1, 1, 1);
-            }
+        // 2. Wave Propagation & Infinite Triangle Alignment
+        const dist = position.length();
+        const t = controller.waveTime * 2;
+        const k = 0.5;
+        let wave = 0;
+
+        switch (controller.waveType) {
+            case 'NONE': wave = 0; break;
+            case 'SINE': wave = Math.sin(dist * k - t); break;
+            case 'SAWTOOTH': wave = (((controller.phaseA * 0.5 + dist * k) / (Math.PI * 2)) % 1) * 2 - 1; break;
+            case 'SQUARE': wave = Math.sign(Math.sin(dist * k - t)); break;
+            case 'FRACTAL':
+                wave = Math.sin(dist * k - t) * 1.0 +
+                    Math.sin(dist * k * 3 - t * 1.5) * 0.33 +
+                    Math.sin(dist * k * 7 - t * 2.1) * 0.14 +
+                    Math.sin(dist * k * 21 - t * 3.3) * 0.05;
+                wave /= 1.52;
+                break;
         }
 
-        // 2. Wave Propagation & Infinite Triangle Alignment (Moved after audio for sync)
+        // 3. Audio Spatial Reactivity
+        let audioWave = 0;
+        if (controller.audioSync && sharedAnalyser && dataArray) {
+            // Map distance to FFT bin
+            const binIndex = Math.floor(Math.min(dist * 4, dataArray.length - 1));
+            const frequencyValue = dataArray[binIndex] / 255;
+            audioWave = frequencyValue;
+        }
+
+        const baseAmplitude = 0.5;
+        const finalAmplitude = controller.audioSync
+            ? (baseAmplitude + audioWave * 2.0)
+            : baseAmplitude;
+
         if (upRef.current && downRef.current) {
-            const dist = position.length();
-            const t = controller.waveTime * 2;
-            const k = 0.5;
-            let wave = 0;
-
-            switch (controller.waveType) {
-                case 'NONE':
-                    // If audio sync is on but wave type is none, we can still do a "bounce"
-                    wave = controller.audioSync ? audioAmplitude : 0;
-                    break;
-                case 'SINE':
-                    wave = Math.sin(dist * k - t);
-                    break;
-                case 'SAWTOOTH':
-                    wave = (((controller.phaseA * 0.5 + dist * k) / (Math.PI * 2)) % 1) * 2 - 1;
-                    break;
-                case 'SQUARE':
-                    wave = Math.sign(Math.sin(dist * k - t));
-                    break;
-                case 'FRACTAL':
-                    wave = Math.sin(dist * k - t) * 1.0 +
-                        Math.sin(dist * k * 3 - t * 1.5) * 0.33 +
-                        Math.sin(dist * k * 7 - t * 2.1) * 0.14 +
-                        Math.sin(dist * k * 21 - t * 3.3) * 0.05;
-                    wave /= 1.52;
-                    break;
-            }
-
-            const baseAmplitude = 0.5;
-            const finalAmplitude = controller.audioSync ? (baseAmplitude + audioAmplitude * 1.5) : baseAmplitude;
-
             const baseY = controller.infiniteTriangle ? 0.58 : 0;
             const baseX = controller.infiniteTriangle ? 0.58 : 0;
             const baseZ = controller.infiniteTriangle ? 0.29 : 0;

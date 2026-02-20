@@ -562,11 +562,29 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         boxShadow: '0 10px 40px rgba(0,0,0,0.4)', overflow: 'hidden'
                     }}
                 >
+                    {/* Sacred Geometry Backdrop */}
+                    <div style={{
+                        position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+                        opacity: 0.04, pointerEvents: 'none', width: '250px', height: '250px', zIndex: 0
+                    }}>
+                        <svg viewBox="0 0 100 100" width="100%" height="100%" stroke="#d4af37" fill="none">
+                            <circle cx="50" cy="50" r="45" strokeWidth="0.5" />
+                            <circle cx="50" cy="50" r="15" strokeWidth="0.5" />
+                            {[0, 60, 120, 180, 240, 300].map(angle => {
+                                const rad = angle * Math.PI / 180;
+                                return <circle key={angle} cx={50 + 15 * Math.cos(rad)} cy={50 + 15 * Math.sin(rad)} r="15" strokeWidth="0.5" />;
+                            })}
+                            <path d="M50 5 L93.3 30 L93.3 70 L50 95 L6.7 70 L6.7 30 Z" strokeWidth="0.5" />
+                            <path d="M50 5 L50 95 M6.7 30 L93.3 70 M93.3 30 L6.7 70" strokeWidth="0.5" />
+                        </svg>
+                    </div>
+
                     <div className="drag-handle" style={{
                         padding: '10px', background: 'rgba(212, 175, 55, 0.1)', borderBottom: '1px solid #d4af37',
-                        cursor: 'grab', display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+                        cursor: 'grab', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                        position: 'relative', zIndex: 1
                     }}>
-                        <span style={{ fontSize: '0.7rem', color: '#d4af37', fontWeight: 'bold', marginLeft: '10px' }}>INTRODUCTORY PIMPING</span>
+                        <span style={{ fontSize: '1.2rem', color: '#d4af37', fontWeight: 'bold', marginLeft: '10px' }}>𒀭  sonor - 𓋹 𒀭</span>
                         <button
                             onClick={() => setIntroOpen(false)}
                             style={{
@@ -575,11 +593,11 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                             }}
                         >✕</button>
                     </div>
-                    <div style={{ padding: '20px' }}>
+                    <div style={{ padding: '20px', position: 'relative', zIndex: 1 }}>
                         <div style={{ margin: '10px 0' }}>
                             <audio ref={audioRef} controls autoPlay style={{ width: '100%', height: '35px' }}>
                                 <source src="/INTRODUCTORY%20PIMPING.wav" type="audio/wav" />
-                                Your browser does not support the audio element.
+                                𒀭
                             </audio>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}>
@@ -587,19 +605,19 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                                 href="/INTRODUCTORY%20PIMPING.wav"
                                 download="INTRODUCTORY PIMPING.wav"
                                 style={{
-                                    color: '#d4af37', textDecoration: 'none', fontSize: '0.75rem',
-                                    border: '1px solid rgba(212,175,55,0.3)', padding: '5px 15px',
+                                    color: '#d4af37', textDecoration: 'none', fontSize: '1rem',
+                                    border: '1px solid rgba(212,175,55,0.3)', padding: '5px 25px',
                                     borderRadius: '20px', transition: 'all 0.3s ease',
                                     backgroundColor: 'rgba(212,175,55,0.05)', display: 'flex',
-                                    alignItems: 'center', gap: '5px'
+                                    alignItems: 'center', gap: '10px'
                                 }}
                                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(212,175,55,0.15)'}
                                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(212,175,55,0.05)'}
                             >
-                                <span style={{ fontSize: '1rem' }}>⤓</span> DOWNLOAD THE SONIC KEY
+                                <span style={{ fontSize: '1.5rem' }}>𓍲</span> 𓏽 ⤓ 𓏽
                             </a>
                         </div>
-                        <p style={{ color: '#1a1a1a', fontStyle: 'italic', fontSize: '0.8rem', margin: '10px 0 0 0', opacity: 0.6 }}>The Vision in Sound</p>
+                        <p style={{ color: '#1a1a1a', fontSize: '1rem', margin: '15px 0 0 0', opacity: 0.8, letterSpacing: '4px' }}>𒀭 𓋹 𒀭 𓍲 𒀭</p>
                     </div>
                 </DraggablePanel>
             )}
