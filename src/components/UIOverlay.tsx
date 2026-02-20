@@ -5,6 +5,7 @@ import { connectAudioSource, getAudioCtx } from '../views/geometries/Metatron';
 import { getHymn, getNumericScripture } from '../data/scripture';
 import { LANG_NAMES, UI_STRINGS } from '../data/translations';
 import { SecretEntry } from './SecretEntry';
+import { v12Solver } from '../models/V12CurvatureSolver';
 
 const NollCubeContent = ({ language, isRTL }: { language: any, isRTL: boolean }) => {
     const text = getNollCubeText(language);
@@ -521,8 +522,8 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         /* ENCRYPTION LAB TAB */
                         <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
                             <div style={{ marginBottom: '5px', fontSize: '0.75rem', color: '#555' }}>
-                                <span style={{ fontWeight: 'bold', color: '#d4af37' }}>Super Simple Guide:</span>{' '}
-                                1) Put in a file or sentence. 2) Tap an ENCRYPT button. 3) Tap DECRYPT to get it back.
+                                <span style={{ fontWeight: 'bold', color: '#d4af37' }}>How this lab works:</span>{' '}
+                                1) Choose a file or type some text. 2) Press ENCRYPT to transform it. 3) Press DECRYPT to recover what you put in.
                             </div>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                                 {/* Left Side: Controls */}
@@ -601,6 +602,20 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                                     </div>
 
                                     <button
+                                        onClick={async () => {
+                                            const N = BigInt(controller.labN || "62615533");
+                                            console.log(`[V12] Attempting factorization of N = ${N}...`);
+                                            const result = await v12Solver.factorViaCurvature(N);
+                                            if (result) {
+                                                alert(`[V12] FACTORIZATION SUCCESS:\nP = ${result.p}\nQ = ${result.q}\nN = ${result.p * result.q}\n\nFactors will be displayed when RSA tool is active.`);
+                                            } else {
+                                                alert(`[V12] FACTORIZATION FAILED. N may be prime or too large for curvature method.\n\nTry:\n- Smaller N (< 10^8)\n- Known composite numbers\n- Enable RSA tool and use DECRYPT button`);
+                                            }
+                                        }}
+                                        style={{ marginTop: '10px', padding: '8px', background: '#d4af37', border: '1px solid #d4af37', color: '#000', cursor: 'pointer', fontSize: '0.7rem', fontWeight: 'bold' }}
+                                    >⚡ V12_CURVATURE_FACTORIZE</button>
+
+                                    <button
                                         onClick={() => {
                                             controller.setLabBuffer(null);
                                             controller.setProcessedBuffer(null);
@@ -610,7 +625,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                                     >𓎂_CLEAR_V12_LAB</button>
 
                                     <div style={{ fontSize: '0.6rem', color: '#888', fontStyle: 'italic', marginTop: '5px' }}>
-                                        * DECRYPTION REQUIRES RSA_POLE ALIGNMENT (LATTICE GAP &lt; 0.001)
+                                        * V12 CURVATURE METHOD: Uses S(σ,t) = Re(ζ''/ζ - (ζ'/ζ)²) pole structure
                                     </div>
                                 </div>
 
