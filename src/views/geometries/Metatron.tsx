@@ -13,6 +13,7 @@ interface Props {
 let sharedAudioCtx: AudioContext | null = null;
 let sharedAnalyser: AnalyserNode | null = null;
 let dataArray: Uint8Array | null = null;
+let timeDataArray: Uint8Array | null = null;
 
 export const getAudioCtx = (): AudioContext => {
     if (!sharedAudioCtx) sharedAudioCtx = new AudioContext();
@@ -27,6 +28,7 @@ export const getAnalyser = (): AnalyserNode => {
         sharedAnalyser.fftSize = 256;
         const bufferLength = sharedAnalyser.frequencyBinCount;
         dataArray = new Uint8Array(bufferLength);
+        timeDataArray = new Uint8Array(bufferLength);
     }
     return sharedAnalyser;
 };
@@ -210,8 +212,9 @@ const CherubimNode: React.FC<{
 
     useFrame((_state, _delta) => {
         // 0. Update Frequency Data if syncing
-        if (controller.audioSync && sharedAnalyser && dataArray) {
+        if (controller.audioSync && sharedAnalyser && dataArray && timeDataArray) {
             sharedAnalyser.getByteFrequencyData(dataArray as any);
+            sharedAnalyser.getByteTimeDomainData(timeDataArray as any);
         }
 
         // 1. Rotation with Split Mode
@@ -251,18 +254,24 @@ const CherubimNode: React.FC<{
                 break;
         }
 
-        // 3. Audio Spatial Reactivity (Incorporating Rotation)
+        // 3. Audio Spatial Reactivity (Incorporating Rotation & Time Domain)
         let audioWave = 0;
-        if (controller.audioSync && sharedAnalyser && dataArray) {
+        let audioJitter = 0;
+        if (controller.audioSync && sharedAnalyser && dataArray && timeDataArray) {
             // Map distance and rotation phase to FFT bin for "spinning" waves
             const rotationOffset = controller.phaseA * 20;
             const binIndex = Math.floor(Math.min((dist * 4 + rotationOffset) % dataArray.length, dataArray.length - 1));
             audioWave = dataArray[binIndex] / 255;
+
+            // Raw time domain "sound pressure" jitter
+            const timeIndex = Math.floor(Math.min(dist * 8, timeDataArray.length - 1));
+            // Center time data around 0 (normally 128 is center for 8-bit)
+            audioJitter = (timeDataArray[timeIndex] - 128) / 128;
         }
 
         const baseAmplitude = 0.5;
-        // The wave mode (SINE etc) plus the audio ripple
-        const totalWave = wave + (controller.audioSync ? audioWave * 2.5 : 0);
+        // The wave mode (SINE etc) plus the audio ripple plus raw jitter
+        const totalWave = wave + (controller.audioSync ? (audioWave * 2.5 + audioJitter * 0.4) : 0);
         const finalDisplacement = totalWave * baseAmplitude;
 
         if (upRef.current && downRef.current) {

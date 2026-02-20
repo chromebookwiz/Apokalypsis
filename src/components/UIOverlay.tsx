@@ -4,6 +4,7 @@ import { getRevelation, getNollCubeText } from '../data/revelation';
 import { connectAudioSource, getAudioCtx } from '../views/geometries/Metatron';
 import { getHymn, getNumericScripture } from '../data/scripture';
 import { LANG_NAMES, UI_STRINGS } from '../data/translations';
+import { SecretEntry } from './SecretEntry';
 
 const NollCubeContent = ({ language, isRTL }: { language: any, isRTL: boolean }) => {
     const text = getNollCubeText(language);
@@ -128,25 +129,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
 
     const handleCenterCrossClick = () => {
         if (isSecretAngle) {
-            // ... (Secret Link Logic) ...
-            const d = [3433, 3482, 3497, 3353, 8130, 6672, 3538, 3513, 3461, 3515, 8027, 2467, 7133, 2162, 7043, 6970, 7073, 7038, 3508, 3389, 8106, 3313, 3514, 3564, 8149, 8126, 8068, 7969, 8164, 3295, 6988, 3542, 7170, 7046, 6935, 7090, 2386, 6774, 8037, 8148, 8162, 8131, 3527, 3433, 2333, 3294, 3570, 3528, 3410, 6955, 7051, 7121, 7167, 2101, 2549, 2349, 7056, 7000, 3583, 3406, 8189, 3307, 3540, 3560, 3349, 3535, 8052, 7999, 7095, 2103, 3563, 6965, 7158];
-            const k = [
-                [110, 101, 116, 97, 110, 111, 108, 32, 45, 32, 4552, 4755, 4723, 4755, 4635, 4701],
-                [78, 101, 116, 97, 110, 111, 108, 108, 32, 45, 32, 5838, 5794, 5862, 5794, 5833, 5845, 5814, 5814],
-                [49, 50, 51, 52],
-                [1502, 1512, 1499, 1489, 1492],
-                [952, 1009, 972, 957, 959, 962],
-                [2357, 2367, 2350, 2366, 2344],
-                [4840, 4656, 4635, 4701, 4845, 32, 4528, 4653, 4635, 4701],
-                [5833, 5845, 5814, 5811, 5860, 45, 5814, 5794, 5811, 5811, 5814, 5838, 5822],
-                [1575, 1604, 1608, 1581, 1610]
-            ];
-            const link = d.map((c, i) => {
-                let x = c - 13; // Un-salt
-                k.forEach(p => { x ^= p[i % p.length]; });
-                return String.fromCharCode(x);
-            }).join('');
-            window.open(link, "_blank");
+            controller.setSecretEntryOpen(true);
         } else {
             controller.resetCameraView();
         }
@@ -692,6 +675,11 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     <NollCubeContent language={controller.language} isRTL={isRTL} />
                 </div>
             </div>
+
+            {/* SECRET ENTRY PANEL */}
+            {controller.secretEntryOpen && (
+                <SecretEntry onClose={() => controller.setSecretEntryOpen(false)} controller={controller} />
+            )}
 
         </div >
     );

@@ -124,6 +124,12 @@ export const useSceneController = () => {
     const [uiVisible, setUiVisible] = useState(false);
     const [theoryUnlocked, setTheoryUnlocked] = useState(false);
     const [theoryOpen, setTheoryOpen] = useState(false);
+    const [secretEntryOpen, setSecretEntryOpen] = useState(false);
+    const [resonance, setResonance] = useState(0);
+    const [latticeAlignment, setLatticeAlignment] = useState(0);
+    const [primePole, setPrimePole] = useState(0);
+    const [sacredFlux, setSacredFlux] = useState<string[]>([]);
+    const [activeSigil, setActiveSigil] = useState("");
 
     // Speech Ref - Removed
     // const synthesis = window.speechSynthesis;
@@ -248,8 +254,46 @@ export const useSceneController = () => {
                     setPhaseB(prev => prev + baseSpeed);
                 }
 
-                setWaveTime(prev => prev + delta * rotationSpeed);
                 setHyperPhase(prev => prev + 0.002 * rotationSpeed);
+
+                // Advanced v11 resonance logic
+                // 1. RSA Prime Pole Discovery: sign(S) = sign(-cos(2*theta))
+                // theta is our current rotation (Phase A)
+                const s_theta = -Math.cos(2 * phaseA);
+                setPrimePole(s_theta);
+
+                // 2. Lattice SVP Alignment: Max resonance at specific 4D rotations
+                // We simulate a 4D rotation 'W' component
+                const latticeRes = Math.max(0, 1 - Math.abs(Math.sin(phaseA * 2) * Math.cos(phaseB * 3)));
+                setLatticeAlignment(latticeRes * 100);
+
+                // 3. Final Harmonic Sync
+                const targetRes = (s_theta > 0.8 ? 50 : 0) + (latticeRes > 0.95 ? 50 : 0);
+                setResonance(prev => prev * 0.9 + targetRes * 0.1);
+
+                // 4. Ultimate Sacred Generator [Symbolic Mapping]
+                // Map Phase A/B to ranges of sacred Unicode scripts
+                const ranges = [
+                    [0x10900, 0x1091F], // Phoenician
+                    [0x12000, 0x1236F], // Cuneiform
+                    [0x13000, 0x1342F], // Hieroglyphs
+                    [0x0800, 0x083F]    // Samaritan
+                ];
+
+                const flux: string[] = [];
+                for (let i = 0; i < 9; i++) {
+                    const range = ranges[i % ranges.length];
+                    const seed = Math.abs(phaseA * (i + 1) + phaseB * 1.5);
+                    const code = range[0] + (Math.floor(seed * 100) % (range[1] - range[0]));
+                    flux.push(String.fromCodePoint(code));
+                }
+                setSacredFlux(flux);
+
+                // Derived Sigil from Hyperphase + View Angle
+                const sigilRange = [0x2600, 0x267F]; // Misc Symbols
+                const sigilSeed = Math.abs(hyperPhase + viewAngle + azimuthAngle);
+                const sigilCode = sigilRange[0] + (Math.floor(sigilSeed * 10) % (sigilRange[1] - sigilRange[0]));
+                setActiveSigil(String.fromCodePoint(sigilCode));
             }
             frameId = requestAnimationFrame(animate);
         };
@@ -361,6 +405,14 @@ export const useSceneController = () => {
         setTheoryUnlocked,
         theoryOpen,
         setTheoryOpen,
+        secretEntryOpen,
+        setSecretEntryOpen,
+        resonance,
+        setResonance,
+        latticeAlignment,
+        primePole,
+        sacredFlux,
+        activeSigil,
 
         // Actions
         toggleGeometry,
