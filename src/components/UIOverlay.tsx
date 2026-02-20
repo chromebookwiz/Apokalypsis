@@ -140,7 +140,7 @@ const DivineCorners: React.FC = () => {
                 <circle cx="0" cy="0" r="60" fill="none" stroke="currentColor" strokeWidth="0.3" />
                 <circle cx="0" cy="0" r="75" fill="none" stroke="currentColor" strokeWidth="0.2" />
                 <circle cx="0" cy="0" r="90" fill="none" stroke="currentColor" strokeWidth="0.2" />
-                
+
                 {/* Radial lines: 24 meridians (representing 2T group) */}
                 {Array.from({ length: 24 }).map((_, i) => {
                     const angle = (i * 360) / 24;
@@ -158,7 +158,7 @@ const DivineCorners: React.FC = () => {
                         />
                     );
                 })}
-                
+
                 {/* Parallel circles: 12 parallels (representing A4 group) */}
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => {
                     const radius = (i * 15);
@@ -175,7 +175,7 @@ const DivineCorners: React.FC = () => {
                         />
                     );
                 })}
-                
+
                 {/* Sacred intersection points (288 cells = 24×12) */}
                 {Array.from({ length: 12 }).map((_, j) => {
                     const radius = (j + 1) * 15;
@@ -196,7 +196,7 @@ const DivineCorners: React.FC = () => {
                         );
                     });
                 })}
-                
+
                 {/* Corner quadrant lines */}
                 <line x1="0" y1="0" x2="200" y2="0" stroke="currentColor" strokeWidth="0.3" />
                 <line x1="0" y1="0" x2="0" y2="200" stroke="currentColor" strokeWidth="0.3" />
@@ -959,24 +959,6 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 {renderClickableAngle(`${Math.abs(controller.viewAngle).toFixed(2)}°${controller.viewAngle > 0 ? 'N' : 'S'}`)}
                 <div>{renderClickableAngle(`${Math.abs(controller.azimuthAngle).toFixed(2)}°${controller.azimuthAngle > 0 ? 'E' : 'W'}`)}</div>
             </div>
-
-            {/* SECRET THEORY UNLOCK BUTTON */}
-            {controller.theoryUnlocked && (
-                <button
-                    onClick={() => controller.setTheoryOpen(true)}
-                    style={{
-                        position: 'fixed', left: 'clamp(10px, 4vw, 40px)', top: '50%', transform: 'translateY(-110%)',
-                        background: 'none', border: '1px solid rgba(212, 175, 55, 0.4)', borderRadius: '50%',
-                        width: '48px', height: '48px', cursor: 'pointer', color: '#d4af37',
-                        fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        animation: 'fadeIn 1s ease', pointerEvents: 'auto', zIndex: 900,
-                        boxShadow: '0 0 15px rgba(212, 175, 55, 0.2)',
-                        transition: 'all 0.3s ease'
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 25px rgba(212, 175, 55, 0.5)'; e.currentTarget.style.borderColor = '#d4af37'; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 15px rgba(212, 175, 55, 0.2)'; e.currentTarget.style.borderColor = 'rgba(212, 175, 55, 0.4)'; }}
-                >Ω</button>
-            )}
 
             {/* INTRO PIMPING BUTTON */}
             {introUnlocked && (
