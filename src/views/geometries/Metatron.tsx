@@ -251,27 +251,27 @@ const CherubimNode: React.FC<{
                 break;
         }
 
-        // 3. Audio Spatial Reactivity
+        // 3. Audio Spatial Reactivity (Incorporating Rotation)
         let audioWave = 0;
         if (controller.audioSync && sharedAnalyser && dataArray) {
-            // Map distance to FFT bin
-            const binIndex = Math.floor(Math.min(dist * 4, dataArray.length - 1));
-            const frequencyValue = dataArray[binIndex] / 255;
-            audioWave = frequencyValue;
+            // Map distance and rotation phase to FFT bin for "spinning" waves
+            const rotationOffset = controller.phaseA * 20;
+            const binIndex = Math.floor(Math.min((dist * 4 + rotationOffset) % dataArray.length, dataArray.length - 1));
+            audioWave = dataArray[binIndex] / 255;
         }
 
         const baseAmplitude = 0.5;
-        const finalAmplitude = controller.audioSync
-            ? (baseAmplitude + audioWave * 2.0)
-            : baseAmplitude;
+        // The wave mode (SINE etc) plus the audio ripple
+        const totalWave = wave + (controller.audioSync ? audioWave * 2.5 : 0);
+        const finalDisplacement = totalWave * baseAmplitude;
 
         if (upRef.current && downRef.current) {
             const baseY = controller.infiniteTriangle ? 0.58 : 0;
             const baseX = controller.infiniteTriangle ? 0.58 : 0;
             const baseZ = controller.infiniteTriangle ? 0.29 : 0;
 
-            upRef.current.position.set(baseX, baseY + wave * finalAmplitude, baseZ);
-            downRef.current.position.set(-baseX, -baseY - wave * finalAmplitude, -baseZ);
+            upRef.current.position.set(baseX, baseY + finalDisplacement, baseZ);
+            downRef.current.position.set(-baseX, -baseY - finalDisplacement, -baseZ);
 
             if (controller.infiniteTriangle) {
                 const snap = Math.PI / 6;
