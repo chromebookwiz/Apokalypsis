@@ -154,11 +154,17 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
     // ... (rest of setup) ...
     const [showInfo, setShowInfo] = React.useState(false);
     const [secretFlash, setSecretFlash] = useState(false);
+    const [introUnlocked, setIntroUnlocked] = useState(false);
+    const [introOpen, setIntroOpen] = useState(false);
 
-    // Secret 6 click handler for degrees display
+    // Secret digit click handler
     const handleDigitClick = (char: string) => {
         if (char === '6' && !controller.theoryUnlocked) {
             controller.setTheoryUnlocked(true);
+            setSecretFlash(true);
+            setTimeout(() => setSecretFlash(false), 600);
+        } else if (char === '3' && !introUnlocked) {
+            setIntroUnlocked(true);
             setSecretFlash(true);
             setTimeout(() => setSecretFlash(false), 600);
         }
@@ -166,19 +172,24 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
 
     // Render angle text with clickable digits
     const renderClickableAngle = (text: string) => {
-        return text.split('').map((char, i) => (
-            <span
-                key={i}
-                onClick={char === '6' ? () => handleDigitClick(char) : undefined}
-                style={{
-                    cursor: char === '6' ? 'pointer' : 'default',
-                    transition: 'all 0.3s ease',
-                    ...(char === '6' && secretFlash ? { color: '#fff', textShadow: '0 0 20px #ffd700, 0 0 40px #ffd700' } : {})
-                }}
-            >
-                {char}
-            </span>
-        ));
+        return text.split('').map((char, i) => {
+            const isClickable = char === '6' || char === '3';
+            return (
+                <span
+                    key={i}
+                    onClick={isClickable ? () => handleDigitClick(char) : undefined}
+                    style={{
+                        cursor: isClickable ? 'pointer' : 'default',
+                        transition: 'all 0.3s ease',
+                        padding: isClickable ? '5px 2px' : '0', // Mobile touch target
+                        margin: isClickable ? '0 -2px' : '0',
+                        ...(isClickable && secretFlash ? { color: '#fff', textShadow: '0 0 20px #ffd700, 0 0 40px #ffd700' } : {})
+                    }}
+                >
+                    {char}
+                </span>
+            );
+        });
     };
 
     // Parse Revelation Text
@@ -492,7 +503,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 <button
                     onClick={() => controller.setTheoryOpen(true)}
                     style={{
-                        position: 'fixed', left: 'clamp(10px, 4vw, 40px)', top: '50%', transform: 'translateY(-50%)',
+                        position: 'fixed', left: 'clamp(10px, 4vw, 40px)', top: '50%', transform: 'translateY(-110%)',
                         background: 'none', border: '1px solid rgba(212, 175, 55, 0.4)', borderRadius: '50%',
                         width: '48px', height: '48px', cursor: 'pointer', color: '#d4af37',
                         fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -503,6 +514,55 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 25px rgba(212, 175, 55, 0.5)'; e.currentTarget.style.borderColor = '#d4af37'; }}
                     onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 15px rgba(212, 175, 55, 0.2)'; e.currentTarget.style.borderColor = 'rgba(212, 175, 55, 0.4)'; }}
                 >Ω</button>
+            )}
+
+            {/* INTRO PIMPING BUTTON */}
+            {introUnlocked && (
+                <button
+                    onClick={() => setIntroOpen(true)}
+                    style={{
+                        position: 'fixed', left: 'clamp(10px, 4vw, 40px)', top: '50%', transform: 'translateY(10%)',
+                        background: 'none', border: '1px solid rgba(212, 175, 55, 0.4)', borderRadius: '50%',
+                        width: '48px', height: '48px', cursor: 'pointer', color: '#d4af37',
+                        fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        animation: 'fadeIn 1s ease', pointerEvents: 'auto', zIndex: 900,
+                        boxShadow: '0 0 15px rgba(212, 175, 55, 0.2)',
+                        transition: 'all 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 25px rgba(212, 175, 55, 0.5)'; e.currentTarget.style.borderColor = '#d4af37'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 15px rgba(212, 175, 55, 0.2)'; e.currentTarget.style.borderColor = 'rgba(212, 175, 55, 0.4)'; }}
+                >♫</button>
+            )}
+
+            {/* INTRO POPUP */}
+            {introOpen && (
+                <div style={{
+                    position: 'fixed', inset: 0, zIndex: 20002, background: 'rgba(0, 0, 0, 0.95)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto',
+                    animation: 'fadeIn 0.5s ease'
+                }}>
+                    <div style={{
+                        width: '90%', maxWidth: '500px', background: '#fdfbf7', border: '2px solid #d4af37',
+                        borderRadius: '15px', padding: '30px', textAlign: 'center', position: 'relative'
+                    }}>
+                        <button
+                            onClick={() => setIntroOpen(false)}
+                            style={{
+                                position: 'absolute', top: '15px', right: '15px', background: 'none',
+                                border: '1px solid #d4af37', borderRadius: '50%', width: '30px', height: '30px',
+                                color: '#d4af37', cursor: 'pointer'
+                            }}
+                        >✕</button>
+                        <h2 style={{ color: '#d4af37', marginBottom: '20px', textTransform: 'uppercase' }}>Introductory Pimping</h2>
+                        <div style={{ margin: '30px 0' }}>
+                            <audio controls autoPlay style={{ width: '100%' }}>
+                                <source src="/INTRODUCTORY%20PIMPING.wav" type="audio/wav" />
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+                        <p style={{ color: '#1a1a1a', fontStyle: 'italic', fontSize: '0.9rem' }}>The Vision in Sound</p>
+                    </div>
+                </div>
             )}
 
             {/* THEORY ARTICLE OVERLAY */}
