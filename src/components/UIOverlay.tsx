@@ -960,6 +960,24 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 <div>{renderClickableAngle(`${Math.abs(controller.azimuthAngle).toFixed(2)}°${controller.azimuthAngle > 0 ? 'E' : 'W'}`)}</div>
             </div>
 
+            {/* SECRET THEORY UNLOCK BUTTON */}
+            {controller.theoryUnlocked && (
+                <button
+                    onClick={() => controller.setTheoryOpen(true)}
+                    style={{
+                        position: 'fixed', left: 'clamp(10px, 4vw, 40px)', top: '50%', transform: 'translateY(-110%)',
+                        background: 'none', border: '1px solid rgba(212, 175, 55, 0.4)', borderRadius: '50%',
+                        width: '48px', height: '48px', cursor: 'pointer', color: '#d4af37',
+                        fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        animation: 'fadeIn 1s ease', pointerEvents: 'auto', zIndex: 900,
+                        boxShadow: '0 0 15px rgba(212, 175, 55, 0.2)',
+                        transition: 'all 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 25px rgba(212, 175, 55, 0.5)'; e.currentTarget.style.borderColor = '#d4af37'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 15px rgba(212, 175, 55, 0.2)'; e.currentTarget.style.borderColor = 'rgba(212, 175, 55, 0.4)'; }}
+                >Ω</button>
+            )}
+
             {/* INTRO PIMPING BUTTON */}
             {introUnlocked && (
                 <button
@@ -1117,19 +1135,6 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 }}>
                     <NollCubeContent language={controller.language} isRTL={isRTL} />
                 </div>
-            </div>
-
-            {/* BOTTOM NAVIGATION SECTION - Simplified without center cross */}
-            <div className="bottom-center" style={{ position: 'fixed', bottom: '20px', left: '50%', transform: 'translateX(-50%)', zIndex: 1100, display: 'flex', gap: '20px', alignItems: 'center', pointerEvents: 'auto' }}>
-                <button
-                    className="sacred-btn"
-                    onClick={() => controller.setLibraryOpen(!controller.libraryOpen)}
-                    style={{
-                        fontSize: '1.8rem', background: 'none', border: 'none', visibility: controller.uiVisible ? 'visible' : 'hidden',
-                        color: controller.libraryOpen ? '#d4af37' : 'rgba(212, 175, 55, 0.4)', cursor: 'pointer',
-                        filter: controller.libraryOpen ? 'drop-shadow(0 0 10px #d4af37)' : 'none', transition: 'all 0.3s ease'
-                    }}
-                >𓉙</button>
             </div>
 
             {/* THEORY PAPER BUTTON - Invisible in top-right corner (hidden link to paper) */}
