@@ -520,6 +520,10 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     ) : (
                         /* ENCRYPTION LAB TAB */
                         <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                            <div style={{ marginBottom: '5px', fontSize: '0.75rem', color: '#555' }}>
+                                <span style={{ fontWeight: 'bold', color: '#d4af37' }}>Super Simple Guide:</span>{' '}
+                                1) Put in a file or sentence. 2) Tap an ENCRYPT button. 3) Tap DECRYPT to get it back.
+                            </div>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                                 {/* Left Side: Controls */}
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -1061,16 +1065,18 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     width: isSecretAngle ? '100px' : '80px',
                     height: isSecretAngle ? '100px' : '80px',
                     borderRadius: '50%',
-                    border: '2px solid' + (isSecretAngle ? '#fff' : '#d4af37'),
-                    background: 'rgba(0,0,0,0.8)',
+                    border: `2px solid ${isSecretAngle ? '#ffffff' : '#d4af37'}`,
+                    background: 'rgba(253, 251, 247, 0.96)',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: isSecretAngle ? '#fff' : '#d4af37',
+                    color: isSecretAngle ? '#ffffff' : '#d4af37',
                     fontSize: isSecretAngle ? '2rem' : '1.5rem',
                     transition: 'all 0.3s ease',
-                    boxShadow: isSecretAngle ? '0 0 30px #d4af37, inset 0 0 20px #d4af37' : '0 0 10px rgba(0,0,0,0.5)',
+                    boxShadow: isSecretAngle
+                        ? '0 0 35px #d4af37, 0 0 60px rgba(212,175,55,0.9), inset 0 0 18px rgba(212,175,55,0.9)'
+                        : '0 0 14px rgba(0,0,0,0.35)',
                     animation: isSecretAngle ? 'pulse 2s infinite' : 'none'
                 }}>
                     {isSecretAngle ? '𓋹' : '†'}
