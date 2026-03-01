@@ -242,6 +242,8 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
     }>>([]);
     const [currentSong, setCurrentSong] = React.useState<string | null>(null);
     const [currentIndex, setCurrentIndex] = React.useState<number>(-1);
+    const [songsPanelOpen, setSongsPanelOpen] = React.useState(false);
+    const [showSongsButton, setShowSongsButton] = React.useState(false);
 
     // Audio Sync Effect for Intro
     React.useEffect(() => {
@@ -255,9 +257,9 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
         }
     }, [introOpen]);
 
-    // Load songs manifest (AI-friendly JSON in public/) when theory is unlocked
+    // Load songs manifest (AI-friendly JSON in public/) when hymns panel is opened
     React.useEffect(() => {
-        if (!controller.theoryUnlocked) return;
+        if (!songsPanelOpen) return;
         fetch('/ai-songs.json')
             .then(r => r.ok ? r.json() : Promise.reject('no-json'))
             .then((list: any[]) => {
@@ -283,47 +285,54 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 ].map(f => ({ title: f.replace(/\.wav$/i, ''), filename: f, url: '/' + encodeURIComponent(f) }));
                 setSongs(fallback);
             });
-    }, [controller.theoryUnlocked]);
+    }, [songsPanelOpen]);
 
-    // Autoplay first song when manifest loads and theory is unlocked
+    const playSong = async (s: any, index: number) => {
+        if (!s) return;
+        const url = s.url || ('/' + encodeURIComponent(s.filename));
+        setCurrentIndex(index);
+        setCurrentSong(url);
+        try {
+            const ctx = getAudioCtx();
+            await ctx.resume();
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current.src = url;
+                connectAudioSource(audioRef.current);
+                audioRef.current.currentTime = 0;
+                await audioRef.current.play();
+                controller.setAudioSync(true);
+                if (typeof s.rotationSpeed === 'number') controller.setRotationSpeed(s.rotationSpeed);
+                if (typeof s.frequencyA === 'number') controller.setFrequencyA(s.frequencyA);
+                if (typeof s.frequencyB === 'number') controller.setFrequencyB(s.frequencyB);
+                if (typeof s.toneScale === 'string') controller.setToneScale(s.toneScale as any);
+                if (typeof s.varied === 'boolean') controller.setVariedMode(s.varied);
+                controller.setToneEnabled(true);
+            }
+        } catch (e) { console.warn('playSong failed', e); }
+    };
+
+    // Autoplay first song when manifest loads and hymns panel is opened
     React.useEffect(() => {
-        if (!controller.theoryUnlocked) return;
+        if (!songsPanelOpen) return;
         if (songs.length === 0) return;
-        // start at first track if none selected
         if (currentIndex === -1) {
-            const s = songs[0];
-            setCurrentIndex(0);
-            const url = s.url || ('/' + encodeURIComponent(s.filename));
-            setCurrentSong(url);
-            (async () => {
-                try {
-                    const ctx = getAudioCtx();
-                    await ctx.resume();
-                    if (audioRef.current) {
-                        audioRef.current.pause();
-                        audioRef.current.src = url;
-                        connectAudioSource(audioRef.current);
-                        audioRef.current.currentTime = 0;
-                        await audioRef.current.play();
-                        controller.setAudioSync(true);
-                        if (typeof s.rotationSpeed === 'number') controller.setRotationSpeed(s.rotationSpeed);
-                        if (typeof s.frequencyA === 'number') controller.setFrequencyA(s.frequencyA);
-                        if (typeof s.frequencyB === 'number') controller.setFrequencyB(s.frequencyB);
-                        if (typeof s.toneScale === 'string') controller.setToneScale(s.toneScale as any);
-                        if (typeof s.varied === 'boolean') controller.setVariedMode(s.varied);
-                        controller.setToneEnabled(true);
-                    }
-                } catch (e) { /* ignore autoplay errors */ }
-            })();
+            playSong(songs[0], 0);
         }
-    }, [songs, controller.theoryUnlocked]);
+    }, [songs, songsPanelOpen]);
 
-    // Secret digit click handler
+    // Secret digit click handler (3 -> theory/paper/omega; 6 -> hymns/music)
     const handleDigitClick = (char: string) => {
-        if (char === '6' && !controller.theoryUnlocked) {
+        if (char === '3' && !controller.theoryUnlocked) {
             controller.setTheoryUnlocked(true);
             setSecretFlash(true);
             setTimeout(() => setSecretFlash(false), 600);
+        } else if (char === '6') {
+            // Toggle hymns panel and ensure music button visible
+            setSongsPanelOpen(prev => !prev);
+            setShowSongsButton(true);
+            setSecretFlash(true);
+            setTimeout(() => setSecretFlash(false), 400);
         } else if (char === '3' && !introUnlocked) {
             setIntroUnlocked(true);
             setSecretFlash(true);
@@ -1053,8 +1062,8 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 >Ω</button>
             )}
 
-            {/* Songs panel revealed by clicking the '6' digit (theoryUnlocked) */}
-            {controller.theoryUnlocked && (
+            {/* Songs/Hymns panel toggled by music button or '6' digit */}
+            {controller.uiVisible && songsPanelOpen && (
                 <DraggablePanel
                     initialStyle={{
                         position: 'fixed', left: '80px', top: '120px', zIndex: 20005,
@@ -1062,7 +1071,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         borderRadius: '12px', padding: '10px', pointerEvents: 'auto'
                     }}
                 >
-                    <div className="drag-handle" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div className="drag-handle" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
                         <strong style={{ color: '#d4af37' }}>Hidden Hymns</strong>
                         <button onClick={() => { setSongs([]); setCurrentSong(null); }} style={{ background: 'none', border: 'none', color: '#d4af37', cursor: 'pointer' }}>✕</button>
                     </div>
@@ -1076,14 +1085,10 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                                 style={{ width: '100%' }}
                                 src={currentSong || undefined}
                                 onEnded={() => {
-                                    // autoplay next track
                                     if (songs.length === 0) return;
                                     const next = (currentIndex + 1) % songs.length;
                                     const s = songs[next];
-                                    if (s) {
-                                        setCurrentIndex(next);
-                                        setCurrentSong(s.url || ('/' + encodeURIComponent(s.filename)));
-                                    }
+                                    if (s) playSong(s, next);
                                 }}
                             />
                         </div>
@@ -1095,34 +1100,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                                     <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', border: '1px solid rgba(212,175,55,0.12)', padding: '6px 8px', borderRadius: '8px' }}>
                                         <div style={{ flex: 1, textAlign: 'left', fontSize: '0.9rem', color: '#111' }}>{s.title}</div>
                                         <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-                                            <button onClick={() => {
-                                                const url = s.url || ('/' + encodeURIComponent(s.filename));
-                                                // set index so onEnded can advance
-                                                setCurrentIndex(i);
-                                                setCurrentSong(url);
-                                                (async () => {
-                                                    try {
-                                                        const ctx = getAudioCtx();
-                                                        await ctx.resume();
-                                                        if (audioRef.current) {
-                                                            audioRef.current.pause();
-                                                            audioRef.current.src = url;
-                                                            connectAudioSource(audioRef.current);
-                                                            audioRef.current.currentTime = 0;
-                                                            await audioRef.current.play();
-                                                            controller.setAudioSync(true);
-
-                                                            // Apply song-specific vibration/spin metadata to controller
-                                                            if (typeof s.rotationSpeed === 'number') controller.setRotationSpeed(s.rotationSpeed);
-                                                            if (typeof s.frequencyA === 'number') controller.setFrequencyA(s.frequencyA);
-                                                            if (typeof s.frequencyB === 'number') controller.setFrequencyB(s.frequencyB);
-                                                            if (typeof s.toneScale === 'string') controller.setToneScale(s.toneScale as any);
-                                                            if (typeof s.varied === 'boolean') controller.setVariedMode(s.varied);
-                                                            controller.setToneEnabled(true);
-                                                        }
-                                                    } catch (e) { /* ignore playback errors */ }
-                                                })();
-                                            }} style={{ background: 'none', border: '1px solid #d4af37', borderRadius: '6px', padding: '6px', cursor: 'pointer', color: '#d4af37' }}>▶</button>
+                                            <button onClick={() => playSong(s, i)} style={{ background: 'none', border: '1px solid #d4af37', borderRadius: '6px', padding: '6px', cursor: 'pointer', color: '#d4af37' }}>▶</button>
                                             <a href={s.url || ('/' + encodeURIComponent(s.filename))} download={s.filename} style={{ background: 'none', border: '1px solid rgba(212,175,55,0.2)', borderRadius: '6px', padding: '6px', textDecoration: 'none', color: '#d4af37', fontSize: '0.9rem' }}>⤓</a>
                                         </div>
                                     </div>
@@ -1131,6 +1109,21 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         </div>
                     </div>
                 </DraggablePanel>
+            )}
+
+            {/* MUSIC TOGGLE BUTTON (visible after pressing '6') */}
+            {controller.uiVisible && showSongsButton && (
+                <button
+                    onClick={() => setSongsPanelOpen(prev => !prev)}
+                    title={songsPanelOpen ? 'Hide Hymns' : 'Show Hymns'}
+                    style={{
+                        position: 'fixed', left: 'clamp(60px, 6vw, 80px)', top: '50%', transform: 'translateY(-20%)',
+                        background: 'none', border: '1px solid rgba(212, 175, 55, 0.4)', borderRadius: '50%',
+                        width: '44px', height: '44px', cursor: 'pointer', color: '#d4af37',
+                        fontSize: '1.3rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        pointerEvents: 'auto', zIndex: 900
+                    }}
+                >♪</button>
             )}
 
             {/* INTRO PIMPING BUTTON */}
