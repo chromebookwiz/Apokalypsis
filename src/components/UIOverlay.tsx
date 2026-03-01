@@ -264,51 +264,54 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
         let isMounted = true;
         
         // Defer loading to allow initial render to complete
-        const loadTimer = setTimeout(() => {
-            fetch('/ai-songs.json', { cache: 'default' })
-                .then(r => r.ok ? r.json() : Promise.reject('no-json'))
-                .then((list: any[]) => {
-                    if (!isMounted) return;
-                    const items = list.map(i => ({
-                        title: i.title,
-                        filename: i.filename,
-                        url: '/' + encodeURIComponent(i.filename),
-                        rotationSpeed: typeof i.rotationSpeed === 'number' ? i.rotationSpeed : undefined,
-                        frequencyA: typeof i.frequencyA === 'number' ? i.frequencyA : undefined,
-                        frequencyB: typeof i.frequencyB === 'number' ? i.frequencyB : undefined,
-                        toneScale: typeof i.toneScale === 'string' ? i.toneScale : undefined,
-                        varied: typeof i.varied === 'boolean' ? i.varied : undefined,
-                        blobUrl: undefined
-                    }));
-                    setSongs(items);
-                    // Prefetch first track in background
-                    if (items.length) {
-                        setTimeout(() => prefetchAudioBlob(items, 0), 100);
-                    }
-                })
-                .catch(() => {
-                    if (!isMounted) return;
-                    // Fallback: derive from known public files
-                    const fallback = [
-                        "1. A PIMP'S BEGINNINGS.wav",
-                        '25. CHRIS PIMP.wav', '31. FRANKENHOE.wav', '33. MATADOR PIMP.wav', "34. THE PIMP'S ENVY.wav",
-                        '38. THE HISTORY OF ISRAEL.wav', '39. ASCENT AND AWEKENING.wav', "40. A PIMP'S DECLARATION.wav",
-                        '41. THE SECRETS OF A PIMP.wav', '42. SKY BULL.wav', '51. HELL ON EARTH.wav'
-                    ].map(f => {
-                        const clean = f.replace(/^\d+\.\s*/, '').replace(/\.wav$/i, '');
-                        return { 
-                            title: clean, 
-                            filename: f, 
-                            url: '/' + encodeURIComponent(f),
-                            rotationSpeed: 0.2,
-                            frequencyA: 440,
-                            frequencyB: 660,
-                            toneScale: 'MERKABA',
-                            varied: false,
-                        };
-                    });
-                    setSongs(fallback);
+        const loadTimer = setTimeout(async () => {
+            try {
+                const resp = await fetch('/ai-songs.json', { cache: 'default' });
+                if (!resp.ok) throw new Error('Failed to fetch songs');
+                
+                const list = await resp.json() as any[];
+                if (!isMounted || !Array.isArray(list)) return;
+                
+                const items = list.map(i => ({
+                    title: i.title || 'Unknown',
+                    filename: i.filename || '',
+                    url: '/' + encodeURIComponent(i.filename || ''),
+                    rotationSpeed: typeof i.rotationSpeed === 'number' ? i.rotationSpeed : undefined,
+                    frequencyA: typeof i.frequencyA === 'number' ? i.frequencyA : undefined,
+                    frequencyB: typeof i.frequencyB === 'number' ? i.frequencyB : undefined,
+                    toneScale: typeof i.toneScale === 'string' ? i.toneScale : undefined,
+                    varied: typeof i.varied === 'boolean' ? i.varied : undefined,
+                    blobUrl: undefined
+                }));
+                setSongs(items);
+                // Prefetch first track in background
+                if (items.length && typeof prefetchAudioBlob === 'function') {
+                    setTimeout(() => prefetchAudioBlob(items, 0), 100);
+                }
+            } catch (err) {
+                if (!isMounted) return;
+                console.warn('[Songs] Failed to load manifest, using fallback');
+                // Fallback: derive from known public files
+                const fallback = [
+                    "1. A PIMP'S BEGINNINGS.wav",
+                    '25. CHRIS PIMP.wav', '31. FRANKENHOE.wav', '33. MATADOR PIMP.wav', "34. THE PIMP'S ENVY.wav",
+                    '38. THE HISTORY OF ISRAEL.wav', '39. ASCENT AND AWEKENING.wav', "40. A PIMP'S DECLARATION.wav",
+                    '41. THE SECRETS OF A PIMP.wav', '42. SKY BULL.wav', '51. HELL ON EARTH.wav'
+                ].map(f => {
+                    const clean = f.replace(/^\d+\.\s*/, '').replace(/\.wav$/i, '');
+                    return { 
+                        title: clean, 
+                        filename: f, 
+                        url: '/' + encodeURIComponent(f),
+                        rotationSpeed: 0.2,
+                        frequencyA: 440,
+                        frequencyB: 660,
+                        toneScale: 'MERKABA',
+                        varied: false,
+                    };
                 });
+                setSongs(fallback);
+            }
         }, 500); // 500ms delay to prioritize initial page render
         
         return () => {
