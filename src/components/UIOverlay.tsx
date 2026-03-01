@@ -230,6 +230,8 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
     const [introOpen, setIntroOpen] = useState(false);
     const [labTab, setLabTab] = useState<'TOOLS' | 'LAB'>('TOOLS');
     const audioRef = React.useRef<HTMLAudioElement>(null);
+    const [songs, setSongs] = React.useState<Array<{title: string; filename: string; url?: string}>>([]);
+    const [currentSong, setCurrentSong] = React.useState<string | null>(null);
 
     // Audio Sync Effect for Intro
     React.useEffect(() => {
@@ -242,6 +244,27 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             controller.setAudioSync(false);
         }
     }, [introOpen]);
+
+    // Load songs manifest (AI-friendly JSON in public/) when theory is unlocked
+    React.useEffect(() => {
+        if (!controller.theoryUnlocked) return;
+        fetch('/ai-songs.json')
+            .then(r => r.ok ? r.json() : Promise.reject('no-json'))
+            .then((list: any[]) => {
+                const items = list.map(i => ({ title: i.title, filename: i.filename, url: '/' + encodeURIComponent(i.filename) }));
+                setSongs(items);
+            })
+            .catch(() => {
+                // fallback: derive from known public files
+                const fallback = [
+                    "A PIMP'S BEGINNINGS.wav",
+                    'CHRIS PIMP.wav', 'FRANKENHOE.wav', 'MATADOR PIMP.wav', "THE PIMP'S ENVY.wav",
+                    'THE HISTORY OF ISRAEL.wav', 'ASCENT AND AWEKENING.wav', "A PIMP'S DECLARATION.wav",
+                    'THE SECRETS OF A PIMP.wav', 'SKY BULL.wav', 'HELL ON EARTH.wav'
+                ].map(f => ({ title: f.replace(/\.wav$/i, ''), filename: f, url: '/' + encodeURIComponent(f) }));
+                setSongs(fallback);
+            });
+    }, [controller.theoryUnlocked]);
 
     // Secret digit click handler
     const handleDigitClick = (char: string) => {
@@ -976,6 +999,67 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 25px rgba(212, 175, 55, 0.5)'; e.currentTarget.style.borderColor = '#d4af37'; }}
                     onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 15px rgba(212, 175, 55, 0.2)'; e.currentTarget.style.borderColor = 'rgba(212, 175, 55, 0.4)'; }}
                 >Ω</button>
+            )}
+
+            {/* Songs panel revealed by clicking the '6' digit (theoryUnlocked) */}
+            {controller.theoryUnlocked && (
+                <DraggablePanel
+                    initialStyle={{
+                        position: 'fixed', left: '80px', top: '120px', zIndex: 20005,
+                        width: '360px', maxHeight: '60vh', overflow: 'auto', background: '#fdfbf7', border: '2px solid #d4af37',
+                        borderRadius: '12px', padding: '10px', pointerEvents: 'auto'
+                    }}
+                >
+                    <div className="drag-handle" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <strong style={{ color: '#d4af37' }}>Hidden Hymns</strong>
+                        <button onClick={() => { setSongs([]); setCurrentSong(null); }} style={{ background: 'none', border: 'none', color: '#d4af37', cursor: 'pointer' }}>✕</button>
+                    </div>
+                    <div style={{ marginTop: '8px', fontSize: '0.85rem', color: '#111' }}>
+                        <div style={{ marginBottom: '8px' }}>
+                            <audio ref={audioRef} controls style={{ width: '100%' }} src={currentSong || undefined} />
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            {songs.length === 0 ? (
+                                <div style={{ fontSize: '0.9rem', color: '#666' }}>Loading...</div>
+                            ) : (
+                                songs.map((s, i) => (
+                                    <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', border: '1px solid rgba(212,175,55,0.12)', padding: '6px 8px', borderRadius: '8px' }}>
+                                        <div style={{ flex: 1, textAlign: 'left', fontSize: '0.9rem', color: '#111' }}>{s.title}</div>
+                                        <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                                            <button onClick={() => {
+                                                const url = s.url || ('/' + encodeURIComponent(s.filename));
+                                                setCurrentSong(url);
+                                                (async () => {
+                                                    try {
+                                                        const ctx = getAudioCtx();
+                                                        await ctx.resume();
+                                                        if (audioRef.current) {
+                                                            audioRef.current.pause();
+                                                            audioRef.current.src = url;
+                                                            connectAudioSource(audioRef.current);
+                                                            audioRef.current.currentTime = 0;
+                                                            await audioRef.current.play();
+                                                            controller.setAudioSync(true);
+
+                                                            // Apply song-specific vibration/spin metadata to controller
+                                                            if (typeof s.rotationSpeed === 'number') controller.setRotationSpeed(s.rotationSpeed);
+                                                            if (typeof s.frequencyA === 'number') controller.setFrequencyA(s.frequencyA);
+                                                            if (typeof s.frequencyB === 'number') controller.setFrequencyB(s.frequencyB);
+                                                            if (typeof s.toneScale === 'string') controller.setToneScale(s.toneScale as any);
+                                                            if (typeof s.varied === 'boolean') controller.setVariedMode(s.varied);
+                                                            controller.setToneEnabled(true);
+                                                        }
+                                                    } catch (e) { /* ignore playback errors */ }
+                                                })();
+                                            }} style={{ background: 'none', border: '1px solid #d4af37', borderRadius: '6px', padding: '6px', cursor: 'pointer', color: '#d4af37' }}>▶</button>
+                                            <a href={s.url || ('/' + encodeURIComponent(s.filename))} download={s.filename} style={{ background: 'none', border: '1px solid rgba(212,175,55,0.2)', borderRadius: '6px', padding: '6px', textDecoration: 'none', color: '#d4af37', fontSize: '0.9rem' }}>⤓</a>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    </div>
+                </DraggablePanel>
             )}
 
             {/* INTRO PIMPING BUTTON */}

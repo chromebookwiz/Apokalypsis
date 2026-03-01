@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Language } from '../data/translations';
-import { v12Solver } from '../models/V12CurvatureSolver';
+import { v12Solver, SACRED_KEYS } from '../models/V12CurvatureSolver';
 
 // ... other types ...
 export type GeometryType = 'TESSERACT' | 'METATRON' | 'SUPER_METATRON' | 'ULAM_SPIRAL';
@@ -538,8 +538,10 @@ export const useSceneController = () => {
         }
 
         setLabStatus('ENCRYPTING');
-        // Lattice XOR key: Math.floor(0.615 * 255) ^ Math.floor(0.785 * 255) = 84
-        const key = Math.floor(0.615 * 255) ^ Math.floor(0.785 * 255);
+        // Lattice XOR key derived from sacred lattice keys (keeps encryption coherent with V12 paper)
+        const sacredA = SACRED_KEYS.XW;
+        const sacredB = SACRED_KEYS.YW;
+        const key = (Math.floor(sacredA * 255) ^ Math.floor(sacredB * 255)) & 0xff;
         const result = new Uint8Array(source.length);
         for (let i = 0; i < source.length; i++) {
             result[i] = source[i] ^ key;
@@ -555,14 +557,12 @@ export const useSceneController = () => {
         }
         setLabStatus('DECRYPTING');
 
-        // Lattice/LWE decryption simulation: 
-        // In GA, 4D rotation is the basis transformation matrix.
-        // We "de-rotate" the bytes as if they were vector coordinates.
+        // Lattice/LWE decryption simulation: uses the same sacred keys as encryption
+        // In GA, 4D rotation is the basis transformation matrix. We "de-rotate" the bytes.
         const result = new Uint8Array(processedBuffer.length);
+        const decKey = (Math.floor(SACRED_KEYS.XW * 255) ^ Math.floor(SACRED_KEYS.YW * 255)) & 0xff;
         for (let i = 0; i < processedBuffer.length; i++) {
-            // Apply XOR "de-rotation" based on the sacred keys
-            const key = Math.floor(0.615 * 255) ^ Math.floor(0.785 * 255);
-            result[i] = processedBuffer[i] ^ key;
+            result[i] = processedBuffer[i] ^ decKey;
         }
         setProcessedBuffer(result);
         setLabStatus('IDLE');

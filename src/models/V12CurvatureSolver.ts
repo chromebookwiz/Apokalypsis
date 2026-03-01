@@ -306,3 +306,9 @@ export class V12FactorizationEngine {
 // Export singleton instance
 export const v12Solver = new V12FactorizationEngine();
 
+// Sacred keys used across the app for lattice alignment and encryption mapping
+export const SACRED_KEYS = {
+    XW: 0.615, // TETRA PRESET (Sacred Key)
+    YW: 0.785  // PI/4 (Resonance Gate)
+};
+
