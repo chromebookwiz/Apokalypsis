@@ -258,41 +258,64 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
         }
     }, [introOpen]);
 
-    // Load songs manifest (AI-friendly JSON in public/) when hymns panel is opened
+    // Load songs manifest in the background (non-blocking) on component mount
+    // This ensures site loads first, then songs are fetched asynchronously
     React.useEffect(() => {
-        if (!songsPanelOpen) return;
-        fetch('/ai-songs.json')
-            .then(r => r.ok ? r.json() : Promise.reject('no-json'))
-            .then((list: any[]) => {
-                const items = list.map(i => ({
-                    title: i.title,
-                    filename: i.filename,
-                    url: '/' + encodeURIComponent(i.filename),
-                    rotationSpeed: typeof i.rotationSpeed === 'number' ? i.rotationSpeed : undefined,
-                    frequencyA: typeof i.frequencyA === 'number' ? i.frequencyA : undefined,
-                    frequencyB: typeof i.frequencyB === 'number' ? i.frequencyB : undefined,
-                    toneScale: typeof i.toneScale === 'string' ? i.toneScale : undefined,
-                    varied: typeof i.varied === 'boolean' ? i.varied : undefined,
-                    blobUrl: undefined
-                }));
-                setSongs(items);
-                // Prefetch first track for instant playback
-                setTimeout(() => { prefetchAudioBlob(items, 0); }, 50);
-            })
-            .catch(() => {
-                // fallback: derive from known public files
-                const fallback = [
-                    "1. A PIMP'S BEGINNINGS.wav",
-                    '25. CHRIS PIMP.wav', '31. FRANKENHOE.wav', '33. MATADOR PIMP.wav', "34. THE PIMP'S ENVY.wav",
-                    '38. THE HISTORY OF ISRAEL.wav', '39. ASCENT AND AWEKENING.wav', "40. A PIMP'S DECLARATION.wav",
-                    '41. THE SECRETS OF A PIMP.wav', '42. SKY BULL.wav', '51. HELL ON EARTH.wav'
-                ].map(f => {
-                    const clean = f.replace(/^\d+\.\s*/, '').replace(/\.wav$/i, '');
-                    return { title: clean, filename: f, url: '/' + encodeURIComponent(f) };
+        let isMounted = true;
+        
+        // Defer loading to allow initial render to complete
+        const loadTimer = setTimeout(() => {
+            fetch('/ai-songs.json', { cache: 'default' })
+                .then(r => r.ok ? r.json() : Promise.reject('no-json'))
+                .then((list: any[]) => {
+                    if (!isMounted) return;
+                    const items = list.map(i => ({
+                        title: i.title,
+                        filename: i.filename,
+                        url: '/' + encodeURIComponent(i.filename),
+                        rotationSpeed: typeof i.rotationSpeed === 'number' ? i.rotationSpeed : undefined,
+                        frequencyA: typeof i.frequencyA === 'number' ? i.frequencyA : undefined,
+                        frequencyB: typeof i.frequencyB === 'number' ? i.frequencyB : undefined,
+                        toneScale: typeof i.toneScale === 'string' ? i.toneScale : undefined,
+                        varied: typeof i.varied === 'boolean' ? i.varied : undefined,
+                        blobUrl: undefined
+                    }));
+                    setSongs(items);
+                    // Prefetch first track in background
+                    if (items.length) {
+                        setTimeout(() => prefetchAudioBlob(items, 0), 100);
+                    }
+                })
+                .catch(() => {
+                    if (!isMounted) return;
+                    // Fallback: derive from known public files
+                    const fallback = [
+                        "1. A PIMP'S BEGINNINGS.wav",
+                        '25. CHRIS PIMP.wav', '31. FRANKENHOE.wav', '33. MATADOR PIMP.wav', "34. THE PIMP'S ENVY.wav",
+                        '38. THE HISTORY OF ISRAEL.wav', '39. ASCENT AND AWEKENING.wav', "40. A PIMP'S DECLARATION.wav",
+                        '41. THE SECRETS OF A PIMP.wav', '42. SKY BULL.wav', '51. HELL ON EARTH.wav'
+                    ].map(f => {
+                        const clean = f.replace(/^\d+\.\s*/, '').replace(/\.wav$/i, '');
+                        return { 
+                            title: clean, 
+                            filename: f, 
+                            url: '/' + encodeURIComponent(f),
+                            rotationSpeed: 0.2,
+                            frequencyA: 440,
+                            frequencyB: 660,
+                            toneScale: 'MERKABA',
+                            varied: false,
+                        };
+                    });
+                    setSongs(fallback);
                 });
-                setSongs(fallback);
-            });
-    }, [songsPanelOpen]);
+        }, 500); // 500ms delay to prioritize initial page render
+        
+        return () => {
+            isMounted = false;
+            clearTimeout(loadTimer);
+        };
+    }, []); // Run once on mount only
 
     const playAbortControllers = React.useRef<Map<number, AbortController>>(new Map());
 
@@ -1206,6 +1229,9 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                                 ))
                             )}
                         </div>
+                        <div style={{ marginTop: '12px', paddingTop: '8px', borderTop: '1px solid rgba(212,175,55,0.2)', fontSize: '0.7rem', color: '#d4af37', textAlign: 'center' }}>
+                            *This is an incomplete collection of the 54 Hymns.
+                        </div>
                     </div>
                 </DraggablePanel>
             )}
@@ -1409,12 +1435,6 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             >𓊈𓊉</button>
 
             {/* SECRET ENTRY PANEL */}
-            {/* FOOTER NOTE */}
-            {controller.uiVisible && (
-                <div style={{ position: 'fixed', bottom: '8px', left: '50%', transform: 'translateX(-50%)', zIndex: 12000, color: '#d4af37', fontSize: '0.8rem', pointerEvents: 'none', opacity: 0.95 }}>
-                    *This is an incomplete collection of the 54 Hymns.
-                </div>
-            )}
             {controller.secretEntryOpen && (
                 <SecretEntry onClose={() => controller.setSecretEntryOpen(false)} controller={controller} />
             )}
