@@ -226,7 +226,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
     // ... (rest of setup) ...
     const [showInfo, setShowInfo] = React.useState(false);
     const [secretFlash, setSecretFlash] = useState(false);
-    const [introUnlocked, setIntroUnlocked] = useState(false);
+    const [introUnlocked, _setIntroUnlocked] = useState(false);
     const [introOpen, setIntroOpen] = useState(false);
     const [labTab, setLabTab] = useState<'TOOLS' | 'LAB'>('TOOLS');
     const audioRef = React.useRef<HTMLAudioElement>(null);
@@ -239,6 +239,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
         frequencyB?: number;
         toneScale?: string;
         varied?: boolean;
+        blobUrl?: string;
     }>>([]);
     const [currentSong, setCurrentSong] = React.useState<string | null>(null);
     const [currentIndex, setCurrentIndex] = React.useState<number>(-1);
@@ -271,9 +272,12 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     frequencyA: typeof i.frequencyA === 'number' ? i.frequencyA : undefined,
                     frequencyB: typeof i.frequencyB === 'number' ? i.frequencyB : undefined,
                     toneScale: typeof i.toneScale === 'string' ? i.toneScale : undefined,
-                    varied: typeof i.varied === 'boolean' ? i.varied : undefined
+                    varied: typeof i.varied === 'boolean' ? i.varied : undefined,
+                    blobUrl: undefined
                 }));
                 setSongs(items);
+                // Prefetch first track for instant playback
+                setTimeout(() => { prefetchAudioBlob(items, 0); }, 50);
             })
             .catch(() => {
                 // fallback: derive from known public files
@@ -292,7 +296,8 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
 
     const playSong = async (s: any, index: number) => {
         if (!s) return;
-        const url = s.url || ('/' + encodeURIComponent(s.filename));
+        // prefer already-fetched blobUrl for instant playback
+        const url = s.blobUrl || s.url || ('/' + encodeURIComponent(s.filename));
         setCurrentIndex(index);
         setCurrentSong(url);
         try {
@@ -315,31 +320,51 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
         } catch (e) { console.warn('playSong failed', e); }
     };
 
-    // Autoplay first song when manifest loads and hymns panel is opened
-    React.useEffect(() => {
-        if (!songsPanelOpen) return;
-        if (songs.length === 0) return;
-        if (currentIndex === -1) {
-            playSong(songs[0], 0);
+    // Helper: fetch audio as blob and store object URL on songs state
+    const prefetchAudioBlob = async (items: any[], index: number) => {
+        if (!items || !items[index]) return;
+        const src = items[index].url || ('/' + encodeURIComponent(items[index].filename));
+        try {
+            const resp = await fetch(src, { cache: 'force-cache' });
+            if (!resp.ok) return;
+            const blob = await resp.blob();
+            const blobUrl = URL.createObjectURL(blob);
+            // update state
+            setSongs(prev => {
+                const copy = prev.slice();
+                if (copy[index]) copy[index] = { ...copy[index], blobUrl };
+                return copy;
+            });
+            // schedule background prefetch for next few tracks
+            for (let i = index + 1; i < Math.min(items.length, index + 4); i++) {
+                setTimeout(() => prefetchAudioBlob(items, i), 300 * (i - index));
+            }
+        } catch (e) {
+            // ignore; will fall back to network src when user plays
+            // console.warn('prefetch failed', e);
         }
-    }, [songs, songsPanelOpen]);
+    };
 
-    // Secret digit click handler (3 -> theory/paper/omega; 6 -> hymns/music)
+    // Revoke any blob URLs when songs list changes/unmount
+    React.useEffect(() => {
+        return () => {
+            songs.forEach(s => {
+                if (s.blobUrl) try { URL.revokeObjectURL(s.blobUrl); } catch (_) { }
+            });
+        };
+    }, [songs]);
+
     const handleDigitClick = (char: string) => {
         if (char === '3' && !controller.theoryUnlocked) {
             controller.setTheoryUnlocked(true);
             setSecretFlash(true);
             setTimeout(() => setSecretFlash(false), 600);
-        } else if (char === '6') {
-            // Toggle hymns panel and ensure music button visible
-            setSongsPanelOpen(prev => !prev);
+            return;
+        }
+        if (char === '6') {
+            // toggle hymns panel; show music button affordance
+            setSongsPanelOpen(open => !open);
             setShowSongsButton(true);
-            setSecretFlash(true);
-            setTimeout(() => setSecretFlash(false), 400);
-        } else if (char === '3' && !introUnlocked) {
-            setIntroUnlocked(true);
-            setSecretFlash(true);
-            setTimeout(() => setSecretFlash(false), 600);
         }
     };
 
@@ -1313,6 +1338,12 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             >𓊈𓊉</button>
 
             {/* SECRET ENTRY PANEL */}
+            {/* FOOTER NOTE */}
+            {controller.uiVisible && (
+                <div style={{ position: 'fixed', bottom: '8px', left: '50%', transform: 'translateX(-50%)', zIndex: 12000, color: '#d4af37', fontSize: '0.8rem', pointerEvents: 'none', opacity: 0.95 }}>
+                    *This is an incomplete collection of the 54 Hymns.
+                </div>
+            )}
             {controller.secretEntryOpen && (
                 <SecretEntry onClose={() => controller.setSecretEntryOpen(false)} controller={controller} />
             )}
