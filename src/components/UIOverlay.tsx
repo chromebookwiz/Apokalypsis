@@ -294,21 +294,45 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             });
     }, [songsPanelOpen]);
 
-    const playSong = async (s: any, index: number) => {
+    const playAbortControllers = React.useRef<Map<number, AbortController>>(new Map());
+
+    const playSong = async (s: any, index: number, retryCount = 0): Promise<void> => {
         if (!s) return;
-        // prefer already-fetched blobUrl for instant playback
-        const url = s.blobUrl || s.url || ('/' + encodeURIComponent(s.filename));
-        setCurrentIndex(index);
-        setCurrentSong(url);
+        
+        // Cancel any previous request for this track
+        const prevCtrl = playAbortControllers.current.get(index);
+        if (prevCtrl) prevCtrl.abort();
+        
+        const abortCtrl = new AbortController();
+        playAbortControllers.current.set(index, abortCtrl);
+        
         try {
+            // Prefer blob URL, fallback to cached URL, then to direct fetch
+            const url = s.blobUrl || s.url || ('/' + encodeURIComponent(s.filename));
+            setCurrentIndex(index);
+            setCurrentSong(url);
+            
             const ctx = getAudioCtx();
             await ctx.resume();
-            if (audioRef.current) {
+            
+            if (audioRef.current && !abortCtrl.signal.aborted) {
                 audioRef.current.pause();
+                audioRef.current.src = '';
                 audioRef.current.src = url;
                 connectAudioSource(audioRef.current);
                 audioRef.current.currentTime = 0;
-                await audioRef.current.play();
+                
+                // Play with timeout to catch hangs
+                const playPromise = audioRef.current.play();
+                if (playPromise !== undefined) {
+                    await Promise.race([
+                        playPromise,
+                        new Promise<void>((_, reject) =>
+                            setTimeout(() => reject(new Error('PLAY_TIMEOUT')), 8000)
+                        )
+                    ]);
+                }
+                
                 controller.setAudioSync(true);
                 if (typeof s.rotationSpeed === 'number') controller.setRotationSpeed(s.rotationSpeed);
                 if (typeof s.frequencyA === 'number') controller.setFrequencyA(s.frequencyA);
@@ -317,31 +341,64 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 if (typeof s.varied === 'boolean') controller.setVariedMode(s.varied);
                 controller.setToneEnabled(true);
             }
-        } catch (e) { console.warn('playSong failed', e); }
+        } catch (e) {
+            // Abort signal means user stopped playback or new song was queued
+            if (e instanceof DOMException && e.name === 'NotAllowedError') {
+                console.warn(`[Audio] Playback not allowed (context suspended or user stopped)`, s.filename);
+                return;
+            }
+            
+            // Retry logic for network/timeout errors (but not on blob URLs which are local)
+            if (retryCount < 2 && !s.blobUrl && (e instanceof Error && /timeout|abort|fetch/i.test(e.message))) {
+                const delay = 300 * Math.pow(2, retryCount); // exponential backoff
+                console.warn(`[Audio] Retry ${retryCount + 1} for ${s.filename} in ${delay}ms`);
+                await new Promise(r => setTimeout(r, delay));
+                return playSong(s, index, retryCount + 1);
+            }
+            
+            console.warn(`[Audio] playSong failed for ${s.filename}:`, e instanceof Error ? e.message : String(e));
+        } finally {
+            playAbortControllers.current.delete(index);
+        }
     };
 
-    // Helper: fetch audio as blob and store object URL on songs state
-    const prefetchAudioBlob = async (items: any[], index: number) => {
+    // Helper: fetch audio as blob and store object URL on songs state (with retry)
+    const prefetchAudioBlob = async (items: any[], index: number, retryCount = 0) => {
         if (!items || !items[index]) return;
+        
         const src = items[index].url || ('/' + encodeURIComponent(items[index].filename));
         try {
-            const resp = await fetch(src, { cache: 'force-cache' });
-            if (!resp.ok) return;
+            const resp = await fetch(src, { 
+                cache: 'default',  // Allow browser to use cache or network
+                signal: AbortSignal.timeout(10000)  // 10s timeout
+            });
+            if (!resp.ok) {
+                console.warn(`[Prefetch] HTTP ${resp.status} for ${items[index].filename}`);
+                return;
+            }
+            
             const blob = await resp.blob();
             const blobUrl = URL.createObjectURL(blob);
-            // update state
+            
+            // Update state with blob URL
             setSongs(prev => {
                 const copy = prev.slice();
                 if (copy[index]) copy[index] = { ...copy[index], blobUrl };
                 return copy;
             });
-            // schedule background prefetch for next few tracks
-            for (let i = index + 1; i < Math.min(items.length, index + 4); i++) {
-                setTimeout(() => prefetchAudioBlob(items, i), 300 * (i - index));
+            
+            // Schedule background prefetch for next few tracks (staggered)
+            for (let i = index + 1; i < Math.min(items.length, index + 3); i++) {
+                setTimeout(() => prefetchAudioBlob(items, i), 400 * (i - index));
             }
         } catch (e) {
-            // ignore; will fall back to network src when user plays
-            // console.warn('prefetch failed', e);
+            // Silently ignore prefetch errors; playback will use network fallback
+            if (e instanceof Error && e.name !== 'AbortError') {
+                // Retry once on network failure (not on abort)
+                if (retryCount < 1) {
+                    setTimeout(() => prefetchAudioBlob(items, index, retryCount + 1), 1000);
+                }
+            }
         }
     };
 
@@ -1112,6 +1169,20 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                                 preload="auto"
                                 style={{ width: '100%' }}
                                 src={currentSong || undefined}
+                                onLoadedMetadata={() => {
+                                    console.log(`[Audio] Loaded metadata for track ${currentIndex}`);
+                                }}
+                                onError={(e) => {
+                                    const err = e.currentTarget.error;
+                                    if (err) {
+                                        console.error(`[Audio] Error code ${err.code}: ${err.message} (track ${currentIndex})`);
+                                        // Retry if it's a network error
+                                        if (err.code === 4 && currentIndex >= 0 && songs[currentIndex]) {
+                                            console.warn(`[Audio] Retrying failed track...`);
+                                            setTimeout(() => playSong(songs[currentIndex], currentIndex), 1000);
+                                        }
+                                    }
+                                }}
                                 onEnded={() => {
                                     if (songs.length === 0) return;
                                     const next = (currentIndex + 1) % songs.length;
