@@ -389,14 +389,15 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
     };
 
     // Helper: fetch audio as blob and store object URL on songs state (with retry)
+    // Limits prefetch to 3 concurrent blobs to prevent memory exhaustion
     const prefetchAudioBlob = async (items: any[], index: number, retryCount = 0) => {
         if (!items || !items[index]) return;
         
         const src = items[index].url || ('/' + encodeURIComponent(items[index].filename));
         try {
             const resp = await fetch(src, { 
-                cache: 'default',  // Allow browser to use cache or network
-                signal: AbortSignal.timeout(10000)  // 10s timeout
+                cache: 'default',
+                signal: AbortSignal.timeout(10000)
             });
             if (!resp.ok) {
                 console.warn(`[Prefetch] HTTP ${resp.status} for ${items[index].filename}`);
@@ -406,21 +407,29 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             const blob = await resp.blob();
             const blobUrl = URL.createObjectURL(blob);
             
-            // Update state with blob URL
+            // Update state with blob URL, and revoke old blobs beyond +3 tracks ahead
             setSongs(prev => {
                 const copy = prev.slice();
                 if (copy[index]) copy[index] = { ...copy[index], blobUrl };
+                
+                // Revoke blobs for tracks more than 3 ahead to free memory
+                for (let i = 0; i < copy.length; i++) {
+                    if (i < index - 1 && copy[i]?.blobUrl) {
+                        try { 
+                            URL.revokeObjectURL(copy[i].blobUrl!);
+                            copy[i] = { ...copy[i], blobUrl: undefined };
+                        } catch (_) { }
+                    }
+                }
                 return copy;
             });
             
-            // Schedule background prefetch for next few tracks (staggered)
-            for (let i = index + 1; i < Math.min(items.length, index + 3); i++) {
-                setTimeout(() => prefetchAudioBlob(items, i), 400 * (i - index));
+            // Schedule background prefetch for next 2 tracks only (reduced from 3)
+            for (let i = index + 1; i < Math.min(items.length, index + 2); i++) {
+                setTimeout(() => prefetchAudioBlob(items, i), 500 * (i - index));
             }
         } catch (e) {
-            // Silently ignore prefetch errors; playback will use network fallback
             if (e instanceof Error && e.name !== 'AbortError') {
-                // Retry once on network failure (not on abort)
                 if (retryCount < 1) {
                     setTimeout(() => prefetchAudioBlob(items, index, retryCount + 1), 1000);
                 }
@@ -428,14 +437,33 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
         }
     };
 
-    // Revoke any blob URLs when songs list changes/unmount
+    // Clean up old blobs when switching tracks
+    React.useEffect(() => {
+        if (currentIndex >= 0) {
+            setSongs(prev => {
+                const copy = prev.slice();
+                // Revoke blobs for all tracks except current and next 2
+                for (let i = 0; i < copy.length; i++) {
+                    if ((i < currentIndex - 1 || i > currentIndex + 2) && copy[i]?.blobUrl) {
+                        try {
+                            URL.revokeObjectURL(copy[i].blobUrl!);
+                            copy[i] = { ...copy[i], blobUrl: undefined };
+                        } catch (_) { }
+                    }
+                }
+                return copy;
+            });
+        }
+    }, [currentIndex]);
+
+    // Revoke any remaining blob URLs on component unmount
     React.useEffect(() => {
         return () => {
             songs.forEach(s => {
                 if (s.blobUrl) try { URL.revokeObjectURL(s.blobUrl); } catch (_) { }
             });
         };
-    }, [songs]);
+    }, []);
 
     const handleDigitClick = (char: string) => {
         if (char === '3' && !controller.theoryUnlocked) {
