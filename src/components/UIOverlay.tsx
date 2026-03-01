@@ -230,7 +230,16 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
     const [introOpen, setIntroOpen] = useState(false);
     const [labTab, setLabTab] = useState<'TOOLS' | 'LAB'>('TOOLS');
     const audioRef = React.useRef<HTMLAudioElement>(null);
-    const [songs, setSongs] = React.useState<Array<{title: string; filename: string; url?: string}>>([]);
+    const [songs, setSongs] = React.useState<Array<{
+        title: string;
+        filename: string;
+        url?: string;
+        rotationSpeed?: number;
+        frequencyA?: number;
+        frequencyB?: number;
+        toneScale?: string;
+        varied?: boolean;
+    }>>([]);
     const [currentSong, setCurrentSong] = React.useState<string | null>(null);
 
     // Audio Sync Effect for Intro
@@ -251,7 +260,16 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
         fetch('/ai-songs.json')
             .then(r => r.ok ? r.json() : Promise.reject('no-json'))
             .then((list: any[]) => {
-                const items = list.map(i => ({ title: i.title, filename: i.filename, url: '/' + encodeURIComponent(i.filename) }));
+                const items = list.map(i => ({
+                    title: i.title,
+                    filename: i.filename,
+                    url: '/' + encodeURIComponent(i.filename),
+                    rotationSpeed: typeof i.rotationSpeed === 'number' ? i.rotationSpeed : undefined,
+                    frequencyA: typeof i.frequencyA === 'number' ? i.frequencyA : undefined,
+                    frequencyB: typeof i.frequencyB === 'number' ? i.frequencyB : undefined,
+                    toneScale: typeof i.toneScale === 'string' ? i.toneScale : undefined,
+                    varied: typeof i.varied === 'boolean' ? i.varied : undefined
+                }));
                 setSongs(items);
             })
             .catch(() => {
