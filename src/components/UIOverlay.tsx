@@ -241,6 +241,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
         varied?: boolean;
     }>>([]);
     const [currentSong, setCurrentSong] = React.useState<string | null>(null);
+    const [currentIndex, setCurrentIndex] = React.useState<number>(-1);
 
     // Audio Sync Effect for Intro
     React.useEffect(() => {
@@ -283,6 +284,39 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 setSongs(fallback);
             });
     }, [controller.theoryUnlocked]);
+
+    // Autoplay first song when manifest loads and theory is unlocked
+    React.useEffect(() => {
+        if (!controller.theoryUnlocked) return;
+        if (songs.length === 0) return;
+        // start at first track if none selected
+        if (currentIndex === -1) {
+            const s = songs[0];
+            setCurrentIndex(0);
+            const url = s.url || ('/' + encodeURIComponent(s.filename));
+            setCurrentSong(url);
+            (async () => {
+                try {
+                    const ctx = getAudioCtx();
+                    await ctx.resume();
+                    if (audioRef.current) {
+                        audioRef.current.pause();
+                        audioRef.current.src = url;
+                        connectAudioSource(audioRef.current);
+                        audioRef.current.currentTime = 0;
+                        await audioRef.current.play();
+                        controller.setAudioSync(true);
+                        if (typeof s.rotationSpeed === 'number') controller.setRotationSpeed(s.rotationSpeed);
+                        if (typeof s.frequencyA === 'number') controller.setFrequencyA(s.frequencyA);
+                        if (typeof s.frequencyB === 'number') controller.setFrequencyB(s.frequencyB);
+                        if (typeof s.toneScale === 'string') controller.setToneScale(s.toneScale as any);
+                        if (typeof s.varied === 'boolean') controller.setVariedMode(s.varied);
+                        controller.setToneEnabled(true);
+                    }
+                } catch (e) { /* ignore autoplay errors */ }
+            })();
+        }
+    }, [songs, controller.theoryUnlocked]);
 
     // Secret digit click handler
     const handleDigitClick = (char: string) => {
@@ -1034,7 +1068,24 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     </div>
                     <div style={{ marginTop: '8px', fontSize: '0.85rem', color: '#111' }}>
                         <div style={{ marginBottom: '8px' }}>
-                            <audio ref={audioRef} controls style={{ width: '100%' }} src={currentSong || undefined} />
+                            <audio
+                                ref={audioRef}
+                                controls
+                                autoPlay
+                                preload="auto"
+                                style={{ width: '100%' }}
+                                src={currentSong || undefined}
+                                onEnded={() => {
+                                    // autoplay next track
+                                    if (songs.length === 0) return;
+                                    const next = (currentIndex + 1) % songs.length;
+                                    const s = songs[next];
+                                    if (s) {
+                                        setCurrentIndex(next);
+                                        setCurrentSong(s.url || ('/' + encodeURIComponent(s.filename)));
+                                    }
+                                }}
+                            />
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                             {songs.length === 0 ? (
@@ -1046,6 +1097,8 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                                         <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
                                             <button onClick={() => {
                                                 const url = s.url || ('/' + encodeURIComponent(s.filename));
+                                                // set index so onEnded can advance
+                                                setCurrentIndex(i);
                                                 setCurrentSong(url);
                                                 (async () => {
                                                     try {
