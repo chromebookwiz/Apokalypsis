@@ -278,11 +278,14 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             .catch(() => {
                 // fallback: derive from known public files
                 const fallback = [
-                    "A PIMP'S BEGINNINGS.wav",
-                    'CHRIS PIMP.wav', 'FRANKENHOE.wav', 'MATADOR PIMP.wav', "THE PIMP'S ENVY.wav",
-                    'THE HISTORY OF ISRAEL.wav', 'ASCENT AND AWEKENING.wav', "A PIMP'S DECLARATION.wav",
-                    'THE SECRETS OF A PIMP.wav', 'SKY BULL.wav', 'HELL ON EARTH.wav'
-                ].map(f => ({ title: f.replace(/\.wav$/i, ''), filename: f, url: '/' + encodeURIComponent(f) }));
+                    "1. A PIMP'S BEGINNINGS.wav",
+                    '25. CHRIS PIMP.wav', '31. FRANKENHOE.wav', '33. MATADOR PIMP.wav', "34. THE PIMP'S ENVY.wav",
+                    '38. THE HISTORY OF ISRAEL.wav', '39. ASCENT AND AWEKENING.wav', "40. A PIMP'S DECLARATION.wav",
+                    '41. THE SECRETS OF A PIMP.wav', '42. SKY BULL.wav', '51. HELL ON EARTH.wav'
+                ].map(f => {
+                    const clean = f.replace(/^\d+\.\s*/, '').replace(/\.wav$/i, '');
+                    return { title: clean, filename: f, url: '/' + encodeURIComponent(f) };
+                });
                 setSongs(fallback);
             });
     }, [songsPanelOpen]);

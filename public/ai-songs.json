@@ -1,13 +1,13 @@
 [
-  { "title": "A PIMP'S BEGINNINGS", "filename": "A PIMP'S BEGINNINGS.wav", "rotationSpeed": 0.9, "frequencyA": 0.9, "frequencyB": 0.95, "toneScale": "MERKABA", "varied": false },
-  { "title": "CHRIS PIMP", "filename": "CHRIS PIMP.wav", "rotationSpeed": 1.1, "frequencyA": 1.1, "frequencyB": 1.05, "toneScale": "TRIADIC", "varied": true },
-  { "title": "FRANKENHOE", "filename": "FRANKENHOE.wav", "rotationSpeed": 0.7, "frequencyA": 0.7, "frequencyB": 0.72, "toneScale": "FUNDAMENTAL", "varied": false },
-  { "title": "MATADOR PIMP", "filename": "MATADOR PIMP.wav", "rotationSpeed": 1.3, "frequencyA": 1.3, "frequencyB": 1.25, "toneScale": "CELESTIAL", "varied": true },
-  { "title": "THE PIMP'S ENVY", "filename": "THE PIMP'S ENVY.wav", "rotationSpeed": 1.0, "frequencyA": 1.0, "frequencyB": 1.0, "toneScale": "MERKABA", "varied": false },
-  { "title": "THE HISTORY OF ISRAEL", "filename": "THE HISTORY OF ISRAEL.wav", "rotationSpeed": 0.85, "frequencyA": 0.85, "frequencyB": 0.9, "toneScale": "TRIADIC", "varied": false },
-  { "title": "ASCENT AND AWEKENING", "filename": "ASCENT AND AWEKENING.wav", "rotationSpeed": 1.4, "frequencyA": 1.4, "frequencyB": 1.35, "toneScale": "CELESTIAL", "varied": true },
-  { "title": "A PIMP'S DECLARATION", "filename": "A PIMP'S DECLARATION.wav", "rotationSpeed": 0.95, "frequencyA": 0.95, "frequencyB": 0.98, "toneScale": "MERKABA", "varied": false },
-  { "title": "THE SECRETS OF A PIMP", "filename": "THE SECRETS OF A PIMP.wav", "rotationSpeed": 1.2, "frequencyA": 1.2, "frequencyB": 1.18, "toneScale": "TRIADIC", "varied": true },
-  { "title": "SKY BULL", "filename": "SKY BULL.wav", "rotationSpeed": 0.6, "frequencyA": 0.6, "frequencyB": 0.62, "toneScale": "FUNDAMENTAL", "varied": false },
-  { "title": "HELL ON EARTH", "filename": "HELL ON EARTH.wav", "rotationSpeed": 1.6, "frequencyA": 1.6, "frequencyB": 1.55, "toneScale": "CELESTIAL", "varied": true }
+  { "title": "A PIMP'S BEGINNINGS", "filename": "1. A PIMP'S BEGINNINGS.wav", "rotationSpeed": 0.9, "frequencyA": 0.9, "frequencyB": 0.95, "toneScale": "MERKABA", "varied": false },
+  { "title": "CHRIS PIMP", "filename": "25. CHRIS PIMP.wav", "rotationSpeed": 1.1, "frequencyA": 1.1, "frequencyB": 1.05, "toneScale": "TRIADIC", "varied": true },
+  { "title": "FRANKENHOE", "filename": "31. FRANKENHOE.wav", "rotationSpeed": 0.7, "frequencyA": 0.7, "frequencyB": 0.72, "toneScale": "FUNDAMENTAL", "varied": false },
+  { "title": "MATADOR PIMP", "filename": "33. MATADOR PIMP.wav", "rotationSpeed": 1.3, "frequencyA": 1.3, "frequencyB": 1.25, "toneScale": "CELESTIAL", "varied": true },
+  { "title": "THE PIMP'S ENVY", "filename": "34. THE PIMP'S ENVY.wav", "rotationSpeed": 1.0, "frequencyA": 1.0, "frequencyB": 1.0, "toneScale": "MERKABA", "varied": false },
+  { "title": "THE HISTORY OF ISRAEL", "filename": "38. THE HISTORY OF ISRAEL.wav", "rotationSpeed": 0.85, "frequencyA": 0.85, "frequencyB": 0.9, "toneScale": "TRIADIC", "varied": false },
+  { "title": "ASCENT AND AWEKENING", "filename": "39. ASCENT AND AWEKENING.wav", "rotationSpeed": 1.4, "frequencyA": 1.4, "frequencyB": 1.35, "toneScale": "CELESTIAL", "varied": true },
+  { "title": "A PIMP'S DECLARATION", "filename": "40. A PIMP'S DECLARATION.wav", "rotationSpeed": 0.95, "frequencyA": 0.95, "frequencyB": 0.98, "toneScale": "MERKABA", "varied": false },
+  { "title": "THE SECRETS OF A PIMP", "filename": "41. THE SECRETS OF A PIMP.wav", "rotationSpeed": 1.2, "frequencyA": 1.2, "frequencyB": 1.18, "toneScale": "TRIADIC", "varied": true },
+  { "title": "SKY BULL", "filename": "42. SKY BULL.wav", "rotationSpeed": 0.6, "frequencyA": 0.6, "frequencyB": 0.62, "toneScale": "FUNDAMENTAL", "varied": false },
+  { "title": "HELL ON EARTH", "filename": "51. HELL ON EARTH.wav", "rotationSpeed": 1.6, "frequencyA": 1.6, "frequencyB": 1.55, "toneScale": "CELESTIAL", "varied": true }
 ]
