@@ -229,7 +229,8 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
     const [introUnlocked, _setIntroUnlocked] = useState(false);
     const [introOpen, setIntroOpen] = useState(false);
     const [labTab, setLabTab] = useState<'TOOLS' | 'LAB'>('TOOLS');
-    const audioRef = React.useRef<HTMLAudioElement>(null);
+    const introAudioRef = React.useRef<HTMLAudioElement>(null);
+    const hymnsAudioRef = React.useRef<HTMLAudioElement>(null);
     const [songs, setSongs] = React.useState<Array<{
         title: string;
         filename: string;
@@ -248,9 +249,9 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
 
     // Audio Sync Effect for Intro
     React.useEffect(() => {
-        if (introOpen && audioRef.current) {
+        if (introOpen && introAudioRef.current) {
             getAudioCtx().resume().then(() => {
-                connectAudioSource(audioRef.current!);
+                connectAudioSource(introAudioRef.current!);
                 controller.setAudioSync(true);
             });
         } else if (!introOpen) {
@@ -262,16 +263,16 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
     // This ensures site loads first, then songs are fetched asynchronously
     React.useEffect(() => {
         let isMounted = true;
-        
+
         // Defer loading to allow initial render to complete
         const loadTimer = setTimeout(async () => {
             try {
                 const resp = await fetch('/ai-songs.json', { cache: 'default' });
                 if (!resp.ok) throw new Error('Failed to fetch songs');
-                
+
                 const list = await resp.json() as any[];
                 if (!isMounted || !Array.isArray(list)) return;
-                
+
                 const items = list.map(i => ({
                     title: i.title || 'Unknown',
                     filename: i.filename || '',
@@ -299,9 +300,9 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     '41. THE SECRETS OF A PIMP.wav', '42. SKY BULL.wav', '51. HELL ON EARTH.wav'
                 ].map(f => {
                     const clean = f.replace(/^\d+\.\s*/, '').replace(/\.wav$/i, '');
-                    return { 
-                        title: clean, 
-                        filename: f, 
+                    return {
+                        title: clean,
+                        filename: f,
                         url: '/' + encodeURIComponent(f),
                         rotationSpeed: 0.2,
                         frequencyA: 440,
@@ -313,89 +314,76 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 setSongs(fallback);
             }
         }, 500); // 500ms delay to prioritize initial page render
-        
+
         return () => {
             isMounted = false;
             clearTimeout(loadTimer);
         };
     }, []); // Run once on mount only
 
-    const playAbortControllers = React.useRef<Map<number, AbortController>>(new Map());
-
-    const playSong = async (s: any, index: number, retryCount = 0): Promise<void> => {
+    const playSong = async (s: any, index: number): Promise<void> => {
         if (!s) return;
-        
-        // Cancel any previous request for this track
-        const prevCtrl = playAbortControllers.current.get(index);
-        if (prevCtrl) prevCtrl.abort();
-        
-        const abortCtrl = new AbortController();
-        playAbortControllers.current.set(index, abortCtrl);
-        
-        try {
-            // Prefer blob URL, fallback to cached URL, then to direct fetch
-            const url = s.blobUrl || s.url || ('/' + encodeURIComponent(s.filename));
-            setCurrentIndex(index);
-            setCurrentSong(url);
-            
-            const ctx = getAudioCtx();
-            await ctx.resume();
-            
-            if (audioRef.current && !abortCtrl.signal.aborted) {
-                audioRef.current.pause();
-                audioRef.current.src = '';
-                audioRef.current.src = url;
-                connectAudioSource(audioRef.current);
-                audioRef.current.currentTime = 0;
-                
-                // Play with timeout to catch hangs
-                const playPromise = audioRef.current.play();
-                if (playPromise !== undefined) {
-                    await Promise.race([
-                        playPromise,
-                        new Promise<void>((_, reject) =>
-                            setTimeout(() => reject(new Error('PLAY_TIMEOUT')), 8000)
-                        )
-                    ]);
-                }
-                
-                controller.setAudioSync(true);
-                if (typeof s.rotationSpeed === 'number') controller.setRotationSpeed(s.rotationSpeed);
-                if (typeof s.frequencyA === 'number') controller.setFrequencyA(s.frequencyA);
-                if (typeof s.frequencyB === 'number') controller.setFrequencyB(s.frequencyB);
-                if (typeof s.toneScale === 'string') controller.setToneScale(s.toneScale as any);
-                if (typeof s.varied === 'boolean') controller.setVariedMode(s.varied);
-                controller.setToneEnabled(true);
-            }
-        } catch (e) {
-            // Abort signal means user stopped playback or new song was queued
-            if (e instanceof DOMException && e.name === 'NotAllowedError') {
-                console.warn(`[Audio] Playback not allowed (context suspended or user stopped)`, s.filename);
-                return;
-            }
-            
-            // Retry logic for network/timeout errors (but not on blob URLs which are local)
-            if (retryCount < 2 && !s.blobUrl && (e instanceof Error && /timeout|abort|fetch/i.test(e.message))) {
-                const delay = 300 * Math.pow(2, retryCount); // exponential backoff
-                console.warn(`[Audio] Retry ${retryCount + 1} for ${s.filename} in ${delay}ms`);
-                await new Promise(r => setTimeout(r, delay));
-                return playSong(s, index, retryCount + 1);
-            }
-            
-            console.warn(`[Audio] playSong failed for ${s.filename}:`, e instanceof Error ? e.message : String(e));
-        } finally {
-            playAbortControllers.current.delete(index);
-        }
+        const url = s.blobUrl || s.url || ('/' + encodeURIComponent(s.filename));
+        setCurrentIndex(index);
+        setCurrentSong(url);
     };
+
+    // Hymns Playback & Metadata Sync Effect
+    React.useEffect(() => {
+        const audio = hymnsAudioRef.current;
+        if (!audio || !currentSong || currentIndex < 0) return;
+
+        let isCancelled = false;
+
+        // Apply metadata to controller immediately
+        const s = songs[currentIndex];
+        if (s) {
+            controller.setAudioSync(true);
+            if (typeof s.rotationSpeed === 'number') controller.setRotationSpeed(s.rotationSpeed);
+            if (typeof s.frequencyA === 'number') controller.setFrequencyA(s.frequencyA);
+            if (typeof s.frequencyB === 'number') controller.setFrequencyB(s.frequencyB);
+            if (typeof s.toneScale === 'string') controller.setToneScale(s.toneScale as any);
+            if (typeof s.varied === 'boolean') controller.setVariedMode(s.varied);
+            controller.setToneEnabled(true);
+        }
+
+        // Handle Playback
+        const startPlayback = async () => {
+            try {
+                const ctx = getAudioCtx();
+                await ctx.resume();
+                connectAudioSource(audio);
+
+                if (isCancelled) return;
+
+                // Ensure the audio element is ready and play
+                audio.currentTime = 0;
+                await audio.play();
+            } catch (e) {
+                if (isCancelled) return;
+                if (e instanceof DOMException && e.name === 'NotAllowedError') {
+                    console.warn("[Audio] Autoplay blocked or interrupted");
+                    return;
+                }
+                console.warn("[Audio] Playback effect error:", e);
+            }
+        };
+
+        startPlayback();
+
+        return () => {
+            isCancelled = true;
+        };
+    }, [currentSong, currentIndex]);
 
     // Helper: fetch audio as blob and store object URL on songs state (with retry)
     // Limits prefetch to 3 concurrent blobs to prevent memory exhaustion
     const prefetchAudioBlob = async (items: any[], index: number, retryCount = 0) => {
         if (!items || !items[index]) return;
-        
+
         const src = items[index].url || ('/' + encodeURIComponent(items[index].filename));
         try {
-            const resp = await fetch(src, { 
+            const resp = await fetch(src, {
                 cache: 'default',
                 signal: AbortSignal.timeout(10000)
             });
@@ -403,19 +391,19 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 console.warn(`[Prefetch] HTTP ${resp.status} for ${items[index].filename}`);
                 return;
             }
-            
+
             const blob = await resp.blob();
             const blobUrl = URL.createObjectURL(blob);
-            
+
             // Update state with blob URL, and revoke old blobs beyond +3 tracks ahead
             setSongs(prev => {
                 const copy = prev.slice();
                 if (copy[index]) copy[index] = { ...copy[index], blobUrl };
-                
+
                 // Revoke blobs for tracks more than 3 ahead to free memory
                 for (let i = 0; i < copy.length; i++) {
                     if (i < index - 1 && copy[i]?.blobUrl) {
-                        try { 
+                        try {
                             URL.revokeObjectURL(copy[i].blobUrl!);
                             copy[i] = { ...copy[i], blobUrl: undefined };
                         } catch (_) { }
@@ -423,7 +411,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 }
                 return copy;
             });
-            
+
             // Schedule background prefetch for next 2 tracks only (reduced from 3)
             for (let i = index + 1; i < Math.min(items.length, index + 2); i++) {
                 setTimeout(() => prefetchAudioBlob(items, i), 500 * (i - index));
@@ -1212,14 +1200,13 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 >
                     <div className="drag-handle" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
                         <strong style={{ color: '#d4af37' }}>Hidden Hymns</strong>
-                        <button onClick={() => { setSongs([]); setCurrentSong(null); }} style={{ background: 'none', border: 'none', color: '#d4af37', cursor: 'pointer' }}>✕</button>
+                        <button onClick={() => setSongsPanelOpen(false)} style={{ background: 'none', border: 'none', color: '#d4af37', cursor: 'pointer' }}>✕</button>
                     </div>
                     <div style={{ marginTop: '8px', fontSize: '0.85rem', color: '#111' }}>
                         <div style={{ marginBottom: '8px' }}>
                             <audio
-                                ref={audioRef}
+                                ref={hymnsAudioRef}
                                 controls
-                                autoPlay
                                 preload="auto"
                                 style={{ width: '100%' }}
                                 src={currentSong || undefined}
@@ -1244,6 +1231,9 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                                     if (s) playSong(s, next);
                                 }}
                             />
+                            <div style={{ marginTop: '4px', fontSize: '0.65rem', color: '#d4af37', textAlign: 'center', opacity: 0.8 }}>
+                                *This is an incomplete collection of the 54 Hymns.
+                            </div>
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                             {songs.length === 0 ? (
@@ -1254,14 +1244,11 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                                         <div style={{ flex: 1, textAlign: 'left', fontSize: '0.9rem', color: '#111' }}>{s.title}</div>
                                         <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
                                             <button onClick={() => playSong(s, i)} style={{ background: 'none', border: '1px solid #d4af37', borderRadius: '6px', padding: '6px', cursor: 'pointer', color: '#d4af37' }}>▶</button>
-                                            <a href={s.url || ('/' + encodeURIComponent(s.filename))} download={s.filename} style={{ background: 'none', border: '1px solid rgba(212,175,55,0.2)', borderRadius: '6px', padding: '6px', textDecoration: 'none', color: '#d4af37', fontSize: '0.9rem' }}>⤓</a>
+                                            <a href={s.blobUrl || s.url || ('/' + encodeURIComponent(s.filename))} download={s.filename} style={{ background: 'none', border: '1px solid rgba(212,175,55,0.2)', borderRadius: '6px', padding: '6px', textDecoration: 'none', color: '#d4af37', fontSize: '0.9rem' }}>⤓</a>
                                         </div>
                                     </div>
                                 ))
                             )}
-                        </div>
-                        <div style={{ marginTop: '12px', paddingTop: '8px', borderTop: '1px solid rgba(212,175,55,0.2)', fontSize: '0.7rem', color: '#d4af37', textAlign: 'center' }}>
-                            *This is an incomplete collection of the 54 Hymns.
                         </div>
                     </div>
                 </DraggablePanel>
@@ -1343,7 +1330,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     </div>
                     <div style={{ padding: '20px', position: 'relative', zIndex: 1 }}>
                         <div style={{ margin: '10px 0' }}>
-                            <audio ref={audioRef} controls autoPlay style={{ width: '100%', height: '35px' }}>
+                            <audio ref={introAudioRef} controls autoPlay style={{ width: '100%', height: '35px' }}>
                                 <source src="/INTRODUCTORY%20PIMPING.wav" type="audio/wav" />
                                 𒀭
                             </audio>

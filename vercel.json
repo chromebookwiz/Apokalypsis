@@ -20,7 +20,7 @@
             ]
         },
         {
-            "source": "/*.wav",
+            "source": "/:file(.*\\.wav)",
             "headers": [
                 {
                     "key": "Cache-Control",

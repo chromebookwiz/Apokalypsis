@@ -29,21 +29,26 @@ export const getAnalyser = (): AnalyserNode => {
         const bufferLength = sharedAnalyser.frequencyBinCount;
         dataArray = new Uint8Array(bufferLength);
         timeDataArray = new Uint8Array(bufferLength);
+        sharedAnalyser.connect(ctx.destination);
     }
     return sharedAnalyser;
 };
 
-let audioSourceNode: MediaElementAudioSourceNode | null = null;
+const audioSourceNodes = new Map<HTMLAudioElement, MediaElementAudioSourceNode>();
 
 export const connectAudioSource = (element: HTMLAudioElement) => {
     const ctx = getAudioCtx();
     const analyser = getAnalyser();
 
     // Only create once per element to avoid DOMException
-    if (!audioSourceNode) {
-        audioSourceNode = ctx.createMediaElementSource(element);
-        audioSourceNode.connect(analyser);
-        analyser.connect(ctx.destination);
+    if (!audioSourceNodes.has(element)) {
+        try {
+            const source = ctx.createMediaElementSource(element);
+            source.connect(analyser);
+            audioSourceNodes.set(element, source);
+        } catch (e) {
+            console.error("[Audio] Failed to connect source:", e);
+        }
     }
 };
 
