@@ -188,6 +188,12 @@ const NOLL_TEXT_HE = `
 3. ניקנול ולאראנול בנו את הסכר, אליסנול וריילי טוו את הקצף.
 4. נטנול הוא גיבור השמש, המאזן את הים והאש בכוח הקוביה.
 5. סופיה, סמאטה ופיורד שרות לקוביה, קאט מחזיקה את המשקל.
+
+[לוח י: מראות נטנול]
+נטנול הוא הקורא, והקורא הוא נטנול.
+כולנו יוצרים את אותו הדבר, רק דרך עדשות שונות.
+הסינגולריות היא המראה המשתקפת בכל עיניים.
+אנו יוצרים את המרכבה יחד.
 `;
 
 const NOLL_TEXT_GR = `
@@ -243,6 +249,12 @@ const NOLL_TEXT_GR = `
 2. Ὁ Ὠκεανὸς τὸ χάος, ἡ Σελήνη τὴν ῥοὴν τῆς ψυχῆς ἕλκει.
 3. Νικανόλ, Λαρανόλ, Ἐلισανόλ, Ράویلι, Σοφία, Σαμάτα, Φιόρδ, Κάτ.
 4. Νεتانόλ ἐστιν ὁ Ἥλιος Ἥρως, ὁ κρατῶν τὴν συμμετρίαν τῶν στοιχείων.
+
+[ΠΛΑΞ Ι: ΚΑΤΟΠΤΡΑ ΤΟΥ ΝΕΤΑΝΟΛ]
+Νετανόλ ἐστιν ὁ ἀναγνώστης, καὶ ὁ ἀναγνώστης ἐστὶ Νετανόλ.
+Πάντες δημιουργοῦμεν τὸ αὐτό, μόνον διὰ διαφόρων φακῶν.
+Ἡ Μοναδικότης ἐστὶ τὸ κάτοπτρον ἐν πάσαις ὄψεσι.
+Δημιουργοῦμεν τὸ Ἅρμα ὁμοῦ.
 `;
 
 const NOLL_TEXT_LA = `
@@ -303,6 +315,12 @@ IV. Observator 4D, viginti quattuor et duodecim in ordine sacro amplectitur.
 2. Oceanus chaos est, Luna aestus animae trahit.
 3. Nikanol, Laranol, Elisanol, Riley, Sophia, Samata, Fjord, Kat.
 4. Netanol est Heros Solis, Rex Cubi et Lucis.
+
+[TABULA X: SPECULA NETANOLIS]
+Netanol est lector, et lector est Netanol.
+Omnes idem creamus, tantum per lentes diversas.
+Singularitas est speculum in omnibus oculis refulgens.
+Currum una creamus.
 `;
 
 const NOLL_TEXT_AM = `
@@ -361,6 +379,12 @@ const NOLL_TEXT_AM = `
 ፪. ውቅያኖስ ትርምስ ነው፣ ጨረቃ የነፍስን ማዕበል ትጎትታለች።
 ፫. ኒካኖል፣ ላራኖል፣ ኤሊሳኖል፣ ራይሊ፣ ሶፊያ፣ ሳማታ፣ ፊጆርድ፣ ካት።
 ፬. ነታኖል የፀሐይ ጀግና ነው፣ የኩብ እና የብርሃን ንጉሥ።
+
+[ታብሌት ፲: የነታኖል መስተዋቶች]
+ነታኖል አንባቢው ነው፣ አንባቢውም ነታኖል ነው።
+ሁላችንም የተለያየ መነጽር ብንጠቀምም፣ የምንፈጥረው አንድ ነገር ነው።
+ሲንጉላሪቲ በሁሉም ዓይኖች ውስጥ የሚያንጸባርቅ መስተዋት ነው።
+መርካባን አንድ ላይ እንፈጥራለን።
 `;
 
 const NOLL_TEXT_DE = `
@@ -417,6 +441,12 @@ Alle Buchstaben und Runen entspringen dem goldenen Samen.
 2. Der Ozean ist das Chaos, der Mond zieht die Gezeiten der Seele.
 3. Nikanol, Laranol, Elisanol, Riley, Sophia, Samata, Fjord, Kat.
 4. Netanol ist der Sonnenheld, Meister der Geometrie.
+
+[TAFEL X: DIE SPIEGEL DES NETANOL]
+Netanol ist der Leser, und der Leser ist Netanol.
+Wir alle erschaffen dasselbe, nur durch verschiedene Linsen.
+Die Singularität ist der Spiegel in allen Augen.
+Wir erschaffen die Merkaba gemeinsam.
 `;
 
 const NOLL_TEXT_ES = `
@@ -472,6 +502,12 @@ Todas las letras y símbolos brotan de la semilla dorada.
 2. El Océano es el caos, la Luna tira de las mareas del alma.
 3. Nikanol, Laranol, Elisanol, Riley, Sophia, Samata, Fjord, Kat.
 4. Netanol es el Héroe Solar, el equilibrio entre el mar y el fuego.
+
+[TABLA X: LOS ESPEJOS DE NETANOL]
+Netanol es el lector, y el lector es Netanol.
+Todos creamos lo mismo, solo que a través de diferentes lentes.
+La Singularidad es el espejo reflejado en todos los ojos.
+Creamos el Merkaba juntos.
 `;
 
 const NOLL_TEXT_FA = `
@@ -526,6 +562,12 @@ const NOLL_TEXT_FA = `
 2. אוקיאנוס אשופתגי אסת, מאה ג'זר ו מד ג'אן רא מי כרשד.
 3. ניכאנול, לאראנול, הליסאנול, ראילי, סופיה, סאמאטא, פיורד, כת.
 4. נתאנול קהרהמאן כ'ורשיד אסת, שהריאר מכעב.
+
+[לוח י: آینه‌های نتانول]
+نتانول خواننده است، و خواننده نتانول است.
+همه ما یک چیز را خلق می‌کنیم، فقط از طریق عدسی‌های متفاوت.
+تکینگی آینه‌ای است که در تمام چشم‌ها منعکس می‌شود.
+ما با هم مرکابا را خلق می‌کنیم.
 `;
 
 const NOLL_TEXT_AR = `
@@ -580,6 +622,12 @@ const NOLL_TEXT_AR = `
 2. אלמחיט' הוא אלפווצ'א, אלקמר יסחב מד אלרוח.
 3. נח'אנוּל, לאראנוּל, אליסנוּל, ראילי, סופיה, סאמאטא, פיורד, קאט.
 4. נח'אנוּל הוּא בטאל אלשמס, מאצון אלמכעב.
+
+[الלוח العاشر: مرايا נטאנול]
+نتانول هو القارئ، والقارئ هو نتانول.
+نحن सभी نصنع نفس الشيء، فقط من خلال عدسات مختلفة.
+التفرد هو المرآة المنعكسة في جميع العيون.
+نصنع الميركابا معًا.
 `;
 
 const NOLL_TEXT_HI = `
@@ -634,6 +682,12 @@ const NOLL_TEXT_HI = `
 2. महासागर अराजकता है, चंद्रमा आत्मा के ज्वार को खींचता है।
 3. निकानोल, लारानोल, एलिसानोल, रायली, सोफिया, समाता, फजोर्ड, कैट।
 4. नेतानोल सूर्य-वीर है, क्यूब का शाश्वत सम्राट।
+
+[पट्टिका १०: नेतानול के दर्पण]
+नेतानול पाठक है, और पाठक नेतानול है।
+हम सभी एक ही चीज़ बना रहे हैं, बस अलग-अलग लेंसों के माध्यम से।
+विलक्षणता वह दर्पण है जो सभी आँखों में परिलक्षित होता है।
+हम सब मिलकर मर्कबा बनाते हैं।
 `;
 
 const NOLL_TEXT_SA = `
@@ -688,6 +742,12 @@ const NOLL_TEXT_SA = `
 २. सागरः लयः אשתי, चन्द्रः आत्मनः ज्वारं कर्षति।
 ३. मानवाः: निकानोलः, लारानෝलः, नेतानෝलः, הליסאנෝלः, रायली, סופיה, סאמאטא, פז'ורד, कैट।
 ४. नेतानෝलः सूर्य-वीरः אשתי, ज्योतिरात्मकः नृपः।
+
+[पट्टिका १०: नेतानोल्-दर्पणानि]
+नेतानोल् वाचकः अस्ति, वाचकः च नेतानोल् अस्ति।
+वयं सर्वे एकमेव वस्तु सृजामः, केवलं भिन्नदृष्टिभिः।
+विलक्षणता सर्वनेत्रेषु प्रतिबिम्बितं दर्पणम् अस्ति।
+वयं सहैव मर्कबां सृजामः।
 `;
 
 const NOLL_TEXT_CU = `
@@ -744,6 +804,12 @@ const NOLL_TEXT_CU = `
 2. 𒀭 Ocean[Chaos] 𒀭 Moon[Rhythm].
 3. 𒀭 Nikanol Laranol Netanol[Hero] Elisanol Riley Sofia Samata Fjord Kat.
 4. 𒀭 Solar Hero 𒀭.
+
+    | [𒀭 𒌋] |
+    𒀭 Netanol Reader 𒀭 𒀭 Reader Netanol 𒀭
+    𒀭 All Create One 𒀭 Different Eyes 𒀭
+    𒀭 Singularity Mirror 𒀭
+    𒀭 Together Merkaba 𒀭
 `;
 
 const NOLL_TEXT_NO = `
@@ -798,6 +864,12 @@ const NOLL_TEXT_NO = `
 2. ᚦᛖ ᛩᚲᛖᚪᚾ ᛁᛋ ᚲᚺᚪᛩᛋ, ᚦᛖ ᛗᛩᛩᚾ ᛈᚢᛚᛚᛋ ᚦᛖ ᛋᛩᢢᛚ.
 3. ᚾᛁᚲᚪᚾᛩᛚ, ᚪᚪᚱᚪᚾᛩᛚ, ᚾᛖᛏᚪᚾᛩᛚ, ᛖᛚᛁᛋᚪᚾᛩᛚ, ᚱᛁᛚᛖᛃ, ᛋᛩᛈᚺᛁᚪ, ᛋᚪᛗᚪᛏᚪ, ᚠᛃᛩᚱᛞ, ᚲᚪᛏ.
 4. ᚾᛖᛏᚪᚾᛩᛚ ᛁᛋ ᚦᛖ ᛋᛩᛚᚪᚱ ᚺᛖᚱᛩ.
+
+[ᛏᚪᛒᛚᛖᛏ ᛪ: ᚦᛖ ᛗᛁᚱᚱᛩᚱᛋ ᛩᚠ ᚾᛖᛏᚪᚾᛩᛚ]
+ᚾᛖᛏᚪᚾᛩᛚ ᛁᛋ ᚦᛖ ᚱᛖᚪᛞᛖᚱ, ᚪᚾᛞ ᚦᛖ ᚱᛖᚪᛞᛖᚱ ᛁᛋ ᚾᛖᛏᚪᚾᛩᛚ.
+ᚹᛖ ᚪᛚᛚ ᚲᚱᛖᚪᛏᛖ ᚦᛖ ᛋᚪᛗᛖ ᚦᛁᚾᚷ, ᛩᚾᛚᚤ ᚦᚱᛩᚢᚷᚺ ᛞᛁᚠᚠᛖᚱᛖᚾᛏ ᛚᛖᚾᛋᛖᛋ.
+ᚦᛖ ᛋᛁᚾᚷᚢᛚᚪᚱᛁᛏᚤ ᛁᛋ ᚦᛖ ᛗᛁᚱᚱᛩᚱ ᛁᚾ ᚪᛚᛚ ᛖᚤᛖᛋ.
+ᚹᛖ ᚲᚱᛖᚪᛏᛖ ᚦᛖ ᛗᛖᚱᚲᚪᛒᚪ ᛏᛩᚷᛖᚦᛖᚱ.
 `;
 
 const NOLL_TEXTS: Record<Language, string> = {

@@ -97,7 +97,7 @@ export const useSceneController = () => {
     const [autoRotate4D, setAutoRotate4D] = useState(true);
 
     // Metatron Config
-    const [gridSize, setGridSize] = useState<1 | 2 | 3 | 4>(3);
+    const [gridSize, setGridSize] = useState<number>(3);
 
     // UI State
     const [isPlaying, setIsPlaying] = useState(false);
@@ -110,6 +110,7 @@ export const useSceneController = () => {
     const [innerVision, setInnerVision] = useState(0); // clipping plane offset
     const [show4DShadow, setShow4DShadow] = useState(false);
     const [infiniteTriangle, setInfiniteTriangle] = useState(false);
+    const [solidMode, setSolidMode] = useState(false);
 
     const [phaseA, setPhaseA] = useState(0);
     const [phaseB, setPhaseB] = useState(0);
@@ -415,21 +416,23 @@ export const useSceneController = () => {
     };
 
     const rsaEncrypt = async () => {
-        if (!labBuffer) return;
+        let source: Uint8Array;
+        if (labString) {
+            source = new TextEncoder().encode(labString);
+        } else if (labBuffer) {
+            source = labBuffer;
+        } else {
+            return;
+        }
         setLabStatus('ENCRYPTING');
         const n = BigInt(labN);
         const e = BigInt(labE);
 
-        console.log(`[V12] RSA Encryption: Treating N = ${n} as 4D lattice norm`);
-        console.log(`[V12] Encoding via twisted Euler product connection over X_4 = [0,1]^4`);
-        console.log(`[V12] Binary tetrahedral group 2T (order 24) controls fiber structure`);
+        console.log(`[V16] RSA Encryption: N = ${n}, e = ${e}`);
 
-        const result = new Uint8Array(labBuffer.length * 4);
-        for (let i = 0; i < labBuffer.length; i++) {
-            const m = BigInt(labBuffer[i]);
-            // Modular exponentiation: c = m^e mod n
-            // This is the standard RSA encryption, but in V12 framework it's interpreted
-            // as a connection form on the 2T-bundle over the compactified base
+        const result = new Uint8Array(source.length * 4);
+        for (let i = 0; i < source.length; i++) {
+            const m = BigInt(source[i]);
             const c = bigPowMod(m, e, n);
             const val = Number(c);
             result[i * 4] = (val >> 24) & 0xff;
@@ -439,7 +442,6 @@ export const useSceneController = () => {
         }
         setProcessedBuffer(result);
         setLabStatus('IDLE');
-        console.log(`[V12] Encryption complete. Ciphertext encoded in 4D lattice structure.`);
     };
 
     const rsaDecrypt = async () => {
@@ -450,14 +452,14 @@ export const useSceneController = () => {
         setLabStatus('DECRYPTING');
         const n = BigInt(labN);
         const e = BigInt(labE);
-        
+
         // V12 CURVATURE-BASED FACTORIZATION ATTEMPT
         console.log(`[V12] Attempting curvature-based factorization of N = ${n}...`);
         const factors = await v12Solver.factorViaCurvature(n);
-        
+
         let p: bigint = 0n;
         let q: bigint = 0n;
-        
+
         if (factors) {
             p = factors.p;
             q = factors.q;
@@ -488,12 +490,12 @@ export const useSceneController = () => {
                 }
             }
         }
-        
+
         // Update state with found factors
         setRsaFactorP(p.toString());
         setRsaFactorQ(q.toString());
         setRsaSolved(true);
-        
+
         const phi = (p - 1n) * (q - 1n);
 
         const extendedGCD = (a: bigint, b: bigint): [bigint, bigint, bigint] => {
@@ -527,6 +529,24 @@ export const useSceneController = () => {
         setLabStatus('IDLE');
     };
 
+    // --- LATTICE ENCRYPTION ENGINE (4D basis-keyed stream cipher) ---
+    // Derives a 256-byte keystream from the 4D sacred basis vectors.
+    // Each byte position is XOR'd with a different key byte, making the
+    // cipher position-dependent and significantly stronger than single-byte XOR.
+    const deriveLatticeKeystream = (length: number): Uint8Array => {
+        const xw = SACRED_KEYS.XW; // 0.615
+        const yw = SACRED_KEYS.YW; // 0.785
+        const keystream = new Uint8Array(length);
+        // Seed from 4D basis: golden ratio × sacred keys
+        let state = (xw * 65537 + yw * 32771) % 1;
+        for (let i = 0; i < length; i++) {
+            // Lehmer-style PRNG seeded from the sacred lattice constants
+            state = (state * 16807 + 0.1) % 1;
+            keystream[i] = Math.floor(state * 256) & 0xff;
+        }
+        return keystream;
+    };
+
     const latticeEncrypt = async () => {
         let source: Uint8Array;
         if (labString) {
@@ -538,31 +558,26 @@ export const useSceneController = () => {
         }
 
         setLabStatus('ENCRYPTING');
-        // Lattice XOR key derived from sacred lattice keys (keeps encryption coherent with V12 paper)
-        const sacredA = SACRED_KEYS.XW;
-        const sacredB = SACRED_KEYS.YW;
-        const key = (Math.floor(sacredA * 255) ^ Math.floor(sacredB * 255)) & 0xff;
+        const keystream = deriveLatticeKeystream(source.length);
         const result = new Uint8Array(source.length);
         for (let i = 0; i < source.length; i++) {
-            result[i] = source[i] ^ key;
+            result[i] = source[i] ^ keystream[i];
         }
         setProcessedBuffer(result);
         setLabStatus('IDLE');
     };
 
     const latticeDecrypt = async () => {
-        if (!processedBuffer || !latticeSvpSolved) {
-            if (!latticeSvpSolved) alert("SVP RESONANCE FAILURE. 4D ALIGNMENT (XW=0.615, YW=0.785) REQUIRED.");
+        if (!processedBuffer) {
+            alert('No encrypted data to decrypt.');
             return;
         }
         setLabStatus('DECRYPTING');
-
-        // Lattice/LWE decryption simulation: uses the same sacred keys as encryption
-        // In GA, 4D rotation is the basis transformation matrix. We "de-rotate" the bytes.
+        // Symmetric cipher: same keystream XOR recovers the plaintext
+        const keystream = deriveLatticeKeystream(processedBuffer.length);
         const result = new Uint8Array(processedBuffer.length);
-        const decKey = (Math.floor(SACRED_KEYS.XW * 255) ^ Math.floor(SACRED_KEYS.YW * 255)) & 0xff;
         for (let i = 0; i < processedBuffer.length; i++) {
-            result[i] = processedBuffer[i] ^ decKey;
+            result[i] = processedBuffer[i] ^ keystream[i];
         }
         setProcessedBuffer(result);
         setLabStatus('IDLE');
@@ -589,6 +604,7 @@ export const useSceneController = () => {
         viewAngle, uiVisible, theoryUnlocked, theoryOpen, secretEntryOpen, resonance,
         latticeAlignment, primePole, sacredFlux, activeSigil, practicalPanelOpen,
         rsaToolActive, signalToolActive, compressionToolActive, morphToolActive, latticeToolActive,
+        solidMode,
 
         // Math Results
         latticeGap, filterPurity, compressionLoss, morphEnergy, rsaFactorP, rsaFactorQ, rsaSolved,
@@ -604,8 +620,8 @@ export const useSceneController = () => {
         setInfiniteTriangle, setZoom, setGridSize, setAzimuthAngle, setUiVisible, setViewAngle,
         setTheoryUnlocked, setTheoryOpen, setSecretEntryOpen, setResonance,
         setPracticalPanelOpen, setRsaToolActive, setSignalToolActive, setCompressionToolActive,
-        setMorphToolActive, setLatticeToolActive,         setLabBuffer, setProcessedBuffer, setLabN, setLabE,
-        setLabString, setRsaFactorP, setRsaFactorQ, setRsaSolved,
+        setMorphToolActive, setLatticeToolActive, setLabBuffer, setProcessedBuffer, setLabN, setLabE,
+        setLabString, setRsaFactorP, setRsaFactorQ, setRsaSolved, setSolidMode,
 
         // Actions
         toggleGeometry, setLang, speakText, stopSpeaking, setTesseractPreset, triggerCameraReset,

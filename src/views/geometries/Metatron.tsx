@@ -105,7 +105,14 @@ const CherubimNode: React.FC<{
     const { tetraUp, tetraDown } = useMemo(() => createMerkabaGeometries(2.0), []);
     const sphereGeo = useMemo(() => new THREE.SphereGeometry(2.0, 24, 24), []);
 
-    const invisibleMat = useMemo(() => new THREE.MeshBasicMaterial({ visible: false }), []);
+    const invisibleMat = useMemo(() => new THREE.MeshBasicMaterial({
+        color: color,
+        visible: controller.solidMode,
+        wireframe: false,
+        transparent: true,
+        opacity: controller.solidMode ? 0.3 : 0,
+        side: THREE.DoubleSide
+    }), [color, controller.solidMode]);
 
     // Rotation refs
     const upRef = useRef<THREE.Mesh>(null);
@@ -350,12 +357,13 @@ const CherubimNode: React.FC<{
 
     const sphereMat = useMemo(() => new THREE.MeshBasicMaterial({
         color: color,
-        wireframe: true,
+        wireframe: !controller.solidMode,
         transparent: true,
-        opacity: 0.1,
+        opacity: controller.solidMode ? 0.3 : 0.1,
+        side: controller.solidMode ? THREE.DoubleSide : THREE.FrontSide,
         clippingPlanes: [clippingPlane],
         clipShadows: true
-    }), [color, clippingPlane]);
+    }), [color, clippingPlane, controller.solidMode]);
 
     return (
         <group position={position}>
@@ -382,34 +390,70 @@ const CherubimNode: React.FC<{
 export const MetatronGeometry: React.FC<Props> = ({ controller }) => {
     const spacing = 4.0;
     const size = controller.gridSize || 3;
+    const isSphereMode = size >= 10;
 
     // Metatron Invocation: "This cube is the 4D version of his perfect vision, and contains all that was, is, and will be on Earth."
 
     // --- 1. DYNAMIC GRID ---
     const { nodes, connections } = useMemo(() => {
         const _nodes: THREE.Vector3[] = [];
-        const offset = (size - 1) / 2;
 
-        for (let x = 0; x < size; x++) {
-            for (let y = 0; y < size; y++) {
-                for (let z = 0; z < size; z++) {
-                    const px = (x - offset) * spacing;
-                    const py = (y - offset) * spacing;
-                    const pz = (z - offset) * spacing;
-                    _nodes.push(new THREE.Vector3(px, py, pz));
+        if (isSphereMode) {
+            // MODE 10: 10×10×10 Sphere Cube
+            // Center node at origin
+            _nodes.push(new THREE.Vector3(0, 0, 0));
+
+            // Place remaining nodes on a sphere surface
+            // Use cubic grid coordinates normalized to sphere
+            const sphereRadius = spacing * (size - 1) / 2;
+            const offset = (size - 1) / 2;
+            for (let x = 0; x < size; x++) {
+                for (let y = 0; y < size; y++) {
+                    for (let z = 0; z < size; z++) {
+                        // Skip the exact center — already added as node 0
+                        if (x === offset && y === offset && z === offset) continue;
+                        const px = (x - offset) / offset; // normalized -1..1
+                        const py = (y - offset) / offset;
+                        const pz = (z - offset) / offset;
+                        // Project onto sphere surface
+                        const len = Math.sqrt(px * px + py * py + pz * pz);
+                        _nodes.push(new THREE.Vector3(
+                            (px / len) * sphereRadius,
+                            (py / len) * sphereRadius,
+                            (pz / len) * sphereRadius
+                        ));
+                    }
                 }
             }
-        }
 
-        const _conns: [number, number][] = [];
-        for (let i = 0; i < _nodes.length; i++) {
-            for (let j = i + 1; j < _nodes.length; j++) {
-                _conns.push([i, j]);
+            // Connect all outer nodes to center (node 0)
+            const _conns: [number, number][] = [];
+            for (let i = 1; i < _nodes.length; i++) {
+                _conns.push([0, i]);
             }
+            return { nodes: _nodes, connections: _conns };
+        } else {
+            // MODES 1-4: Standard cubic grid with all-to-all connections
+            const offset = (size - 1) / 2;
+            for (let x = 0; x < size; x++) {
+                for (let y = 0; y < size; y++) {
+                    for (let z = 0; z < size; z++) {
+                        const px = (x - offset) * spacing;
+                        const py = (y - offset) * spacing;
+                        const pz = (z - offset) * spacing;
+                        _nodes.push(new THREE.Vector3(px, py, pz));
+                    }
+                }
+            }
+            const _conns: [number, number][] = [];
+            for (let i = 0; i < _nodes.length; i++) {
+                for (let j = i + 1; j < _nodes.length; j++) {
+                    _conns.push([i, j]);
+                }
+            }
+            return { nodes: _nodes, connections: _conns };
         }
-
-        return { nodes: _nodes, connections: _conns };
-    }, [size]);
+    }, [size, isSphereMode]);
 
     // --- 2. INSTANCED LINES ---
     const meshRef = useRef<THREE.InstancedMesh>(null);
@@ -553,22 +597,54 @@ export const MetatronGeometry: React.FC<Props> = ({ controller }) => {
                 <mesh ref={rsaScanRef} geometry={rsaScanGeo} material={rsaScanMat} rotation={[Math.PI / 2, 0, 0]} />
             )}
 
-            {nodes.map((pos, i) => (
-                <CherubimNode
-                    key={i}
-                    position={pos}
-                    color={sphereColor}
-                    controller={controller}
-                    nodeIndex={i}
-                    totalNodes={nodes.length}
-                />
-            ))}
+            {isSphereMode ? (
+                <>
+                    {/* MODE 10: Lightweight instanced rendering */}
+                    {/* Center sphere — larger, golden */}
+                    <mesh position={[0, 0, 0]}>
+                        <sphereGeometry args={[3.0, 32, 32]} />
+                        <meshBasicMaterial
+                            color="#ffd700"
+                            wireframe={!controller.solidMode}
+                            transparent
+                            opacity={controller.solidMode ? 0.6 : 0.4}
+                            side={controller.solidMode ? THREE.DoubleSide : THREE.FrontSide}
+                        />
+                    </mesh>
+                    {/* Outer spheres — smaller, instanced */}
+                    {nodes.slice(1).map((pos, i) => (
+                        <mesh key={i} position={pos}>
+                            <sphereGeometry args={[0.6, 8, 8]} />
+                            <meshBasicMaterial
+                                color={sphereColor}
+                                wireframe={!controller.solidMode}
+                                transparent
+                                opacity={controller.solidMode ? 0.3 : 0.3}
+                                side={controller.solidMode ? THREE.DoubleSide : THREE.FrontSide}
+                            />
+                        </mesh>
+                    ))}
+                </>
+            ) : (
+                <>
+                    {nodes.map((pos, i) => (
+                        <CherubimNode
+                            key={i}
+                            position={pos}
+                            color={sphereColor}
+                            controller={controller}
+                            nodeIndex={i}
+                            totalNodes={nodes.length}
+                        />
+                    ))}
+                </>
+            )}
 
             <instancedMesh ref={meshRef} args={[cylinderGeo, undefined, connections.length]}>
                 <meshBasicMaterial
                     color={gridColor}
                     transparent
-                    opacity={0.3}
+                    opacity={isSphereMode ? 0.15 : 0.3}
                 />
             </instancedMesh>
         </group>

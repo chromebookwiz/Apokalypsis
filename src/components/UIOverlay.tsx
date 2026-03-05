@@ -294,20 +294,17 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 console.warn('[Songs] Failed to load manifest, using fallback');
                 // Fallback: derive from known public files
                 const fallback = [
-                    "1. A PIMP'S BEGINNINGS.wav",
-                    '25. CHRIS PIMP.wav', '31. FRANKENHOE.wav', '33. MATADOR PIMP.wav', "34. THE PIMP'S ENVY.wav",
-                    '38. THE HISTORY OF ISRAEL.wav', '39. ASCENT AND AWEKENING.wav', "40. A PIMP'S DECLARATION.wav",
-                    '41. THE SECRETS OF A PIMP.wav', '42. SKY BULL.wav', '51. HELL ON EARTH.wav'
+                    '42. SKY BULL.wav'
                 ].map(f => {
                     const clean = f.replace(/^\d+\.\s*/, '').replace(/\.wav$/i, '');
                     return {
                         title: clean,
                         filename: f,
                         url: '/' + encodeURIComponent(f),
-                        rotationSpeed: 0.2,
-                        frequencyA: 440,
-                        frequencyB: 660,
-                        toneScale: 'MERKABA',
+                        rotationSpeed: 0.6,
+                        frequencyA: 0.6,
+                        frequencyB: 0.62,
+                        toneScale: 'FUNDAMENTAL',
                         varied: false,
                     };
                 });
@@ -830,7 +827,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                                             onClick={controller.latticeDecrypt}
                                             disabled={!controller.processedBuffer || controller.labStatus !== 'IDLE'}
                                             title="LATTICE_SVP_DECRYPT (4D Basis Reduction)"
-                                            style={{ padding: '10px', background: controller.latticeSvpSolved ? '#d4af37' : 'rgba(212,175,55,0.2)', color: '#000', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: '1.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+                                            style={{ padding: '10px', background: controller.processedBuffer ? '#d4af37' : 'rgba(212,175,55,0.2)', color: '#000', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: '1.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
                                         >
                                             <span>𓍲</span>
                                             <span style={{ fontSize: '0.4rem', opacity: 0.8 }}>DECRYPT</span>
@@ -839,7 +836,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                                         {/* Row 2: RSA */}
                                         <button
                                             onClick={controller.rsaEncrypt}
-                                            disabled={!controller.labBuffer || controller.labStatus !== 'IDLE'}
+                                            disabled={(!controller.labBuffer && !controller.labString) || controller.labStatus !== 'IDLE'}
                                             title="RSA_LATTICE_ENCRYPT (Modular Exponentiation)"
                                             style={{ padding: '10px', background: '#d4af37', color: '#000', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: '1.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
                                         >
@@ -1044,21 +1041,24 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     </div>
 
                     {/* MODES */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
-                        <button className="sacred-btn" onClick={controller.toggleDarkMode} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.darkMode ? '#d4af37' : 'none', color: controller.darkMode ? '#fdfbf7' : '#d4af37', textAlign: 'center' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '5px' }}>
+                        <button className="sacred-btn" onClick={controller.toggleDarkMode} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.darkMode ? '#d4af37' : 'none', color: controller.darkMode ? '#fdfbf7' : '#d4af37', textAlign: 'center' }} title="Day/Night">
                             {controller.darkMode ? '☼' : '☽'}
                         </button>
-                        <button className="sacred-btn" onClick={controller.toggleCameraType} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37', textAlign: 'center', fontSize: '1.2rem' }}>
+                        <button className="sacred-btn" onClick={controller.toggleCameraType} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', color: '#d4af37', textAlign: 'center', fontSize: '1.2rem' }} title="Camera Projection">
                             {controller.cameraType === 'ORTHOGRAPHIC' ? '◻' : '◈'}
                         </button>
-                        <button className="sacred-btn" onClick={() => controller.setInfiniteTriangle(!controller.infiniteTriangle)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.infiniteTriangle ? '#d4af37' : 'none', color: controller.infiniteTriangle ? '#fdfbf7' : '#d4af37', fontSize: '1.2rem', textAlign: 'center' }}>
+                        <button className="sacred-btn" onClick={() => controller.setInfiniteTriangle(!controller.infiniteTriangle)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.infiniteTriangle ? '#d4af37' : 'none', color: controller.infiniteTriangle ? '#fdfbf7' : '#d4af37', fontSize: '1.2rem', textAlign: 'center' }} title="Infinite Triangle">
                             𝝙
+                        </button>
+                        <button className="sacred-btn" onClick={() => controller.setSolidMode(!controller.solidMode)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.solidMode ? '#d4af37' : 'none', color: controller.solidMode ? '#fdfbf7' : '#d4af37', fontSize: '1.2rem', textAlign: 'center' }} title="Solid Forms">
+                            {controller.solidMode ? '⬛' : '⛶'}
                         </button>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '5px' }}>
-                        {[1, 2, 3, 4].map((size) => (
-                            <button key={size} className="sacred-btn" onClick={() => controller.setGridSize(size as 1 | 2 | 3 | 4)} style={{ flex: 1, padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.gridSize === size ? '#d4af37' : 'none', color: controller.gridSize === size ? '#fdfbf7' : '#d4af37', textAlign: 'center' }}>{size}</button>
+                    <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
+                        {[1, 2, 3, 4, 10].map((size) => (
+                            <button key={size} className="sacred-btn" onClick={() => controller.setGridSize(size)} style={{ flex: size === 10 ? '1 1 100%' : 1, padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.gridSize === size ? '#d4af37' : 'none', color: controller.gridSize === size ? '#fdfbf7' : '#d4af37', textAlign: 'center', fontWeight: size === 10 ? 'bold' : 'normal' }}>{size === 10 ? '⬡ 10³ SPHERE CUBE' : size}</button>
                         ))}
                     </div>
 
@@ -1231,9 +1231,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                                     if (s) playSong(s, next);
                                 }}
                             />
-                            <div style={{ marginTop: '4px', fontSize: '0.65rem', color: '#d4af37', textAlign: 'center', opacity: 0.8 }}>
-                                *This is an incomplete collection of the 54 Hymns.
-                            </div>
+
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                             {songs.length === 0 ? (
@@ -1331,14 +1329,14 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     <div style={{ padding: '20px', position: 'relative', zIndex: 1 }}>
                         <div style={{ margin: '10px 0' }}>
                             <audio ref={introAudioRef} controls autoPlay style={{ width: '100%', height: '35px' }}>
-                                <source src="/INTRODUCTORY%20PIMPING.wav" type="audio/wav" />
+                                <source src={`/${encodeURIComponent('42. SKY BULL.wav')}`} type="audio/wav" />
                                 𒀭
                             </audio>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}>
                             <a
-                                href="/INTRODUCTORY%20PIMPING.wav"
-                                download="𒀭.wav"
+                                href={`/${encodeURIComponent('42. SKY BULL.wav')}`}
+                                download="SKY_BULL.wav"
                                 style={{
                                     color: '#d4af37', textDecoration: 'none', fontSize: '1rem',
                                     border: '1px solid rgba(212,175,55,0.3)', padding: '5px 25px',
