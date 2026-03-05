@@ -397,44 +397,34 @@ export const MetatronGeometry: React.FC<Props> = ({ controller }) => {
     // --- 1. DYNAMIC GRID ---
     const { nodes, connections } = useMemo(() => {
         const _nodes: THREE.Vector3[] = [];
+        const offset = (size - 1) / 2;
 
         if (isSphereMode) {
-            // MODE 10: 10×10×10 Sphere Cube
-            // Center node at origin
+            // MODE 10+: 10x10x10 Cube with EXPLICIT center node
+            // 1. Add center node at origin
             _nodes.push(new THREE.Vector3(0, 0, 0));
-
-            // Place remaining nodes on a sphere surface
-            // Use cubic grid coordinates normalized to sphere
-            const sphereRadius = spacing * (size - 1) / 2;
-            const offset = (size - 1) / 2;
+            // 2. Add cubic grid
             for (let x = 0; x < size; x++) {
                 for (let y = 0; y < size; y++) {
                     for (let z = 0; z < size; z++) {
-                        // Skip the exact center — already added as node 0
-                        if (x === offset && y === offset && z === offset) continue;
-                        const px = (x - offset) / offset; // normalized -1..1
-                        const py = (y - offset) / offset;
-                        const pz = (z - offset) / offset;
-                        // Project onto sphere surface
-                        const len = Math.sqrt(px * px + py * py + pz * pz);
-                        _nodes.push(new THREE.Vector3(
-                            (px / len) * sphereRadius,
-                            (py / len) * sphereRadius,
-                            (pz / len) * sphereRadius
-                        ));
+                        const px = (x - offset) * spacing;
+                        const py = (y - offset) * spacing;
+                        const pz = (z - offset) * spacing;
+                        // Avoid adding a duplicate node at the center if size is odd
+                        if (px === 0 && py === 0 && pz === 0) continue;
+                        _nodes.push(new THREE.Vector3(px, py, pz));
                     }
                 }
             }
 
-            // Connect all outer nodes to center (node 0)
             const _conns: [number, number][] = [];
+            // Connect all nodes to the first node (the center)
             for (let i = 1; i < _nodes.length; i++) {
                 _conns.push([0, i]);
             }
             return { nodes: _nodes, connections: _conns };
         } else {
-            // MODES 1-4: Standard cubic grid with all-to-all connections
-            const offset = (size - 1) / 2;
+            // MODES 1-4: Standard all-to-all Metatron connections
             for (let x = 0; x < size; x++) {
                 for (let y = 0; y < size; y++) {
                     for (let z = 0; z < size; z++) {
@@ -453,7 +443,7 @@ export const MetatronGeometry: React.FC<Props> = ({ controller }) => {
             }
             return { nodes: _nodes, connections: _conns };
         }
-    }, [size, isSphereMode]);
+    }, [size, isSphereMode, spacing]);
 
     // --- 2. INSTANCED LINES ---
     const meshRef = useRef<THREE.InstancedMesh>(null);
@@ -600,30 +590,40 @@ export const MetatronGeometry: React.FC<Props> = ({ controller }) => {
             {isSphereMode ? (
                 <>
                     {/* MODE 10: Lightweight instanced rendering */}
-                    {/* Center sphere — larger, golden */}
-                    <mesh position={[0, 0, 0]}>
-                        <sphereGeometry args={[3.0, 32, 32]} />
-                        <meshBasicMaterial
-                            color="#ffd700"
-                            wireframe={!controller.solidMode}
-                            transparent
-                            opacity={controller.solidMode ? 0.6 : 0.4}
-                            side={controller.solidMode ? THREE.DoubleSide : THREE.FrontSide}
-                        />
-                    </mesh>
-                    {/* Outer spheres — smaller, instanced */}
-                    {nodes.slice(1).map((pos, i) => (
-                        <mesh key={i} position={pos}>
-                            <sphereGeometry args={[0.6, 8, 8]} />
-                            <meshBasicMaterial
-                                color={sphereColor}
-                                wireframe={!controller.solidMode}
-                                transparent
-                                opacity={controller.solidMode ? 0.3 : 0.3}
-                                side={controller.solidMode ? THREE.DoubleSide : THREE.FrontSide}
-                            />
-                        </mesh>
-                    ))}
+                    {(() => {
+                        const centerIdx = 0; // The explicit center node is always at index 0
+                        return (
+                            <>
+                                {/* Center sphere — larger, golden */}
+                                <mesh position={nodes[centerIdx]}>
+                                    <sphereGeometry args={[3.0, 32, 32]} />
+                                    <meshBasicMaterial
+                                        color="#ffd700"
+                                        wireframe={!controller.solidMode}
+                                        transparent
+                                        opacity={controller.solidMode ? 0.6 : 0.4}
+                                        side={controller.solidMode ? THREE.DoubleSide : THREE.FrontSide}
+                                    />
+                                </mesh>
+                                {/* Outer spheres — smaller, instanced */}
+                                {nodes.map((pos, i) => {
+                                    if (i === centerIdx) return null;
+                                    return (
+                                        <mesh key={i} position={pos}>
+                                            <sphereGeometry args={[0.6, 8, 8]} />
+                                            <meshBasicMaterial
+                                                color={sphereColor}
+                                                wireframe={!controller.solidMode}
+                                                transparent
+                                                opacity={controller.solidMode ? 0.3 : 0.3}
+                                                side={controller.solidMode ? THREE.DoubleSide : THREE.FrontSide}
+                                            />
+                                        </mesh>
+                                    );
+                                })}
+                            </>
+                        );
+                    })()}
                 </>
             ) : (
                 <>
