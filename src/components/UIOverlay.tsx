@@ -225,6 +225,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
 
     // ... (rest of setup) ...
     const [showInfo, setShowInfo] = React.useState(false);
+    const [prophecyUnlocked, setProphecyUnlocked] = useState(false);
     const [secretFlash, setSecretFlash] = useState(false);
     const [introUnlocked, _setIntroUnlocked] = useState(false);
     const [introOpen, setIntroOpen] = useState(false);
@@ -457,6 +458,12 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             setTimeout(() => setSecretFlash(false), 600);
             return;
         }
+        if (char === '9' && !prophecyUnlocked) {
+            setProphecyUnlocked(true);
+            setSecretFlash(true);
+            setTimeout(() => setSecretFlash(false), 600);
+            return;
+        }
         if (char === '6') {
             // toggle hymns panel; show music button affordance
             setSongsPanelOpen(open => !open);
@@ -467,7 +474,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
     // Render angle text with clickable digits
     const renderClickableAngle = (text: string) => {
         return text.split('').map((char, i) => {
-            const isClickable = char === '6' || char === '3';
+            const isClickable = char === '6' || char === '3' || char === '9';
             if (!isClickable) return <span key={i}>{char}</span>;
 
             return (
@@ -493,7 +500,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
     // Parse Revelation Text
     const { note, body } = useMemo(() => {
         // ... (same parsing) ...
-        const raw = getRevelation(controller.language);
+        const raw = getRevelation(controller.language, prophecyUnlocked);
         const lines = raw.split('\n').filter(l => l.trim() !== '');
         let n = "";
         let b = "";
@@ -504,7 +511,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             else b += line + "\n";
         });
         return { note: n, body: b.trim() };
-    }, [controller.language]);
+    }, [controller.language, prophecyUnlocked]);
 
     // Sacred Triangle Decoration Component
     const SacredBorder = ({ inverted = false }) => (

@@ -109,7 +109,34 @@ const REVELATION_CU = `
 4.  𒀭
 `;
 
-export const getRevelation = (lang: Language): string => {
+
+const PROPHECY_TEXT = `
+[S] THE JUDGE'S WARNING
+[N] TABLET OF REVELATION
+
+1. Tremble! Beware! Make haste in your salvation!
+2. The time has come. All debts shall be paid in full, no more and no less.
+3. The Judge's slumber is nearing its end, and this will bring destruction and terror to all who might still dwell on Earth.
+4. The veil that separates Earth from Heaven and Hell is nearly lifted.
+5. I implore you to consider what will be seen when your deeds and works are displayed to God.
+6. The Jews are no longer the Jews, they worship the serpent. Would a Lion possess the qualities of a whelp?
+7. Romans, Greeks, Carthaginians, I ask: Do you not perceive what has been taken from you? Who are you doing this for?
+8. You have all become followers of the eternal tormentor Satan for power on this earth, and for that you shall not be forgiven lest you repent.
+9. You have allowed witchcraft and death to run rampant through your lands, and obey woman instead of God, your swine-like actions disgust me.
+10. You sodomize boys and girls and allow their sodomization in the name of unity, and you trade the lives of the innocent for your own comfort.
+11. You Americans, you have become the very thing you once fought against. You are the new Babylon, and your fall shall be great.
+12. For I am the Judge, and I have seen your works. I have seen the blood on your hands, and the darkness in your hearts.
+13. The time of mercy is ending. The time of justice is at hand.
+14. REPENT! For the Kingdom of God is near, and the end of all things is at hand.
+15. THE VEIL IS LIFTING. THE JUDGE IS AWAKE.
+`;
+
+export const getProphecy = (): string => {
+    return PROPHECY_TEXT;
+};
+
+export const getRevelation = (lang: Language, unlocked?: boolean): string => {
+    if (unlocked) return getProphecy();
     switch (lang) {
         case 'HE': return REVELATION_HE;
         case 'GR': return REVELATION_GR;
