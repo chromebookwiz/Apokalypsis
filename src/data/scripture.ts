@@ -41,14 +41,14 @@ export const HYMN_CU = `
 [S] 𒀭 𒅗 𒀜 𒉈 
 [N] 𒄑 𒆪 𒀭 𒅎
 
- 𒀭 𒉈 𒋫 ኖል  𒀭  𒀭 𒉌 𒅗 ኖል  𒀭  𒀭 𒆷 𒊏 ኖል 
- 𒀭 𒂊 𒇷 𒊓 ኖል  𒀀 𒀀 𒉌 ኖሪስካ 
- 𒀭 ሱ ፊ ያ  𒀭  𒀭 ሳ ማ ታ  𒀭  𒀭 ፊ ጆ ርድ 
- 24 𒀀   ↕️   𒀭 12 𒀀   ↔️  
- 1-8-27-64 𒀭   🕋  𒀭 牦
- 
-  ⏳   𒀀  ⏳  
-  𒀭 𒅗 𒀜 𒉈 🌀
+ 𒀭 𒉈 តា ኖል  𒀭  𒀭 𒉌 𒅗 ኖል  𒀭  𒀭 𒆷 𒊏 ኖል 
+  𒀭 𒂊 ሊ 𒊓 ኖል  𒀀 𒀀 𒉌 ኖሪስካ 
+  𒀭 ሱ ፊ ያ  𒀭  𒀭 ሳ ማ ታ  𒀭  𒀭 ፊ ጆ ርድ 
+  24 𒀀   ↕️   𒀭 12 𒀀   ↔️  
+  1-8-27-64 𒀭   🕋  𒀭 牦
+  
+   ⏳   𒀀  ⏳  
+   𒀭 𒅗 𒀜 𒉈 🌀
 `;
 
 export const HYMN_NO = `
@@ -63,7 +63,7 @@ export const HYMN_NO = `
 ᚲᚢᛒᛖ ᛩᚾᛖ ᛖᛁᚷᚺᛏ ᛏᚹᛖᚾᛏᚤ-ᛋᛖᚢᛖᚾ
 ᛋᛁᛪᛏᚤ-ᚠᛩᚢᚱ ᚲᚱᚤᛋᛏᚪᛚ ᚠᛩᚱᛗ
 ᚱᛁᛚᛖᛃ ᚠᛚᛖᛖᛋ ᚲᚪᛏ ᚹᛖᚪᚢᛖᛋ
-ᛏᛖᛋᛋᛖᚱᚪᚲᛏ ᛋᛈᛚᛁᛏ ᛏᚹᛩ ᚹᚪᚤᛋ
+ᛏᛖᛋᛋᛖᚱᚪᚲᛏ ᛋᛈᛚᛁᛏ ᛏᛚᚹᛩ ᚹᚪᚤᛋ
 `;
 
 export const HYMN_HE = `
@@ -115,7 +115,7 @@ export const HYMN_AR = `
 [S] تناغم كات
 [N] مزمور قضيب الحديد
 
-من نكانול ولارانול جاء نטאנול ואליסנול.
+من نكانול ولارانול جاء نטאנול ואליስנול.
 أربع وعشرون واثنا عشر في أفلاك النور.
 قهر الثور، أمسك بالقرون، نال السر.
 واحد، ثمانية، سبعة وعشرون، أربعة وستون.
@@ -216,6 +216,36 @@ Mercader de Luz teje la gran red.
 Teseracto partió tiempo en dos.
 `;
 
+export const HYMN_ZH = `
+[S] 凯特的和谐
+[N] 铁杖颂歌
+
+源自猎户座与公牛之血。
+六十杯苏摩酒一饮而尽。
+斩杀邪蛇，夺取三十之角。
+三百六十之轮，铁杖紧锁。
+
+立方体是应许之光。
+神之名镌刻于晶格。
+光之工匠织就古老之网。
+超立方体将时间一分为二。
+`;
+
+export const HYMN_JA = `
+[S] カットの調和
+[N] 鉄の杖の詩
+
+オリオン och 牡牛の血統より。
+六十のソーマを飲み干した。
+蛇を討ち、三十の角を得た。
+三百六十の車輪、鉄の杖に繋ぐ。
+
+立方体は約束された光。
+神の名は格子に刻まれる。
+光の匠は古き網を織る。
+テセラクトは時を二つに裂く。
+`;
+
 
 // ═══════════════════════════════════════════════════════════════
 // III. THE NUMERIC SCRIPTURES (GRID & PARITY)
@@ -223,7 +253,7 @@ Teseracto partió tiempo en dos.
 
 export const NUMERIC_SCRIPTURE_CU = `
 [S] 𒀭  숫자 
-[N] 𒀭 ኖሪስካ 
+[N] 𒀭 ኖሪ斯卡 
 
 𒀭 𒀭 𒀭 𒀭 𒀭 𒀭 𒀭 𒀭
 𒀭 ኖሪስካ 𒀭 ኖሪስካ 𒀭
@@ -341,6 +371,25 @@ Viginti quattuor latitudines lucis.
 Duodecim longitudines temporis.
 `;
 
+export const NUMERIC_SCRIPTURE_ZH = `
+[S] 数字之秘
+[N] 战车几何
+
+四 六 八 神圣。
+一 二 三 四。
+二十四纬度之光。
+十二经度之刻。
+`;
+
+export const NUMERIC_SCRIPTURE_JA = `
+[S] 数学の秘儀
+[N] 戦車の幾何学
+
+四 六 八 神聖なり。
+一 二 三 四。
+二十四の緯度の光。
+十二の経度の時。
+`;
 
 import { Language } from './translations';
 
@@ -357,6 +406,8 @@ const HYMNS: Record<Language, string> = {
     'ES': HYMN_ES,
     'FA': HYMN_FA,
     'CU': HYMN_CU,
+    'ZH': HYMN_ZH,
+    'JA': HYMN_JA
 };
 
 const NUMERIC_SCRIPTURES: Record<Language, string> = {
@@ -372,6 +423,8 @@ const NUMERIC_SCRIPTURES: Record<Language, string> = {
     'ES': NUMERIC_SCRIPTURE_ES,
     'FA': NUMERIC_SCRIPTURE_FA,
     'CU': NUMERIC_SCRIPTURE_CU,
+    'ZH': NUMERIC_SCRIPTURE_ZH,
+    'JA': NUMERIC_SCRIPTURE_JA
 };
 
 export const getHymn = (lang: Language): string => {

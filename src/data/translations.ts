@@ -1,4 +1,4 @@
-export type Language = 'HE' | 'GR' | 'AM' | 'HI' | 'NO' | 'SA' | 'LA' | 'AR' | 'DE' | 'ES' | 'FA' | 'CU';
+export type Language = 'HE' | 'GR' | 'AM' | 'HI' | 'NO' | 'SA' | 'LA' | 'AR' | 'DE' | 'ES' | 'FA' | 'CU' | 'ZH' | 'JA';
 
 export const LANG_NAMES: Record<Language, string> = {
     'HE': 'עִבְרִית', // Hebrew
@@ -12,7 +12,9 @@ export const LANG_NAMES: Record<Language, string> = {
     'DE': 'Deutsch', // German
     'ES': 'Español', // Spanish
     'FA': 'فارسی', // Persian (Farsi)
-    'CU': '𒅴𒂠' // Cuneiform (Sumerian)
+    'CU': '𒅴𒂠', // Cuneiform (Sumerian)
+    'ZH': '中文', // Chinese
+    'JA': '日本語' // Japanese
 };
 
 export const UI_STRINGS: Record<Language, any> = {
@@ -199,5 +201,35 @@ export const UI_STRINGS: Record<Language, any> = {
         next: "𒀭",
         toggle_text: "𒀭",
         toggle_dark: "𒀭"
+    },
+    'ZH': {
+        hide_ui: "隐藏界面",
+        show_ui: "显示界面",
+        info: "公牛与晶格的传说",
+        lock_parallel: "束缚战车",
+        unlock_parallel: "释放战车",
+        mute_tones: "静音合唱",
+        enable_tones: "唤醒合唱",
+        scale: "神圣音阶",
+        prev: "向后转",
+        reset: "中心",
+        next: "向前转",
+        toggle_text: "切换文本",
+        toggle_dark: "昼 / 夜"
+    },
+    'JA': {
+        hide_ui: "UIを隠す",
+        show_ui: "UIを表示",
+        info: "牡牛と格子の伝説",
+        lock_parallel: "戦車を繋ぐ",
+        unlock_parallel: "戦車を放つ",
+        mute_tones: "合唱を静める",
+        enable_tones: "合唱を目覚めさせる",
+        scale: "神聖な音階",
+        prev: "後ろへ",
+        reset: "中心",
+        next: "前へ",
+        toggle_text: "文字を切り替え",
+        toggle_dark: "昼 / 夜"
     }
 };
