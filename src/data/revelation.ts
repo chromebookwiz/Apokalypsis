@@ -108,6 +108,24 @@ const REVELATION_CU = `
 3. 𒀭 𒀭 𒁮
 4.  𒀭
 `;
+const REVELATION_ZH = `
+[S] 麦达昶的愿景
+[N] 火之战车
+
+1. 我看见了世界中心的火之战车。
+2. 轮中之轮，数字的原始连接。
+3. 光之工匠建造了这台机器。
+4. 在真理之线上，曲率是正的。
+`;
+const REVELATION_JA = `
+[S] メルカバのビジョン
+[N] 火の戦車
+
+一、 世界の中心に火の戦車を見た。
+二、 輪の中の轮、数字の根源的な繋がり。
+三、 光の匠がこの機械を造った。
+四、 真実の線上において、曲率は正である。
+`;
 
 
 
@@ -440,6 +458,8 @@ export const getRevelation = (lang: Language, unlocked?: boolean): string => {
         case 'ES': return REVELATION_ES;
         case 'FA': return REVELATION_FA;
         case 'CU': return REVELATION_CU;
+        case 'ZH': return REVELATION_ZH;
+        case 'JA': return REVELATION_JA;
         default: return REVELATION_LA;
     }
 };

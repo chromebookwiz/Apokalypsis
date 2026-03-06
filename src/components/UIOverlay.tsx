@@ -545,6 +545,39 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             {/* SUBTLE HOLY OVERLAY */}
             <DivineCorners />
 
+            {/* CENTRAL UNLOCK EYE - ONLY WHEN UI IS HIDDEN */}
+            {!controller.uiVisible && (
+                <div style={{
+                    position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+                    display: 'flex', justifyContent: 'center', alignItems: 'center',
+                    backgroundColor: 'rgba(0,0,0,0.1)', // Very subtle backdrop
+                    pointerEvents: 'auto', zIndex: 1050
+                }}>
+                    <button
+                        onClick={() => {
+                            controller.setUiVisible(true);
+                        }}
+                        style={{
+                            fontSize: '8rem', background: 'none', border: 'none',
+                            color: '#d4af37', cursor: 'pointer',
+                            filter: 'drop-shadow(0 0 20px rgba(212, 175, 55, 0.8))',
+                            transition: 'all 0.5s ease',
+                            animation: 'pulse 3s infinite ease-in-out'
+                        }}
+                        className="unlock-eye"
+                    >
+                        𓁹
+                    </button>
+                    <style>{`
+                        @keyframes pulse {
+                            0% { transform: scale(1); opacity: 0.6; }
+                            50% { transform: scale(1.1); opacity: 1; }
+                            100% { transform: scale(1); opacity: 0.6; }
+                        }
+                    `}</style>
+                </div>
+            )}
+
             {/* LEFT CORNER: EYE ICON ONLY */}
             <div className="corner-tl" style={{
                 position: 'fixed', top: '20px', left: '20px', zIndex: 1100, pointerEvents: 'auto',
