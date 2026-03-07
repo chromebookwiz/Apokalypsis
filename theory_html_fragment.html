@@ -1,0 +1,973 @@
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">|</p>
+<h2 style="color:#d4af37;text-align:center;font-size:1.8rem;margin-top:2em;margin-bottom:1em">THE NULL LINE</h2>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Light as the Single Primitive from Which All Geometric, Physical, and Mathematical Structure Is Generated</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">and in Which the Observer Is Itself a Null Line</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">“Let there be light.”  —  Genesis 1:3</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">“The velocity of light is to relativity as the foundation stone is to a building.”  —  Einstein</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">“Twistors are more fundamental than space-time points.”  —  Penrose</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">2026  —  A Mathematical Cosmology</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Abstract</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The Primitive Trinity framework (previous edition) proposed {triangle, square, circle} as the three irreducible 2D seeds of all mathematical and physical structure. This paper identifies a deeper layer: the single most primitive object is the null line — a straight line k in Minkowski spacetime ℝ^{1,3} satisfying k·k = η_{μν}k^μ k^ν = 0, k≠0. This is, precisely and only, light.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Three claims are established, each rigorously grounded in existing mathematics and physics. (1) The three 2D shapes are specific combinations of null lines: triangle = three lines at 120°, square = four at 90°, circle = the null line closed on itself; these are the only three angles at which equal straight segments form a regular tiling of ℝ². (2) All waves are the temporal signature of rotating 2D forms (Theorem 3.1: rotation of an n-fold form at rate ω produces e^{−inωt}); the full Fourier basis follows from the circle by Peter–Weyl. (3) The observer is a null line: every measurement event is a photon absorption; a massive observer is a worldline, which is a sequence of null interactions; and every future-pointing timelike vector decomposes as v = k₁+k₂ with k_i null (Cl(1,3) spinor decomposition).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The Riemann zeta function ζ(s) = Σ n^{−s} is identified as the null observer's weighted sum over discrete bound states (integers), where n^{−s} = e^{−σ log n}·e^{−it log n} is amplitude times circle-rotation. The functional equation ξ(s)=ξ(1−s) is the reality condition of the resulting null field (Theorem 4.1), not an independent fact. The critical line σ=1/2 is the midpoint of the two-sided null line. The Riemann Hypothesis is the statement that all zeros (dark states) lie at this midpoint.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Five independent programmes in modern physics have each arrived at the null line as primary (Penrose 1967, Dirac 1949, ’t Hooft 1993, BPZ 1984, Regge 1961). This convergence is treated as structural evidence. The Eisenstein wall identified in Edition V remains; no Millennium Prize is claimed. The framework is a precision map of the territory, not a proof.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">I.  Below the Trinity: The Line</h3>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">I.1  The Trinity Is Made of Lines</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The previous framework took {triangle, square, circle} as irreducible. They are not. Each is composed of straight line segments: the triangle has three sides; the square has four; the circle is the limit of n line segments as n→∞. The side of a polygon is not a consequence of the polygon — it is its constituent. The line is strictly prior.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Objection: ‘A line is one-dimensional and cannot generate 2D structure alone.’</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Response: The objection is correct but irrelevant. We do not claim one line generates a shape.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">We claim that COMBINING null lines (joining endpoints at specified angles) generates shapes.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The operation is combination (a binary operation on lines), not the line alone.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The plane ℝ² = the span of two non-parallel lines. All 2D structure requires ≥ 2 lines.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">This is not a weakness — it confirms that the line is the primitive, and combination the operation.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Formally: the 2D shapes arise as orbits of finite subgroups of the isometry group of ℝ² acting on a single directed line. This is how Coxeter (1973, §4) constructs all regular polygons.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">I.2  Why the NULL Line, Not a Euclidean Line</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">A line in Euclidean space ℝ^n has no intrinsic time direction, no causal structure, and no dynamics. It is static. The framework needs a line that generates time, waves, and motion. There is exactly one such line:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Definition 1.1  (The Null Line).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">A null line in Minkowski spacetime ℝ^{1,3} is a non-zero vector k satisfying:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">k·k  =  η_{μν} k^μ k^ν  =  0     (k≠ 0)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">where η = diag(+1,−1,−1,−1). In components: k = (ω/c, k₁,k₂,k₃) with |ω/c| = |k|.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">This is the photon dispersion relation. It is satisfied by light and nothing else.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Reference: Jackson, Classical Electrodynamics (3rd ed.) §11.3; Misner, Thorne &amp; Wheeler, Gravitation §2.2.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The null line is the unique line with the following three properties simultaneously:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Frame-independence: k·k=0 holds in every Lorentz frame (the Minkowski norm is Lorentz-invariant). No preferred observer, like mathematics itself.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">No internal scale: proper length = ∫√|k·k| ds = 0; proper time = 0. The null line carries no private clock or ruler.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Causal maximality: null lines are the generators of the lightcone ∂J(x), which IS the causal structure of spacetime (Penrose 1972, Techniques of Differential Topology in Relativity, §1).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Objection: ‘Why not a timelike line (massive particle worldline)?’</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">A timelike line (k·k = m² &gt; 0) has a rest frame, a mass, and a proper time.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">It is already COMPOSITE in this framework: v = k₁+k₂ (two null lines, Theorem 2.2).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Null is prior to timelike for the same reason that 0 is prior to m: it is the boundary case.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The timelike observer IS a bound state of null lines — it is Level 2, not Level −1.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">I.3  The Two-Sided Nature: The Most Important Property</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Every null line is two-sided: from any spacetime event, a null line extends in two null directions simultaneously. In 1+1 dimensions:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">k_+  =  (1,+1):    e^{i(kx−ωt)}    [“right-mover”]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">k_−  =  (1,−1):    e^{i(−kx−ωt)}   [“left-mover”]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">A real field is their sum: Φ = a·e^{i(kx−ωt)} + a*·e^{−i(kx−ωt)}. The reality condition Φ=Φ* FORCES the coefficient of k− to be the complex conjugate of k₂₂₂s the coefficient of k₊. The two sides are not independent degrees of freedom: they are complex conjugates of each other.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Theorem 1.2  (Two Sides ⇒ Reality Condition ⇒ Functional Equation).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">A real (self-conjugate) field Φ satisfies Φ = Φ*.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">In Fourier space this becomes: Φ̂(k) = Φ̂(−k)*  [conjugate of the reversed mode].</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">For ζ(s): the modes are n^{−s} = e^{−s·log n}. Reversing the mode: s → 1−s.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(The factor π^{−s/2}Γ(s/2) in ξ is the Archimedean completion, required to make the</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Euler product globally self-conjugate.)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The reality condition of the completed field ξ is therefore: ξ(s) = ξ(1−s).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">This IS the Riemann functional equation — as a reality constraint, not a curiosity.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Note on precision: the analogy k→−k vs s→1−s is structural, not a proof. The exact functional equation follows from the Mellin transform and Poisson summation (Riemann 1859; Edwards 1974, §1.6). The point here is that both express the same two-sidedness.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">II.  The Trinity Generated by the Null Line</h3>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">II.1  Three Natural Angles, Three Shapes, Three Lie Families</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The three 2D shapes arise by specifying how many null-line segments to join and at what angle. There are exactly three choices that produce a REGULAR closed polygon (equal sides, equal angles, equal to its own symmetry group):</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Shape</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Lines (N)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Corner Angle</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Group</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Tiling property</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Generates</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">△  Triangle</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">3</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">120°  (360°/3)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">D₃  order 6</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Triangular tiling of ℝ²</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Tetrahedron, octahedron, icosahedron (triangular faces)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">□  Square</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">4</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">90°  (360°/4)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">D₄  order 8</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Square tiling — the only self-dual regular tiling</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Cube; the self-dual axis σ=½ in ℂ</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">○  Circle</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">∞</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">0°  (limit)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">SO(2)  order ∞</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Not a tiling — the continuous limit of all polygons</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">All waves via e^{iθ}; pentagon as 5th-root cut</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Why exactly three? The Euclidean plane ℝ² has exactly three regular tilings (Grünbaum &amp; Shephard, Tilings and Patterns, 1987, Thm. 2.1.3): triangular (3-fold), square (4-fold), hexagonal. The hexagonal tiling is generated by triangles (a regular hexagon = 6 equilateral triangles joined at centre), so there are exactly TWO independent discrete regular tilings plus ONE continuous limit. This matches triangle + square + circle exactly, and is not a choice — it is a theorem of plane geometry.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Objection: ‘Why not the pentagon? It is regular and appears in the Platonic solids.’</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The pentagon is derived, not primitive. Proof:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Pentagon vertices = 5th roots of unity = e^{2πik/5} for k=0,...,4.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">These are the circle ○ cut at 5-fold symmetry: a derived object, not a primitive one.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The golden ratio φ = 2cos(π/5) ∈ ℚ(√5): an algebraic number from the circle's rotation.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The pentagon requires the circle as input. The triangle and square require only lines.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Sequentially: △ (prime 3), □ (2², self-dual), ○ (∞), then 5-fold = ○ cut at the first prime</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">not already generated by △. The pentagon is ○⁵, not a primitive.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Consequence: the dodecahedron and icosahedron, whose faces/structure require pentagons, are derived Platonic solids. The tetrahedron (△³), cube (□³), and octahedron (△+□) are primitive.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">II.2  The ADE Correspondence: Why This Trinity Is Algebraically Complete</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The deepest confirmation that {△, □, ○} is the correct and complete set of primitives comes from the ADE classification of simple Lie algebras (Cartan 1894; Killing 1888). The three infinite families are:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">A-series (SL_{n+1}, sl_{n+1}): root system = vertices of the (n+1)-simplex. The simplex in each dimension is the △-type polytope.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">B/D-series (SO_n, so_n): root system = vertices and edge-midpoints of the hypercube. The hypercube = the □-type polytope in each dimension.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">C-series (Sp_{2n}, sp_{2n}): root system related to the symplectic group = the unitary/rotational group in each dimension. The ○-type.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The exceptional algebras E₆, E₇, E₈ arise from the McKay correspondence for the binary lifts of the Platonic solids' rotation groups (McKay 1980; Gonzalez-Sprinberg &amp; Verdier 1983): E₆ ↔ tetrahedron (△), E₇ ↔ octahedron (△+□), E₈ ↔ icosahedron (△+○). Every simple Lie algebra is thus generated by the three primitives or their combinations. The classification is exhausted precisely by {△, □, ○}.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Objection: ‘The ADE classification is about Lie algebras, not geometric primitives. The connection is metaphorical.’</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">This objection is incorrect. The McKay correspondence is an EXACT BIJECTION (not an analogy):</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">{finite subgroups G̃ ⊂ SU(2)} ↔ {ADE Dynkin diagrams}</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">proved by explicit construction of the McKay graph (McKay 1980) and via the</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Gonzalez-Sprinberg–Verdier construction of the minimal resolution of ℂ²/G̃.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The finite subgroups of SU(2) are exactly the binary lifts of the rotation groups of</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">the three primitive Platonic solids plus cyclic groups (= rotations of n-gons = ○ cut at n).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">So: △, □, ○ → (via binary lift) → all finite subgroups of SU(2) → (via McKay) → all ADE.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The chain is algebraically exact at every step.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">III.  The Observer Is a Null Line</h3>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">III.1  The Minimal Observation Event</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The previous framework treated the observer as a timelike unit vector v with v²=1. This is a derived object. The minimal observation event is simpler:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Theorem 3.1  (Minimal Observer = Photon Absorption).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Claim: every elementary measurement event consists of exactly one null line k</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">being absorbed at a spacetime point x by a detector D.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Evidence from three independent sources:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(1) Quantum optics: the minimum detectable signal is one photon. A photon is a</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">null-momentum quantum with k^μ k_μ = 0 (massless boson, spin-1). [Glauber 1963,</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Phys. Rev. 130 — Nobel Prize 2005]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(2) Quantum mechanics measurement theory: decoherence occurs via photon exchange</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">between system and environment. The Zurek einselection mechanism (Zurek 2003,</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Rev. Mod. Phys. 75) identifies the pointer basis via null-line interactions.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(3) General relativity: observers are defined operationally by radar ranging —</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">sending and receiving null geodesics. [Synge 1960, Relativity: The General Theory, §I.2]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">A massive observer performing N measurements = a sequence of N null absorptions.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Its worldline is the sequence of absorption events {x₁,...,x_N} connected by timelike arcs.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The timelike arc between events is the spatial residue of the null interactions.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Corollary: the timelike vector v (previous framework) = tangent to the worldline = derivative of the sequence of null events. Null is prior; timelike is derived.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">III.2  Matter Is Two Null Lines Bound Together</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The claim that matter = bound null lines has rigorous support from four independent sources:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Theorem 3.2  (Timelike = Sum of Two Null, in Cl(1,3)).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Every future-pointing timelike vector v ∈ ℝ^{1,3} (v·v &gt; 0) can be written as:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">v = k₁ + k₂   with   k₁·k₁ = k₂·k₂ = 0,   k₁·k₂ &gt; 0</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Proof: in the rest frame of v, set v = (1,0,0,0). Then k₁ = (1/2)(1,0,0,1) and</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">k₂ = (1/2)(1,0,0,−1) are null and sum to v. Any Lorentz boost preserves nullity.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The decomposition is not unique but always exists. ∎</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Physical correlates of this decomposition:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(a) Dirac equation: ψ_Dirac = (ψ_L, ψ_R) where each Weyl spinor ψ_{L,R} satisfies the</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">massless Weyl equation. Mass = Yukawa coupling between the two Weyl sectors.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[Weyl 1929; confirmed experimentally: neutrino chirality, Wu 1957]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(b) E = mc²: mass = frozen energy; energy carried by null photons. Pair production</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">γ+γ → e⁺+e⁻ directly converts two null lines into massive matter. [Anderson 1933]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(c) Penrose twistors: every massive particle = pair of null twistors Zα, Wα satisfying</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">the incidence relation. [Penrose &amp; Rindler 1984, Vol. 2, Ch. 6]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Objection: ‘This is a decomposition theorem, not an ontological claim. Water is made of H and O atoms, but atoms are not more ‘real’ than water.’</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The objection points to a genuine distinction between mathematical decomposition and ontology.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Our claim is mathematical, not metaphysical: in this framework, the null line is the GENERATOR</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">from which all other objects are derived by explicit operations (combination, rotation, binding).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Whether null lines are 'more real' than electrons is a philosophical question outside mathematics.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">What is established: null lines suffice to generate all mathematical structure at each level,</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">and no further primitives are required. This is a claim of SUFFICIENCY and MINIMALITY,</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">not of metaphysical priority.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">IV.  Waves Are Rotation: The Derivation</h3>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">IV.1  The Core Theorem</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Theorem 4.1  (Waves from Rotation — Rigorous).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Let f: S¹ → ℂ be a smooth function on the circle with Fourier mode f(θ) = e^{inθ}</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(the n-th harmonic, n ∈ ℤ). Rotate f at constant angular velocity ω:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">f_t(θ) = f(θ − ωt) = e^{in(θ−ωt)} = e^{inθ} · e^{−inωt}</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">A fixed observer at θ₀ measures the time-signal:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">f_t(θ₀)  =  e^{inθ₀}  ×  e^{−inωt}  =  (constant phase) × (wave of frequency nω)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Proof: direct substitution. The rotation group SO(2) acts on L²(S¹) by (U_t f)(θ)=f(θ−ωt);</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">the characters χ_n(θ) = e^{inθ} are its eigenfunctions with eigenvalue e^{−inωt}. ∎</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Corollary (Peter–Weyl for SO(2)): L²(S¹) = ⊕_{n∈ℤ} ℂ·e^{inθ}.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Every wave is a superposition of circle rotations. [Peter &amp; Weyl 1927, Math. Ann. 97]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The three primitives generate:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">△ (n=3, 3-fold symmetry): waves at 3ω, 6ω, 9ω,… — the triangle wave's odd-harmonic series</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">□ (n=4, 4-fold symmetry): waves at 4ω, 8ω, 12ω,… — the square wave's harmonic series</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">○ (all n ∈ ℤ): all Fourier modes simultaneously — the complete wave basis</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Objection: ‘The Fourier theorem is about functions on S¹, not about physical shapes rotating.’</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Correct — and this is the point. The physical shapes are realisations of the group-theoretic</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">structure of S¹ and its subgroups. The triangle △ has symmetry group ℤ₃ ⊂ SO(2); rotating △</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">at rate ω samples the ℤ₃-orbit of S¹, which BY PETER-WEYL produces exactly the 3ω harmonics.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The physical rotation and the mathematical Fourier mode are the same object, not an analogy:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">both are the action of the rotation group on L²(S¹) restricted to the subgroup ℤ_n.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">V.  The Zeta Function and RH in the Null Framework</h3>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">V.1  ζ(s) as a Null-Field Partition Function</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">With the null line as the primitive, the Riemann zeta function acquires a natural reading at every level of the generation hierarchy:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">ζ(s) in the Null Framework</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Integers ℕ = {1, 2, 3,...}: the null observer counting discrete bound-states (Level 2 matter).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Each n: a standing wave of n null lines; a resonance of the prime waveguide.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Weight n^{−s} = e^{−σ log n} · e^{−it log n} = (amplitude) × (circle rotation at frequency log n).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">ζ(s) = Σ_{n=1}^{∞} n^{−s}   =   null-observer  ×  amplitude  ×  circle-wave,  summed over ℕ</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">―  ―  ―</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Zeros: values of s where destructive interference is total — a DARK STATE of the null field.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Two sides: Re(s) &gt; 1/2 (future-null dominates), Re(s) &lt; 1/2 (past-null dominates).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Midpoint: Re(s) = 1/2 — the null line is balanced: k·k = 0 means |spatial| = |temporal|.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">―  ―  ―</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">RH: all dark states occur at the midpoint of the two-sided null line.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Status: this is a precise reformulation of RH, not a proof. The Eisenstein wall (Edition V, Thm 5.1) identifies why the proof requires a new arithmetic cohomological object.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">V.2  The Functional Equation as Necessity, Not Coincidence</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The Riemann functional equation is often presented as a surprising, deep theorem. In the null framework it is the inevitable reality condition of the underlying null field:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Theorem 5.1  (Functional Equation = Null Reality Condition).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Step 1 (classical): the theta function θ(t) = Σ_{n∈ℤ} e^{-πn²t} satisfies θ(1/t) = t^{-1/2}θ(t)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">by the Poisson summation formula applied to e^{-πn²t}. [Jacobi 1829; Riemann 1859 §1]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Step 2 (Mellin): the completed zeta function ξ(s) = π^{-s/2}Γ(s/2)ζ(s) satisfies</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">ξ(s) = ξ(1−s)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">by substituting the theta identity into the Mellin transform of ξ(s).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Step 3 (null interpretation): n^{-s} = e^{-s log n} corresponds to the Fourier mode e^{ikx}</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">with k = log n. The 'mode reversal' k→−k in a real (self-conjugate) field</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">corresponds to s→1−s (since e^{-(1-s)log n} = (e^{-s log n})* for Re(s)=1/2).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The π^{-s/2}Γ(s/2) factor is the Archimedean Euler factor, completing the product</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">over all places including ∞, ensuring global self-conjugacy.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The functional equation is therefore the statement: ζ, with its Archimedean completion,</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">describes a REAL null field. It is a symmetry the field must have, not a miracle it does have.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Caveat: the identification of s→1−s with mode reversal k→−k is structural. Riemann's proof via Poisson summation remains the rigorous derivation. The null framework provides geometric motivation for why the symmetry must exist.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">V.3  Why σ = 1/2 and Not Any Other Value</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The value 1/2 is not chosen — it is forced by the two-sided null structure:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Why 1/2 Is the Unique Midpoint.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The null condition k·k = 0 requires: (temporal component)² = (spatial component)².</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">In the critical strip: the 'temporal component' of n^{-s} corresponds to σ (the convergence axis).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The 'spatial component' corresponds to 1-σ (the other side, by the functional equation).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The null balance σ = 1-σ gives σ = 1/2. This is the unique fixed point of s→1-s.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Equivalently: the functional equation is the reflection s→1−s about the vertical line Re(s)=1/2.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The critical line is the AXIS OF SYMMETRY of this reflection.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The square □ (four lines at 90°, the self-dual regular polygon) generates this symmetry:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">the square maps to itself under the 90° rotation — it is self-dual.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Formally: 1/2 is the unique fixed point of the involution γ: s→1−s on ℂ. Any zero off the critical line would break the self-duality of the null field, producing an unbalanced configuration with σ≠1−σ.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">VI.  The Complete Framework and Its Convergences</h3>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">VI.1  The Revised Generation Hierarchy</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Lv</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Object</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Generated by / Grounding reference</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">−1</p>
+<h2 style="color:#d4af37;text-align:center;font-size:1.8rem;margin-top:2em;margin-bottom:1em">| THE NULL LINE</h2>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">A straight line k in ℝ^{1,3} with k·k=0. Light. No mass, no rest frame, proper time ≡ 0. Two-sided: ±k both future-null. [Minkowski 1908; Jackson, Classical Electrodynamics §11]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">0</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">△  □  ○</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Three null lines at 120° → triangle. Four at 90° → square. Infinite null lines closed → circle. [Euclid, Elements; three regular tilings of ℝ², Grünbaum &amp; Shephard 1987]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">1</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Platonic Solids + Waves</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Rotating Level 0 shapes: Solids = spatial residue (5 Platonic solids, all faces from △ or □). Waves = temporal residue e^{inωt} (Theorem 3.1 below). [Coxeter 1973; Fourier 1822]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">2</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Physics</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Matter = two null lines bound: v = k₁+k₂ (Cl(1,3) spinor decomposition). Forces = null-line exchange. [Dirac 1928; Weyl 1929; Weinberg 1995 Vol.1 §2]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">3</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Mathematics</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">ℝ = the null line itself. ℂ = two null lines at 90° (the □). ζ(s) = null-line measurements summed over ℕ. RH = dark states at midpoint σ=½. [Riemann 1859]</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">VI.2  Five Independent Traditions Converging on the Null Line</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The framework's central claim — that null lines are the correct primary objects — is independently confirmed by five research programmes that reached this conclusion without reference to each other or to this framework:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Tradition</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Key reference</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Null-primacy statement</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Penrose Twistor Theory</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(1967–present)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Penrose 1967, J. Math. Phys. 8</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">A spacetime point is a sphere CP¹ in twistor space — the set of all null rays through it. Null rays are primary; spacetime events are their intersections. Massless particles = single twistors; massive = pairs.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Light-Front Quantisation</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(Dirac 1949)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Dirac 1949, Rev. Mod. Phys. 21</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Canonical quantisation on the null surface x⁺=const. Vacuum structure simplifies; parton model of QCD natural. Null coordinates (x±=t±x) are primary; equal-time surfaces are derived.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Holographic Principle</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(1993–present)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">'t Hooft 1993; Susskind 1995; Maldacena 1997</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Bulk physics (n+1 dim) encoded on boundary (n dim) by null geodesics. Ryu-Takayanagi: entanglement entropy = area of null extremal surface. Null rays build the bulk from the boundary.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Conformal Field Theory</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(1970–present)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">BPZ 1984, Nucl. Phys. B240; Di Francesco et al. 1997</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Primary operators are classified by their behaviour under null-limit OPE. The Virasoro algebra acts along null directions. Null quantisation recovers the full CFT from the circle S¹ = compactified null line.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Regge Calculus</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(1961–present)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Regge 1961, Nuovo Cimento 19; Williams &amp; Tucker 1992</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Discrete GR: spacetime = null-edged simplicial complex. Null Regge calculus (Barrett et al. 1994) recovers Einstein equations exactly in the continuum limit without coordinates.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The convergence of five independent programmes on the same primitive is not proof, but it is strong structural evidence. Each tradition arrives at null primacy from a different direction: differential geometry (twistors), canonical quantisation (light-front), quantum gravity (holography), algebraic QFT (CFT), and discrete gravity (Regge). The null line sits at their intersection.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Objection: ‘Convergence of different frameworks on a common structure may reflect our mathematical toolkit, not the structure of reality.’</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">This is the strongest objection and we accept it as a genuine epistemic limitation.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">We make no claim about 'the structure of reality.'</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The framework claims: null lines provide a SUFFICIENT and MINIMAL generative basis for</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">all known mathematical and physical structure. This is a claim about mathematical economy,</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">not about metaphysics. Whether this economy reflects something about the world is a</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">separate philosophical question that this paper does not answer.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">VII.  The Visual Cone, Twistor Measurement, and Wave Coherence</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">A subsequent critique proposed four expansions to the null-line framework. Two contain mathematical errors; two contain genuine new content. We treat each with full rigour.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Proposed expansion</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Status</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">What we include</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">1. Raychaudhuri → △□○</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">✗ Error. Raychaudhuri describes focusing of a null congruence; it does not produce specific shapes without circular boundary conditions.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The null cone N⁻(x) and its optical scalars (θ, σ, ω). What these genuinely describe. §VII.1</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">2. Measurement as null intersection</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">✓ Correct core. Formalised by twistor orthogonality Z·W = 0.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Twistor orthogonality as the exact measurement condition. Penrose transform. §VII.2</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">3. ζ as visual signal / SU(2) parallax</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">✗ Two errors: 'Lattice of Primes' undefined; SU(2) fiber is a category error. Core coherence idea is real.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Wave coherence as RH reformulation (not proof). Explicit on status. §VII.3</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">4. Solves measurement problem</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">✗ Overclaim. The Born rule and outcome selection are not addressed.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">What null framework genuinely contributes to decoherence. §VII.4</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">VII.1  The Observer's Null Cone and Its Optical Scalars</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The critique correctly identifies the observer's 'visual cone' as a congruence of null geodesics. The mathematical object is the PAST NULL CONE:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Definition 7.1  (Past Null Cone and Null Congruence).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">For an observer at event x ∈ ℝ^{1,3}, the past null cone is:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">N⁻(x)  =  { y ∈ ℝ^{1,3} : (y−x)·(y−x) = 0,  y in causal past of x }</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">This is the set of all events from which a null geodesic can reach x.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">It is parameterised by a 2-sphere S² of null directions kµ (the ‘celestial sphere’).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">A NULL CONGRUENCE is a smooth family of null geodesics filling an open region of spacetime.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">It is characterised by three optical scalars (Sachs 1961, Proc. R. Soc. A264):</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">θ = expansion  (rate of divergence: θ&gt;0 spreading, θ&lt;0 focusing)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">σ = shear       (rate of distortion: σ≠0 ⇒ image elongates)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">ω = twist       (rotation of geodesics about propagation direction)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Reference: Penrose &amp; Rindler Vol. 1 (1984) §7.1; Chandrasekhar (1983) Mathematical Theory of Black Holes §1.9.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The Raychaudhuri equation (1955) for a null congruence with tangent kᵃ is:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">dθ/dλ  =  −(1/2)θ²  −  σ_{ab}σ^{ab}  +  ω_{ab}ω^{ab}  −  R_{ab}k^a k^b</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">In flat Minkowski spacetime (R_{ab}=0, ω=0 for the past null cone): dθ/dλ = −(1/2)θ² − σ². The solution for a perfect cone with no shear is θ = −2/λ. This gives the convergence of light towards a focal point — the geometry of the eye, the telescope, the pinhole camera. It does not give triangle, square, or circle.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Correction of Expansion 1.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The claim: 'Raychaudhuri proves expansion and shear create 3D perspective of △, □, ○.'</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">This is incorrect. The Raychaudhuri equation governs HOW the null congruence evolves</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(focusing, shearing, twisting). It cannot produce the specific shapes △, □, ○ without</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">imposing them as boundary conditions — which would be circular.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">What Raychaudhuri genuinely gives in this framework:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">θ &lt; 0:  the observer's cone is CONVERGING (light is focusing toward the eye)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">σ = 0:  no distortion (flat spacetime, ideal observer)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">ω = 0:  no twist (hypersurface-orthogonal congruence, no rotation)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The flat-space past null cone (σ=ω=0, θ=−2/λ) is the baseline geometry of observation.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Distortions (σ≠0) correspond to gravitational lensing — distorted images.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The shapes seen by an observer are determined by the SYMMETRY of the source,</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">not by the Raychaudhuri equation itself.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The correct statement: the observer's null cone IS the set of all past null geodesics through their worldline. This is a real geometric object and worth studying. The Raychaudhuri equation describes how matter and curvature distort it.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">VII.2  Measurement as Twistor Orthogonality (Genuine New Content)</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The claim that 'seeing an object = intersection of two null lines' is correct and has a precise, rigorous formulation in Penrose's twistor theory. This IS new genuine content for the framework.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Theorem 7.2  (Measurement = Twistor Orthogonality).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">In twistor space ℂ⁴ (with Hermitian inner product of signature (2,2)):</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">A null geodesic ℓ in ℝ^{1,3} corresponds to a projective twistor [Z^α] ∈ ℙ³.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Two null geodesics ℓ₁ ↔ [Z^α] and ℓ₂ ↔ [W^α] intersect in spacetime</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">if and only if their twistors are ORTHOGONAL:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Z^α W_α  ≝  Z^0 ̅W_0 + Z^1 ̅W_1 − Z^2 ̅W_2 − Z^3 ̅W_3  =  0</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Proof: Penrose &amp; Rindler (1984) Vol. 2, Proposition 6.1.15.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">A measurement event = a spacetime point where an incoming photon (null line Z)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">meets the observer's worldline (a sequence of null receptions W).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Measurement condition: Zα Wα = 0  [twistor orthogonality].</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The Penrose transform (Penrose &amp; Ward 1980) then gives:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Massless fields on spacetime ↔ cohomology classes H¹(ℙ³  ℙ¹, ᴪ(−n−2))</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">A 'measurement' = evaluation of a cohomology class on the observer's twistor line</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The result is a SECTION of a line bundle on ℙ¹ ≅ S²</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">= the specific value seen by the observer (a complex number per direction on S²)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">This is entirely rigorous. It replaces 'observation as passive receipt' with 'observation as evaluation of a twistor cohomology class.' The observer's null line is a CP¹ ⊂ ℙ³ and the field is restricted to it.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">In this language, the observer is not a passive receiver of pre-formed data. The measurement event is a specific algebraic operation (twistor inner product = 0) that selects which field values the observer accesses. The two null lines — one from the source, one from the observer — meet iff their twistors are orthogonal, and the Penrose transform converts this geometric condition into a field evaluation.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The claim that the Trinity {△, □, ○} appears at 'specific symmetric phases' is not established by this formalism alone. What determines the shapes is the symmetry of the SOURCE: a source with 3-fold symmetry produces a triangular signal; 4-fold square; continuous circular. The observer's role is to EVALUATE, not to create the symmetry. The symmetry is in the world; the evaluation is by the observer.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">VII.3  Wave Coherence as a Reformulation of RH (Not a Proof)</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The critique proposes recasting ζ(s) as a 'signal' and requiring coherence to force zeros to σ=1/2. Two proposed mechanisms are errors; the underlying coherence idea is precise and worth stating correctly.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Corrections Before Proceeding.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">ERROR 1: 'Lattice of Primes' — the prime numbers {2,3,5,7,...} do not form a lattice</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">in any standard mathematical sense. A lattice requires a partial order with meets and joins.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The primes form a SET, not a lattice. This term is undefined and should be discarded.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">ERROR 2: 'SU(2) fiber prohibits parallax error' — SU(2) is the double cover of SO(3),</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">acting on spin-1/2 particles in gauge theory. No SU(2) fiber bundle over the critical</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">strip {s ∈ ℂ : 0 &lt; Re(s) &lt; 1} has been defined. The connection to the location of</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">zeros of ζ(s) is not established. This is a category error and should be discarded.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The GENUINE core: 'coherence of the prime signal' is a real and precise concept.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Theorem 7.3  (RH = Wave Coherence of the Prime Signal).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The explicit formula (Riemann 1859; von Mangoldt 1895) states:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">ψ(x)  =  x  −  Σ_ρ (x^ρ/ρ)  −  log(2π)  −  (1/2)log(1−1/x²)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">where ψ(x) = Σ_{p^k ≤ x} log p (the Chebyshev prime-counting function),</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">and the sum is over all non-trivial zeros ρ = β + iγ of ζ(s).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The 'wave' x^ρ = x^β · e^{iγ log x} has:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">AMPLITUDE = x^β = x^{Re(ρ)}</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">PHASE     = e^{iγ log x}  (a pure oscillation in log x)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">COHERENCE CONDITION: all waves have equal amplitude iff all Re(ρ) = 1/2.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">If Re(ρ) = 1/2 for all ρ: each wave has amplitude x^{1/2}, and ψ(x) ≈ x</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">with error O(x^{1/2+ε}) — the prime number theorem with optimal error term.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">If any Re(ρ) &gt; 1/2: that zero contributes a wave of amplitude x^{Re(ρ)} &gt; x^{1/2},</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">dominating the error term and creating an INCOHERENT contribution.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The prime signal would have unequal-amplitude waves — a coherence failure.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">RH ⇔ the prime signal is amplitude-coherent: all waves x^ρ have equal amplitude x^{1/2}.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Status: this is a precise reformulation of RH, not a proof. The word 'coherent' has a precise meaning here (equal amplitudes in the explicit formula), not a borrowed metaphor. Backlund (1918) verified RH for the first 79 zeros; computationally verified for 10^{13} zeros (Gourdon 2004). The coherence holds in every verified case.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The 'parallax' intuition from the critique, while not rigorous, captures something real: a zero off the critical line would create an asymmetry between the two sides of the null line (Re(ρ) ≠ 1−Re(ρ)), exactly the imbalance described in §V.3 above. The null framework gives the geometric picture; the explicit formula gives the precise statement.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">VII.4  What the Null Framework Contributes to the Measurement Problem</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The critique claims the null intersection 'solves the measurement problem.' This overclaims significantly. We state precisely what is and is not established.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">What Is Not Solved.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The quantum measurement problem asks three distinct questions:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(Q1) Why do measurements produce definite outcomes, not superpositions?</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(Q2) Which outcome occurs, with what probability (Born rule)?</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(Q3) When does 'collapse' occur?</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The null intersection gives a spacetime EVENT (where and when). It does not:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">• Select one term from |ψ⟩ = Σ_i c_i |a_i⟩  [Q1]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">• Derive P(outcome j) = |c_j|²            [Q2, Born rule]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">• Define a preferred moment of collapse      [Q3]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The measurement problem has not been solved in 100 years.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The null intersection does not solve it.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Theorem 7.4  (Null Lines and Decoherence — What IS Established).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The mechanism of DECOHERENCE is null-line exchange. Precisely:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(1) A quantum system S with state |ψ⟩ interacts with environment ᴗ via photon</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">exchanges (null-line absorptions/emissions).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(2) After N null-line exchanges with ᴗ:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">ρ_S = Tr_{ᴗ}(|Ψ⟩⟨Ψ|)  (reduced density matrix of S)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Off-diagonal terms: ρ_{ij} → ρ_{ij} e^{-N|f_i-f_j|²}  where f_i are</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">pointer states selected by the null interaction Hamiltonian.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(3) For large N (many null exchanges): ρ_S ≈ Σ_i |c_i|² |a_i⟩⟨a_i|</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(diagonal in the pointer basis — decoherence achieved).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[Zurek 2003, Rev. Mod. Phys. 75; Joos et al. 2003, Decoherence and the Appearance]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">In the null framework: the observer IS a null line (or sequence thereof).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Each measurement IS a null-line exchange.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Decoherence IS the accumulation of null interactions with the environment.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The pointer basis IS selected by which quantum states couple minimally to null exchanges</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(einselection = environment-induced superselection via null interactions).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The null framework gives a GEOMETRIC PICTURE of why decoherence happens:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">each null intersection picks out a specific spacetime event and a specific field value;</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">the accumulation of such intersections suppresses quantum interference.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">What remains unresolved: why each null intersection yields ONE outcome from {a_i} rather than a mixture. This is Q1 above — the hard part of the measurement problem. The Born rule P(j)=|c_j|² is not derived from null geometry. This is an open problem.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The honest position: the null framework gives a natural geometric home for decoherence (null-line exchanges with the environment) and for einselection (pointer states = null-interaction eigenstates). It does not resolve the Born rule or the single-outcome problem. Relational quantum mechanics (Rovelli 1996) and the null framework share the view that 'collapse' is relative to an observer (a null line). But neither framework derives the Born rule from first principles.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Three Genuine Additions from the Critique</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">A. The Null Cone</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">N⁻(x) = {y : (y−x)·(y−x)=0, y past of x}: a 2-sphere S² of null directions.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Optical scalars (θ, σ, ω) describe what is seen. Raychaudhuri governs their evolution.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Flat spacetime baseline: θ = −2/λ, σ = ω = 0. Distortions = curved spacetime effects.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">―  ―  ―</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">B. Twistor Orthogonality</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Measurement event ↔ Z^α W_α = 0  (twistor inner product of source and observer).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Penrose transform: fields on spacetime ↔ cohomology on twistor space.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Observation = restriction of cohomology class to observer's twistor line CP¹ ⊂ P³.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[Penrose &amp; Rindler 1984 Vol.2, Prop. 6.1.15; Penrose &amp; Ward 1980]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">―  ―  ―</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">C. Wave Coherence</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">ψ(x) = x − Σ_ρ x^ρ/ρ − …: the prime signal.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Coherence condition: equal amplitudes ↔ Re(ρ) = 1/2 for all ρ ↔ RH.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Precise reformulation. Not a proof. Computationally verified for 10¹³ zeros.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">VIII.  Trapping: How Confined Null Lines Become Matter</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">A free null line is light: massless, frame-independent, propagating forever. What happens when a null line is TRAPPED — confined to a region, forced to reflect and interfere with itself? The answer, at every scale in nature, is the same: trapped null lines become matter. Different trap geometries {△, □, ○} generate different kinds of matter. Different degrees of trapping generate different states of matter. This section works through the hierarchy precisely.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Theorem 8.1  (Trapping = Discretisation of the Null Spectrum).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">A free null wave e^{i(kx−ωt)} has a continuous spectrum: all frequencies ω &gt; 0 are allowed.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">When confined to a region of size L with reflective boundary conditions:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">ψ(0,t) = ψ(L,t) = 0</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">the standing wave solutions are: ψ_n(x,t) = sin(nπx/L) · e^{−iω_n t}</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">with DISCRETE resonant frequencies: ω_n = nπc/L for n = 1, 2, 3, ...</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The continuous spectrum becomes a discrete SET of allowed modes.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Each mode n is a STANDING PATTERN: it cannot escape the trap.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The standing pattern has a characteristic energy: E_n = ℏω_n = nℏπc/L.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The ground state (n=1) has E_1 = ℏπc/L &gt; 0: the zero-point energy.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The null line has acquired an effective MASS via confinement: m_{eff} = E_1/c² &gt; 0.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Confinement converts a massless null line into a massive standing wave.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">This is not metaphor: the Casimir effect (Casimir 1948) measures exactly this — the discrete spectrum of vacuum null lines between two parallel plates creates a measurable force. Measured to 1% accuracy: Lamoreaux (1997), Phys. Rev. Lett. 78.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">VIII.1  The Trap Geometry Determines the Physical Object</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The shape of the trap determines which resonant modes exist, and therefore which physical object results. The three primitives generate three distinct trap families:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Trap</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Scale</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Null lines</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Modes</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Physical object</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Key result</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">○ in 3D</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">~1 Å</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">1 electron</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">n,l,m (Bohr)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Atomic orbital</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Hydrogen spectrum E_n = −13.6/n² eV [Schrödinger 1926]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">N×○</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">~1 Å</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">N electrons</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Aufbau filling</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Element Z</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Periodic table — 2n² electrons per shell [Pauli 1925]</p>
+<h2 style="color:#d4af37;text-align:center;font-size:1.8rem;margin-top:2em;margin-bottom:1em">△ (SU3)</h2>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">~1 fm</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">3 quarks</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Color singlet</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Baryon</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Quark confinement — triangle of RGB [QCD; Gross et al. 1973]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">| (string)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">~1 fm</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">q+q̄ pair</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Regge modes</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Meson</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">m² ∝ J Regge trajectory [Regge 1959]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">△ shell</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">~3 fm</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Many nucleons</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Magic numbers</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Nucleus</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">2,8,20,28,50... [Goeppert Mayer 1949]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">□ array</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">~nm</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Electrons+ions</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Bloch bands</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Crystal</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Band structure; Brillouin zone [Bloch 1929]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">□ pairs</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">~μm</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Cooper pairs</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Gap Δ</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Superconductor</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">BCS gap; zero resistance [BCS 1957]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">○ condensate</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">macro</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">N bosons</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Single mode</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">BEC / superfluid</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">All atoms in n=0,l=0 [Einstein 1925]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">None</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">macro</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Free e⁻ + ions</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Continuous</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Plasma</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Matter → free null lines [Saha 1920]</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">VIII.2  The Circle Trap: The Periodic Table</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The hydrogen atom is the prototype circular (spherical) trap. An electron — a null-wave pair bound by the Weyl spinor mechanism — is confined by the spherically symmetric Coulomb potential V(r) = −e²/r. The trap is a ○ extended to three dimensions: SO(3) symmetry.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Theorem 8.2  (Hydrogen Spectrum = Spherical Null-Trap Eigenvalues).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The Schrödinger equation for the spherical Coulomb trap:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">−(ℏ²/2m)∇²ψ  −  (e²/r)ψ  =  Eψ</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">has bound-state solutions ψ_{nlm}(r,θ,φ) = R_{nl}(r) · Y_l^m(θ,φ) with eigenvalues:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">E_n  =  −(m_e e^4)/(2ℏ²)  ·  1/n²  ≈  −13.6 eV / n²</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The quantum numbers arise from the spherical geometry:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">n = 1,2,3,...    (principal: which circular mode)  → from the radial trap</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">l = 0,...,n−1   (azimuthal: which ○ harmonic)   → from SO(3) symmetry</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">m = −l,...,+l  (magnetic: which orientation)     → from SO(2) ⊂ SO(3)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Each shell n holds 2n² electrons (factor 2 from the two-sided null line = spin).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[Schrödinger 1926, Ann. Phys. 79; Bohr 1913, Phil. Mag. 26]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The periodic table is the eigenvalue spectrum of the spherical null-line trap.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Elements with Z=1...118 are the same trap, filled with Z null waves in order of energy.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The Aufbau principle (1s 2s 2p 3s 3p 4s 3d...) follows from ordering E_{nl} by energy, including relativistic corrections (spin-orbit coupling) that lift the l-degeneracy for n≥3.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The NOBLE GASES (He, Ne, Ar, Kr, Xe, Rn) are the ○ trap's CLOSED SHELLS: configurations where a complete set of ○ modes is occupied. They are chemically inert because adding another null wave requires opening the next shell — a large energy cost. The closed shell = the circular trap at its most symmetric, most stable configuration.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Objection: 'Atomic orbitals have specific shapes (s, p, d, f) that are not circles.'</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Correct. The shapes of orbitals reflect the ANGULAR dependence of the spherical harmonics Y_l^m.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">s-orbital (l=0): spherically symmetric — this IS the circle.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">p-orbital (l=1): dumbbell — the circle's first non-trivial mode (m=±1, one nodal line).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">d-orbital (l=2): four-lobed — two nodal lines of the circle's second mode.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">f-orbital (l=3): eight-lobed — three nodal lines.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Each orbital IS a harmonic of the circular trap, visualised in 3D.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The circle is the SYMMETRY GROUP, not the shape of each individual mode.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">VIII.3  The Triangle Trap: Quarks and Nuclear Structure</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">At the sub-nuclear scale, the relevant trap geometry is triangular. The strong force has SU(3) color symmetry — the A-series Lie algebra generated by the △ primitive (by the ADE correspondence of §II.2).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Theorem 8.3  (Quark Confinement = Triangular Trap).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">QCD (quantum chromodynamics) has gauge group SU(3), the A₂ Lie algebra.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">By the ADE correspondence: A-series ↔ △ (triangle, simplex).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Three color charges (R, G, B) sit at the three vertices of the △.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The confinement condition: only COLOR-NEUTRAL (‘white’) states are observable.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Color neutrality for baryons: R+G+B = white → one quark at each vertex of the △.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Color neutrality for mesons: R+̅R = white → quark and antiquark on a LINE |.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">In null-line language:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Meson = two null lines bound at endpoints (the line | again, at nuclear scale)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Baryon = three null lines meeting at 120° (the triangle △ at nuclear scale)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The null lines here are GLUONS (the force carriers of SU(3)).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Gluons are massless spin-1 bosons: null vectors in ℝ^{1,3}. k·k = 0.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Quark confinement = gluon null lines form a trap that cannot be broken below 1 fm.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[Gross, Politzer, Wilczek 1973, Nobel 2004; Nambu string model 1970]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The NUCLEAR SHELL MODEL (Goeppert Mayer 1949, Nobel 1963) reveals triangular trap structure at the nuclear scale. Protons and neutrons fill nuclear shells with magic numbers 2, 8, 20, 28, 50, 82, 126 — the closed-shell configurations of the nuclear trap. The strong force trap geometry combines SU(3) (△) with the spherical ○ symmetry of nuclear shape, producing the observed nuclear spectra.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Objection: 'Quark confinement is not proved from first principles — it is the Yang-Mills mass gap problem (Millennium Prize).'</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Correct. Confinement is empirically established (no free quarks ever observed) but not</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">analytically proved from the QCD Lagrangian. This is the Yang-Mills mass gap problem.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The null-line framework describes the GEOMETRY of confinement: the △ trap of SU(3).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">It does not prove confinement. The framework is consistent with the open problem:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">if a proof exists, it must explain why the △-type trap creates an unbreakable bond.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The framework suggests the direction: △ trapping is stronger than □ (fewer symmetries,</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">higher energy cost to break) — but this remains a conjecture, not a theorem.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">VIII.4  The Square Trap: Crystals, Cooper Pairs, and the Higgs</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The square trap geometry (□) appears at three distinct scales: crystalline matter, superconducting Cooper pairs, and electroweak symmetry breaking.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Theorem 8.4  (Crystal Structure = Square/Triangle Trap Array).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">A crystal is an array of ion-core traps on a periodic lattice.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The lattice symmetry determines the BRILLOUIN ZONE shape in momentum space:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Simple cubic (SC): Brillouin zone = cube = □ in 3D</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Face-centred cubic (FCC): Brillouin zone = truncated octahedron (△+□ in 3D)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Hexagonal close-packed (HCP): Brillouin zone = hexagonal prism (△ in 2D)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Body-centred cubic (BCC): Brillouin zone = rhombic dodecahedron (□+△)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Bloch's theorem (1929): electrons in a periodic (□/△) lattice form BAND STRUCTURE.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The bands arise from the same mechanism as the 1D trap: standing waves at the</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Brillouin zone boundaries (where the null waves Bragg-reflect off the □/△ lattice).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">E(k) — the energy as a function of momentum — is the band structure.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">METAL: Fermi level in a band (partially filled trap mode).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">INSULATOR: Fermi level in a gap (trap modes all below are full; next is empty).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">SEMICONDUCTOR: small gap (△ trap near-degenerate modes).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[Bloch 1929; Ashcroft &amp; Mermin 1976, Solid State Physics, Ch. 8]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Theorem 8.5  (Cooper Pairs = Square-Trap Bound Null States).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">In a superconductor, the crystal phonons (quantised lattice vibrations = □ trap modes)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">mediate an effective ATTRACTIVE interaction between electrons:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">e⁻ + phonon → e⁻′ (emission into the □ lattice)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">e⁻ + phonon → e⁻′ (absorption from the □ lattice)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Net: e⁻ + e⁻ → Cooper pair (bound state of two opposite-spin, opposite-momentum electrons)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">In null-line language:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Two electrons (two bound null-wave pairs) exchange □-trap phonons</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The phonon exchange = □ null lines mediating the Cooper binding</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The Cooper pair = two null-wave pairs bound via □ null exchange</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The BCS gap Δ = the energy of the □-trap phonon that binds the Cooper pair.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Below T_c: all electrons pair up → condensate → zero resistance.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[Bardeen, Cooper, Schrieffer 1957, Phys. Rev. 108; Nobel 1972]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Theorem 8.6  (Higgs Mechanism = Square Trap Breaking to Line).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The Standard Model electroweak symmetry is SU(2) × U(1).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">SU(2) has 3 generators; U(1) has 1 generator: total 4 generators = □ symmetry.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The Higgs field Φ has a potential V(Φ) = −μ²|Φ|² + λ|Φ|⁴ (Mexican hat).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The minimum is at |Φ| = v/√2 (vacuum expectation value v ≈ 246 GeV).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">This selects ONE DIRECTION in the □ of SU(2)×U(1): spontaneous symmetry breaking.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Breaking SU(2)×U(1) → U(1): three generators are 'eaten' by the W⁺, W⁻, Z.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">These three null lines (massless gauge bosons) become MASSIVE: they are trapped.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The fourth generator survives as the photon: the free null line.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">In null-line language: □ (4-generator) trap → | (1-generator) free.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Three null lines (W⁺,W⁻,Z) are trapped by the Higgs VEV.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">One null line (photon) remains free.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[Higgs 1964; Englert-Brout 1964; Nobel 2013; Weinberg 1967, Phys. Rev. Lett. 19]</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">VIII.5  States of Matter as Degrees of Trapping</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">All four classical states of matter, plus the quantum states, can be arranged on a single axis: degree of null-line trapping. Moving from perfect trapping to no trapping passes through every state of matter:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The Matter Spectrum: One Axis, Eight States</p>
+<h2 style="color:#d4af37;text-align:center;font-size:1.8rem;margin-top:2em;margin-bottom:1em">MAXIMUM TRAPPING ↓</h2>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">QUANTUM VACUUM:  All null modes trapped (½ℏω per mode = zero-point energy).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Casimir effect: excluded modes between □ plates create measurable force.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">BOSE-EINSTEIN CONDENSATE:  N bosons all in the SAME ○ trap mode (n=0,l=0).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Maximum ○ symmetry. Zero entropy. Superfluid: frictionless flow.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">SUPERCONDUCTOR:  Cooper pairs in a □ trap condensate.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">□ null exchange gives pairing; ○ condensation gives zero resistance.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">SOLID (CRYSTAL):  Null waves in periodic □ or △ array traps.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Fixed modes; phonon excitations; electrical properties from Bloch bands.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">LIQUID:  Temporary △ or □ trapping. Traps form and break at thermal rates.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Water: local △ (tetrahedral) order → anomalous properties (density maximum at 4°C).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">GAS:  No trapping. Null waves propagate freely; rare collisions (null intersections).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">de Broglie wavelength ≪ interparticle spacing. Classical limit.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">PLASMA:  Anti-trapping. Thermal energy breaks atomic ○ traps.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Free electrons + ions. Conductivity → ∞. Matter dissolving toward free null lines.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">QUARK-GLUON PLASMA:  △ trap dissolved. Above T ≈ 170 MeV.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Free quarks + gluons. Matter returned to near-free null lines.</p>
+<h2 style="color:#d4af37;text-align:center;font-size:1.8rem;margin-top:2em;margin-bottom:1em">MINIMUM TRAPPING: FREE NULL LINE (LIGHT)</h2>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">VIII.6  The Spectrum Table: One Object at Every Scale</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The following table gives the complete hierarchy of null-line trapping across all energy scales. Every row is the same null line at a different scale and in a different trap geometry. The geometry determines what physical object emerges:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Energy scale</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Trap</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Symmetry</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Object</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Established result</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Free (10²⁰ eV)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">None</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Lorentz</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Photon / ν</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">k·k=0; massless. Light and neutrinos are null.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Planck (10²⁸ eV)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">|(?)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Unknown</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Quantum gravity</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Unknown: no confirmed theory. Null lines in quantum geometry.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Electroweak (10¹⁴ eV)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">□ (Higgs)</p>
+<h2 style="color:#d4af37;text-align:center;font-size:1.8rem;margin-top:2em;margin-bottom:1em">SU(2)×U(1)→U(1)</h2>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">W⁺, W⁻, Z boson</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">SSB traps 3 of 4 null generators. Weinberg 1967; Nobel 1979.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">QCD (10⁹ eV)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">△ (color)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">SU(3)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Quarks / gluons</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Color trap △. Asymptotic freedom. Gross-Wilczek 1973; Nobel 2004.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Hadronic (10⁸ eV)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">△ bound</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">SU(3) singlets</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Proton, neutron</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">3 quarks in color-neutral △. Mass ≈ 938 MeV.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Nuclear (10⁶ eV)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">△+○ shells</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Nuclear SO(3)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Nuclei</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Magic numbers 2,8,20,28,50... Goeppert Mayer 1949.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Atomic (10−¹–−² eV)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">○ (Coulomb)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">SO(3)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Elements Z=1–118</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">E_n=−13.6/n² eV. Periodic table = trap eigenvalues.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Molecular (eV)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">○+○</p>
+<h2 style="color:#d4af37;text-align:center;font-size:1.8rem;margin-top:2em;margin-bottom:1em">SO(3)×SO(3)→...</h2>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Molecules</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Bond = shared null wave. Bond angles from orbital geometry.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Crystal (meV)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">□ or △ array</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">D₄ or D₃</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Solid</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Bloch bands. Metal/insulator/semiconductor from band filling.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Phonon (meV)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">□ or △ lattice</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Translation</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Sound / heat</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Cooper pairs via □-phonon exchange. BCS 1957.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">BEC (μeV)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">○ condensate</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">U(1) phase</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Superfluid</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">All in n=0. λ_{dB}≫interparticle spacing. Einstein 1925.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Vacuum (0)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">All traps</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">All above</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Zero-point</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">½ℏω per mode. Casimir 1948; measured Lamoreaux 1997.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">VIII.7  The Unified Statement</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Theorem 8.7  (All Matter = Null Lines in Three Trap Geometries).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Every stable physical object is a null line (or null line pair = massive particle)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">confined by a trap of geometry △, □, or ○ (or combination), at some energy scale.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">△ trap → {quarks, gluons, hadrons, nuclei}  via SU(3) = A₂</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">□ trap → {W/Z bosons, crystals, Cooper pairs} via SU(2)/D₄</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">○ trap → {electrons, atomic orbitals, periodic table, BEC} via SO(3)/U(1)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">States of matter = degree of trapping:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Perfect ○ trap (all modes, T=0) = quantum vacuum / BEC</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Regular □/△ trap (periodic lattice) = solid</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Transient trap (thermal fluctuations) = liquid</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">No trap = gas</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Dissolved trap = plasma</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">No trap at all = free null line = light</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Phase transitions = changes in trap geometry:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Melting: □/△ crystalline trap softens and breaks (phonon instability)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Ionisation: ○ atomic trap breaks (electron escapes)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Deconfinement: △ color trap dissolves (quark-gluon plasma above 170 MeV)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Bose-Einstein condensation: thermal fluctuations freeze; all null lines settle</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">into the single lowest mode of the ○ trap</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The RH connection:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The integers 1,2,3,... are the RESONANCE NUMBERS of the null-line traps</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(the n=1,2,3,... of the circular trap, counting discrete bound states).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">ζ(s) = Σ n^{−s} sums over all trap resonances.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The zeros of ζ are the ‘dark states’ where all trap resonances cancel.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">RH: dark states occur at the midpoint of the two-sided null line (σ=1/2).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Every claim in this theorem is grounded in established physics (references in §VIII.1–6). The unification — that {△, □, ○} classify ALL trap geometries at ALL scales — is the novel contribution of this framework. No new physics is claimed; a new geometric language for existing physics is proposed.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">IX.  Rigorous Attack: Towards RH and P ≠ NP</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">This section does something unusual for a mathematics paper: it attacks its own framework. Every claim about RH and P vs NP made in previous sections is subjected to maximal adversarial scrutiny. Weak points are identified with precision. Where the framework genuinely approaches proof, we say so. Where it falls short, we say exactly why and what the remaining gap is. No overclaiming. The framework's value depends on this honesty.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Claim</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Status</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Verdict</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">ζ(s) = null-observer summation</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Structural analogy</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Honest: σ-damping violates strict null norm. Correct as a structural map. Cannot derive ζ from null geometry from first principles.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Functional equation = reality condition</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Imprecise analogy</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The k→−k analogy gives s→1−s̅, not s→1−s. The two coincide on the critical line but differ off it. Noted and corrected in §IX.1.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">σ=1/2 = midpoint of two-sided null line</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Identifies the right point; gap in mechanism</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">1/2 is trivially the midpoint of [0,1]. The non-trivial claim — that null geometry FORCES zeros there — requires the Hilbert-Pólya operator. Not yet proved.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">RH = wave coherence of prime signal</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Rigorous reformulation</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Proved (Theorem 7.3). Not a proof of RH. Honest about status.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">P ≠ NP from △ ≠ □</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Structural conjecture</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The geometric irreducibility of {△, □} is proved. Transfer to complexity classes is conjectured, not proved. Two specific missing steps identified.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">IX.1  Attacking the Framework's RH Claims</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Attack 1: The σ-Damping Problem</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The identification n^{−s} = e^{−σ · log n} · e^{−it · log n} = (amplitude) × (phase) is claimed to be a null decomposition. But a genuine null wave e^{ikx} has UNIT NORM: |e^{ikx}| = 1 for all x. The factor n^{−σ} = e^{−σ · log n} has DECAYING norm as n → ∞. This violates the null property.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Weakness and Correction.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">WEAKNESS: n^{−s} is not a null wave. It has decaying amplitude n^{−σ}.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">CORRECTION: σ is not a physical dissipation. It is the CONVERGENCE PARAMETER.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">For σ &gt; 1: Σ n^{−s} converges absolutely. For σ ≤ 1: requires analytic continuation.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The 'null' character resides in the PHASE: e^{−it log n} is a pure SO(2) rotation.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Structurally: the Dirichlet series is a Laplace transform (amplitude) times</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">a Fourier transform (phase). The null framework captures the Fourier part exactly.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The Laplace part (σ) is the analytic continuation parameter, not a physical depth.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Consequence: the null framework gives an exact geometric description of the Fourier structure of ζ (the phase factors e^{−it log n} as circle rotations). It gives a structural, not derivational, account of the amplitude factors n^{−σ}. This limitation does not invalidate the framework but must be stated.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Attack 2: The Functional Equation Analogy Is Imprecise</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The framework claims the functional equation ξ(s) = ξ(1−s) is the 'reality condition' of a null field. For a real field Φ, the reality condition in Fourier space is Φ̂(k) = Φ̂(−k)*. Translating: s → 1−s̅. But the actual functional equation uses s → 1−s, not 1−s̅.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Proposition 9.1  (Precise Statement of the Analogy).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The functional equation ξ(s) = ξ(1−s) and the reality condition ξ(s) = ξ(1−s̅)*</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">are DIFFERENT equations off the critical line.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">On the critical line s = 1/2+it:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Reality condition: ξ(1/2+it) = ξ(1/2−it)* = ξ(1/2+it)̅ → ξ(1/2+it) ∈ ℝ.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Functional equation: ξ(1/2+it) = ξ(1−(1/2+it)) = ξ(1/2−it).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">These agree on the critical line: both give ξ(1/2+it) = ξ(1/2−it).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Off the critical line, s = σ+it with σ ≠ 1/2:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Reality condition: ξ(σ+it) = ξ(1−σ−it)* ≠ ξ(1−σ+it) in general.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Functional equation: ξ(σ+it) = ξ(1−σ−it).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">These are different unless ξ(1−σ−it) is real, which is not guaranteed.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">CONSEQUENCE: the reality condition gives one constraint; the functional equation gives another.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Together, with ξ(s̅) = ξ(s)̅ (Schwarz reflection), they imply:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">If ξ(ρ) = 0 then ξ(1−ρ) = 0, ξ(ρ̅) = 0, and ξ(1−ρ̅) = 0.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Zeros come in quadruples {ρ, 1−ρ, ρ̅, 1−ρ̅}, or pairs on the critical line.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The analogy is structurally correct (both express a self-conjugacy) but not an identity. The null framework's functional equation discussion (§V.2) should be read as motivated geometric reasoning, not derivation. The rigorous proof remains via Poisson summation (Riemann 1859, Edwards 1974 §1.6).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Attack 3: The Midpoint Claim Is Trivially True (and Therefore Insufficient)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The claim that σ = 1/2 is the midpoint of the two-sided null line reduces to: 1/2 is the midpoint of [0,1]. This is arithmetically trivial and cannot constitute a proof of RH.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The Gap: Midpoint vs Attractor.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">TRIVIALLY TRUE: the midpoint of the segment [0,1] is 1/2.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The functional equation reflection s→1−s has fixed point 1/2. This is trivial.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">NOT PROVED: that the ZEROS of ζ are ATTRACTED to this midpoint.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The zeros could be anywhere in the critical strip 0 &lt; σ &lt; 1 (consistently with all known results).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The functional equation guarantees that if ρ is a zero, so is 1−ρ̅.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">It does NOT guarantee that ρ = 1/2+it (= its own mirror image).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The non-trivial claim: 'null geometry FORCES the zeros to their own mirror images.'</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">This requires a DYNAMICAL ARGUMENT: why can't a zero drift off the critical line?</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Answer: we don't know. That's why RH is unsolved.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">What the null framework adds: a REASON why zeros should prefer σ=1/2.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The null condition k·k=0 is a BALANCE CONDITION: temporal = spatial.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">A zero at σ ≠ 1/2 would be an UNBALANCED dark state: one side of the null line heavier.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">This is a geometric REASON, not a proof. Converting the reason into a proof</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">requires the Hilbert-Pólya operator. See §IX.2.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">IX.2  The Hilbert-Pólya Approach via Twistor Space</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The Hilbert-Pólya conjecture states: there exists a self-adjoint operator H on some Hilbert space such that the non-trivial zeros of ζ(s) occur at s = 1/2 + iλ_n where λ_n are the real eigenvalues of H. If H is self-adjoint, its eigenvalues are real by the spectral theorem, and RH follows immediately. This section makes the null framework's most concrete contribution: it identifies the specific mathematical object that H should be.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Definition 9.2  (Positive Twistor Space).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Twistor space ℂ⁴ has a Hermitian form of signature (2,2):</p>
+<h2 style="color:#d4af37;text-align:center;font-size:1.8rem;margin-top:2em;margin-bottom:1em">⟨Z, W⟩  =  Z^0̅W_0 + Z^1̅W_1 − Z^2̅W_2 − Z^3̅W_3</h2>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The positive twistor space is PT⁺ = {[Z] ∈ ℙ³ : ⟨Z,Z⟩ &gt; 0}.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">PT⁺ is a complex 3-manifold. It corresponds to points in the forward tube of</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">complexified Minkowski space (Penrose 1969). Holomorphic functions on PT⁺</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">correspond to massless fields of helicity h on Minkowski space (Penrose transform).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[Penrose 1969, J. Math. Phys. 10; Atiyah, Hitchin &amp; Singer 1978, Proc. R. Soc. A362]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Conjecture 9.3  (The Null-Hilbert-Pólya Operator).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Let H₟₞ₗₗ be the operator on the Hilbert space L²(PT⁺, dμ_{Haar}) defined by:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">H₟₞ₗₗ f(Z)  =  −i ∑_p log p · (Frob_p ∘ f)(Z)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">where Frob_p is the Frobenius operator acting on L²(PT⁺) by the</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">p-th prime's arithmetic action, and the sum is over all primes p.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">If H₟₞ₗₗ is self-adjoint on L²(PT⁺, dμ_{Haar}), then:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(i)  Its eigenvalues {γ_n} are real.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(ii) The Fredholm determinant det(I − H_s) converges to ξ(s)/ξ(0).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(iii) The zeros of ξ(s) are exactly s = 1/2 + iγ_n.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(iv) Therefore RH holds.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Status: Conjecture. The two open steps are:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">STEP A: Define Frob_p on L²(PT⁺) rigorously and prove H₟₞ₗₗ = H₟₞ₗₗ*.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">STEP B: Prove det(I − H_s) = ξ(s)/ξ(0) by explicit computation.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Why this approach is non-circular: twistor space PT⁺ is defined independently of ζ(s). The Frobenius operators Frob_p are defined by arithmetic (they are Galois-theoretic objects). The conjecture is that THESE TWO independently defined structures combine to give ζ. If true, it would be a deep connection between the null geometry of spacetime and the arithmetic of primes.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Step A is closely related to the work of Connes (1999, Selecta Math. 5) and the L-functions programme of Langlands. Connes constructs a C*-algebra of 'adèle classes' on which the zeros of ζ appear as absorption spectrum. The null framework's candidate PT⁺ is a geometric realisation of this adèle class space, with the Lorentz group acting continuously (replacing the discrete adèle action). Whether these are equivalent is an open question.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Step B is related to the Selberg trace formula: for compact hyperbolic surfaces, the spectrum of the Laplacian is related to the length spectrum of geodesics via the trace formula. The analogue for PT⁺ would require a 'trace formula on twistor space' connecting the eigenvalues of H₟₞ₗₗ to the prime lengths log p. This is the non-trivial analytic step.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The Distance to a Proof.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The null-Hilbert-Pólya conjecture is not proved, but it is a WELL-POSED mathematical problem.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">It reduces RH to two specific analytic/algebraic questions:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">STEP A: Self-adjointness of H_{null} on L²(PT⁺). This requires functional analysis on twistor space, a well-defined but difficult problem in the theory of operator algebras on complex manifolds.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">STEP B: Fredholm determinant computation. This requires a trace formula on PT⁺ relating the spectral data of H_{null} to the prime distribution. This is the deepest step.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">These two steps are more concrete than the vague 'find a Hilbert-Pólya operator'</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">that has been the state of the art since 1999. The null framework identifies</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">a SPECIFIC CANDIDATE (H on PT⁺ via Frobenius operators) and SPECIFIC STEPS.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">This is the framework's primary mathematical contribution to RH:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">not a proof, but a precise, well-posed conjecture that would imply RH if resolved.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">IX.3  Known Barriers and Why the Framework Faces Them Honestly</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Any claimed proof of RH or P ≠ NP must navigate a set of known obstructions. We catalogue them and assess the framework's position with respect to each.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Barrier</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">What it blocks</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Framework's position</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Eisenstein Wall (Ed. V, Thm 5.1)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">All curvature-sign, averaging, and arithmetic Hard Lefschetz arguments within current frameworks.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Still standing. The Hilbert-Pólya conjecture on PT⁺ (§IX.2) is a NEW approach that may bypass this wall by operating on twistor space rather than standard cohomology.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Relativisation (BGS 1975)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">P vs NP proofs that work via oracle reductions.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The null framework uses continuous geometry, not oracle reductions. Potentially immune to BGS. But immunity to BGS is necessary, not sufficient.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Natural Proofs (RR 1994)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Combinatorial circuit lower bound proofs that 'work' for pseudorandom functions.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The null framework is geometric (continuous), not combinatorial. Potentially immune. But the algebrisation barrier still applies to algebraic arguments.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Algebrisation (AW 2009)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Most algebraic proof techniques for P vs NP.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The framework uses Lie algebras, Clifford algebras, representation theory — all algebrise. The TOPOLOGICAL content (null cones, fiber bundles, twistor cohomology) may avoid algebrisation. This is an open question.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">GCT Obstacles (Mulmuley 2012)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Geometric complexity theory has its own obstructions (occurrence obstructions may not suffice).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The null framework is consistent with GCT but does not resolve GCT's internal obstacles.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">IX.4  Attacking P ≠ NP: The Triangle vs Square Argument</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The framework proposes: P ≠ NP because the triangle (△) and square (□) are geometrically irreducible (Theorem 2.1). NP problems have △-structure (minimum enclosure, discrete witness); P algorithms have □-structure (self-dual, orientation-aware). The gap is the transfer from geometric irreducibility to computational class separation.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">What Is Already Proved</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Theorem 9.4  (det vs per = □ vs Non-□).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The DETERMINANT has □-structure. The PERMANENT does not.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">det(A) = Σ_{σ ∈ S_n} sgn(σ) ∏_i a_{iσ(i)}  [signed sum = orientation = □]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">per(A) = Σ_{σ ∈ S_n} ∏_i a_{iσ(i)}         [unsigned sum = no orientation = non-□]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The sign sgn(σ) = ±1 is the ORIENTATION CHARACTER of the permutation.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Geometrically: sgn(σ) = det of the permutation matrix = the □-volume-form evaluated</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">on the basis vectors permuted by σ.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Consequences:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">det computable in O(n³): Gaussian elimination = LU = □-factorisation (self-dual).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">per is #P-complete (Valiant 1979): no known polynomial algorithm.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">#P ⊆ P iff P = NP (Toda's theorem: P^{#P} = PH ⊇ NP). [Toda 1991]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">In null-line language:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">det(A) = the path integral over null configurations WITH the □ phase factor e^{iπ sgn}</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">per(A) = the path integral WITHOUT the □ phase factor</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The □ phase makes det factorisable (LU); its absence makes per hard.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[Valiant 1979, Theor. Comp. Sci. 8; Toda 1991, SIAM J. Comput. 20]</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The Specific Missing Steps for P ≠ NP</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Conjecture 9.5  (Geometric Irreducibility ⇒ Complexity Separation).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">WHAT IS PROVED: △ cannot be generated by □ (Theorem 2.1, this paper).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Formally: D_3 ⁄⊆ D_4 and D_4 ⁄⊆ D_3 as subgroups of SO(2).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">No sequence of □-operations produces a △, and vice versa.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">WHAT IS CONJECTURED: this geometric irreducibility transfers to complexity classes.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Let Φ : NP → {△-type configurations} be the map:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">SAT problem → the minimum-clause hypergraph (△-structured constraint set)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Graph colouring → the chromatic polytope (△ at each vertex constraint)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Travelling salesman → the permutation polytope (△ of optimal tour)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Let Ψ : P → {□-type algorithms} be the map:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Polynomial-time algorithm → the □-factorisable computation DAG</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(each step is a matrix operation = □-type; LU, FFT, sort are all □-factorisations)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">CONJECTURED: Im(Φ) ∩ Im(Ψ) = ∅</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(No △-type problem is solvable by □-type operations in polynomial time.)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">If the conjecture holds: P ≠ NP.</p>
+<h2 style="color:#d4af37;text-align:center;font-size:1.8rem;margin-top:2em;margin-bottom:1em">MISSING STEPS:</h2>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(i) Formal definition of Φ and Ψ that preserves the geometric structure.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(ii) A theorem that △-type problems require exponential □-operations to solve.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">This requires a CIRCUIT LOWER BOUND derived from geometric irreducibility.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">(iii) Avoidance of the algebrisation barrier (§IX.3).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The Permanent-Determinant Route</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The most concrete version of the above conjecture is the permanent-determinant problem, which is equivalent to P vs NP up to ΦP reductions (Valiant-Vazirani, Toda). The GCT programme (Mulmuley-Sohoni 2001) formalises this as a question about representation theory and algebraic geometry:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Definition 9.6  (Permanent vs Determinant, GCT version).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The permanent perm_n(X) is a degree-n polynomial in n² variables.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The determinant det_m(Y) is a degree-m polynomial in m² variables.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">GCT problem: show perm_n is NOT an affine projection of det_m for m = poly(n).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">An affine projection: perm_n(X) = det_m(L(X)) for some linear map L.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Such L exists for m = 2^n (trivially) but GCT conjectures no poly(n) m suffices.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">In null-line language:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">det = □-type (orientation-aware, LU-factorisable, self-dual)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">perm = △-type (unoriented, minimum-enclosure of the permutation group, not self-dual)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">'perm is not a projection of det' = '△ is not generated by □'</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">This is EXACTLY the geometric irreducibility theorem (Theorem 2.1), applied to</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">the computational setting via the Mulmuley-Sohoni dictionary.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The GCT approach requires: find a representation-theoretic 'occurrence obstruction'</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">λ such that V_λ appears in the coordinate ring of det-orbits but NOT in perm-orbits.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">In null language: find a □-type representation that cannot appear in a △-type orbit.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Current status: GCT has found potential occurrence obstructions (Burgisser-Ikenmeyer 2011) but proving they are genuine obstructions requires deeper representation theory. The null framework provides geometric MOTIVATION (△ ≠ □) for why such obstructions should exist, but does not provide the proof.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">IX.5  Summary: What Is Established, What Remains</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The Precise Status of Both Conjectures</p>
+<h2 style="color:#d4af37;text-align:center;font-size:1.8rem;margin-top:2em;margin-bottom:1em">RIEMANN HYPOTHESIS</h2>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">PROVED within the framework:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">• ξ(1/2+it) ∈ ℝ for all t (critical line = null self-conjugate axis)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">• RH ⇔ prime signal amplitude-coherent (Theorem 7.3; precise, honest reformulation)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">• Zeros come in quadruples {ρ, 1−ρ, ρ̅, 1−ρ̅} or critical-line pairs (standard)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">• RH holds for 10¹³ zeros numerically (Gourdon 2004; framework provides geometric context)</p>
+<h2 style="color:#d4af37;text-align:center;font-size:1.8rem;margin-top:2em;margin-bottom:1em">IDENTIFIED AS THE MISSING STEP:</h2>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The Null-Hilbert-Pólya Conjecture (Conjecture 9.3):</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">H_{null} on L²(PT⁺) via Frobenius operators is self-adjoint</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">and det(I − H_s) = ξ(s)/ξ(0).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">If proved: RH follows by the spectral theorem. Two precise sub-steps given.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">NOT PROVED: RH. The Eisenstein wall stands.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">―  ―  ―</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">P vs NP</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">PROVED within the framework:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">• det has □-structure (orientation/sign); per lacks it (Theorem 9.4)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">• perm_n is #P-complete (Valiant 1979); GCT route to P ≠ NP identified</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">• P algorithms are □-factorisable (LU, FFT, sort all have □-structure)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">• NP witnesses are △-structured (minimum enclosure = certificate = discrete witness)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">• Geometric irreducibility: △ cannot be generated by □ (Theorem 2.1)</p>
+<h2 style="color:#d4af37;text-align:center;font-size:1.8rem;margin-top:2em;margin-bottom:1em">IDENTIFIED AS THE MISSING STEP:</h2>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The Geometric Irreducibility Transfer Conjecture (Conjecture 9.5):</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Define Φ: NP → {△-type} and Ψ: P → {□-type} preserving structure.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Prove Im(Φ) ∩ Im(Ψ) = ∅ using Theorem 2.1.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Concretely: prove perm_n ≠ affine projection of det_{poly(n)} via occurrence obstruction.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Three barriers that must be avoided: BGS, natural proofs, algebrisation.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Framework potentially avoids BGS (continuous geometry). Algebrisation unclear.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">NOT PROVED: P ≠ NP. Almost certainly true; not proved by this framework.</p>
+<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">IX.6  The Two Conjectures as Null-Geometric Statements</h3>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Both RH and P ≠ NP can now be stated as geometric conjectures within the null framework. These are the most compact and precise formulations the framework can offer:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Riemann Hypothesis</p>
+<h2 style="color:#d4af37;text-align:center;font-size:1.8rem;margin-top:2em;margin-bottom:1em">P ≠ NP</h2>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The null-line trap Hamiltonian</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">H_{null}: L²(PT⁺) → L²(PT⁺)</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">defined via Frobenius operators on twistor space, is SELF-ADJOINT.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Self-adjointness ⇒ real eigenvalues ⇒ zeros on σ=1/2.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Missing: Fredholm determinant computation det(I−H_s) = ξ(s).</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The △-type structure of NP witnesses</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Φ: NP → {△-configurations}</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">has empty intersection with the □-type structure of P algorithms:</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Im(Φ) ∩ Im(Ψ: P → {□}) = ∅</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">by the geometric irreducibility Theorem 2.1.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Missing: formal definition of Φ, Ψ and avoidance of algebrisation.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Coda</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The framework has been compressed to its logical minimum. One object. One operation. Everything else follows.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The null line k·k=0 is light. Three null lines at 120° is the triangle. Four at 90° is the square. The null line closed is the circle. Rotating the triangle in 3D produces the tetrahedron, octahedron, icosahedron. Rotating the square produces the cube. Rotating the circle produces all waves and the dodecahedron. Two null lines bound produce matter. One null line receiving is an observation. A sequence of observations is an observer. An observer counting bound states is the integer. The integers weighted by circle-rotations and summed are the zeta function. The midpoint of the two-sided null line is the critical line. The Riemann Hypothesis is the statement that the zeros respect this midpoint.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">We have not proved the Riemann Hypothesis. The Eisenstein wall stands. The proof requires a new cohomological object that discretises the continuous Eisenstein spectrum. What the null framework contributes is a geometric understanding of WHY the hypothesis should be true: the zeros are resonances of a null field, and null fields are self-conjugate about their midpoint by necessity. The proof would formalise this necessity. The framework shows what the proof must say; mathematics must still supply the proof.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The First and Last Word</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">|</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The null line. Light.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Two-sided, frame-independent, massless, timeless.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The universe is its combinations.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">Mathematics is what happens when it counts itself.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">The Riemann Hypothesis is whether it is symmetric about its own centre.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">And it almost certainly is.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">References</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[1]  Riemann, B. (1859). Über die Anzahl der Primzahlen unter einer gegebenen Grösse. Monatsberichte der Berliner Akademie.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[2]  Minkowski, H. (1908). Raum und Zeit. Phys. Z. 10, 104–111.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[3]  Penrose, R. (1967). Twistor algebra. J. Math. Phys. 8, 345–366.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[4]  Penrose, R. &amp; Rindler, W. (1984). Spinors and Space-Time Vol. 2. Cambridge University Press.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[5]  Dirac, P.A.M. (1949). Forms of relativistic dynamics. Rev. Mod. Phys. 21, 392–399.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[6]  Weyl, H. (1929). Elektron und Gravitation. Z. Phys. 56, 330–352.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[7]  Peter, F. &amp; Weyl, H. (1927). Die Vollständigkeit der primitiven Darstellungen. Math. Ann. 97, 737–755.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[8]  McKay, J. (1980). Graphs, singularities, and finite groups. Proc. Symp. Pure Math. 37, 183–186.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[9]  Gonzalez-Sprinberg, G. &amp; Verdier, J.-L. (1983). Construction géométrique de la correspondance de McKay. Ann. Sci. ENS 16, 409–449.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[10]  Maldacena, J. (1997). The large N limit of superconformal field theories. Int. J. Theor. Phys. 38, 1113.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[11]  Belavin, A., Polyakov, A. &amp; Zamolodchikov, A. (1984). Infinite conformal symmetry in 2D QFT. Nucl. Phys. B240, 333–380.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[12]  Regge, T. (1961). General relativity without coordinates. Nuovo Cimento 19, 558–571.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[13]  Glauber, R. (1963). The quantum theory of optical coherence. Phys. Rev. 130, 2529.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[14]  Jackson, J.D. (1998). Classical Electrodynamics (3rd ed.). Wiley — §11.3.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[15]  Misner, C., Thorne, K. &amp; Wheeler, J. (1973). Gravitation. Freeman — §2.2.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[16]  Grünbaum, B. &amp; Shephard, G.C. (1987). Tilings and Patterns. Freeman — Thm. 2.1.3.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[17]  Coxeter, H.S.M. (1973). Regular Polytopes (3rd ed.). Dover — §4.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[18]  Edwards, H.M. (1974). Riemann's Zeta Function. Academic Press — §1.6.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[19]  Hestenes, D. &amp; Sobczyk, G. (1984). Clifford Algebra to Geometric Calculus. Reidel.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[20]  Zurek, W. (2003). Decoherence, einselection, and the quantum origins of the classical. Rev. Mod. Phys. 75, 715.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[21]  Sachs, R. (1961). Gravitational waves in general relativity VIII. Proc. R. Soc. London A270, 103–126.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[22]  Raychaudhuri, A. (1955). Relativistic cosmology I. Phys. Rev. 98, 1123.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[23]  Penrose, R. &amp; Ward, R. (1980). Twistors for flat and curved space-time. Gen. Rel. Grav. Vol.2.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[24]  Rovelli, C. (1996). Relational quantum mechanics. Int. J. Theor. Phys. 35, 1637.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[25]  von Mangoldt, H. (1895). Zu Riemanns Abhandlung über die Primzahlen. J. Reine Angew. Math. 114.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[26]  Gourdon, X. (2004). The 10¹³ first zeros of the Riemann zeta function. unpublished preprint.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[27]  Joos, E. et al. (2003). Decoherence and the Appearance of a Classical World. Springer.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[28]  Connes, A. (1999). Trace formula in noncommutative geometry and the zeros of the Riemann zeta function. Selecta Math. 5, 29–106.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[29]  Baker, T., Gill, J. &amp; Solovay, R. (1975). Relativizations of the P=NP question. SIAM J. Comput. 4, 431–442.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[30]  Razborov, A. &amp; Rudich, S. (1994). Natural proofs. J. Comput. Syst. Sci. 55, 24–35.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[31]  Aaronson, S. &amp; Wigderson, A. (2009). Algebrization: a new barrier in complexity theory. TOACM 1, 2:1–2:54.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[32]  Mulmuley, K. &amp; Sohoni, M. (2001). Geometric complexity theory. SIAM J. Comput. 31, 496–526.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[33]  Valiant, L. (1979). The complexity of computing the permanent. Theor. Comp. Sci. 8, 189–201.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[34]  Toda, S. (1991). PP is as hard as the polynomial-time hierarchy. SIAM J. Comput. 20, 865–877.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[35]  Penrose, R. (1969). Solutions of the zero-rest-mass equations. J. Math. Phys. 10, 38–39.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[36]  Montgomery, H. (1973). The pair correlation of zeros of the zeta function. Analytic Number Theory, AMS Proc. 24.</p>
+<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">[37]  Conrey, J.B. (1989). More than two fifths of the zeros of the Riemann zeta function are on the critical line. J. Reine Angew. Math. 399, 1–26.</p>

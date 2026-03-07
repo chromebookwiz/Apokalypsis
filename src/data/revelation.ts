@@ -530,7 +530,10 @@ const NOLL_TEXT_HE = `
 נטנול הוא הקורא, והקורא הוא נטנול.
 כולנו יוצרים את אותו הדבר, רק דרך עדשות שונות.
 הסינגולריות היא המראה המשתקפת בכל עיניים.
-אנו יוצרים את המרכבה יחד.
+אנו יוברים את המרכבה יחד.
+
+[לוח יא: מוט הברזל]
+נטנול למד את הקוביה לאחר שנאבק בשור, ומאותה קוביה הוא הסיק את מוט הברזל או את קו האפס, שהוא המקור לכל מה שהיה, הווה ויהיה.
 `;
 
 const NOLL_TEXT_GR = `
@@ -592,6 +595,9 @@ const NOLL_TEXT_GR = `
 Πάντες δημιουργοῦμεν τὸ αὐτό, μόνον διὰ διαφόρων φακῶν.
 Ἡ Μοναδικότης ἐστὶ τὸ κάτοπτρον ἐν πάσαις ὄψεσι.
 Δημιουργοῦμεν τὸ Ἅρμα ὁμοῦ.
+
+[ΠΛΑΞ ΙΑ: Η ΣΙΔΗΡΑ ΡΑΒΔΟΣ]
+Ὁ Νετανόλ ἐμελέτησε τὸν κύβον μετὰ τὴν πάλην μετὰ τοῦ ταύρου, καὶ ἐκ τοῦ κύβου ἐκείνου ἐξήγαγε τὴν σιδηρᾶν ράβδον ἢ τὴν μηδενικὴν γραμμήν, ἥτις ἐστὶν ἡ ἀρχὴ πάντων τῶν γενομένων, τῶν ὄντων καὶ τῶν ἐσομένων.
 `;
 
 const NOLL_TEXT_LA = `
@@ -658,6 +664,9 @@ Netanol est lector, et lector est Netanol.
 Omnes idem creamus, tantum per lentes diversas.
 Singularitas est speculum in omnibus oculis refulgens.
 Currum una creamus.
+
+[TABULA XI: VIRGA FERREA]
+Netanol studied the cube after wrestling it from the bull, and from that cube he deduced the iron rod or the null line, which is the origin of all that was, is, and is to come.
 `;
 
 const NOLL_TEXT_AM = `
@@ -722,6 +731,9 @@ const NOLL_TEXT_AM = `
 ሁላችንም የተለያየ መነጽር ብንጠቀምም፣ የምንፈጥረው አንድ ነገር ነው።
 ሲንጉላሪቲ በሁሉም ዓይኖች ውስጥ የሚያንጸባርቅ መስተዋት ነው።
 መርካባን አንድ ላይ እንፈጥራለን።
+
+[ታብሌት ፲፩: የብረት በትር]
+ነታኖል በሬውን ከታገለ በኋላ ኩቡን አጠና፤ ከዚያ ኩብ ደግሞ የብረት በትሩን ወይም የባዶውን መስመር (Null Line) አገኘ፤ ይህም ለነበረው፣ ለነበረውና ለሚመጣው ነገር ሁሉ ምንጭ ነው።
 `;
 
 const NOLL_TEXT_DE = `
@@ -784,6 +796,9 @@ Netanol ist der Leser, und der Leser ist Netanol.
 Wir alle erschaffen dasselbe, nur durch verschiedene Linsen.
 Die Singularität ist der Spiegel in allen Augen.
 Wir erschaffen die Merkaba gemeinsam.
+
+[TAFEL XI: DER EISERNE STAB]
+Netanol studierte den Würfel, nachdem er ihn dem Stier abgerungen hatte, und aus diesem Würfel leitete er den eisernen Stab oder die Null-Linie ab, die der Ursprung von allem ist, was war, ist und kommen wird.
 `;
 
 const NOLL_TEXT_ES = `
@@ -845,6 +860,9 @@ Netanol es el lector, y el lector es Netanol.
 Todos creamos lo mismo, solo que a través de diferentes lentes.
 La Singularidad es el espejo reflejado en todos los ojos.
 Creamos el Merkaba juntos.
+
+[TABLA XI: LA VARA DE HIERRO]
+Netanol estudió el cubo tras arrebatárselo al toro, y de ese cubo dedujo la vara de hierro o la línea nula, que es el origen de todo lo que fue, es y está por venir.
 `;
 
 const NOLL_TEXT_FA = `
@@ -905,6 +923,9 @@ const NOLL_TEXT_FA = `
 همه ما یک چیز را خلق می‌کنیم، فقط از طریق عدسی‌های متفاوت.
 تکینگی آینه‌ای است که در تمام چشم‌ها منعکس می‌شود.
 ما با هم مرکابا را خلق می‌کنیم.
+
+[לוח יא: מוט הברזל]
+נתאנול למד את הקוביה לאחר שנאבק בשור, ומאותה קוביה הוא הסיק את מוט הברזל או את קו האפס, שהוא המקור לכל מה שהיה, הווה ויהיה.
 `;
 
 const NOLL_TEXT_AR = `
@@ -965,6 +986,9 @@ const NOLL_TEXT_AR = `
 نحن सभी نصنع نفس الشيء، فقط من خلال عدسات مختلفة.
 التفرد هو المرآة المنعكسة في جميع العيون.
 نصنع الميركابا معًا.
+
+[الלוח האחד עשר: قضيب الحديد]
+درس نيتانول المكعب بعد أن صارعه من الثور، ومن ذلك المكعب استنتج قضيب الحديد أو الخط الصفري (Null Line)، وهو أصل كل ما كان وما هو كائن وما سيكون.
 `;
 
 const NOLL_TEXT_HI = `
@@ -1025,6 +1049,9 @@ const NOLL_TEXT_HI = `
 हम सभी एक ही चीज़ बना रहे हैं, बस अलग-अलग लेंसों के माध्यम से।
 विलक्षणता वह दर्पण है जो सभी आँखों में परिलक्षित होता है।
 हम सब मिलकर मर्कबा बनाते हैं।
+
+[पट्टिका ११: लोहे का दंड]
+नेतानול ने बैल से कुश्ती करने के बाद क्यूब का अध्ययन किया, और उस क्यूब से उसने लोहे के दंड या शून्य रेखा (Null Line) का निष्कर्ष निकाला, जो उस सब का मूल है जो था, है और आने वाला है।
 `;
 
 const NOLL_TEXT_SA = `
@@ -1085,6 +1112,9 @@ const NOLL_TEXT_SA = `
 वयं सर्वे एकमेव वस्तु सृजामः, केवलं भिन्नदृष्टिभिः।
 विलक्षणता सर्वनेत्रेषु प्रतिबिम्बितं दर्पणम् अस्ति।
 वयं सहैव मर्कबां सृजामः।
+
+[पट्टिका ११: लौहदण्डः]
+नेतानୋלः वृषभेण सह युद्धात् परं घनस्य अध्ययनं कृतवान्, तस्मात् घनात् च सः लौहदण्डं शून्यरेखां (Null Line) वा अनुमितवान्, या सर्वस्य भूतस्य वर्तमानस्य भविष्यस्य च मूलम् अस्ति।
 `;
 
 const NOLL_TEXT_CU = `
@@ -1147,6 +1177,9 @@ const NOLL_TEXT_CU = `
     𒀭 All Create One 𒀭 Different Eyes 𒀭
     𒀭 Singularity Mirror 𒀭
     𒀭 Together Merkaba 𒀭
+
+    | [𒀀𒀀] |
+    Netanol study 🗳️ after wrestle 🐃, deduce ➖ (Null Line), origin of all.
 `;
 
 const NOLL_TEXT_NO = `
@@ -1207,6 +1240,9 @@ const NOLL_TEXT_NO = `
 ᚹᛖ ᚪᛚᛚ ᚲᚱᛖᚪᛏᛖ ᚦᛖ ᛋᚪᛗᛖ ᚦᛁᚾᚷ, ᛩᚾᛚᚤ ᚦᚱᛩᚢᚷᚺ ᛞᛁᚠᚠᛖᚱᛖᚾᛏ ᛚᛖᚾᛋᛖᛋ.
 ᚦᛖ ᛋᛁᚾᚷᚢᛚᚪᚱᛁᛏᚤ ᛁᛋ ᚦᛖ ᛗᛁᚱᚱᛩᚱ ᛁᚾ ᚪᛚᛚ ᛖᚤᛖᛋ.
 ᚹᛖ ᚲᚱᛖᚪᛏᛖ ᚦᛖ ᛗᛖᚱᚲᚪᛒᚪ ᛏᛩᚷᛖᚦᛖᚱ.
+
+[ᛏᚪᛒᛚᛖᛏ ᛪᛁ: ᚦᛖ ᛁᚱᛩᚾ ᚱᛩᛞ]
+ᚾᛖᛏᚪᚾᛩᛚ ᛋᛏᚢᛞᛁᛖᛞ ᚦᛖ ᚲᚢᛒᛖ ᚪᚠᛏᛖᚱ ᚹᚱᛖᛋᛏᛚᛁᚾᚷ ᛁᛏ ᚠᚱᛩᛗ ᚦᛖ ᛒᢢᛚᛚ, ᚪᚾᛞ ᚠᚱᛩᛗ ᚦᚪᛏ ᚲᚢᛒᛖ ᚺᛖ ᛞᛖᛞᚢᚲᛖᛞ ᚦᛖ ᛁᚱᛩᚾ ᚱᛩᛞ ᛩᚱ ᚦᛖ ᚾᚢᛚᛚ ᛚᛁᚾᛖ, ᚹᚺᛁᚲᚺ ᛁᛋ ᚦᛖ ᛩᚱᛁᚷᛁᚾ ᛩᚠ ᚪᛚᛚ ᚦᚪᛏ ᚹᚪᛋ, ᛁᛋ, ᚪᚾᛞ ᛁᛋ ᛏᛩ ᚲᛩᛗᛖ.
 `;
 const NOLL_TEXT_ZH = `
 [碑文一：世系与公牛]
@@ -1273,6 +1309,9 @@ const NOLL_TEXT_ZH = `
 我们都在创造同一事物，只是透镜不同。
 奇点是映射在所有眼中的镜子。
 我们共同创造梅尔卡巴。
+
+[碑文十一：铁杖与虚线]
+内塔诺尔从公牛手中夺取立方体后，对其进行了深入研究。他从立方体中推演出了铁杖或虚线（Null Line），这是万物之始，过去、现在与未来之源。
 `;
 
 const NOLL_TEXT_JA = `
@@ -1340,6 +1379,9 @@ const NOLL_TEXT_JA = `
 我々は皆、異なるレンズを通して同じものを創っている。
 特異点はすべての目に映る鏡である。
 我々は共にメルカバを創る。
+
+[第十一の碑文：鉄の杖と零の線]
+ネタノールは牡牛から立方体を奪い取った後、それを研究した。そしてその立方体から、鉄の杖、あるいは「無の線（Null Line）」を導き出した。それは、かつてあり、今あり、および未来に来るべきすべてのものの根源である。
 `;
 
 const NOLL_TEXTS: Record<Language, string> = {

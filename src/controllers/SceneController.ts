@@ -124,9 +124,7 @@ export const useSceneController = () => {
     const [azimuthAngle, setAzimuthAngle] = useState(0); // Azimuth (E/W)
     const [activeViewIndex, setActiveViewIndex] = useState(0); // 0=Front, 1=Iso, 2=Top...
     const [uiVisible, setUiVisible] = useState(false);
-    const [theoryUnlocked, setTheoryUnlocked] = useState(false);
     const [theoryOpen, setTheoryOpen] = useState(false);
-    const [secretEntryOpen, setSecretEntryOpen] = useState(false);
     const [resonance, setResonance] = useState(0);
     const [latticeAlignment, setLatticeAlignment] = useState(0);
     const [primePole, setPrimePole] = useState(0);
@@ -601,7 +599,7 @@ export const useSceneController = () => {
         hyperPhase, metatron5D, tesseractRot, autoRotate4D, isPlaying, rotationSpeed, splitMode,
         frequencyA, frequencyB, audioSync, revealSymmetry, innerVision, show4DShadow, phaseA, phaseB,
         waveTime, waveType, infiniteTriangle, showNumbers, zoom, gridSize, cameraResetTrigger,
-        viewAngle, uiVisible, theoryUnlocked, theoryOpen, secretEntryOpen, resonance,
+        viewAngle, uiVisible, theoryOpen, resonance,
         latticeAlignment, primePole, sacredFlux, activeSigil, practicalPanelOpen,
         rsaToolActive, signalToolActive, compressionToolActive, morphToolActive, latticeToolActive,
         solidMode,
@@ -618,7 +616,7 @@ export const useSceneController = () => {
         setIsPlaying, setRotationSpeed, setSplitMode, setFrequencyA, setFrequencyB, setAudioSync,
         setRevealSymmetry, setInnerVision, setShow4DShadow, setShowNumbers, setWaveType, setWaveTime,
         setInfiniteTriangle, setZoom, setGridSize, setAzimuthAngle, setUiVisible, setViewAngle,
-        setTheoryUnlocked, setTheoryOpen, setSecretEntryOpen, setResonance,
+        setTheoryOpen, setResonance,
         setPracticalPanelOpen, setRsaToolActive, setSignalToolActive, setCompressionToolActive,
         setMorphToolActive, setLatticeToolActive, setLabBuffer, setProcessedBuffer, setLabN, setLabE,
         setLabString, setRsaFactorP, setRsaFactorQ, setRsaSolved, setSolidMode,

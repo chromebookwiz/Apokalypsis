@@ -4,8 +4,8 @@ import { getRevelation, getNollCubeText } from '../data/revelation';
 import { connectAudioSource, getAudioCtx } from '../views/geometries/Metatron';
 import { getHymn, getNumericScripture } from '../data/scripture';
 import { LANG_NAMES, UI_STRINGS } from '../data/translations';
-import { SecretEntry } from './SecretEntry';
 import { v12Solver } from '../models/V12CurvatureSolver';
+import { MagiCouncilAgent } from './MagiCouncilAgent';
 
 const NollCubeContent = ({ language, isRTL }: { language: any, isRTL: boolean }) => {
     const text = getNollCubeText(language);
@@ -452,16 +452,27 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
     }, []);
 
     const handleDigitClick = (char: string) => {
-        if (char === '3' && !controller.theoryUnlocked) {
-            controller.setTheoryUnlocked(true);
+        if (char === '3') {
+            // Digit '3' no longer unlocks theory, it's always available
             setSecretFlash(true);
             setTimeout(() => setSecretFlash(false), 600);
             return;
         }
-        if (char === '9' && !prophecyUnlocked) {
-            setProphecyUnlocked(true);
+        if (char === '9') {
+            // Unlock prophecy if not already
+            if (!prophecyUnlocked) {
+                setProphecyUnlocked(true);
+            }
+            // Trigger visual flash
             setSecretFlash(true);
             setTimeout(() => setSecretFlash(false), 600);
+
+            // Pop up hidden text (Info Modal) on tablet (>= 768px) if not English
+            // Note: 'EN' is currently not in Language type but we check for it just in case of future expansion
+            // or if English is implicitly handled. In this codebase, English is largely absent/removed.
+            if (window.innerWidth >= 768 && (controller.language as string) !== 'EN') {
+                setShowInfo(true);
+            }
             return;
         }
         if (char === '6') {
@@ -545,38 +556,8 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             {/* SUBTLE HOLY OVERLAY */}
             <DivineCorners />
 
-            {/* CENTRAL UNLOCK EYE - ONLY WHEN UI IS HIDDEN */}
-            {!controller.uiVisible && (
-                <div style={{
-                    position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
-                    display: 'flex', justifyContent: 'center', alignItems: 'center',
-                    backgroundColor: 'rgba(0,0,0,0.1)', // Very subtle backdrop
-                    pointerEvents: 'auto', zIndex: 1050
-                }}>
-                    <button
-                        onClick={() => {
-                            controller.setUiVisible(true);
-                        }}
-                        style={{
-                            fontSize: '8rem', background: 'none', border: 'none',
-                            color: '#d4af37', cursor: 'pointer',
-                            filter: 'drop-shadow(0 0 20px rgba(212, 175, 55, 0.8))',
-                            transition: 'all 0.5s ease',
-                            animation: 'pulse 3s infinite ease-in-out'
-                        }}
-                        className="unlock-eye"
-                    >
-                        𓁹
-                    </button>
-                    <style>{`
-                        @keyframes pulse {
-                            0% { transform: scale(1); opacity: 0.6; }
-                            50% { transform: scale(1.1); opacity: 1; }
-                            100% { transform: scale(1); opacity: 0.6; }
-                        }
-                    `}</style>
-                </div>
-            )}
+            {/* MAGI COUNCIL AGENT - PERSISTENT LEFT PANEL */}
+            <MagiCouncilAgent controller={controller} />
 
             {/* LEFT CORNER: EYE ICON ONLY */}
             <div className="corner-tl" style={{
@@ -1081,7 +1062,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     </div>
 
                     {/* MODES */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '5px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr', gap: '5px' }}>
                         <button className="sacred-btn" onClick={controller.toggleDarkMode} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.darkMode ? '#d4af37' : 'none', color: controller.darkMode ? '#fdfbf7' : '#d4af37', textAlign: 'center' }} title="Day/Night">
                             {controller.darkMode ? '☼' : '☽'}
                         </button>
@@ -1093,6 +1074,9 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         </button>
                         <button className="sacred-btn" onClick={() => controller.setSolidMode(!controller.solidMode)} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.solidMode ? '#d4af37' : 'none', color: controller.solidMode ? '#fdfbf7' : '#d4af37', fontSize: '1.2rem', textAlign: 'center' }} title="Solid Forms">
                             {controller.solidMode ? '⬛' : '⛶'}
+                        </button>
+                        <button className="sacred-btn" onClick={() => controller.setMetatronShape(controller.metatronShape === 'CUBE' ? 'NONE' : 'CUBE')} style={{ padding: '10px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.metatronShape === 'CUBE' ? '#d4af37' : 'none', color: controller.metatronShape === 'CUBE' ? '#fdfbf7' : '#d4af37', fontSize: '1.2rem', textAlign: 'center' }} title="Cube Geometry">
+                            {controller.metatronShape === 'CUBE' ? '🧊' : '🔳'}
                         </button>
                     </div>
 
@@ -1214,23 +1198,6 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 <div>{renderClickableAngle(`${Math.abs(controller.azimuthAngle).toFixed(2)}°${controller.azimuthAngle > 0 ? 'E' : 'W'}`)}</div>
             </div>
 
-            {/* SECRET THEORY UNLOCK BUTTON */}
-            {controller.theoryUnlocked && (
-                <button
-                    onClick={() => controller.setTheoryOpen(true)}
-                    style={{
-                        position: 'fixed', left: 'clamp(10px, 4vw, 40px)', top: '50%', transform: 'translateY(-110%)',
-                        background: 'none', border: '1px solid rgba(212, 175, 55, 0.4)', borderRadius: '50%',
-                        width: '48px', height: '48px', cursor: 'pointer', color: '#d4af37',
-                        fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        animation: 'fadeIn 1s ease', pointerEvents: 'auto', zIndex: 900,
-                        boxShadow: '0 0 15px rgba(212, 175, 55, 0.2)',
-                        transition: 'all 0.3s ease'
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 25px rgba(212, 175, 55, 0.5)'; e.currentTarget.style.borderColor = '#d4af37'; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 15px rgba(212, 175, 55, 0.2)'; e.currentTarget.style.borderColor = 'rgba(212, 175, 55, 0.4)'; }}
-                >Ω</button>
-            )}
 
             {/* Songs/Hymns panel toggled by music button or '6' digit */}
             {controller.uiVisible && songsPanelOpen && (
@@ -1458,7 +1425,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             {/* NOLL CUBE OVERLAY */}
             <div style={{
                 position: 'fixed', bottom: '150px', left: '40px', zIndex: 100, pointerEvents: 'auto',
-                display: (controller.metatronShape === 'MERKABA' && controller.uiVisible) ? 'block' : 'none',
+                display: ((controller.metatronShape === 'MERKABA' || controller.metatronShape === 'CUBE') && controller.uiVisible) ? 'block' : 'none',
                 opacity: 1, transition: 'opacity 0.5s'
             }}>
                 <div style={{
@@ -1469,34 +1436,38 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 </div>
             </div>
 
-            {/* THEORY PAPER BUTTON - Invisible in top-right corner (hidden link to paper) */}
+            {/* THEORY PAPER BUTTON - NOW ALWAYS VISIBLE */}
             <button
                 className="sacred-btn"
                 onClick={() => controller.setTheoryOpen(!controller.theoryOpen)}
-                title="Unified Theory V12"
+                title="THE NULL LINE"
                 style={{
                     position: 'fixed',
                     top: '20px',
                     right: '20px',
                     fontSize: '1.8rem',
                     background: 'none',
-                    border: 'none',
-                    color: 'transparent',
+                    border: '1px solid rgba(212, 175, 55, 0.4)',
+                    borderRadius: '50%',
+                    width: '48px',
+                    height: '48px',
+                    color: '#d4af37',
                     cursor: 'pointer',
-                    filter: 'none',
                     transition: 'all 0.3s ease',
                     zIndex: 1100,
                     pointerEvents: 'auto',
-                    opacity: 0,
-                    width: '40px',
-                    height: '40px'
+                    opacity: 0.8,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: 'rgba(0,0,0,0.5)',
+                    boxShadow: '0 0 15px rgba(212, 175, 55, 0.2)'
                 }}
-            >𓊈𓊉</button>
+                onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.boxShadow = '0 0 25px rgba(212, 175, 55, 0.5)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.8'; e.currentTarget.style.boxShadow = '0 0 15px rgba(212, 175, 55, 0.2)'; }}
+            >Ω</button>
 
-            {/* SECRET ENTRY PANEL */}
-            {controller.secretEntryOpen && (
-                <SecretEntry onClose={() => controller.setSecretEntryOpen(false)} controller={controller} />
-            )}
+            {/* SECRET ENTRY PANEL REMOVED */}
 
         </div >
     );

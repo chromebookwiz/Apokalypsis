@@ -1,4 +1,3 @@
-export const UNIFIED_THEORY = `
 |
 
 THE NULL LINE
@@ -454,4 +453,3 @@ References
 [50]  Mandelstam, S. (1973). Interacting-string picture of dual-resonance models. Nucl. Phys. B64.
 
 [37]  Conrey, J.B. (1989). More than two fifths of the zeros of the Riemann zeta function are on the critical line. J. Reine Angew. Math. 399, 1–26.
-`;

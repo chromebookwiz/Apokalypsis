@@ -104,6 +104,7 @@ const CherubimNode: React.FC<{
 
     const { tetraUp, tetraDown } = useMemo(() => createMerkabaGeometries(2.0), []);
     const sphereGeo = useMemo(() => new THREE.SphereGeometry(2.0, 24, 24), []);
+    const boxGeo = useMemo(() => new THREE.BoxGeometry(2.2, 2.2, 2.2), []);
 
     const invisibleMat = useMemo(() => new THREE.MeshBasicMaterial({
         color: color,
@@ -376,6 +377,11 @@ const CherubimNode: React.FC<{
                 <Edges threshold={15} color="#0000ff" linewidth={2} transparent opacity={0.8} />
                 {controller.show4DShadow && <Edges threshold={0} color="#0000ff" linewidth={0.5} transparent opacity={0.2} scale={1.2} />}
             </mesh>
+            {controller.metatronShape === 'CUBE' && (
+                <mesh geometry={boxGeo} material={invisibleMat}>
+                    <Edges threshold={15} color="#d4af37" linewidth={1.5} transparent opacity={0.9} />
+                </mesh>
+            )}
             {/* LITERAL MATH: Compression Ghost Shadow */}
             {controller.compressionToolActive && (
                 <group scale={1.05} rotation={[0.1, 0.1, 0.1]}>
