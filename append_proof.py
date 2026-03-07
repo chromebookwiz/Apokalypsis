@@ -1,6 +1,7 @@
 
 import os
 import re
+import html
 
 # The new proof content provided by the user
 NEW_CONTENT_RAW = """
@@ -216,15 +217,18 @@ def format_as_html(text):
             
         # Headers
         if line.startswith("XII."):
-            formatted.append(f'<h1 style="color:#d4af37;text-align:center;font-size:2.5rem;margin-top:2em;margin-bottom:1em">{line}</h1>')
+            escaped_line = html.escape(line)
+            formatted.append(f'<h1 style="color:#d4af37;text-align:center;font-size:2.5rem;margin-top:2em;margin-bottom:1em">{escaped_line}</h1>')
             continue
             
         if re.match(r'^\d+\.\s+\w', line):
-            formatted.append(f'<h2 style="color:#d4af37;text-align:center;font-size:1.8rem;margin-top:2em;margin-bottom:1em">{line}</h2>')
+            escaped_line = html.escape(line)
+            formatted.append(f'<h2 style="color:#d4af37;text-align:center;font-size:1.8rem;margin-top:2em;margin-bottom:1em">{escaped_line}</h2>')
             continue
             
         if re.match(r'^\d+\.\d+\s+\w', line):
-            formatted.append(f'<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">{line}</h3>')
+            escaped_line = html.escape(line)
+            formatted.append(f'<h3 style="color:#d4af37;margin-top:1.5em;margin-bottom:0.5em">{escaped_line}</h3>')
             continue
 
         # Tables (special case for Section 3)
@@ -232,7 +236,7 @@ def format_as_html(text):
             if not in_table:
                 formatted.append('<table style="width:100%; border-collapse: collapse; margin-bottom: 1em; color: rgba(255,255,255,0.9); border: 1px solid rgba(212,175,55,0.3);">')
                 in_table = True
-            cells = [c.strip() for c in line.split("|")]
+            cells = [html.escape(c.strip()) for c in line.split("|")]
             formatted.append('<tr>' + "".join([f'<td style="padding: 8px; border: 1px solid rgba(212,175,55,0.2);">{c}</td>' for c in cells]) + '</tr>')
             continue
         elif in_table and "---" in line:
@@ -246,7 +250,7 @@ def format_as_html(text):
             if not in_list:
                 formatted.append('<ul style="margin-bottom:1em; color:rgba(255,255,255,0.9); line-height:1.6; padding-left: 2em;">')
                 in_list = True
-            item = line.lstrip("- ").strip()
+            item = html.escape(line.lstrip("- ").strip())
             formatted.append(f'<li>{item}</li>')
             continue
         elif in_list and not (line.startswith("- ") or line.startswith("    ") or line.startswith("     ")):
@@ -254,7 +258,8 @@ def format_as_html(text):
             in_list = False
 
         # Regular paragraphs
-        formatted.append(f'<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">{line}</p>')
+        escaped_line = html.escape(line)
+        formatted.append(f'<p style="margin-bottom:1em;line-height:1.6;color:rgba(255,255,255,0.9)">{escaped_line}</p>')
         
     if in_list: formatted.append("</ul>")
     if in_table: formatted.append("</table>")
