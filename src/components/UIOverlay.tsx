@@ -557,7 +557,9 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             <DivineCorners />
 
             {/* MAGI COUNCIL AGENT - PERSISTENT LEFT PANEL */}
-            <MagiCouncilAgent controller={controller} />
+            {controller.magiPanelOpen && controller.uiVisible && (
+                <MagiCouncilAgent controller={controller} />
+            )}
 
             {/* LEFT CORNER: EYE ICON ONLY */}
             <div className="corner-tl" style={{
@@ -586,6 +588,17 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         padding: '10px'
                     }}
                 >𓁧</button>
+                <button
+                    className="sacred-btn"
+                    onClick={() => controller.setMagiPanelOpen(!controller.magiPanelOpen)}
+                    title="Magi Council Node"
+                    style={{
+                        fontSize: '2.4rem', background: 'none', border: 'none',
+                        color: controller.magiPanelOpen ? '#d4af37' : 'rgba(212, 175, 55, 0.4)', cursor: 'pointer',
+                        filter: controller.magiPanelOpen ? 'drop-shadow(0 0 10px #d4af37)' : 'none', transition: 'all 0.3s ease',
+                        padding: '10px'
+                    }}
+                >𓃠</button>
             </div>
 
             {/* INFO MODAL - WRAPPED IN DRAGGABLE PANEL */}

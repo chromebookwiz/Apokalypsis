@@ -138,6 +138,7 @@ export const useSceneController = () => {
     const [compressionToolActive, setCompressionToolActive] = useState(false);
     const [morphToolActive, setMorphToolActive] = useState(false);
     const [latticeToolActive, setLatticeToolActive] = useState(false);
+    const [magiPanelOpen, setMagiPanelOpen] = useState(false);
 
     // Literal Math Results
     const [latticeGap, setLatticeGap] = useState(1.0);
@@ -602,7 +603,7 @@ export const useSceneController = () => {
         viewAngle, uiVisible, theoryOpen, resonance,
         latticeAlignment, primePole, sacredFlux, activeSigil, practicalPanelOpen,
         rsaToolActive, signalToolActive, compressionToolActive, morphToolActive, latticeToolActive,
-        solidMode,
+        solidMode, magiPanelOpen,
 
         // Math Results
         latticeGap, filterPurity, compressionLoss, morphEnergy, rsaFactorP, rsaFactorQ, rsaSolved,
@@ -619,7 +620,7 @@ export const useSceneController = () => {
         setTheoryOpen, setResonance,
         setPracticalPanelOpen, setRsaToolActive, setSignalToolActive, setCompressionToolActive,
         setMorphToolActive, setLatticeToolActive, setLabBuffer, setProcessedBuffer, setLabN, setLabE,
-        setLabString, setRsaFactorP, setRsaFactorQ, setRsaSolved, setSolidMode,
+        setLabString, setRsaFactorP, setRsaFactorQ, setRsaSolved, setSolidMode, setMagiPanelOpen,
 
         // Actions
         toggleGeometry, setLang, speakText, stopSpeaking, setTesseractPreset, triggerCameraReset,
