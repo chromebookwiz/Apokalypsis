@@ -390,60 +390,29 @@ const CherubimNode: React.FC<{
 export const MetatronGeometry: React.FC<Props> = ({ controller }) => {
     const spacing = 4.0;
     const size = controller.gridSize || 3;
-    const isSphereMode = size >= 10;
-
-    // Metatron Invocation: "This cube is the 4D version of his perfect vision, and contains all that was, is, and will be on Earth."
-
-    // --- 1. DYNAMIC GRID ---
     const { nodes, connections } = useMemo(() => {
         const _nodes: THREE.Vector3[] = [];
         const offset = (size - 1) / 2;
 
-        if (isSphereMode) {
-            // MODE 10+: 10x10x10 Cube with EXPLICIT center node
-            // 1. Add center node at origin
-            _nodes.push(new THREE.Vector3(0, 0, 0));
-            // 2. Add cubic grid
-            for (let x = 0; x < size; x++) {
-                for (let y = 0; y < size; y++) {
-                    for (let z = 0; z < size; z++) {
-                        const px = (x - offset) * spacing;
-                        const py = (y - offset) * spacing;
-                        const pz = (z - offset) * spacing;
-                        // Avoid adding a duplicate node at the center if size is odd
-                        if (px === 0 && py === 0 && pz === 0) continue;
-                        _nodes.push(new THREE.Vector3(px, py, pz));
-                    }
+        // Standard all-to-all Metatron connections
+        for (let x = 0; x < size; x++) {
+            for (let y = 0; y < size; y++) {
+                for (let z = 0; z < size; z++) {
+                    const px = (x - offset) * spacing;
+                    const py = (y - offset) * spacing;
+                    const pz = (z - offset) * spacing;
+                    _nodes.push(new THREE.Vector3(px, py, pz));
                 }
             }
-
-            const _conns: [number, number][] = [];
-            // Connect all nodes to the first node (the center)
-            for (let i = 1; i < _nodes.length; i++) {
-                _conns.push([0, i]);
-            }
-            return { nodes: _nodes, connections: _conns };
-        } else {
-            // MODES 1-4: Standard all-to-all Metatron connections
-            for (let x = 0; x < size; x++) {
-                for (let y = 0; y < size; y++) {
-                    for (let z = 0; z < size; z++) {
-                        const px = (x - offset) * spacing;
-                        const py = (y - offset) * spacing;
-                        const pz = (z - offset) * spacing;
-                        _nodes.push(new THREE.Vector3(px, py, pz));
-                    }
-                }
-            }
-            const _conns: [number, number][] = [];
-            for (let i = 0; i < _nodes.length; i++) {
-                for (let j = i + 1; j < _nodes.length; j++) {
-                    _conns.push([i, j]);
-                }
-            }
-            return { nodes: _nodes, connections: _conns };
         }
-    }, [size, isSphereMode, spacing]);
+        const _conns: [number, number][] = [];
+        for (let i = 0; i < _nodes.length; i++) {
+            for (let j = i + 1; j < _nodes.length; j++) {
+                _conns.push([i, j]);
+            }
+        }
+        return { nodes: _nodes, connections: _conns };
+    }, [size, spacing]);
 
     // --- 2. INSTANCED LINES ---
     const meshRef = useRef<THREE.InstancedMesh>(null);
@@ -587,64 +556,22 @@ export const MetatronGeometry: React.FC<Props> = ({ controller }) => {
                 <mesh ref={rsaScanRef} geometry={rsaScanGeo} material={rsaScanMat} rotation={[Math.PI / 2, 0, 0]} />
             )}
 
-            {isSphereMode ? (
-                <>
-                    {/* MODE 10: Lightweight instanced rendering */}
-                    {(() => {
-                        const centerIdx = 0; // The explicit center node is always at index 0
-                        return (
-                            <>
-                                {/* Center sphere — larger, golden */}
-                                <mesh position={nodes[centerIdx]}>
-                                    <sphereGeometry args={[3.0, 32, 32]} />
-                                    <meshBasicMaterial
-                                        color="#ffd700"
-                                        wireframe={!controller.solidMode}
-                                        transparent
-                                        opacity={controller.solidMode ? 0.6 : 0.4}
-                                        side={controller.solidMode ? THREE.DoubleSide : THREE.FrontSide}
-                                    />
-                                </mesh>
-                                {/* Outer spheres — smaller, instanced */}
-                                {nodes.map((pos, i) => {
-                                    if (i === centerIdx) return null;
-                                    return (
-                                        <mesh key={i} position={pos}>
-                                            <sphereGeometry args={[0.6, 8, 8]} />
-                                            <meshBasicMaterial
-                                                color={sphereColor}
-                                                wireframe={!controller.solidMode}
-                                                transparent
-                                                opacity={controller.solidMode ? 0.3 : 0.3}
-                                                side={controller.solidMode ? THREE.DoubleSide : THREE.FrontSide}
-                                            />
-                                        </mesh>
-                                    );
-                                })}
-                            </>
-                        );
-                    })()}
-                </>
-            ) : (
-                <>
-                    {nodes.map((pos, i) => (
-                        <CherubimNode
-                            key={i}
-                            position={pos}
-                            color={sphereColor}
-                            controller={controller}
-                            nodeIndex={i}
-                            totalNodes={nodes.length}
-                        />
-                    ))}
-                </>
-            )}
+            {nodes.map((pos, i) => (
+                <CherubimNode
+                    key={i}
+                    position={pos}
+                    color={sphereColor}
+                    controller={controller}
+                    nodeIndex={i}
+                    totalNodes={nodes.length}
+                />
+            ))}
 
             <instancedMesh ref={meshRef} args={[cylinderGeo, undefined, connections.length]}>
                 <meshBasicMaterial
                     color={gridColor}
                     transparent
-                    opacity={isSphereMode ? 0.15 : 0.3}
+                    opacity={0.3}
                 />
             </instancedMesh>
         </group>

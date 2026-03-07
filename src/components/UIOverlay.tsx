@@ -1097,9 +1097,12 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     </div>
 
                     <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
-                        {[1, 2, 3, 4, 10].map((size) => (
-                            <button key={size} className="sacred-btn" onClick={() => controller.setGridSize(size)} style={{ flex: size === 10 ? '1 1 100%' : 1, padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.gridSize === size ? '#d4af37' : 'none', color: controller.gridSize === size ? '#fdfbf7' : '#d4af37', textAlign: 'center', fontWeight: size === 10 ? 'bold' : 'normal' }}>{size === 10 ? '⬡ 10³ SPHERE CUBE' : size}</button>
-                        ))}
+                        {[1, 2, 3, 4].map((size) => {
+                            const roman = size === 1 ? 'I' : size === 2 ? 'II' : size === 3 ? 'III' : 'IV';
+                            return (
+                                <button key={size} className="sacred-btn" onClick={() => controller.setGridSize(size)} style={{ flex: 1, padding: '8px', border: '1px solid #d4af37', borderRadius: '5px', background: controller.gridSize === size ? '#d4af37' : 'none', color: controller.gridSize === size ? '#fdfbf7' : '#d4af37', textAlign: 'center' }}>{roman}</button>
+                            );
+                        })}
                     </div>
 
                     {/* HARMONICS */}
