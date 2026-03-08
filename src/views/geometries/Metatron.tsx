@@ -111,7 +111,7 @@ const CherubimNode: React.FC<{
         visible: controller.solidMode,
         wireframe: false,
         transparent: true,
-        opacity: controller.solidMode ? 0.3 : 0,
+        opacity: controller.solidMode ? 0.2 : 0,
         side: THREE.DoubleSide
     }), [color, controller.solidMode]);
 
@@ -360,7 +360,7 @@ const CherubimNode: React.FC<{
         color: color,
         wireframe: !controller.solidMode,
         transparent: true,
-        opacity: controller.solidMode ? 0.3 : 0.1,
+        opacity: controller.solidMode ? 0.2 : 0.1,
         side: controller.solidMode ? THREE.DoubleSide : THREE.FrontSide,
         clippingPlanes: [clippingPlane],
         clipShadows: true

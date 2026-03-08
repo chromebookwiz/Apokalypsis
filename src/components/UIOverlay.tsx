@@ -1530,7 +1530,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             {/* NOLL CUBE OVERLAY */}
             <div style={{
                 position: 'fixed', bottom: '150px', left: '40px', zIndex: 100, pointerEvents: 'auto',
-                display: ((controller.metatronShape === 'MERKABA' || controller.metatronShape === 'CUBE') && controller.uiVisible) ? 'block' : 'none',
+                display: (controller.metatronShape === 'MERKABA' && controller.uiVisible) ? 'block' : 'none',
                 opacity: 1, transition: 'opacity 0.5s'
             }}>
                 <div style={{
