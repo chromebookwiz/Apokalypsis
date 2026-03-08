@@ -90,29 +90,30 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
         <div style={{
             width: '100%',
             height: '100%',
-            background: 'rgba(0, 0, 0, 0.85)',
+            background: '#fdfbf7',
             border: '2px solid #d4af37',
             borderRadius: '10px',
             display: 'flex',
             flexDirection: 'column',
             fontFamily: 'Orbitron, monospace',
-            boxShadow: '0 0 30px rgba(212, 175, 55, 0.2)',
+            boxShadow: '0 0 30px rgba(0,0,0,0.1)',
             overflow: 'hidden',
-            color: '#d4af37'
+            color: '#1a1a1a'
         }}>
             {/* HEADER */}
             <div className="drag-handle" style={{
                 padding: '10px',
-                background: 'rgba(212, 175, 55, 0.1)',
+                background: 'rgba(212, 175, 55, 0.15)',
                 borderBottom: '1px solid #d4af37',
                 fontSize: '0.7rem',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                cursor: 'grab'
+                cursor: 'grab',
+                color: '#d4af37'
             }}>
-                <span>MAGI COUNCIL // NODE_01</span>
-                <span style={{ color: '#00ff00' }}>● ONLINE</span>
+                <span style={{ fontWeight: 'bold' }}>MAGI COUNCIL // NODE_01</span>
+                <span style={{ color: '#008800' }}>● ONLINE</span>
             </div>
 
             {/* MESSAGE AREA */}
@@ -137,13 +138,13 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
                             style={{
-                                color: m.type === 'MATH' ? '#888' : m.type === 'SYSTEM' ? '#00ff00' : '#d4af37',
+                                color: m.type === 'MATH' ? '#666' : m.type === 'SYSTEM' ? '#006600' : '#8b6914',
                                 fontStyle: m.type === 'MATH' ? 'italic' : 'normal',
                                 borderLeft: m.type === 'AGENT' ? '2px solid #d4af37' : 'none',
                                 paddingLeft: m.type === 'AGENT' ? '8px' : '0'
                             }}
                         >
-                            {m.type === 'AGENT' && <span style={{ fontSize: '0.6rem', opacity: 0.6, display: 'block' }}>NODE &gt;</span>}
+                            {m.type === 'AGENT' && <span style={{ fontSize: '0.6rem', opacity: 0.6, display: 'block', color: '#888' }}>NODE &gt;</span>}
                             {m.text}
                         </motion.div>
                     ))}
@@ -153,7 +154,7 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
             {/* REFINEMENT STATUS */}
             <div style={{
                 padding: '15px',
-                background: 'rgba(0,0,0,0.5)',
+                background: 'rgba(212, 175, 55, 0.05)',
                 borderTop: '1px solid rgba(212, 175, 55, 0.3)'
             }}>
                 <div style={{ fontSize: '0.6rem', color: '#888', marginBottom: '5px' }}>CURRENT_REFINEMENT:</div>
@@ -163,7 +164,7 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                 <div style={{
                     marginTop: '10px',
                     height: '4px',
-                    background: '#222',
+                    background: 'rgba(0,0,0,0.05)',
                     borderRadius: '2px',
                     overflow: 'hidden'
                 }}>

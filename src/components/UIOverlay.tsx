@@ -1482,12 +1482,23 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                             {THEORY_TRANSLATIONS[theoryLang].content}
                         </div>
                         {theoryLang === 'EN' && (
-                            <div
-                                style={{ marginTop: '30px', borderTop: '1px solid rgba(0,0,0,0.1)', paddingTop: '20px' }}
-                                dangerouslySetInnerHTML={{
-                                    __html: document.getElementById('theory-article')?.innerHTML || ''
-                                }}
-                            />
+                            <>
+                                <style>{`
+                                    .theory-override p, .theory-override h1, .theory-override h2, .theory-override h3, .theory-override td {
+                                        color: #1a1a1a !important;
+                                    }
+                                    .theory-override table {
+                                        border-color: rgba(212,175,55,0.3) !important;
+                                    }
+                                `}</style>
+                                <div
+                                    className="theory-override"
+                                    style={{ marginTop: '30px', borderTop: '1px solid rgba(0,0,0,0.1)', paddingTop: '20px' }}
+                                    dangerouslySetInnerHTML={{
+                                        __html: document.getElementById('theory-article')?.innerHTML || ''
+                                    }}
+                                />
+                            </>
                         )}
                     </div>
                 </DraggablePanel>
