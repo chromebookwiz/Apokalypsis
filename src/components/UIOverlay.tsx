@@ -1492,24 +1492,26 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         <div style={{ whiteSpace: 'pre-wrap', textAlign: 'justify' }}>
                             {THEORY_TRANSLATIONS[theoryLang]?.content || ''}
                         </div>
-                        {/* Allows math paper to display for any language by checking index.html for theory-article-[LANG], falling back to English theory-article */}
-                        <>
-                            <style>{`
-                                .theory-override p, .theory-override h1, .theory-override h2, .theory-override h3, .theory-override td {
-                                    color: #1a1a1a !important;
-                                }
-                                .theory-override table {
-                                    border-color: rgba(212,175,55,0.3) !important;
-                                }
-                            `}</style>
-                            <div
-                                className="theory-override"
-                                style={{ marginTop: '30px', borderTop: '1px solid rgba(0,0,0,0.1)', paddingTop: '20px' }}
-                                dangerouslySetInnerHTML={{
-                                    __html: (document.getElementById(`theory-article-${theoryLang}`) || document.getElementById('theory-article'))?.innerHTML || ''
-                                }}
-                            />
-                        </>
+                        {/* Only fall back to English HTML article if no translation exists for this language */}
+                        {(!THEORY_TRANSLATIONS[theoryLang] || THEORY_TRANSLATIONS[theoryLang]?.content === '[Translation Pending]') && (
+                            <>
+                                <style>{`
+                                    .theory-override p, .theory-override h1, .theory-override h2, .theory-override h3, .theory-override td {
+                                        color: #1a1a1a !important;
+                                    }
+                                    .theory-override table {
+                                        border-color: rgba(212,175,55,0.3) !important;
+                                    }
+                                `}</style>
+                                <div
+                                    className="theory-override"
+                                    style={{ marginTop: '30px', borderTop: '1px solid rgba(0,0,0,0.1)', paddingTop: '20px' }}
+                                    dangerouslySetInnerHTML={{
+                                        __html: (document.getElementById(`theory-article-${theoryLang}`) || document.getElementById('theory-article'))?.innerHTML || ''
+                                    }}
+                                />
+                            </>
+                        )}
                     </div>
                 </DraggablePanel>
             )}

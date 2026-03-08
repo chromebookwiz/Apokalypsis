@@ -379,7 +379,7 @@ const CherubimNode: React.FC<{
             </mesh>
             {controller.metatronShape === 'CUBE' && (
                 <mesh geometry={boxGeo} material={invisibleMat}>
-                    <Edges threshold={15} color="#d4af37" linewidth={1.5} transparent opacity={0.9} />
+                    <Edges threshold={15} color="#00c853" linewidth={1.5} transparent opacity={0.95} />
                 </mesh>
             )}
             {/* LITERAL MATH: Compression Ghost Shadow */}
