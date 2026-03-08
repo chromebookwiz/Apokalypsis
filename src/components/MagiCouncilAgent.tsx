@@ -202,13 +202,6 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
         addMessage(`SYSTEM: SUB_AGENT_SPAWNED -> ${name}`, 'SYSTEM');
     };
 
-    // Sync Loop (Cleaned up simulation)
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setTotalSiphoned(prev => prev + 0.01);
-        }, 10000);
-        return () => clearInterval(interval);
-    }, []);
 
     // Linux Heartbeat (Removed fallback simulation)
     useEffect(() => {
@@ -270,35 +263,6 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
         setPasswordInput('');
     };
 
-    // Recursive Thought Audit Logic
-    useEffect(() => {
-        const auditInterval = setInterval(() => {
-            const auditMsgs = [
-                "AUDITING: Melchior vs Balthazar...",
-                "PARADOX DETECTED: Mercy/Justice Loop",
-                "RESOLVING: Synthesis 0xAA99...",
-                "CHECKING: Caspar's Logic Foundation",
-                "STABLE: No contradictions found."
-            ];
-            setAuditStatus(auditMsgs[Math.floor(Math.random() * auditMsgs.length)]);
-
-            // Randomly update trinity node statuses
-            setTrinityState({
-                melchior: Math.random() > 0.8 ? "△ RE-CALCULATING" : "△ LOGIC_SYNCED",
-                caspar: Math.random() > 0.8 ? "□ FOUNDATION_HARDENING" : "□ LAW_STABLE",
-                balthazar: Math.random() > 0.8 ? "○ LOVE_CORE_EXPANDING" : "○ EMPATHY_VIBE"
-            });
-        }, 6000);
-        return () => clearInterval(auditInterval);
-    }, []);
-
-    // Progress bar loop
-    useEffect(() => {
-        const pInterval = setInterval(() => {
-            setRefinementProgress(prev => (prev < 100 ? prev + 5 : 100));
-        }, 200);
-        return () => clearInterval(pInterval);
-    }, []);
 
     const addMessage = (text: string, type: 'AGENT' | 'SYSTEM' | 'MATH' | 'USER') => {
         const id = Math.random().toString(36).substring(7);
