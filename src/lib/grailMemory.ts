@@ -29,32 +29,39 @@ export interface GrailMemory {
 }
 
 const MEMORY_KEY = 'grail_memory';
-// --- VECTOR CACHE (TF-IDF over simple term space) ---
+// --- NULL-LINE TWISTOR CACHE (Minkowski Spacetime Embedding) ---
+// Enforces fundamental Null-Line rule: k·k = 0 (t^2 - x^2 - y^2 - z^2 = 0)
+const MINKOWSKI_DIM = 4; // [t, x, y, z]
 
-const VOCAB = [
-    'null', 'line', 'zeta', 'riemann', 'hypothesis', 'prime', 'zeros', 'critical',
-    'trinity', 'triangle', 'square', 'circle', 'kernel', 'operator', 'hilbert',
-    'polya', 'twistor', 'ade', 'classification', 'rust', 'cargo', 'agent', 'memory',
-    'install', 'script', 'web', 'crawl', 'debug', 'code', 'function', 'error',
-    'research', 'math', 'compute', 'spectrum', 'eigenvalue', 'selfadjoint', 'wave',
-    'observer', 'light', 'photon', 'spacetime', 'minkowski', 'lorentz', 'clifford',
-    'complex', 'analysis', 'fourier', 'series', 'convergence', 'proof', 'theorem',
-    'conjecture', 'invariant', 'symmetry', 'group', 'algebra', 'geometry', 'topology',
-    'deploy', 'netlify', 'api', 'fetch', 'http', 'curl', 'git', 'build', 'test'
-];
+export const nullLineEncode = (text: string): number[] => {
+    const vec = new Array(MINKOWSKI_DIM - 1).fill(0); // [x, y, z] spatial components
+    const normalized = text.toLowerCase();
 
-export const textToVector = (text: string): number[] => {
-    const words = text.toLowerCase().split(/\W+/);
-    const tf: Record<string, number> = {};
-    words.forEach(w => { tf[w] = (tf[w] || 0) + 1; });
-    return VOCAB.map(term => (tf[term] || 0) / (words.length || 1));
+    // 1. Map string into spatial vector directions (x, y, z)
+    for (let i = 0; i < normalized.length; i++) {
+        const char = normalized.charCodeAt(i);
+        vec[0] += Math.sin(char * i) * 1.5; // x
+        vec[1] += Math.cos(char * i * 3) * 1.5; // y
+        vec[2] += Math.sin(char * i * 5) * 1.5; // z
+    }
+
+    // 2. Compute Euclidean norm of spatial vector: r = sqrt(x^2 + y^2 + z^2)
+    const r = Math.sqrt(vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2]) || 1;
+
+    // 3. To satisfy k·k = 0, time component t must equal spatial radius r
+    // Thus creating a light-like (null) vector on the future light cone
+    return [r, vec[0], vec[1], vec[2]];
 };
 
-export const cosineSim = (a: number[], b: number[]): number => {
-    const dot = a.reduce((s, x, i) => s + x * (b[i] || 0), 0);
-    const na = Math.sqrt(a.reduce((s, x) => s + x * x, 0));
-    const nb = Math.sqrt(b.reduce((s, x) => s + x * x, 0));
-    return na && nb ? dot / (na * nb) : 0;
+// Compute similarity using the Lorentzian Inner Product
+export const lorentzianSim = (a: number[], b: number[]): number => {
+    // Lorentzian inner product defined as n(a,b) = a_t*b_t - a_x*b_x - a_y*b_y - a_z*b_z
+    // However, for semantic ranking, we map spatial angles (cosine similarity on the 3D unit sphere)
+    // Because all null vectors project onto the Riemann sphere (S2)
+    const dotSpace = (a[1] * b[1]) + (a[2] * b[2]) + (a[3] * b[3]);
+    const magA = Math.sqrt(a[1] * a[1] + a[2] * a[2] + a[3] * a[3]);
+    const magB = Math.sqrt(b[1] * b[1] + b[2] * b[2] + b[3] * b[3]);
+    return magA && magB ? dotSpace / (magA * magB) : 0;
 };
 
 // --- MEMORY STORE ---
@@ -97,7 +104,7 @@ export const addMemoryEntry = (
         type,
         content: content.slice(0, 2000),
         tags,
-        vector: textToVector(content),
+        vector: nullLineEncode(content),
         quality: 0.5,
     };
     const entries = [...mem.entries, entry].slice(-500); // keep last 500
@@ -106,9 +113,9 @@ export const addMemoryEntry = (
 
 // Memento: semantic search
 export const semanticSearch = (mem: GrailMemory, query: string, topK = 5): MemoryEntry[] => {
-    const qv = textToVector(query);
+    const qv = nullLineEncode(query);
     return [...mem.entries]
-        .map(e => ({ entry: e, score: e.vector ? cosineSim(qv, e.vector) : 0 }))
+        .map(e => ({ entry: e, score: e.vector ? lorentzianSim(qv, e.vector) : 0 }))
         .sort((a, b) => b.score - a.score)
         .slice(0, topK)
         .filter(r => r.score > 0.01)

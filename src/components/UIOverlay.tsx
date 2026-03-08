@@ -565,9 +565,10 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     initialStyle={{
                         position: 'fixed',
                         left: '20px',
-                        top: '120px',
-                        bottom: '40px',
-                        width: '320px',
+                        top: '40px',
+                        width: '450px',
+                        height: '800px',
+                        maxHeight: '90vh',
                         zIndex: 1500,
                         pointerEvents: 'auto'
                     }}
@@ -694,11 +695,11 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                             <button
                                 onClick={() => setLabTab('TOOLS')}
                                 style={{ background: labTab === 'TOOLS' ? '#d4af37' : 'none', border: '1px solid #d4af37', color: labTab === 'TOOLS' ? '#000' : '#d4af37', fontSize: '0.6rem', padding: '2px 10px', cursor: 'pointer' }}
-                            >TOOLS</button>
+                            >Ψ</button>
                             <button
                                 onClick={() => setLabTab('LAB')}
                                 style={{ background: labTab === 'LAB' ? '#d4af37' : 'none', border: '1px solid #d4af37', color: labTab === 'LAB' ? '#000' : '#d4af37', fontSize: '0.6rem', padding: '2px 10px', cursor: 'pointer' }}
-                            >ENC_LAB</button>
+                            >Λ_E</button>
                             <button onClick={() => controller.setPracticalPanelOpen(false)} style={{ background: 'none', border: 'none', color: '#d4af37', cursor: 'pointer' }}>✕</button>
                         </div>
                     </div>
@@ -824,7 +825,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         /* ENCRYPTION LAB TAB */
                         <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
                             <div style={{ marginBottom: '5px', fontSize: '0.75rem', color: '#555' }}>
-                                <span style={{ fontWeight: 'bold', color: '#d4af37' }}>How this lab works:</span>{' '}
+                                <span style={{ fontWeight: 'bold', color: '#d4af37' }}>Λ : E_k(m)</span>{' '}
                                 1) Choose a file or type some text. 2) Press ENCRYPT to transform it. 3) Press DECRYPT to recover what you put in.
                             </div>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
@@ -870,7 +871,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                                             style={{ padding: '10px', background: '#d4af37', color: '#000', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: '1.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
                                         >
                                             <span>𓍲</span>
-                                            <span style={{ fontSize: '0.4rem', opacity: 0.8 }}>ENCRYPT</span>
+                                            <span style={{ fontSize: '0.4rem', opacity: 0.8 }}>Ε</span>
                                         </button>
                                         <button
                                             onClick={controller.latticeDecrypt}
@@ -879,7 +880,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                                             style={{ padding: '10px', background: controller.processedBuffer ? '#d4af37' : 'rgba(212,175,55,0.2)', color: '#000', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: '1.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
                                         >
                                             <span>𓍲</span>
-                                            <span style={{ fontSize: '0.4rem', opacity: 0.8 }}>DECRYPT</span>
+                                            <span style={{ fontSize: '0.4rem', opacity: 0.8 }}>Δ</span>
                                         </button>
 
                                         {/* Row 2: RSA */}
@@ -890,7 +891,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                                             style={{ padding: '10px', background: '#d4af37', color: '#000', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: '1.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
                                         >
                                             <span>𓋹</span>
-                                            <span style={{ fontSize: '0.4rem', opacity: 0.8 }}>ENCRYPT</span>
+                                            <span style={{ fontSize: '0.4rem', opacity: 0.8 }}>Ε</span>
                                         </button>
                                         <button
                                             onClick={controller.rsaDecrypt}
@@ -899,7 +900,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                                             style={{ padding: '10px', background: controller.rsaSolved ? '#d4af37' : 'rgba(212,175,55,0.2)', color: '#000', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: '1.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
                                         >
                                             <span>𓏽</span>
-                                            <span style={{ fontSize: '0.4rem', opacity: 0.8 }}>DECRYPT</span>
+                                            <span style={{ fontSize: '0.4rem', opacity: 0.8 }}>Δ</span>
                                         </button>
                                     </div>
 
@@ -915,7 +916,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                                             }
                                         }}
                                         style={{ marginTop: '10px', padding: '8px', background: '#d4af37', border: '1px solid #d4af37', color: '#000', cursor: 'pointer', fontSize: '0.7rem', fontWeight: 'bold' }}
-                                    >⚡ V12_CURVATURE_FACTORIZE</button>
+                                    >⚡ V12_∇</button>
 
                                     <button
                                         onClick={() => {
@@ -924,7 +925,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                                             controller.setLabString("");
                                         }}
                                         style={{ marginTop: '10px', padding: '5px', background: 'none', border: '1px solid rgba(212,175,55,0.3)', color: 'rgba(212,175,55,0.6)', cursor: 'pointer', fontSize: '0.6rem' }}
-                                    >𓎂_CLEAR_V12_LAB</button>
+                                    >𓎂_V12_Λ</button>
 
                                     <div style={{ fontSize: '0.6rem', color: '#888', fontStyle: 'italic', marginTop: '5px' }}>
                                         * V12 CURVATURE METHOD: Uses S(σ,t) = Re(ζ''/ζ - (ζ'/ζ)²) pole structure

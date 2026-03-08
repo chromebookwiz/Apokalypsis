@@ -60,9 +60,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const {
         messages,
         system,
-        model = 'anthropic/claude-sonnet-4-5',
+        model = 'anthropic/claude-3.5-sonnet',
         temperature = 0.8,
         max_tokens = 1024,
+        tools,
     } = req.body || {};
 
     if (!messages || !Array.isArray(messages)) {
@@ -86,6 +87,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 ],
                 temperature,
                 max_tokens,
+                ...(tools ? { tools } : {})
             }),
         });
 

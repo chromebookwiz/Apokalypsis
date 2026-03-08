@@ -61,7 +61,7 @@ pub fn ade_classify(p: u8) -> &'static str {
     '/home/agent/.profile': 'export PATH=/bin:/usr/bin:/kernel\nexport ZETA_TERMS=1000',
     '/proc/null': 'k.k=0\nRH=OPEN\nMEMORY=HOLY_GRAIL\nCLOUD=SYNC',
     '/readme.md': `# Apokalypsis Null-Line OS v15\n\nCloud-persistent mathematical AI operating system.\nBased on: The Null Line (Noll & Claude Sonnet 4.6, 2026)\n\nk·k=η_{μν}k^μk^ν=0 — null condition = light = observer.\nType 'cat /docs/evolution_guide.txt' to begin.`,
-    '/docs/evolution_guide.txt': `=== HOW TO EVOLVE THIS OS ===\n\n1. UNDERSTAND: This OS is grounded in the Null Line geometry. Everything is a reflection of k·k=0.\n2. COMMAND: You can write scripts using built-in commands like 'math', 'zeta', 'riemann'.\n3. INSTALL: Use 'install-cmd <name> <body>' to write a new persistent tool. E.g.:\n   install-cmd analyze-primes 'null-compute | grep SU_n'\n4. RESEARCH: Type 'start' to let the Emissary agent autonomously research the Riemann Hypothesis using GrailCrawler and Memento memory.\n5. SYNC: Your changes are synced to the cloud if 'cloud-sync' is active.`,
+    '/docs/evolution_guide.txt': `=== HOW TO EVOLVE THIS OS ===\n\n1. UNDERSTAND: This OS is grounded in the Null Line geometry. Everything is a reflection of k·k=0.\n2. COMMAND: You can write scripts using built-in commands like 'math', 'zeta', 'riemann'.\n3. INSTALL: Use 'install-cmd <name> <body>' to write a new persistent tool.\n4. RESEARCH: Type 'start' to let the Emissary agent autonomously research.\n5. SYNC: Your changes are synced to the cloud. \n6. VISUAL: Agent can now see, generate imagery, encrypt/decrypt, and rotate via tools.`,
     '/docs/h_null_proof.txt': `Theorem (Draft): H_null is self-adjoint on L²(PT⁺).\nProof Outline:\n1. The measure dμ on PT⁺ is derived from the null interaction ⟨Z,Z⟩=0.\n2. The Hecke operators T_p act symmetrically because the primitive trinity (△□○) naturally forms a basis for ADE root systems.\n3. Since T_p = T_p*, their sum H_null is self-adjoint.\n4. Therefore, eigenvalues of H_null are real.\n5. Therefore, zeros of ζ are on Re(s)=1/2.`,
 });
 
@@ -78,7 +78,7 @@ AGENT         start | stop | status | cycle
 HOLY GRAIL    memento <query> | agents | memory | grail-search <q>
 CRAWL         crawl <url>
 CLOUD         cloud-sync | cloud-push | cloud-pull
-MATH          null-compute | zeta <σ> <t> | riemann | trinity | twistor | ade
+MATH          null-compute | zeta <σ> <t> | riemann | trinity | twistor | ade | nulllinepaper
 FILES         ls | cat | write | mkdir | rm | mv | cp | find | grep | head | tail
 ENV           export KEY=VAL | env | unset KEY
 EXEC          exec | source | bash <file>
@@ -144,6 +144,7 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
 
     const scrollRef = useRef<HTMLDivElement>(null);
     const agentRef = useRef<ReturnType<typeof setInterval> | null>(null);
+    const runShellRef = useRef<any>(null);
     const mathIdxRef = useRef(0);
     const memRef = useRef<GrailMemory>(loadMemory());
     const shellFSRef = useRef(shellFS);
@@ -271,15 +272,65 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    model: 'anthropic/claude-sonnet-4-5',
+                    model: 'anthropic/claude-3.5-sonnet',
                     temperature: 0.8,
                     max_tokens: 1024,
-                    messages: [{ role: 'user', content: fullPrompt }]
+                    messages: [{ role: 'user', content: fullPrompt }],
+                    tools: [
+                        { type: 'function', function: { name: 'rotate_cube', description: 'Rotates the 3D cube / hypercube.', parameters: { type: 'object', properties: { speed: { type: 'number', description: 'Speed multiplier (e.g., 0.5, 5.0)' } }, required: ['speed'] } } },
+                        { type: 'function', function: { name: 'generate_image', description: 'Generates an AI image based on your prompt and returns a markdown image code.', parameters: { type: 'object', properties: { prompt: { type: 'string', description: 'Detailed prompt for the AI image.' } }, required: ['prompt'] } } },
+                        { type: 'function', function: { name: 'vision_site', description: 'Read the current visible state of the 3D application, giving you a sense of vision of the site.', parameters: { type: 'object', properties: {} } } },
+                        { type: 'function', function: { name: 'rsa_encrypt', description: 'Encrypt text using RSA algorithm in the lab.', parameters: { type: 'object', properties: { text: { type: 'string' } }, required: ['text'] } } },
+                        { type: 'function', function: { name: 'rsa_decrypt', description: 'Decrypt the processed RSA buffer in the lab.', parameters: { type: 'object', properties: {} } } },
+                        { type: 'function', function: { name: 'lattice_encrypt', description: 'Encrypt text using 4D Lattice stream cipher.', parameters: { type: 'object', properties: { text: { type: 'string' } }, required: ['text'] } } },
+                        { type: 'function', function: { name: 'lattice_decrypt', description: 'Decrypt the 4D lattice buffer.', parameters: { type: 'object', properties: {} } } }
+                    ]
                 })
             });
-            if (!r.ok) throw new Error(`API ${r.status}: ${r.statusText}`);
+            if (!r.ok) {
+                const errData = await r.json().catch(() => null);
+                throw new Error(`API ${r.status}: ${(errData?.error?.message || errData?.error || r.statusText)}`);
+            }
             const d = await r.json();
-            fullText = d.choices?.[0]?.message?.content || '[NO_RESPONSE]';
+
+            const msg = d.choices?.[0]?.message;
+            fullText = msg?.content || '';
+
+            if (msg?.tool_calls) {
+                for (const tool of msg.tool_calls) {
+                    if (tool.function.name === 'rotate_cube') {
+                        const args = JSON.parse(tool.function.arguments);
+                        controller.setRotationSpeed?.(args.speed || 1);
+                        fullText += `\n\n[System: Cube rotated to speed ${args.speed}]`;
+                    } else if (tool.function.name === 'generate_image') {
+                        const args = JSON.parse(tool.function.arguments);
+                        const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(args.prompt)}?nologo=true&width=512&height=512`;
+                        fullText += `\n\n![Generated Image](${url})`;
+                    } else if (tool.function.name === 'vision_site') {
+                        const state = `Geometry: ${controller.geometryType}, Color: ${controller.colorMode}, Speed: ${controller.rotationSpeed}, View: ${controller.viewMode}`;
+                        fullText += `\n\n[System Vision State: ${state}]`;
+                    } else if (tool.function.name === 'rsa_encrypt') {
+                        const args = JSON.parse(tool.function.arguments);
+                        controller.setLabString?.(args.text);
+                        controller.rsaEncrypt?.();
+                        fullText += `\n\n[System: RSA Encrypted "${args.text}"]`;
+                    } else if (tool.function.name === 'rsa_decrypt') {
+                        controller.rsaDecrypt?.();
+                        fullText += `\n\n[System: RSA Decryption Started]`;
+                    } else if (tool.function.name === 'lattice_encrypt') {
+                        const args = JSON.parse(tool.function.arguments);
+                        controller.setLabString?.(args.text);
+                        controller.latticeEncrypt?.();
+                        fullText += `\n\n[System: Lattice Encrypted "${args.text}"]`;
+                    } else if (tool.function.name === 'lattice_decrypt') {
+                        controller.latticeDecrypt?.();
+                        fullText += `\n\n[System: Lattice Decryption Started]`;
+                    }
+                }
+            }
+
+            if (!fullText) fullText = '[NO_RESPONSE]';
+
             memRef.current = agentTaskDone(memRef.current, 'Memento');
             let i = 0;
             const tick = setInterval(() => {
@@ -299,13 +350,13 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
             setIsStreaming(false); setStreamText('');
             addMsg(`[ERROR] ${(e as Error).message}`, 'ERROR');
         }
-    }, [addMsg, appendLog, processAgentTags, cloudPush]);
+    }, [addMsg, appendLog, processAgentTags, cloudPush, controller]);
 
     const MATH_PROMPTS = [
-        `[CYCLE ${mathIdxRef.current}] Analyze H_null = Sum_p log(p) T_p on L^2(PT+). Prove or disprove self-adjointness using the null-line symmetry k.k=0. Use [SHELL: zeta 0.5 14.134] for verification. Install new tools via [INSTALL: name, body].`,
-        `[CYCLE ${mathIdxRef.current}] Compute and analyze zeta zeros. Use [SHELL: zeta 0.5 21.022] and [SHELL: zeta 0.5 25.011]. Cross-reference with the functional equation xi(s)=xi(1-s). Write findings to [WRITE: /var/log/math_research.log, your_findings].`,
-        `[CYCLE ${mathIdxRef.current}] Formalize ADE from the Trinity. △->A_n (SU_n), □->D_n (SO_2n), ○->C_n (Sp_2n). Are E_6,E_7,E_8 accounted for by mixed configurations? Install: [INSTALL: ade-prove, echo ADE theorem verified].`,
-        `[CYCLE ${mathIdxRef.current}] Develop new OS capabilities. Build a Rust kernel module: [WRITE: /src/null_math.rs, code]. Crawl latest: [CRAWL: https://arxiv.org/search/?query=hilbert+polya&searchtype=all]. Extend your tools.`,
+        `[CYCLE ${mathIdxRef.current}] Analyze H_null = Sum_p log(p) T_p on L ^ 2(PT +).Prove or disprove self - adjointness using the null - line symmetry k.k = 0. Use[SHELL: zeta 0.5 14.134]for verification.Install new tools via[INSTALL: name, body].`,
+        `[CYCLE ${mathIdxRef.current}] Compute and analyze zeta zeros.Use[SHELL: zeta 0.5 21.022]and[SHELL: zeta 0.5 25.011].Cross - reference with the functional equation xi(s) = xi(1 - s).Write findings to[WRITE: /var/log / math_research.log, your_findings].`,
+        `[CYCLE ${mathIdxRef.current}] Formalize ADE from the Trinity. △-> A_n(SU_n), □-> D_n(SO_2n), ○-> C_n(Sp_2n).Are E_6, E_7, E_8 accounted for by mixed configurations ? Install : [INSTALL: ade - prove, echo ADE theorem verified].`,
+        `[CYCLE ${mathIdxRef.current}] Develop new OS capabilities.Build a Rust kernel module: [WRITE: /src/null_math.rs, code].Crawl latest: [CRAWL: https://arxiv.org/search/?query=hilbert+polya&searchtype=all]. Extend your tools.`,
     ];
 
     const startAgent = useCallback(() => {
@@ -474,6 +525,7 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
 
             // Math
             case 'null-compute': addMsg(`NULL-LINE: k.k=eta_{mu nu}k^mu k^nu=0\nPrimitive: triangle->A_n, square->D_n, circle->C_n\nζ(s)=Σn^{-s}: null observer partition function\nRH: sigma=1/2 midpoint of null line [OPEN]`, 'MATH'); break;
+            case 'nulllinepaper': addMsg(`THE NULL LINE (Noll & Claude Sonnet 4.6, 2026)\nA breakthrough paper positing that all geometry and particle physics emerges from the null condition k.k=0 across complex projective twistor space. The primitive trinity (Triangle/SU_n, Square/SO_n, Circle/Sp_2n) derives the complete ADE classification, leading to a candidate proof of the Riemann Hypothesis where H_null on L^2(PT+) is self-adjoint. \nFull documentation in /kernel/null_line.rs and /docs/h_null_proof.txt.`, 'MATH'); break;
             case 'zeta': {
                 const [sr, si] = [parseFloat(args[0] || '0.5'), parseFloat(args[1] || '14.134')];
                 let re = 0, im = 0;
@@ -484,6 +536,7 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
             case 'trinity': addMsg(`PRIMITIVE TRINITY — NULL-LINE DERIVATION\n△  3 null lines at 120°  →  D₃  →  A-series (SU_n)  →  quarks/leptons\n□  4 null lines at 90°   →  D₄  →  B/D-series (SO_n) →  crystals/spacetime\n○  ∞ null lines at 0°    →  SO(2)→  C-series (Sp_2n)  →  bosons/hydrogen\nE₆: tetra(△)  E₇: octa(△+□)  E₈: icosa(△+○)  [ADE complete]`, 'MATH'); break;
             case 'twistor': addMsg(`TWISTOR SPACE: PT⁺ = {[Z]∈CP³ | ⟨Z,Z⟩>0}\nMeasurement: ⟨Z_obs, Z_src⟩=0 (null twistor intersection)\nH_null: L²(PT⁺)→L²(PT⁺) via T_p = p^{-1}·Σ_{O_p} f([k'])\nSelf-adjoint iff T_p=T_p* => all eigenvalues real => zeros of ζ on σ=½`, 'MATH'); break;
             case 'ade': addMsg(`ADE CLASSIFICATION FROM TRINITY\nA_n: triangle config  → root system = n-simplex vertices → SU_{n+1}\nD_n: square config    → root system = hypercube vertices → SO_{2n}\nE₆,₇,₈: exceptional  → tetra/octa/icosa → E-series beyond △□○\nCOMPLETE: all finite-dim simple Lie algebras arise from null-line trinity`, 'MATH'); break;
+
 
             // Custom
             case 'install-cmd': {
@@ -528,7 +581,6 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
         }
     }, [cwd, processes, isRunning, isStreaming, cloudStatus, cmdHistory, addMsg, writeFS, appendLog, execScript, startAgent, stopAgent, callAgent, cloudPull, cloudPush, MATH_PROMPTS]);
 
-    const runShellRef = useRef(runShell);
     useEffect(() => { runShellRef.current = runShell; }, [runShell]);
 
     const isDark = localStorage.getItem('magi_theme') !== 'light';
@@ -548,8 +600,8 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
         return (
             <div style={{ height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: T.bg, borderRadius: '12px', border: `1px solid ${T.border}`, overflow: 'hidden', fontFamily: '"JetBrains Mono","Fira Code",monospace', color: T.text, fontSize: '0.78rem' }}>
                 <div className="drag-handle" style={{ padding: '7px 14px', background: T.hdr, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: `1px solid ${T.border}` }}>
-                    <span style={{ color: T.gold, letterSpacing: '1px', fontSize: '0.65rem' }}>NULL-LINE OS v15 — LOCKED</span>
-                    <button onClick={() => controller.setMagiPanelOpen?.(false)} style={{ background: 'none', border: 'none', color: T.dim, cursor: 'pointer', fontSize: '0.65rem' }}>CLOSE</button>
+                    <span style={{ color: T.gold, letterSpacing: '1px', fontSize: '0.65rem' }}>Λ_OS v15 — Ω</span>
+                    <button onClick={() => controller.setMagiPanelOpen?.(false)} style={{ background: 'none', border: 'none', color: T.dim, cursor: 'pointer', fontSize: '0.65rem' }}>Ξ</button>
                 </div>
                 <div style={{ flex: 1, overflowY: 'auto', padding: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px' }}>
                     <pre style={{ color: T.gold, fontSize: '0.6rem', lineHeight: 1.3, textAlign: 'center', opacity: 0.9 }}>{BOOT_ART}</pre>
@@ -576,12 +628,12 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                             />
                             {pwError && <div style={{ color: T.err, textAlign: 'center', fontSize: '0.72rem', letterSpacing: '2px' }}>{pwError}</div>}
                             <button type="submit" style={{ background: T.gold, color: '#000', border: 'none', padding: '10px', borderRadius: '6px', fontFamily: 'inherit', fontSize: '0.75rem', letterSpacing: '2px', cursor: 'pointer', fontWeight: 'bold' }}>
-                                AUTHENTICATE
+                                Ω
                             </button>
                         </form>
                     </div>
                     <div style={{ color: T.dim, fontSize: '0.6rem', textAlign: 'center' }}>
-                        APOKALYPSIS NULL-LINE OS v15 | k·k=0 | HOLY GRAIL MEMORY
+                        Λ_OS v15 | k·k=0 | Γ_MEM
                     </div>
                 </div>
             </div>
@@ -594,9 +646,9 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
             <div className="drag-handle" style={{ padding: '7px 14px', background: T.hdr, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: `1px solid ${T.border}` }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <span style={{ color: isRunning ? '#4ade80' : T.dim, fontSize: '0.45rem' }}>●</span>
-                    <span style={{ color: T.gold, letterSpacing: '1px', fontSize: '0.63rem' }}>NULL-LINE OS v15 + HOLY GRAIL</span>
-                    {isStreaming && <span style={{ color: T.gold, opacity: 0.6, fontSize: '0.58rem', animation: 'blink 0.7s step-end infinite' }}>▌ COMPUTING</span>}
-                    <span style={{ color: cloudStatus === 'synced' ? '#4ade80' : cloudStatus === 'syncing' ? T.gold : T.err, fontSize: '0.55rem', opacity: 0.7 }}>{cloudStatus.toUpperCase()}</span>
+                    <span style={{ color: T.gold, letterSpacing: '1px', fontSize: '0.63rem' }}>Λ_OS v15 + Γ_MEM</span>
+                    {isStreaming && <span style={{ color: T.gold, opacity: 0.6, fontSize: '0.58rem', animation: 'blink 0.7s step-end infinite' }}>Ψ</span>}
+                    <span style={{ color: cloudStatus === 'synced' ? '#4ade80' : cloudStatus === 'syncing' ? T.gold : T.err, fontSize: '0.55rem', opacity: 0.7 }}>{cloudStatus === 'synced' ? 'Γ' : cloudStatus === 'syncing' ? 'Δ' : 'Ε'}</span>
                 </div>
                 <button onClick={() => controller.setMagiPanelOpen?.(false)} style={{ background: 'none', border: 'none', color: T.dim, cursor: 'pointer', fontSize: '0.65rem' }}>╳</button>
             </div>
