@@ -1549,27 +1549,22 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 style={{
                     position: 'fixed',
                     top: '20px',
-                    right: '20px',
-                    fontSize: '1.8rem',
+                    right: '25px',
+                    fontSize: '2.2rem',
                     background: 'none',
-                    border: '1px solid rgba(212, 175, 55, 0.4)',
-                    borderRadius: '50%',
-                    width: '48px',
-                    height: '48px',
+                    border: 'none',
                     color: '#d4af37',
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
                     zIndex: 1100,
                     pointerEvents: 'auto',
-                    opacity: 0.8,
+                    opacity: 0.6,
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: 'rgba(0,0,0,0.5)',
-                    boxShadow: '0 0 15px rgba(212, 175, 55, 0.2)'
+                    justifyContent: 'center'
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.boxShadow = '0 0 25px rgba(212, 175, 55, 0.5)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.8'; e.currentTarget.style.boxShadow = '0 0 15px rgba(212, 175, 55, 0.2)'; }}
+                onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.filter = 'drop-shadow(0 0 10px #d4af37)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.6'; e.currentTarget.style.filter = 'none'; }}
             >Ω</button>
 
             {/* SECRET ENTRY PANEL REMOVED */}

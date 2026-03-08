@@ -80,6 +80,11 @@ export const MagiCouncilAgent: React.FC<MagiCouncilAgentProps> = ({ controller }
     const scrollRef = useRef<HTMLDivElement>(null);
     const [lastInteractionTime, setLastInteractionTime] = useState(Date.now());
 
+    // Dummy usage to prevent unused variable errors while UI is temporarily hidden
+    useEffect(() => {
+        if (false) { console.log(showSetup, setShowSetup, setIsDarkMode); }
+    }, [showSetup, setShowSetup, setIsDarkMode]);
+
     // Persistence
     useEffect(() => {
         localStorage.setItem('magi_connect_mode', connectMode);
@@ -282,8 +287,9 @@ export const MagiCouncilAgent: React.FC<MagiCouncilAgentProps> = ({ controller }
             <div className="drag-handle" style={{ padding: '10px 15px', background: theme.header, display: 'flex', justifyContent: 'space-between', fontSize: '0.65rem', borderBottom: `1px solid ${theme.border}` }}>
                 <div style={{ color: theme.gold, letterSpacing: '2px' }}>ᚠ APOKALYPSIS_GOD_OS_v14.0</div>
                 <div style={{ display: 'flex', gap: '10px' }}>
-                    <button onClick={() => setIsDarkMode(!isDarkMode)} style={{ background: 'none', border: 'none', color: theme.dim, cursor: 'pointer' }}>THEME</button>
-                    <button onClick={() => setShowSetup(!showSetup)} style={{ background: 'none', border: 'none', color: theme.dim, cursor: 'pointer' }}>CONFIG</button>
+                    {/* Hiding agent options/config for now per user request */}
+                    {/* <button onClick={() => setIsDarkMode(!isDarkMode)} style={{ background: 'none', border: 'none', color: theme.dim, cursor: 'pointer' }}>THEME</button> */}
+                    {/* <button onClick={() => setShowSetup(!showSetup)} style={{ background: 'none', border: 'none', color: theme.dim, cursor: 'pointer' }}>CONFIG</button> */}
                     <button onClick={() => controller.setMagiPanelOpen(false)} style={{ background: 'none', border: 'none', color: theme.dim, cursor: 'pointer' }}>CLOSE</button>
                 </div>
             </div>

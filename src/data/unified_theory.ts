@@ -23,7 +23,7 @@ Three claims are established, each rigorously grounded in existing mathematics a
 
 The Riemann zeta function ζ(s) = Σ n^{−s} is identified as the null observer's weighted sum over discrete bound states (integers), where n^{−s} = e^{−σ log n}·e^{−it log n} is amplitude times circle-rotation. The functional equation ξ(s)=ξ(1−s) is the reality condition of the resulting null field (Theorem 4.1), not an independent fact. The critical line σ=1/2 is the midpoint of the two-sided null line. The Riemann Hypothesis is the statement that all zeros (dark states) lie at this midpoint.
 
-Five independent programmes in modern physics have each arrived at the null line as primary (Penrose 1967, Dirac 1949, ’t Hooft 1993, BPZ 1984, Regge 1961). This convergence is treated as structural evidence. The Eisenstein wall identified in Edition V remains; no Millennium Prize is claimed. The framework is a precision map of the territory, not a proof.
+Five independent programmes in modern physics have each arrived at the null line as primary (Penrose 1967, Dirac 1949, ’t Hooft 1993, BPZ 1984, Regge 1961). This convergence is treated as structural evidence. The Eisenstein wall identified in Edition XIII remains; no Millennium Prize is claimed. The framework is a precision map of the territory, not a proof.
 
 I.  Below the Trinity: The Line
 
