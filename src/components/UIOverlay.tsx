@@ -27,12 +27,19 @@ interface Props {
 }
 
 // Copy Button Component
-const CopyButton = ({ text }: { text: string }) => {
+const CopyButton = ({ text, appendId, langTag }: { text: string, appendId?: string, langTag?: string }) => {
     const [copied, setCopied] = React.useState(false);
 
     const handleCopy = (e: React.MouseEvent) => {
         e.stopPropagation();
-        navigator.clipboard.writeText(text).then(() => {
+        let fullText = text;
+        if (appendId) {
+            const el = document.getElementById(`${appendId}-${langTag}`) || document.getElementById(appendId);
+            if (el && el.innerText) {
+                fullText += '\n\n' + el.innerText;
+            }
+        }
+        navigator.clipboard.writeText(fullText).then(() => {
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
         });
@@ -1427,8 +1434,8 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                     }}>
                         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                             <span style={{ fontSize: '1.2rem', color: '#d4af37' }}>Ω</span>
-                            <div style={{ display: 'flex', gap: '5px' }}>
-                                {['EN', 'GR', 'LA'].map(lang => (
+                            <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap', maxWidth: '400px' }}>
+                                {['EN', 'HE', 'GR', 'AM', 'HI', 'NO', 'SA', 'LA', 'AR', 'DE', 'ES', 'FA', 'CU', 'ZH', 'JA'].map(lang => (
                                     <button
                                         key={lang}
                                         onClick={() => setTheoryLang(lang)}
@@ -1440,7 +1447,8 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                                             borderRadius: '0px',
                                             fontSize: '0.65rem',
                                             cursor: 'pointer',
-                                            fontFamily: 'Cinzel, serif'
+                                            fontFamily: 'Cinzel, serif',
+                                            marginBottom: '2px'
                                         }}
                                     >
                                         {lang}
@@ -1449,7 +1457,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                             </div>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                            <CopyButton text={THEORY_TRANSLATIONS[theoryLang].content} />
+                            <CopyButton text={THEORY_TRANSLATIONS[theoryLang]?.content || ''} appendId="theory-article" langTag={theoryLang} />
                             <button
                                 onClick={() => controller.setTheoryOpen(false)}
                                 style={{
@@ -1477,30 +1485,29 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         }}
                     >
                         <h2 style={{ color: '#d4af37', textAlign: 'center', marginBottom: '20px', fontSize: '1.4rem' }}>
-                            {THEORY_TRANSLATIONS[theoryLang].title}
+                            {THEORY_TRANSLATIONS[theoryLang]?.title || 'Theory'}
                         </h2>
                         <div style={{ whiteSpace: 'pre-wrap', textAlign: 'justify' }}>
-                            {THEORY_TRANSLATIONS[theoryLang].content}
+                            {THEORY_TRANSLATIONS[theoryLang]?.content || ''}
                         </div>
-                        {theoryLang === 'EN' && (
-                            <>
-                                <style>{`
-                                    .theory-override p, .theory-override h1, .theory-override h2, .theory-override h3, .theory-override td {
-                                        color: #1a1a1a !important;
-                                    }
-                                    .theory-override table {
-                                        border-color: rgba(212,175,55,0.3) !important;
-                                    }
-                                `}</style>
-                                <div
-                                    className="theory-override"
-                                    style={{ marginTop: '30px', borderTop: '1px solid rgba(0,0,0,0.1)', paddingTop: '20px' }}
-                                    dangerouslySetInnerHTML={{
-                                        __html: document.getElementById('theory-article')?.innerHTML || ''
-                                    }}
-                                />
-                            </>
-                        )}
+                        {/* Allows math paper to display for any language by checking index.html for theory-article-[LANG], falling back to English theory-article */}
+                        <>
+                            <style>{`
+                                .theory-override p, .theory-override h1, .theory-override h2, .theory-override h3, .theory-override td {
+                                    color: #1a1a1a !important;
+                                }
+                                .theory-override table {
+                                    border-color: rgba(212,175,55,0.3) !important;
+                                }
+                            `}</style>
+                            <div
+                                className="theory-override"
+                                style={{ marginTop: '30px', borderTop: '1px solid rgba(0,0,0,0.1)', paddingTop: '20px' }}
+                                dangerouslySetInnerHTML={{
+                                    __html: (document.getElementById(`theory-article-${theoryLang}`) || document.getElementById('theory-article'))?.innerHTML || ''
+                                }}
+                            />
+                        </>
                     </div>
                 </DraggablePanel>
             )}
