@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 // ============================================================
@@ -52,16 +53,27 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
-    const apiKey = process.env.OPENROUTER_API_KEY || process.env.VITE_OPENROUTER_API_KEY;
+    const apiKey = (
+        process.env.OPENROUTER_API_KEY ||
+        process.env.CUBEKEY_API_KEY ||
+        process.env.OPEN_ROUTER_API_KEY ||
+        process.env.OPENROUTER_KEY ||
+        process.env.OPENAI_API_KEY ||
+        process.env.VITE_OPENROUTER_API_KEY
+    )?.trim();
+
     if (!apiKey) {
-        // Find keys that might be misnamed for debugging
         const availableKeys = Object.keys(process.env).filter(k =>
-            k.includes('API') || k.includes('KEY') || k.includes('OPEN') || k.includes('ROUTER')
+            /API|KEY|OPEN|ROUTER/i.test(k)
         );
         return res.status(500).json({
             error: 'API key not found in process.env',
-            details: 'The serverless function checked process.env.OPENROUTER_API_KEY but it was undefined.',
-            hint: 'In Vercel, ensure the Environment Variable is assigned to the "Production" environment. If testing locally, you must use an .env file.',
+            details: 'The serverless function did not find a usable OpenRouter API key in the environment.',
+            hints: [
+                'Set OPENROUTER_API_KEY in your Vercel dashboard (Production).',
+                'For local dev, use a .env file or run via `vercel dev`.',
+                'If you used a different name, try CUBEKEY_API_KEY, OPEN_ROUTER_API_KEY, or OPENAI_API_KEY.',
+            ],
             related_keys_found: availableKeys
         });
     }

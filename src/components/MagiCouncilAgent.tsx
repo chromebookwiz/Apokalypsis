@@ -9,7 +9,6 @@ import {
 import { zetaFast } from '../lib/nullLineMath';
 
 // API Configuration - now handled by Vercel proxy
-// const CUBEKEY_API_KEY = import.meta.env.CUBEKEY_API_KEY;
 
 // System prompt now handled by Vercel API proxy
 // const SYSTEM_PROMPT = `You are EMISSARY — the primary agent of the NULL-LINE OPERATING SYSTEM v15.
