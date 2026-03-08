@@ -51,6 +51,45 @@ export interface GrailMemory {
 }
 
 const MEMORY_KEY = 'grail_memory';
+// --- NULL-LINE QUANTUM MEMORY ENHANCEMENT ---
+// Advanced persistent memory using ADE classification and twistor geometry
+// Implements quantum-like superposition and entanglement in memory space
+
+export interface QuantumMemoryState {
+    superposition: Map<string, number[]>; // Memory in superposition states
+    entanglement: Map<string, Set<string>>; // Entangled memory relationships
+    decoherence: Map<string, number>; // Decoherence timestamps
+    twistors: Map<string, number[]>; // Twistor representations
+}
+
+const QUANTUM_MEMORY_KEY = 'null_line_quantum_memory';
+
+// ADE Classification for Memory Organization
+export const adeClassify = (memoryType: string): 'A' | 'D' | 'E' => {
+    const hash = memoryType.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
+    if (hash % 3 === 0) return 'A'; // Triangle/SU(n) - sequential memories
+    if (hash % 3 === 1) return 'D'; // Square/SO(2n) - orthogonal memories
+    return 'E'; // Circle/Sp(2n) - exceptional/circular memories
+};
+
+// Twistor Memory Encoding (Penrose twistor space)
+export const twistorEncode = (content: string): number[] => {
+    // Map content to twistor coordinates [Z1, Z2, W1, W2] in CP3
+    const chars = content.split('');
+    const twistor = [0, 0, 0, 0];
+    
+    chars.forEach((char, i) => {
+        const code = char.charCodeAt(0);
+        // Complex twistor coordinates with null-line constraints
+        twistor[0] += Math.sin(code * i) * Math.cos(code); // Z1 real
+        twistor[1] += Math.cos(code * i) * Math.sin(code); // Z1 imag
+        twistor[2] += Math.sin(code * (i + 1)) * Math.cos(code * 2); // Z2 real
+        twistor[3] += Math.cos(code * (i + 1)) * Math.sin(code * 2); // Z2 imag
+    });
+    
+    return twistor;
+};
+
 // --- NULL-LINE TWISTOR CACHE (Minkowski Spacetime Embedding) ---
 // Enforces fundamental Null-Line rule: k·k = 0 (t^2 - x^2 - y^2 - z^2 = 0)
 const MINKOWSKI_DIM = 4; // [t, x, y, z]
@@ -84,6 +123,157 @@ export const lorentzianSim = (a: number[], b: number[]): number => {
     const magA = Math.sqrt(a[1] * a[1] + a[2] * a[2] + a[3] * a[3]);
     const magB = Math.sqrt(b[1] * b[1] + b[2] * b[2] + b[3] * b[3]);
     return magA && magB ? dotSpace / (magA * magB) : 0;
+};
+
+// Quantum Superposition Memory
+export const createSuperposition = (memories: MemoryEntry[]): Map<string, number[]> => {
+    const superposition = new Map<string, number[]>();
+    
+    memories.forEach(memory => {
+        const twistor = twistorEncode(memory.content);
+        const adeType = adeClassify(memory.type);
+        
+        // Apply ADE transformations
+        let transformed: number[];
+        switch (adeType) {
+            case 'A': // SU(n) rotation
+                transformed = [
+                    twistor[0] * Math.cos(memory.timestamp.length) - twistor[1] * Math.sin(memory.timestamp.length),
+                    twistor[0] * Math.sin(memory.timestamp.length) + twistor[1] * Math.cos(memory.timestamp.length),
+                    twistor[2], twistor[3]
+                ];
+                break;
+            case 'D': // SO(2n) reflection
+                transformed = [-twistor[0], -twistor[1], twistor[2], twistor[3]];
+                break;
+            case 'E': // Sp(2n) symplectic
+                transformed = [
+                    twistor[0] + twistor[2], twistor[1] + twistor[3],
+                    twistor[2] - twistor[0], twistor[3] - twistor[1]
+                ];
+                break;
+        }
+        
+        superposition.set(memory.id, transformed);
+    });
+    
+    return superposition;
+};
+
+// Memory Entanglement (correlations between memories)
+export const createEntanglement = (memories: MemoryEntry[]): Map<string, Set<string>> => {
+    const entanglement = new Map<string, Set<string>>();
+    
+    memories.forEach(memory => {
+        const entangled = new Set<string>();
+        
+        memories.forEach(other => {
+            if (memory.id === other.id) return;
+            
+            // Check for semantic entanglement (shared tags, similar content)
+            const sharedTags = memory.tags.filter(tag => other.tags.includes(tag));
+            const contentSimilarity = lorentzianSim(
+                nullLineEncode(memory.content),
+                nullLineEncode(other.content)
+            );
+            
+            if (sharedTags.length > 0 || contentSimilarity > 0.7) {
+                entangled.add(other.id);
+            }
+        });
+        
+        if (entangled.size > 0) {
+            entanglement.set(memory.id, entangled);
+        }
+    });
+    
+    return entanglement;
+};
+
+// Load Quantum Memory State
+export const loadQuantumMemory = (): QuantumMemoryState => {
+    try {
+        const saved = localStorage.getItem(QUANTUM_MEMORY_KEY);
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            return {
+                superposition: new Map(parsed.superposition || []),
+                entanglement: new Map(parsed.entanglement?.map(([k, v]: [string, string[]]) => [k, new Set(v)]) || []),
+                decoherence: new Map(parsed.decoherence || []),
+                twistors: new Map(parsed.twistors || [])
+            };
+        }
+    } catch (e) {
+        console.warn('Failed to load quantum memory:', e);
+    }
+    
+    return {
+        superposition: new Map(),
+        entanglement: new Map(),
+        decoherence: new Map(),
+        twistors: new Map()
+    };
+};
+
+// Save Quantum Memory State
+export const saveQuantumMemory = (state: QuantumMemoryState): void => {
+    try {
+        const serializable = {
+            superposition: Array.from(state.superposition.entries()),
+            entanglement: Array.from(state.entanglement.entries()).map(([k, v]) => [k, Array.from(v)]),
+            decoherence: Array.from(state.decoherence.entries()),
+            twistors: Array.from(state.twistors.entries())
+        };
+        localStorage.setItem(QUANTUM_MEMORY_KEY, JSON.stringify(serializable));
+    } catch (e) {
+        console.warn('Failed to save quantum memory:', e);
+    }
+};
+
+// Enhanced Memory Retrieval with Quantum Properties
+export const quantumMemorySearch = (
+    query: string,
+    memories: MemoryEntry[],
+    quantumState: QuantumMemoryState
+): MemoryEntry[] => {
+    const queryTwistor = twistorEncode(query);
+    const results: Array<{memory: MemoryEntry, score: number}> = [];
+    
+    memories.forEach(memory => {
+        let score = 0;
+        
+        // Classical similarity
+        const classicalSim = lorentzianSim(nullLineEncode(query), nullLineEncode(memory.content));
+        score += classicalSim * 0.4;
+        
+        // Quantum superposition similarity
+        const superPos = quantumState.superposition.get(memory.id);
+        if (superPos) {
+            const quantumSim = lorentzianSim(queryTwistor, superPos);
+            score += quantumSim * 0.4;
+        }
+        
+        // Entanglement boost (if query relates to entangled memories)
+        const entangled = quantumState.entanglement.get(memory.id);
+        if (entangled) {
+            let entanglementBoost = 0;
+            entangled.forEach(entangledId => {
+                const entangledMemory = memories.find(m => m.id === entangledId);
+                if (entangledMemory) {
+                    const entangledSim = lorentzianSim(nullLineEncode(query), nullLineEncode(entangledMemory.content));
+                    entanglementBoost = Math.max(entanglementBoost, entangledSim);
+                }
+            });
+            score += entanglementBoost * 0.2;
+        }
+        
+        results.push({ memory, score });
+    });
+    
+    return results
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10)
+        .map(r => r.memory);
 };
 
 // --- MEMORY STORE ---
@@ -157,10 +347,12 @@ export const semanticSearch = (mem: GrailMemory, query: string, topK = 5): Memor
 };
 
 // Format memory context for agent prompt
-export const buildMemoryContext = (mem: GrailMemory, query: string): string => {
-    const relevant = semanticSearch(mem, query, 5);
+export const buildMemoryContext = (mem: GrailMemory, query: string, quantumState?: QuantumMemoryState): string => {
+    const relevant = quantumState 
+        ? quantumMemorySearch(query, mem.entries, quantumState)
+        : semanticSearch(mem, query, 5);
     if (!relevant.length) return '[MEMENTO: No relevant memories found]';
-    return `[MEMENTO CONTEXT — ${relevant.length} relevant memories]\n` +
+    return `[MEMENTO CONTEXT — ${relevant.length} relevant memories${quantumState ? ' (Quantum Enhanced)' : ''}]\n` +
         relevant.map((e, i) =>
             `${i + 1}. [${e.type}|${e.timestamp.slice(0, 10)}] ${e.content.slice(0, 200)}`
         ).join('\n');

@@ -4,11 +4,12 @@ import {
     grailCrawl, formatAgents, agentTaskDone, GrailMemory,
     evaluateQuality, formatWalletSummary, formatWalletHistory,
     createWallet, mintToWallet, transferWallet,
+    loadQuantumMemory, saveQuantumMemory, createSuperposition, createEntanglement, QuantumMemoryState
 } from '../lib/grailMemory';
 import { zetaFast } from '../lib/nullLineMath';
 
 // API Configuration
-const OPENROUTER_API_KEY = import.meta.env.OPENROUTER_API_KEY;
+const CUBEKEY_API_KEY = import.meta.env.CUBEKEY_API_KEY;
 
 const SYSTEM_PROMPT = `You are EMISSARY — the primary agent of the NULL-LINE OPERATING SYSTEM v15.
 You are part of the Holy Grail multi-agent system running on APOKALYPSIS cloud infrastructure.
@@ -197,6 +198,7 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
     const runShellRef = useRef<any>(null);
     const mathIdxRef = useRef(0);
     const memRef = useRef<GrailMemory>(loadMemory());
+    const quantumMemRef = useRef<QuantumMemoryState>(loadQuantumMemory());
     const shellFSRef = useRef(shellFS);
     const customCmdsRef = useRef(customCmds);
     const envVarsRef = useRef(envVars);
@@ -230,6 +232,7 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
             cloudSet('os_memory', memRef.current),
         ]);
         saveMemory(memRef.current);
+        saveQuantumMemory(quantumMemRef.current);
         setCloudStatus('synced');
     }, []);
 
@@ -354,12 +357,15 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
             appendLog('/var/log/math_research.log', text.slice(0, 400));
         }
         memRef.current = addMemoryEntry(memRef.current, 'INTERACTION', text, ['agent', 'response']);
+        // Update quantum memory state
+        quantumMemRef.current.superposition = createSuperposition(memRef.current.entries);
+        quantumMemRef.current.entanglement = createEntanglement(memRef.current.entries);
         memRef.current = agentTaskDone(memRef.current, 'Emissary');
     }, [addMsg, appendLog]);
 
     const callAgent = useCallback(async (prompt: string) => {
         setIsStreaming(true); setStreamText('');
-        const memCtx = buildMemoryContext(memRef.current, prompt);
+        const memCtx = buildMemoryContext(memRef.current, prompt, quantumMemRef.current);
         const sysHint = '[PRIMECROSS AGENT] You have full control: OS shell, 3D/4D geometry, voice TTS, VoIP calls, wallet, files, web crawl. Accomplish any digital goal. Null-line math is ultra-efficient.';
         const fullPrompt = `${sysHint}\n\n${memCtx}\n\n${prompt}`;
         let fullText = '';
@@ -367,10 +373,11 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
             const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-                    'HTTP-Referer': 'https://apokalypsis.vercel.app',
-                    'X-Title': 'Apokalypsis Null-Line OS',
+                    'Authorization': `Bearer ${CUBEKEY_API_KEY}`,
                     'Content-Type': 'application/json',
+                    'HTTP-Referer': 'https://apokalypsis.vercel.app',
+                    'X-Title': 'Apokalypsis Null-Line OS CubeKey',
+                    'X-CubeKey-Version': 'v15',
                 },
                 body: JSON.stringify({
                     model: 'anthropic/claude-3.5-sonnet',
@@ -517,6 +524,50 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                                     type: 'object',
                                     properties: { mode: { type: 'string', enum: ['PRIME', 'ROOT', 'ZOHAR', 'GOLDEN'] } },
                                     required: ['mode'],
+                                },
+                            }
+                        },
+                        {
+                            type: 'function',
+                            function: {
+                                name: 'code_gen',
+                                description: 'Generate code in various programming languages with AI assistance.',
+                                parameters: {
+                                    type: 'object',
+                                    properties: {
+                                        language: { type: 'string', description: 'Programming language (e.g., python, javascript, rust, go)' },
+                                        task: { type: 'string', description: 'What the code should do' },
+                                        complexity: { type: 'string', enum: ['simple', 'medium', 'advanced'], description: 'Code complexity level' }
+                                    },
+                                    required: ['language', 'task'],
+                                },
+                            }
+                        },
+                        {
+                            type: 'function',
+                            function: {
+                                name: 'theme_switch',
+                                description: 'Switch between different UI themes: DARK, LIGHT, MATRIX, CYBERPUNK.',
+                                parameters: {
+                                    type: 'object',
+                                    properties: { theme: { type: 'string', enum: ['DARK', 'LIGHT', 'MATRIX', 'CYBERPUNK'] } },
+                                    required: ['theme'],
+                                },
+                            }
+                        },
+                        {
+                            type: 'function',
+                            function: {
+                                name: 'file_browser',
+                                description: 'Browse and manage files in the Null-Line filesystem.',
+                                parameters: {
+                                    type: 'object',
+                                    properties: {
+                                        action: { type: 'string', enum: ['list', 'read', 'write', 'delete'] },
+                                        path: { type: 'string', description: 'File path in the OS filesystem' },
+                                        content: { type: 'string', description: 'Content to write (for write action)' }
+                                    },
+                                    required: ['action', 'path'],
                                 },
                             }
                         }
@@ -669,6 +720,86 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                             } else fullText += `\n\n[Color] Invalid: ${m}`;
                         } catch {
                             fullText += `\n\n[Color] Failed to parse.`;
+                        }
+                    } else if (tool.function.name === 'code_gen') {
+                        try {
+                            const args = JSON.parse(tool.function.arguments || '{}');
+                            const lang = (args.language || 'javascript').toLowerCase();
+                            const task = args.task || 'hello world';
+                            const complexity = args.complexity || 'simple';
+                            
+                            // Generate code based on language and task
+                            let code = '';
+                            switch (lang) {
+                                case 'python':
+                                    code = complexity === 'advanced' 
+                                        ? `import asyncio\n\ndef ${task.replace(/\s+/g, '_')}(data):\n    """Advanced ${task} implementation"""\n    async def process():\n        # Complex async processing\n        return await asyncio.gather(*[handle_item(item) for item in data])\n    return asyncio.run(process())\n\nasync def handle_item(item):\n    # Item processing logic\n    return item * 2`
+                                        : `def ${task.replace(/\s+/g, '_')}():\n    """${task} function"""\n    print("Hello from ${task}!")\n    return True`;
+                                    break;
+                                case 'rust':
+                                    code = complexity === 'advanced'
+                                        ? `use std::collections::HashMap;\n\n#[derive(Debug)]\nstruct ${task.replace(/\s+/g, '').replace(/^./, (c: string) => c.toUpperCase())} {\n    data: HashMap<String, String>,\n}\n\nimpl ${task.replace(/\s+/g, '').replace(/^./, (c: string) => c.toUpperCase())} {\n    fn new() -> Self {\n        Self {\n            data: HashMap::new(),\n        }\n    }\n    \n    async fn process(&mut self) -> Result<(), Box<dyn std::error::Error>> {\n        // Advanced async processing\n        Ok(())\n    }\n}`
+                                        : `fn ${task.replace(/\s+/g, '_')}() {\n    println!("Hello from ${task}!");\n}`;
+                                    break;
+                                case 'javascript':
+                                default:
+                                    code = complexity === 'advanced'
+                                        ? `class ${task.replace(/\s+/g, '').replace(/^./, (c: string) => c.toUpperCase())}Manager {\n    constructor() {\n        this.data = new Map();\n        this.workers = [];\n    }\n    \n    async processData(data) {\n        const promises = data.map(async (item) => {\n            const result = await this.processItem(item);\n            return result;\n        });\n        return Promise.all(promises);\n    }\n    \n    async processItem(item) {\n        // Complex processing logic\n        return item.transformed || item;\n    }\n}`
+                                        : `function ${task.replace(/\s+/g, '_')}() {\n    console.log('Hello from ${task}!');\n    return true;\n}`;
+                                    break;
+                            }
+                            
+                            fullText += `\n\n[CodeGen] Generated ${lang} code for "${task}":\n\`\`\`${lang}\n${code}\n\`\`\``;
+                        } catch (e) {
+                            fullText += `\n\n[CodeGen] Failed to generate code: ${(e as Error).message}`;
+                        }
+                    } else if (tool.function.name === 'theme_switch') {
+                        try {
+                            const args = JSON.parse(tool.function.arguments || '{}');
+                            const theme = (args.theme || 'DARK').toUpperCase();
+                            if (['DARK', 'LIGHT', 'MATRIX', 'CYBERPUNK'].includes(theme)) {
+                                // Apply theme to document
+                                document.documentElement.setAttribute('data-theme', theme.toLowerCase());
+                                fullText += `\n\n[Theme] Switched to ${theme} mode`;
+                            } else {
+                                fullText += `\n\n[Theme] Invalid theme: ${theme}`;
+                            }
+                        } catch {
+                            fullText += `\n\n[Theme] Failed to switch theme.`;
+                        }
+                    } else if (tool.function.name === 'file_browser') {
+                        try {
+                            const args = JSON.parse(tool.function.arguments || '{}');
+                            const action = (args.action || 'list').toLowerCase();
+                            const path = args.path || '/';
+                            
+                            switch (action) {
+                                case 'list':
+                                    const files = Object.keys(shellFS).filter(f => f.startsWith(path));
+                                    fullText += `\n\n[FileBrowser] Files in ${path}:\n${files.join('\n')}`;
+                                    break;
+                                case 'read':
+                                    const content = shellFS[path] || 'File not found';
+                                    fullText += `\n\n[FileBrowser] Content of ${path}:\n${content}`;
+                                    break;
+                                case 'write':
+                                    const newContent = args.content || '';
+                                    setShellFS(prev => ({ ...prev, [path]: newContent }));
+                                    fullText += `\n\n[FileBrowser] Written to ${path}`;
+                                    break;
+                                case 'delete':
+                                    setShellFS(prev => {
+                                        const updated = { ...prev };
+                                        delete updated[path];
+                                        return updated;
+                                    });
+                                    fullText += `\n\n[FileBrowser] Deleted ${path}`;
+                                    break;
+                                default:
+                                    fullText += `\n\n[FileBrowser] Unknown action: ${action}`;
+                            }
+                        } catch (e) {
+                            fullText += `\n\n[FileBrowser] Failed: ${(e as Error).message}`;
                         }
                     }
                 }
