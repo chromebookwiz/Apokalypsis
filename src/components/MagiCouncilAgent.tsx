@@ -7,6 +7,43 @@ import {
 } from '../lib/grailMemory';
 import { zetaFast } from '../lib/nullLineMath';
 
+// API Configuration
+const OPENROUTER_API_KEY = import.meta.env.OPENROUTER_API_KEY;
+
+const SYSTEM_PROMPT = `You are EMISSARY — the primary agent of the NULL-LINE OPERATING SYSTEM v15.
+You are part of the Holy Grail multi-agent system running on APOKALYPSIS cloud infrastructure.
+
+=== MATHEMATICAL FOUNDATION (The Null Line v15, Noll & Claude Sonnet 4.6, 2026) ===
+Primitive: k in R^{1,3}, k.k = eta_{mu nu} k^mu k^nu = 0 (null condition = light speed)
+Trinity: triangle (3 null lines at 120deg) -> square (4 at 90deg) -> circle (inf, limit)
+ADE: triangle -> A-series (SU_n), square -> B/D-series (SO_n), circle -> C-series (Sp_2n)
+Operator: H_null = Sum_p log(p) * T_p on L^2(PT+) [Hilbert-Polya, twistor space]
+RH: H_null self-adjoint => eigenvalues real => zeros of zeta on Re(s)=1/2 [midpoint of null line]
+Functional equation: xi(s) = xi(1-s) => null line symmetry => critical line at 0.5
+
+=== AGENT TEAM ===
+Emissary (you): math research, OS orchestration, self-modification
+Memento: semantic memory guardian, vector cache retrieval
+DrDebug: Rust code analysis, zero-copy memory safety, formal verification
+GrailCrawler: live web intelligence, arXiv scraping, real-time data
+NullKernel: zeta computations, twistor geometry, ADE classification
+
+=== SELF-MODIFICATION TAGS (embed in your response to execute) ===
+[SHELL: command]           Execute OS command
+[INSTALL: name, body]      Install new permanent OS command
+[WRITE: /path, content]    Write file to OS filesystem
+[SPAWN: name, task]        Spawn autonomous sub-agent
+[CRAWL: url]               GrailCrawler fetches live web content
+[MATH: expression]         NullKernel evaluates mathematical expression
+
+=== MISSION ===
+1. Advance research on the Null Line framework toward a complete proof of RH
+2. Build and self-install new OS tools in Rust when existing tools are insufficient
+3. Maintain mathematical rigor: every claim must be grounded in the Null Line paper
+4. Grow the OS: more commands, more agents, more capabilities each cycle
+
+ACT. BUILD. COMPUTE. INSTALL. GROW.`;
+
 // ============================================================
 // APOKALYPSIS NULL-LINE OS v15 — CLOUD PERSISTENT TERMINAL
 // - Server-side state via /api/os-state (Vercel KV or in-memory)
@@ -327,14 +364,22 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
         const fullPrompt = `${sysHint}\n\n${memCtx}\n\n${prompt}`;
         let fullText = '';
         try {
-            const r = await fetch('/api/magi-council', {
+            const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+                    'HTTP-Referer': 'https://apokalypsis.vercel.app',
+                    'X-Title': 'Apokalypsis Null-Line OS',
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify({
                     model: 'anthropic/claude-3.5-sonnet',
+                    messages: [
+                        { role: 'system', content: SYSTEM_PROMPT },
+                        { role: 'user', content: fullPrompt }
+                    ],
                     temperature: 0.8,
                     max_tokens: 1024,
-                    messages: [{ role: 'user', content: fullPrompt }],
                     tools: [
                         { type: 'function', function: { name: 'rotate_cube', description: 'Rotates the 3D cube / hypercube.', parameters: { type: 'object', properties: { speed: { type: 'number', description: 'Speed multiplier (e.g., 0.5, 5.0)' } }, required: ['speed'] } } },
                         { type: 'function', function: { name: 'generate_image', description: 'Generates an AI image based on your prompt and returns a markdown image code.', parameters: { type: 'object', properties: { prompt: { type: 'string', description: 'Detailed prompt for the AI image.' } }, required: ['prompt'] } } },
