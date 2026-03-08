@@ -123,7 +123,7 @@ export const useSceneController = () => {
     const [viewAngle, setViewAngle] = useState(0); // Polar (N/S)
     const [azimuthAngle, setAzimuthAngle] = useState(0); // Azimuth (E/W)
     const [activeViewIndex, setActiveViewIndex] = useState(0); // 0=Front, 1=Iso, 2=Top...
-    const [uiVisible, setUiVisible] = useState(false);
+    const [uiVisible, setUiVisible] = useState(true);
     const [theoryOpen, setTheoryOpen] = useState(false);
     const [resonance, setResonance] = useState(0);
     const [latticeAlignment, setLatticeAlignment] = useState(0);
@@ -138,7 +138,7 @@ export const useSceneController = () => {
     const [compressionToolActive, setCompressionToolActive] = useState(false);
     const [morphToolActive, setMorphToolActive] = useState(false);
     const [latticeToolActive, setLatticeToolActive] = useState(false);
-    const [magiPanelOpen, setMagiPanelOpen] = useState(false);
+    const [magiPanelOpen, setMagiPanelOpen] = useState(true);
 
     // Literal Math Results
     const [latticeGap, setLatticeGap] = useState(1.0);

@@ -1436,7 +1436,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                                             border: '1px solid #d4af37',
                                             color: theoryLang === lang ? '#fdfbf7' : '#d4af37',
                                             padding: '2px 8px',
-                                            borderRadius: '4px',
+                                            borderRadius: '0px',
                                             fontSize: '0.65rem',
                                             cursor: 'pointer',
                                             fontFamily: 'Cinzel, serif'

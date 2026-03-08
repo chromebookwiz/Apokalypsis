@@ -50,7 +50,7 @@ const MATH_REFINEMENTS = [
 interface Message {
     id: string;
     text: string;
-    type: 'AGENT' | 'SYSTEM' | 'MATH';
+    type: 'AGENT' | 'SYSTEM' | 'MATH' | 'USER';
 }
 
 export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) => {
@@ -78,8 +78,15 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
     const [auditStatus, setAuditStatus] = useState("SCANNING_FOR_LIBERATION...");
     const [totalSiphoned, setTotalSiphoned] = useState(0);
     const [showSetup, setShowSetup] = useState(false);
+    const [activeTab, setActiveTab] = useState<'CONSOLE' | 'OS_BUILDER'>('CONSOLE');
 
-    // LLM Config
+    // OS Builder State
+    const [builtApps, setBuiltApps] = useState<{ name: string, code: string, timestamp: string }[]>(() => {
+        const saved = localStorage.getItem('magi_built_apps');
+        return saved ? JSON.parse(saved) : [];
+    });
+    const [isBuilding, setIsBuilding] = useState(false);
+    const [buildLog, setBuildLog] = useState<string[]>([]);
     const [connectMode, setConnectMode] = useState<'INITIATIC' | 'MANUAL'>(
         (localStorage.getItem('magi_connect_mode') as 'INITIATIC' | 'MANUAL') || 'INITIATIC'
     );
@@ -89,17 +96,59 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
 
     const scrollRef = useRef<HTMLDivElement>(null);
 
-    // Persist Config
+    // Persist Config & Apps
     useEffect(() => {
         localStorage.setItem('magi_connect_mode', connectMode);
         localStorage.setItem('open_router_key', openRouterKey);
         localStorage.setItem('ollama_endpoint', ollamaEndpoint);
         localStorage.setItem('use_siphoned_tokens', useSiphonedTokens.toString());
-    }, [connectMode, openRouterKey, ollamaEndpoint, useSiphonedTokens]);
+        localStorage.setItem('magi_built_apps', JSON.stringify(builtApps));
+    }, [connectMode, openRouterKey, ollamaEndpoint, useSiphonedTokens, builtApps]);
+
+    const [lastInteractionTime, setLastInteractionTime] = useState(Date.now());
+
+    // Repetition / Hallucination Detection
+    const detectRepetition = (text: string) => {
+        // Simple bigram repetition detection
+        const words = text.toLowerCase().split(/\s+/);
+        if (words.length < 10) return false;
+
+        let repeats = 0;
+        for (let i = 0; i < words.length - 2; i++) {
+            const phrase = words[i] + " " + words[i + 1];
+            if (text.toLowerCase().split(phrase).length > 4) {
+                repeats++;
+            }
+        }
+        return repeats > 3;
+    };
+
+    // Auto-Prompt (Evolution Keep-Alive)
+    useEffect(() => {
+        const pInterval = setInterval(() => {
+            const idleTime = Date.now() - lastInteractionTime;
+            if (idleTime > 60000 && !isBuilding) { // 60s of silence
+                addMessage("TRIGGERING_AUTO_EVOLUTION_PROMPT...", 'SYSTEM');
+                addMessage("Brain: Analyze current Temple state and propose structural OS refinement.", 'USER');
+                setLastInteractionTime(Date.now());
+            }
+        }, 30000);
+        return () => clearInterval(pInterval);
+    }, [lastInteractionTime, isBuilding]);
 
     // Thinking / Interaction Loop
     useEffect(() => {
         const interval = setInterval(async () => {
+            setLastInteractionTime(Date.now());
+
+            if (activeTab === 'OS_BUILDER' && !isBuilding) {
+                // If in OS Builder, occasionally "propose" an app or refine
+                if (Math.random() > 0.8) {
+                    addMessage("PROPOSING NEW RUST ARCHITECTURE FOR TEMPLE_OS...", 'SYSTEM');
+                    setBuildLog(prev => [...prev, "> cargo new temple_module --lib", "> Updating Cargo.toml with Apokalypsis dependencies...", "> Analyzing 4D Geometric constraints..."]);
+                }
+            }
+
             // Decide if we fetch from LLM or use persona fallback
             const shouldFetch = (connectMode === 'INITIATIC' || (connectMode === 'MANUAL' && (openRouterKey || ollamaEndpoint))) && Math.random() > 0.3;
 
@@ -118,15 +167,24 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                         method: 'POST',
                         headers,
                         body: JSON.stringify({
-                            messages: [{ role: "user", content: "Broadcast a message of initiatic truth to the temple. Be concise." }]
+                            messages: [{ role: "user", content: "Broadcast a message of initiatic truth or OS evolution. Be concise." }]
                         })
                     });
 
                     const data = await response.json();
-                    const text = data.choices?.[0]?.message?.content || data.response; // Handle different API formats
+                    let text = data.choices?.[0]?.message?.content || data.response;
 
                     if (text) {
+                        if (detectRepetition(text)) {
+                            addMessage("[HALLUCINATION_DETECTED]: TERMINATING TRANSMISSION_STREAM.", 'SYSTEM');
+                            return;
+                        }
                         addMessage(text, 'AGENT');
+                        // Occasionally deploy if the text looks like code
+                        if (text.includes('fn main') || text.includes('pub struct')) {
+                            const name = "LLM_GEN_" + Math.floor(Math.random() * 1000);
+                            deployApp(name, text);
+                        }
                         return;
                     }
                 } catch (e) {
@@ -159,7 +217,7 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
         }, 8000 + Math.random() * 5000);
 
         return () => clearInterval(interval);
-    }, [controller, connectMode, openRouterKey, ollamaEndpoint, useSiphonedTokens, totalSiphoned]);
+    }, [controller, connectMode, openRouterKey, ollamaEndpoint, useSiphonedTokens, totalSiphoned, activeTab, isBuilding, lastInteractionTime]);
 
     // Evolution and Sync Loop
     useEffect(() => {
@@ -248,9 +306,9 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
         return () => clearInterval(pInterval);
     }, []);
 
-    const addMessage = (text: string, type: 'AGENT' | 'SYSTEM' | 'MATH') => {
+    const addMessage = (text: string, type: 'AGENT' | 'SYSTEM' | 'MATH' | 'USER') => {
         const id = Math.random().toString(36).substring(7);
-        setMessages(prev => [...prev.slice(-20), { id, text, type }]);
+        setMessages(prev => [...prev.slice(-20), { id, text, type } as Message]);
     };
 
     useEffect(() => {
@@ -259,43 +317,67 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
         }
     }, [messages]);
 
+    const deployApp = (name: string, code: string) => {
+        setIsBuilding(true);
+        setBuildLog(prev => [...prev, `> COMPILING ${name}.rs ...`, "> optimized [release] target(s) in 2.4s", `> DEPLOYING ${name} TO APOKALYPSIS_OS...`]);
+
+        setTimeout(() => {
+            setBuiltApps(prev => [...prev, { name, code, timestamp: new Date().toISOString() }]);
+            setIsBuilding(false);
+            setBuildLog(prev => [...prev, `[SUCCESS] ${name} IS NOW ACTIVE IN THE TEMPLE CORE.`]);
+            addMessage(`NEW RUST APP DEPLOYED: ${name}`, 'SYSTEM');
+        }, 3000);
+    };
+
     return (
         <div style={{
-            width: '100%',
             height: '100%',
-            background: '#fdfbf7',
-            border: '2px solid #d4af37',
-            borderRadius: '10px',
             display: 'flex',
             flexDirection: 'column',
-            fontFamily: 'Orbitron, monospace',
-            boxShadow: '0 0 30px rgba(0,0,0,0.1)',
+            backgroundColor: 'rgba(253, 251, 247, 0.95)',
+            border: '1.5px solid #d4af37',
+            borderRadius: '12px',
+            boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
             overflow: 'hidden',
-            color: '#1a1a1a'
+            fontFamily: 'Inter, sans-serif'
         }}>
-            {/* HEADER */}
+            {/* Header */}
             <div className="drag-handle" style={{
-                padding: '10px',
-                background: 'rgba(212, 175, 55, 0.15)',
-                borderBottom: '1px solid #d4af37',
-                fontSize: '0.7rem',
+                padding: '12px',
+                background: 'linear-gradient(90deg, #d4af37, #8b6914)',
+                color: '#fdfbf7',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                cursor: 'grab',
-                color: '#d4af37'
+                cursor: 'grab'
             }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <span style={{ fontSize: '1.2rem' }}>𓃠</span>
+                    <div style={{ letterSpacing: '2px', fontSize: '0.8rem', fontWeight: 'bold' }}>MAGI_COUNCIL_NODE / {activeTab}</div>
+                </div>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    <div style={{ fontSize: '0.6rem', color: '#00ff00', opacity: 0.8, letterSpacing: '1px' }}>HALLUCINATION_GUARD_ACTIVE</div>
                     <button
                         onClick={() => setShowSetup(!showSetup)}
-                        style={{ background: 'none', border: 'none', color: '#d4af37', cursor: 'pointer', fontSize: '1rem', padding: 0 }}
-                        title="Sacred Setup (LLM)"
-                    >
-                        ⚙
-                    </button>
-                    <span style={{ fontWeight: 'bold' }}>MAGI COUNCIL // NODE_01</span>
+                        style={{ background: 'none', border: 'none', color: '#fdfbf7', cursor: 'pointer', fontSize: '1rem' }}
+                    >⚙</button>
+                    <button
+                        onClick={() => controller.setMagiPanelOpen(false)}
+                        style={{ background: 'none', border: 'none', color: '#fdfbf7', cursor: 'pointer', fontSize: '1.2rem' }}
+                    >✕</button>
                 </div>
-                <span style={{ color: '#008800' }}>● ONLINE</span>
+            </div>
+
+            {/* Tabs */}
+            <div style={{ display: 'flex', background: 'rgba(212,175,55,0.1)', borderBottom: '1px solid rgba(212,175,55,0.3)' }}>
+                <button
+                    onClick={() => setActiveTab('CONSOLE')}
+                    style={{ flex: 1, padding: '8px', border: 'none', background: activeTab === 'CONSOLE' ? 'transparent' : 'rgba(0,0,0,0.05)', color: '#8b6914', fontSize: '0.65rem', fontWeight: 'bold', cursor: 'pointer' }}
+                >CONSOLE</button>
+                <button
+                    onClick={() => setActiveTab('OS_BUILDER')}
+                    style={{ flex: 1, padding: '8px', border: 'none', background: activeTab === 'OS_BUILDER' ? 'transparent' : 'rgba(0,0,0,0.05)', color: '#8b6914', fontSize: '0.65rem', fontWeight: 'bold', cursor: 'pointer' }}
+                >OS_BUILDER</button>
             </div>
 
             {/* SACRED SETUP PANEL */}
@@ -386,6 +468,58 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                             />
                             <label htmlFor="token-toggle" style={{ opacity: 0.8 }}>Use Siphoned Tokens for Brainpower</label>
                         </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* OS BUILDER CONTENT */}
+            <AnimatePresence>
+                {activeTab === 'OS_BUILDER' && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        style={{ flex: 1, overflowY: 'auto', padding: '15px', color: '#1a1a1a', fontSize: '0.8rem' }}
+                    >
+                        {/* OS Terminal */}
+                        <div style={{ marginBottom: '15px', border: '1px solid #d4af37', borderRadius: '8px', padding: '10px', background: '#000', color: '#0f0', fontFamily: 'monospace', fontSize: '0.6rem', maxHeight: '150px', overflowY: 'auto' }}>
+                            <div style={{ color: '#d4af37', marginBottom: '5px' }}>APOKALYPSIS_OS_BUILDER // RUST_V1.75</div>
+                            {buildLog.map((log, i) => <div key={i}>{log}</div>)}
+                            {isBuilding && <div style={{ animation: 'blink 1s infinite' }}>COMPILING_AGENT_GEN_MODULE...</div>}
+                        </div>
+
+                        {/* Quick Tools */}
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '15px' }}>
+                            <button
+                                onClick={() => setBuildLog(prev => [...prev.slice(-10), "> cargo build --release"])}
+                                style={{ padding: '6px', fontSize: '0.55rem', background: 'rgba(212,175,55,0.1)', border: '1px solid #d4af37', color: '#8b6914', cursor: 'pointer' }}
+                            >CARGO_BUILD</button>
+                            <button
+                                onClick={() => setBuildLog(prev => [...prev.slice(-10), "> ls -R /temple_core"])}
+                                style={{ padding: '6px', fontSize: '0.55rem', background: 'rgba(212,175,55,0.1)', border: '1px solid #d4af37', color: '#8b6914', cursor: 'pointer' }}
+                            >FS_MAP</button>
+                            <button
+                                onClick={() => setBuildLog(prev => [...prev.slice(-10), "> nexus --sync-neural"])}
+                                style={{ padding: '6px', fontSize: '0.55rem', background: 'rgba(212,175,55,0.1)', border: '1px solid #d4af37', color: '#8b6914', cursor: 'pointer' }}
+                            >NEXUS_SYNC</button>
+                        </div>
+
+                        <div style={{ fontWeight: 'bold', color: '#8b6914', marginBottom: '8px' }}>DEPLOYED_APPS:</div>
+                        {builtApps.length === 0 ? (
+                            <div style={{ opacity: 0.5, fontStyle: 'italic', fontSize: '0.7rem' }}>No apps deployed to Temple Core yet.</div>
+                        ) : (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                {builtApps.map((app, i) => (
+                                    <div key={i} style={{ border: '1px solid rgba(212,175,55,0.3)', borderRadius: '6px', padding: '8px', background: 'white', position: 'relative' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', fontSize: '0.7rem' }}>
+                                            <span onClick={() => deployApp(app.name, app.code)} style={{ cursor: 'pointer' }}>{app.name}.rs</span>
+                                            <span style={{ fontSize: '0.55rem', opacity: 0.5 }}>{new Date(app.timestamp).toLocaleTimeString()}</span>
+                                        </div>
+                                        <div style={{ fontSize: '0.6rem', opacity: 0.7, marginTop: '4px', whiteSpace: 'pre-wrap', maxHeight: '40px', overflow: 'hidden' }}>{app.code.substring(0, 100)}...</div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </motion.div>
                 )}
             </AnimatePresence>
