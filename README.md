@@ -50,7 +50,7 @@ A quantum-enhanced AI operating system built on the mathematical foundations of 
    ```bash
    cp .env.example .env
    # Edit .env and add your OpenRouter API key
-   CUBEKEY_API_KEY=your_openrouter_api_key_here
+   OPENROUTER_API_KEY=your_openrouter_api_key_here
    ```
 
 4. **Deploy to Vercel** (recommended for full functionality)
@@ -77,15 +77,19 @@ For local development, create a `.env` file with your OpenRouter API key:
 ```bash
 cp .env.example .env
 # Edit .env and add your OpenRouter API key
-CUBEKEY_API_KEY=your_openrouter_api_key_here
+OPENROUTER_API_KEY=your_openrouter_api_key_here
 ```
 
 ### **Production Deployment**
-For Vercel deployment, set the following environment variables in your Vercel dashboard:
-- `OPENROUTER_API_KEY`: Your OpenRouter API key for server-side AI calls
-- `CUBEKEY_API_KEY`: (Optional) Same key for client-side fallbacks
+For Vercel deployment, set the following environment variables in your Vercel dashboard (do **not** commit these keys into source control):
+- `OPENROUTER_API_KEY`: Your OpenRouter API key used by the server-side AI proxy
 
-The system uses Vercel serverless functions to proxy AI requests, ensuring proper CORS handling and security.
+If you want real VoIP calls via Twilio, also set:
+- `TWILIO_ACCOUNT_SID`
+- `TWILIO_AUTH_TOKEN`
+- `TWILIO_TWIML_URL` (optional; defaults to Twilio placeholder TWiML)
+
+The system uses Vercel serverless functions to proxy AI and telephony calls, keeping credentials hidden from the browser.
 
 ## 🎮 **Usage**
 

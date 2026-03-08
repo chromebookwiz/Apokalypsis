@@ -4,9 +4,8 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [react()],
-    define: {
-        'import.meta.env.CUBEKEY_API_KEY': JSON.stringify(process.env.CUBEKEY_API_KEY || ''),
-    },
+    define: {},
+
     build: {
         rollupOptions: {
             output: {
@@ -15,8 +14,7 @@ export default defineConfig({
                     'three-core': ['three'],
                     'three-fiber': ['@react-three/fiber', '@react-three/drei'],
                     'three-postprocessing': ['@react-three/postprocessing'],
-                    'animation-vendor': ['framer-motion'],
-                    'analytics': ['@vercel/analytics']
+                    'animation-vendor': ['framer-motion']
                 }
             }
         },
