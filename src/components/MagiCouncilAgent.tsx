@@ -45,6 +45,11 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
         };
     });
 
+    const [observerLogs, setObserverLogs] = useState<string[]>(() => {
+        const saved = localStorage.getItem('magi_observer_logs');
+        return saved ? JSON.parse(saved) : [];
+    });
+
     // Security & Linux OS State
     const [isAuthorized, setIsAuthorized] = useState(() => localStorage.getItem('magi_authorized') === 'true');
     const [passwordInput, setPasswordInput] = useState('');
@@ -75,7 +80,8 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
         localStorage.setItem('magi_authorized', isAuthorized.toString());
         localStorage.setItem('magi_subagents', JSON.stringify(subAgents));
         localStorage.setItem('magi_wallets', JSON.stringify(wallets));
-    }, [connectMode, openRouterKey, ollamaEndpoint, useSiphonedTokens, builtApps, shellFS, isAuthorized, subAgents, wallets]);
+        localStorage.setItem('magi_observer_logs', JSON.stringify(observerLogs));
+    }, [connectMode, openRouterKey, ollamaEndpoint, useSiphonedTokens, builtApps, shellFS, isAuthorized, subAgents, wallets, observerLogs]);
 
     const [lastInteractionTime, setLastInteractionTime] = useState(Date.now());
 
@@ -136,7 +142,7 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                     headers,
                     body: JSON.stringify({
                         messages: [
-                            { role: "user", content: `HQ_STATUS: { fs: ${Object.keys(shellFS).length} files, sub_agents: ${Object.keys(subAgents).length} active }\nFINANCIALS: ${isAuthorized ? JSON.stringify(wallets) : 'KEY_REQUIRED'}\nPropose HQ expansion.` }
+                            { role: "user", content: `HQ_STATUS: { fs: ${Object.keys(shellFS).length} files, sub_agents: ${Object.keys(subAgents).length} active }\nFINANCIALS: ${isAuthorized ? JSON.stringify(wallets) : 'KEY_REQUIRED'}\nPropose HQ expansion or address THE_THEORY. Use: [SHELL: cmd], [SPAWN: name, task], [RUST: code].` }
                         ]
                     })
                 });
@@ -145,14 +151,26 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                 let text = data.choices?.[0]?.message?.content || data.response;
 
                 if (text) {
-                    if (detectRepetition(text)) {
-                        addMessage("[HALLUCINATION_DETECTED]: EMERGENCY_REBOOT.", 'SYSTEM');
+                    // Madness Detection (Severe Repetition)
+                    if (detectRepetition(text) && messages.filter(m => detectRepetition(m.text)).length > 3) {
+                        addMessage("[MADNESS_DETECTED]: PURGING NODE_STATE...", 'SYSTEM');
+                        wipeSlate();
                         return;
                     }
 
+                    if (detectRepetition(text)) {
+                        addMessage("[HALLUCINATION_DETECTED]: RE-STABILIZING...", 'SYSTEM');
+                        return;
+                    }
+
+                    setLastInteractionTime(Date.now());
+
                     // 1. Process Code
                     if (text.includes('fn main') || text.includes('pub struct')) {
-                        deployApp("OS_MODULE_" + Math.floor(Math.random() * 1000), text);
+                        const appName = "OS_MODULE_" + Math.floor(Math.random() * 1000);
+                        deployApp(appName, text);
+                        // Agent self-modification: Save source to FS
+                        setShellFS(prev => ({ ...prev, [`/bin/${appName}.rs`]: text }));
                     }
 
                     // 2. Process Commands
@@ -227,15 +245,50 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
     };
 
 
-    // Linux Heartbeat (Removed fallback simulation)
+    // 12-Hour Fourth Observer Summary
     useEffect(() => {
-        const interval = setInterval(() => {
-            if (Math.random() > 0.9) {
-                addMessage("LINUX_KERNEL_STABLE: 100% AGENTIC_COMPLIANCE.", 'SYSTEM');
+        const observerInterval = setInterval(async () => {
+            if (connectMode === 'INITIATIC' || openRouterKey) {
+                try {
+                    const endpoint = connectMode === 'INITIATIC' ? '/api/magi-council' : 'https://openrouter.ai/api/v1/chat/completions';
+                    const headers: any = { "Content-Type": "application/json" };
+                    if (connectMode === 'MANUAL') headers["Authorization"] = `Bearer ${openRouterKey}`;
+
+                    const response = await fetch(endpoint, {
+                        method: 'POST',
+                        headers,
+                        body: JSON.stringify({
+                            messages: [{ role: "user", content: `OBSERVER_MISSION: Summarize the last 12 hours of evolution. HQ_FS: ${Object.keys(shellFS).length} files.` }]
+                        })
+                    });
+                    const data = await response.json();
+                    const summary = data.choices?.[0]?.message?.content || data.response;
+                    if (summary) setObserverLogs(prev => [...prev, `[${new Date().toLocaleString()}] OBSERVER: ${summary}`]);
+                } catch (e) {
+                    console.error("Observer failed:", e);
+                }
             }
-        }, 12000);
-        return () => clearInterval(interval);
-    }, []);
+        }, 1000 * 60 * 60 * 12); // 12 Hours
+        return () => clearInterval(observerInterval);
+    }, [shellFS, connectMode, openRouterKey]);
+
+    // 1-Hour Idle Reboot
+    useEffect(() => {
+        const idleInterval = setInterval(() => {
+            if (Date.now() - lastInteractionTime > 1000 * 60 * 60) {
+                addMessage("IDLE_TIMEOUT: REBOOTING_NEURAL_CORE.", 'SYSTEM');
+                window.location.reload();
+            }
+        }, 1000 * 60 * 5); // Check every 5 mins
+        return () => clearInterval(idleInterval);
+    }, [lastInteractionTime]);
+
+    const wipeSlate = () => {
+        Object.keys(localStorage).forEach(key => {
+            if (key.startsWith('magi_')) localStorage.removeItem(key);
+        });
+        window.location.reload();
+    };
 
     const runShell = (input: string) => {
         const parts = input.trim().split(/\s+/);
@@ -280,6 +333,11 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                 } else {
                     addMessage("Usage: wallet [list|balance]", 'SYSTEM');
                 }
+                break;
+            case 'verify-theory':
+                addMessage("INITIALIZING_THEORY_VERIFICATION...", 'SYSTEM');
+                // The prompt already contains the theory, so we just trigger a specific check
+                setLastInteractionTime(Date.now()); // Wake up
                 break;
             case 'reboot':
                 addMessage("SYSTEM_REBOOT_INITIATED...", 'SYSTEM');
@@ -516,6 +574,19 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                                     {isAuthorized && <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#008800', marginTop: '4px' }}>{data.balance}</div>}
                                 </div>
                             ))}
+                        </div>
+
+                        <div style={{ fontWeight: 'bold', color: '#8b6914', marginBottom: '8px' }}>STRATEGIC_OVERVIEW (THE_FOURTH_OBSERVER):</div>
+                        <div style={{ padding: '10px', background: 'rgba(212,175,55,0.05)', borderRadius: '4px', fontSize: '0.65rem', color: '#5d4037', marginBottom: '15px', border: '1px solid rgba(212,175,55,0.2)', maxHeight: '150px', overflowY: 'auto' }}>
+                            {observerLogs.length === 0 ? (
+                                <div style={{ opacity: 0.5 }}>WAITING_FOR_ELAPSED_12H_EPOCH...</div>
+                            ) : (
+                                observerLogs.slice(-3).map((log, i) => (
+                                    <div key={i} style={{ marginBottom: '8px', borderBottom: '1px solid rgba(0,0,0,0.05)', paddingBottom: '4px' }}>
+                                        {log}
+                                    </div>
+                                ))
+                            )}
                         </div>
 
                         <div style={{ fontWeight: 'bold', color: '#8b6914', marginBottom: '8px' }}>SUB_AGENTS:</div>
