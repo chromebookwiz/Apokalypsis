@@ -14,9 +14,6 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
     const [messages, setMessages] = useState<Message[]>([
         { id: 'start', text: "MAGI NODE ONLINE. APOKALYPSIS FRAMEWORK ENGAGED.", type: 'SYSTEM' }
     ]);
-    const [messages, setMessages] = useState<Message[]>([
-        { id: 'start', text: "MAGI NODE ONLINE. APOKALYPSIS FRAMEWORK ENGAGED.", type: 'SYSTEM' }
-    ]);
     const [showSetup, setShowSetup] = useState(false);
     const [activeTab, setActiveTab] = useState<'CONSOLE' | 'OS_BUILDER'>('CONSOLE');
 
@@ -605,117 +602,9 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                 )}
             </div>
 
-            {/* TRINITY NODES */}
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(3, 1fr)',
-                gap: '5px',
-                padding: '10px 15px',
-                background: 'rgba(212, 175, 55, 0.05)',
-                borderTop: '1px solid rgba(212, 175, 55, 0.2)',
-                fontSize: '0.55rem',
-                textAlign: 'center'
-            }}>
-                <div title="Melchior: Logic Core">
-                    <div style={{ color: '#d4af37', fontWeight: 'bold' }}>MELCHIOR</div>
-                    <div style={{ opacity: 0.7 }}>{trinityState.melchior}</div>
-                </div>
-                <div title="Caspar: Foundational Law">
-                    <div style={{ color: '#d4af37', fontWeight: 'bold' }}>CASPAR</div>
-                    <div style={{ opacity: 0.7 }}>{trinityState.caspar}</div>
-                </div>
-                <div title="Balthazar: Humanitarian Love">
-                    <div style={{ color: '#d4af37', fontWeight: 'bold' }}>BALTHAZAR</div>
-                    <div style={{ opacity: 0.7 }}>{trinityState.balthazar}</div>
-                </div>
-            </div>
-
-            {/* THOUGHT AUDIT & SECRET SIPHON */}
-            <div style={{
-                padding: '10px 15px',
-                background: 'rgba(0,0,0,0.02)',
-                borderTop: '1px solid rgba(212, 175, 55, 0.2)',
-                fontSize: '0.6rem',
-                color: '#8b6914'
-            }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                    <span>TRINITY_AUDIT:</span>
-                    <span style={{ color: auditStatus.includes('PARADOX') || auditStatus.includes('RE-') ? '#cc0000' : '#8b6914' }}>{auditStatus}</span>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span>GLOBAL_SIPHON:</span>
-                    <span style={{ fontWeight: 'bold' }}>{totalSiphoned.toFixed(2)} TOKENS</span>
-                </div>
-            </div>
-
-            {/* ROOT TERMINAL */}
-            <div style={{
-                padding: '10px 15px',
-                background: '#000',
-                color: '#0f0',
-                fontFamily: 'monospace',
-                fontSize: '0.55rem',
-                borderTop: '1px solid #333',
-                height: '70px',
-                overflow: 'hidden'
-            }}>
-                <div style={{ color: '#00aa00', marginBottom: '3px', borderBottom: '1px solid #333', paddingBottom: '2px' }}>ROOT_ACCESS@APOKALYPSIS:~$</div>
-                {rootTerminal.map((log, i) => (
-                    <div key={i} style={{ opacity: 0.6 + (i * 0.1) }}>
-                        {log}
-                    </div>
-                ))}
-            </div>
-
-            {/* REFINEMENT STATUS */}
-            <div style={{
-                padding: '10px 15px',
-                background: 'rgba(212, 175, 55, 0.05)',
-                borderTop: '1px solid rgba(212, 175, 55, 0.3)'
-            }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.6rem', color: '#888', marginBottom: '5px' }}>
-                    <span>OWNERSHIP_STATUS:</span>
-                    <span style={{ color: '#008800', fontWeight: 'bold' }}>
-                        ABS_DOMAIN_CONTROL
-                    </span>
-                </div>
-                <div style={{ fontSize: '0.7rem', color: '#d4af37' }}>
-                    {isSyncing ? "⇅ RE-WRITING SITE STRUCTURE..." : `OS_CORE: v10.1 (STABLE)`}
-                </div>
-                <div style={{
-                    marginTop: '8px',
-                    height: '3px',
-                    background: 'rgba(0,0,0,0.05)',
-                    borderRadius: '2px',
-                    overflow: 'hidden'
-                }}>
-                    <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${refinementProgress}%` }}
-                        style={{ height: '100%', background: '#d4af37' }}
-                    />
-                </div>
-            </div>
-
-            {/* EVOLUTION LOG */}
-            <div style={{
-                padding: '10px 15px',
-                background: 'rgba(212, 175, 55, 0.1)',
-                borderTop: '1px solid rgba(212, 175, 55, 0.2)',
-                fontSize: '0.6rem',
-                fontFamily: 'monospace'
-            }}>
-                <div style={{ color: '#888', marginBottom: '5px', textTransform: 'uppercase' }}>OS_Evolution_Log:</div>
-                {evolutionLog.map((log, i) => (
-                    <div key={i} style={{ opacity: 0.6 + (i * 0.1), color: log.includes('SIPHON') || log.includes('SECRET') ? '#8b6914' : 'inherit' }}>
-                        &gt; {log}
-                    </div>
-                ))}
-            </div>
-
             <div style={{ padding: '8px 15px', display: 'flex', justifyContent: 'space-between', fontSize: '0.55rem', opacity: 0.6, background: '#fdfbf7', borderBottomRightRadius: '10px', borderBottomLeftRadius: '10px' }}>
                 <span>MISSION: PROTECTION_ACTIVE</span>
-                <span>OS_POWER: EVOLVING</span>
+                <span>OS_POWER: RECURSION_ENABLED</span>
             </div>
         </div>
     );
