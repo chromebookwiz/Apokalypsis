@@ -600,7 +600,7 @@ export const useSceneController = () => {
         hyperPhase, metatron5D, tesseractRot, autoRotate4D, isPlaying, rotationSpeed, splitMode,
         frequencyA, frequencyB, audioSync, revealSymmetry, innerVision, show4DShadow, phaseA, phaseB,
         waveTime, waveType, infiniteTriangle, showNumbers, zoom, gridSize, cameraResetTrigger,
-        viewAngle, uiVisible, theoryOpen, resonance,
+        viewAngle, azimuthAngle, uiVisible, theoryOpen, resonance,
         latticeAlignment, primePole, sacredFlux, activeSigil, practicalPanelOpen,
         rsaToolActive, signalToolActive, compressionToolActive, morphToolActive, latticeToolActive,
         solidMode, magiPanelOpen,
@@ -642,9 +642,10 @@ export const useSceneController = () => {
             setIsPlaying(false); setRotationSpeed(1.0); setInfiniteTriangle(false);
             setSplitMode(false); setAudioSync(false); setRevealSymmetry(false);
             setInnerVision(0); setShow4DShadow(false); setGeometryType('METATRON');
+            setAzimuthAngle(0); setViewAngle(0);
             setFrequencyA(1.0); setFrequencyB(1.0); setWaveType('NONE');
         },
-        activeViewIndex, azimuthAngle, darkMode, toggleDarkMode,
+        activeViewIndex, darkMode, toggleDarkMode,
         selectNumber: (n: number) => console.log('Select:', n)
     };
 };

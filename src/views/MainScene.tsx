@@ -73,7 +73,7 @@ export const MainScene: React.FC<Props> = ({ controller }) => {
 
     // Camera View Cycling Logic (Existing)
     useEffect(() => {
-        if (controlsRef.current && controller.activeViewIndex !== 0) {
+        if (controlsRef.current) {
             // ... (Same as before, but only if NOT just manual movement)
             // Actually, activeViewIndex triggers this.
             const angle = IMPORTANT_ANGLES[controller.activeViewIndex];
@@ -105,6 +105,7 @@ export const MainScene: React.FC<Props> = ({ controller }) => {
             <ambientLight intensity={1.5} />
             <spotLight position={[50, 50, 50]} angle={0.2} penumbra={1} intensity={500} color="#d4af37" />
             <pointLight position={[-20, -20, -20]} intensity={200} color="#ffcc00" />
+
             <Environment preset="studio" />
 
             <OrbitControls
