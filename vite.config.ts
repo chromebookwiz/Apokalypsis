@@ -12,7 +12,9 @@ export default defineConfig({
             output: {
                 manualChunks: {
                     'react-vendor': ['react', 'react-dom'],
-                    'three-vendor': ['three', '@react-three/fiber', '@react-three/drei', '@react-three/postprocessing'],
+                    'three-core': ['three'],
+                    'three-fiber': ['@react-three/fiber', '@react-three/drei'],
+                    'three-postprocessing': ['@react-three/postprocessing'],
                     'animation-vendor': ['framer-motion'],
                     'analytics': ['@vercel/analytics']
                 }

@@ -7,6 +7,7 @@ import { LANG_NAMES, UI_STRINGS } from '../data/translations';
 import { v12Solver } from '../models/V12CurvatureSolver';
 import { MagiCouncilAgent } from './MagiCouncilAgent';
 import { THEORY_TRANSLATIONS } from '../data/theory_translations';
+import { ErrorBoundary } from './ErrorBoundary';
 
 const NollCubeContent = ({ language, isRTL }: { language: any, isRTL: boolean }) => {
     const text = getNollCubeText(language);
@@ -561,9 +562,10 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
     );
 
     return (
-        <div className="ui-overlay" style={{ fontFamily: 'Cinzel, serif', pointerEvents: 'none' }}>
-            {/* SUBTLE HOLY OVERLAY */}
-            <DivineCorners />
+        <ErrorBoundary>
+            <div className="ui-overlay" style={{ fontFamily: 'Cinzel, serif', pointerEvents: 'none' }}>
+                {/* SUBTLE HOLY OVERLAY */}
+                <DivineCorners />
 
             {/* MAGI COUNCIL AGENT - PERSISTENT LEFT PANEL */}
             {/* MAGI COUNCIL AI AGENT - NOW DRAGGABLE */}
@@ -1578,6 +1580,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             {/* SECRET ENTRY PANEL REMOVED */}
 
         </div >
+        </ErrorBoundary>
     );
 };
 
