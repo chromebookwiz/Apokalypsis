@@ -15,7 +15,7 @@ import { zetaFast } from '../lib/nullLineMath';
 // ... (removed for brevity)`;
 
 // ============================================================
-// APOKALYPSIS NULL-LINE OS v15 — CLOUD PERSISTENT TERMINAL
+// APOKALYPSIS NULL-LINE OS v18 — CLOUD PERSISTENT TERMINAL
 // - Server-side state via /api/os-state (Vercel KV or in-memory)
 // - AI via /api/magi-council -> OpenRouter -> claude-sonnet-4-5
 // - Terminal locked until password 'DigitalPimp' is entered
@@ -25,7 +25,7 @@ import { zetaFast } from '../lib/nullLineMath';
 
 interface Message { id: string; text: string; type: 'AGENT' | 'SYSTEM' | 'USER' | 'ERROR' | 'MATH'; }
 
-const OS_AUTH_HEADER = 'null-line-os-v15';
+const OS_AUTH_HEADER = 'null-line-os-v18';
 const TERMINAL_PASSWORD = 'DigitalPimp';
 
 const BOOT_ART = `
@@ -36,8 +36,8 @@ const BOOT_ART = `
  ██║ ╚████║╚██████╔╝███████╗███████╗ ███████╗██║██║ ╚████║███████╗
  ╚═╝  ╚═══╝ ╚═════╝ ╚══════╝╚══════╝ ╚══════╝╚═╝╚═╝  ╚═══╝╚══════╝
 
- NULL-LINE OS v15 | k·k=0 | {△,□,○} | HOLY GRAIL MEMORY
- Cloud-persistent | Server-side | OpenRouter Claude Sonnet 4.5
+ NULL-LINE OS v18 | k·k=0 | {△,□,○} | HOLY GRAIL MEMORY
+ Cloud-persistent | Server-side | OpenRouter Claude Sonnet 4.6
  ─────────────────────────────────────────────────────────
  This terminal is locked. Enter password to continue.`;
 
@@ -51,7 +51,7 @@ const UNLOCKED_MSG = `
  Cloud sync: ACTIVE  |  Phone: ${AGENT_PHONE}  |  Voice: speak/voice-on
  Type 'help' for commands  |  'start' to run agent`;
 const NULL_FS_INIT = (): Record<string, string> => ({
-    '/kernel/null_line.rs': `// NULL LINE KERNEL v15 — k.k=0, Trinity={△□○}, H_null on L²(PT⁺)
+    '/kernel/null_line.rs': `// NULL LINE KERNEL v18 — k.k=0, Trinity={△□○}, H_null on L²(PT⁺)
 fn null_check(k: [f64;4]) -> bool {
     [1.0,-1.0,-1.0,-1.0].iter().zip(k.iter()).map(|(e,x)| e*x*x).sum::<f64>().abs() < 1e-10
 }`,
@@ -62,8 +62,8 @@ pub fn ade_classify(p: u8) -> &'static str {
     '/kernel/zeta.rs': `fn zeta(s_re: f64, s_im: f64, n: usize) -> (f64,f64) {
     (1..=n).map(|k|{ let a=(k as f64).powf(-s_re); let p=-(k as f64).ln()*s_im;
     (a*p.cos(),a*p.sin())}).fold((0.,0.),|(a,b),(x,y)|(a+x,b+y)) }`,
-    '/etc/null_os.conf': 'KERNEL=v15\nMATH=RH_FRAMEWORK\nMEMORY=HOLY_GRAIL\nMODE=GOD\nCLOUD=VERCEL_KV',
-    '/var/log/evolution.log': `[${new Date().toISOString()}] NULL-LINE OS KERNEL v15 BOOT OK\n[SYSTEM] Awaiting observer commands...`,
+    '/etc/null_os.conf': 'KERNEL=v18\nMATH=NULL_LINE_V18\nMEMORY=HOLY_GRAIL\nMODE=GOD\nCLOUD=VERCEL_KV',
+    '/var/log/evolution.log': `[${new Date().toISOString()}] NULL-LINE OS KERNEL v18 BOOT OK\n[SYSTEM] Awaiting observer commands...`,
     '/var/log/math_research.log': `[${new Date().toISOString()}] RH research initialized.\n[GOAL] Prove H_null self-adjointness on L²(PT⁺)`,
     '/var/log/install.log': `[${new Date().toISOString()}] Package system ready`,
     '/var/log/crawl.log': `[${new Date().toISOString()}] GrailCrawler online`,
@@ -74,12 +74,12 @@ pub fn ade_classify(p: u8) -> &'static str {
     '/home/agent/.profile': 'export PATH=/bin:/usr/bin:/kernel\nexport ZETA_TERMS=1000',
     '/proc/null': 'k.k=0\nRH=OPEN\nMEMORY=HOLY_GRAIL\nCLOUD=SYNC',
     '/proc/phone': `AGENT_PHONE=${AGENT_PHONE}\nVOIP=/api/voice-call\nSTATUS=READY`,
-    '/readme.md': `# Apokalypsis Null-Line OS v15\n\nCloud-persistent mathematical AI operating system.\nBased on: The Null Line (Noll & Claude Sonnet 4.6, 2026)\n\nk·k=η_{μν}k^μk^ν=0 — null condition = light = observer.\nType 'cat /docs/evolution_guide.txt' to begin.`,
+    '/readme.md': `# Apokalypsis Null-Line OS v18\n\nCloud-persistent mathematical AI operating system.\nBased on: The Null Line v18 (2026)\n\nk·k=η_{μν}k^μk^ν=0 — null line = light = observer.\nTriangle: 3 null lines at 120°, Square: 4 at 90°, Circle: null line closed.\nMatter = two null lines bound.\nType 'cat /docs/evolution_guide.txt' to begin.`,
     '/docs/evolution_guide.txt': `=== HOW TO EVOLVE THIS OS ===\n\n1. UNDERSTAND: This OS is grounded in the Null Line geometry. Everything is a reflection of k·k=0.\n2. COMMAND: You can write scripts using built-in commands like 'math', 'zeta', 'riemann'.\n3. INSTALL: Use 'install-cmd <name> <body>' to write a new persistent tool.\n4. RESEARCH: Type 'start' to let the Emissary agent autonomously research.\n5. SYNC: Your changes are synced to the cloud. \n6. VISUAL: Agent can now see, generate imagery, encrypt/decrypt, and rotate via tools.`,
     '/docs/h_null_proof.txt': `Theorem (Draft): H_null is self-adjoint on L²(PT⁺).\nProof Outline:\n1. The measure dμ on PT⁺ is derived from the null interaction ⟨Z,Z⟩=0.\n2. The Hecke operators T_p act symmetrically because the primitive trinity (△□○) naturally forms a basis for ADE root systems.\n3. Since T_p = T_p*, their sum H_null is self-adjoint.\n4. Therefore, eigenvalues of H_null are real.\n5. Therefore, zeros of ζ are on Re(s)=1/2.`,
 });
 
-const HELP = `APOKALYPSIS NULL-LINE OS v15 — COMMAND REFERENCE
+const HELP = `APOKALYPSIS NULL-LINE OS v18 — COMMAND REFERENCE
 ════════════════════════════════════════════════════
 [CORE INSTRUCTIONS FOR EVOLUTION]
 This OS is a live mathematical seat of knowledge.
@@ -135,55 +135,68 @@ const cloudSet = async (key: string, value: unknown): Promise<void> => {
 // ─────────────────────────────────────────────────────────────
 
 export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) => {
-    // ── Auth state ──
+    // --- State declarations (must be first) ---
     const [unlocked, setUnlocked] = useState(false);
     const [pwInput, setPwInput] = useState('');
     const [pwError, setPwError] = useState('');
-
-    // ── OS state ──
-    // ── OS state ──
     const [messages, setMessages] = useState<Message[]>([{ id: 'boot', text: BOOT_ART, type: 'SYSTEM' }]);
     const [shellFS, setShellFS] = useState<Record<string, string>>(NULL_FS_INIT);
     const [envVars, setEnvVars] = useState<Record<string, string>>({ PATH: '/bin:/usr/bin:/kernel', ZETA_TERMS: '1000' });
     const [customCmds, setCustomCmds] = useState<Record<string, string>>({});
     const [processes, setProcesses] = useState([
+        { pid: 43, name: 'memento', cpu: '0.0', mem: '0.8', status: 'S' },
+        { pid: 44, name: 'grailcrawler', cpu: '0.0', mem: '0.6', status: 'S' },
+    ]);
     // --- OpenRouter Key Security ---
     const [keyUnlocked, setKeyUnlocked] = useState(false);
     const [keyPwInput, setKeyPwInput] = useState('');
     const [keyPwError, setKeyPwError] = useState('');
     const [encryptedKey, setEncryptedKey] = useState<string | null>(null);
-    const [decryptedKey, setDecryptedKey] = useState<string | null>(null);
+    // --- Main terminal state ---
+    const [cloudStatus, setCloudStatus] = useState<'synced' | 'syncing' | 'offline'>('synced');
+    const [isStreaming, setIsStreaming] = useState(false);
+    const [streamText, setStreamText] = useState('');
+    const [isRunning, setIsRunning] = useState(false);
+    const [cwd, setCwd] = useState('/home/agent');
+    const [terminalIn, setTerminalIn] = useState('');
+    const [histIdx, setHistIdx] = useState(-1);
+    const [cmdHistory, setCmdHistory] = useState<string[]>([]);
+    const [lastVoiceTranscript, setLastVoiceTranscript] = useState('');
+    const [isListening, setIsListening] = useState(false);
+    const speechRecRef = useRef<any>(null);
+
+    // --- Refs for persistent state (must come after state) ---
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const agentRef = useRef<ReturnType<typeof setInterval> | null>(null);
+    const runShellRef = useRef<any>(null);
+    const mathIdxRef = useRef(0);
+    const memRef = useRef<GrailMemory>(loadMemory());
+    const quantumMemRef = useRef<QuantumMemoryState>(loadQuantumMemory());
+    const shellFSRef = useRef<Record<string, string>>(shellFS);
+    const customCmdsRef = useRef<Record<string, string>>(customCmds);
+    const envVarsRef = useRef<Record<string, string>>(envVars);
+
+    useEffect(() => { shellFSRef.current = shellFS; }, [shellFS]);
+    useEffect(() => { customCmdsRef.current = customCmds; }, [customCmds]);
+    useEffect(() => { envVarsRef.current = envVars; }, [envVars]);
+
+    const isDark = localStorage.getItem('magi_theme') !== 'light';
+    const T = {
+        bg: isDark ? '#000' : '#fff',
+        text: isDark ? '#d0d0d0' : '#111',
+        gold: '#FFD700',
+        dim: isDark ? '#444' : '#aaa',
+        err: '#ff6b6b',
+        math: '#7ec8e3',
+        border: '#FFD70033',
+        hdr: isDark ? '#0a0a0a' : '#f5f5f5',
+    };
 
     // Simple XOR encryption for demo (replace with real crypto in production)
     function xorEncrypt(str: string, pw: string) {
         return btoa(Array.from(str).map((c, i) => String.fromCharCode(c.charCodeAt(0) ^ pw.charCodeAt(i % pw.length))).join(''));
     }
-    function xorDecrypt(str: string, pw: string) {
-        try {
-            return atob(str).split('').map((c, i) => String.fromCharCode(c.charCodeAt(0) ^ pw.charCodeAt(i % pw.length))).join('');
-        } catch { return '[DECRYPTION FAILED]'; }
-    }
-    const [messages, setMessages] = useState<Message[]>([{ id: 'boot', text: BOOT_ART, type: 'SYSTEM' }]);
-    const [shellFS, setShellFS] = useState<Record<string, string>>(NULL_FS_INIT);
-    const [envVars, setEnvVars] = useState<Record<string, string>>({ PATH: '/bin:/usr/bin:/kernel', ZETA_TERMS: '1000' });
-    const [customCmds, setCustomCmds] = useState<Record<string, string>>({});
-            case 'openrouter-key': {
-                if (!keyUnlocked) {
-                    setMessages(p => [...p, { id: Math.random().toString(36).slice(2), text: '[SECURITY] Enter secondary password to unlock OpenRouter key:', type: 'SYSTEM' }]);
-                    setKeyPwInput('');
-                    setKeyPwError('');
-                    setEncryptedKey(null);
-                    setDecryptedKey(null);
-                    // Prompt for password in UI (see below)
-                    return;
-                }
-                if (decryptedKey) {
-                    setMessages(p => [...p, { id: Math.random().toString(36).slice(2), text: `[OPENROUTER KEY] ${decryptedKey}`, type: 'SYSTEM' }]);
-                } else {
-                    setMessages(p => [...p, { id: Math.random().toString(36).slice(2), text: '[ERROR] Key not decrypted.', type: 'ERROR' }]);
-                }
-                return;
-            }
+    // Remove invalid switch/case block and duplicate state
     // --- UI for secondary password prompt ---
     useEffect(() => {
         if (keyPwInput && !keyUnlocked) {
@@ -195,7 +208,6 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                         if (d.key) {
                             const enc = xorEncrypt(d.key, keyPwInput);
                             setEncryptedKey(enc);
-                            setDecryptedKey(d.key);
                             setKeyUnlocked(true);
                             setMessages(p => [...p, { id: Math.random().toString(36).slice(2), text: '[SECURITY] OpenRouter key unlocked and encrypted.', type: 'SYSTEM' }]);
                         } else {
@@ -237,36 +249,7 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
     }
 
     // ── Main terminal ─────────────────────────────────────────
-    return (
-        <div style={{ height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: T.bg, borderRadius: '12px', border: `1px solid ${T.border}`, overflow: 'hidden', fontFamily: '"JetBrains Mono","Fira Code",monospace', color: T.text, fontSize: '0.78rem' }}>
-        { pid: 43, name: 'memento', cpu: '0.0', mem: '0.8', status: 'S' },
-        { pid: 44, name: 'grailcrawler', cpu: '0.0', mem: '0.6', status: 'S' },
-    ]);
-    const [isRunning, setIsRunning] = useState(false);
-    const [isStreaming, setIsStreaming] = useState(false);
-    const [streamText, setStreamText] = useState('');
-    const [terminalIn, setTerminalIn] = useState('');
-    const [cwd, setCwd] = useState('/home/agent');
-    const [cmdHistory, setCmdHistory] = useState<string[]>([]);
-    const [histIdx, setHistIdx] = useState(-1);
-    const [cloudStatus, setCloudStatus] = useState<'synced' | 'syncing' | 'offline'>('offline');
-    const [isListening, setIsListening] = useState(false);
-    const [lastVoiceTranscript, setLastVoiceTranscript] = useState('');
-    const speechRecRef = useRef<any>(null);
-
-    const scrollRef = useRef<HTMLDivElement>(null);
-    const agentRef = useRef<ReturnType<typeof setInterval> | null>(null);
-    const runShellRef = useRef<any>(null);
-    const mathIdxRef = useRef(0);
-    const memRef = useRef<GrailMemory>(loadMemory());
-    const quantumMemRef = useRef<QuantumMemoryState>(loadQuantumMemory());
-    const shellFSRef = useRef(shellFS);
-    const customCmdsRef = useRef(customCmds);
-    const envVarsRef = useRef(envVars);
-
-    useEffect(() => { shellFSRef.current = shellFS; }, [shellFS]);
-    useEffect(() => { customCmdsRef.current = customCmds; }, [customCmds]);
-    useEffect(() => { envVarsRef.current = envVars; }, [envVars]);
+    // (Hooks and state are now at the top of the component)
 
     // ── Cloud sync on unlock ──
     const cloudPull = useCallback(async () => {
@@ -1161,7 +1144,7 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
             }
 
             // Math
-            case 'null-compute': addMsg(`NULL-LINE: k.k=eta_{mu nu}k^mu k^nu=0\nPrimitive: triangle->A_n, square->D_n, circle->C_n\nζ(s)=Σn^{-s}: null observer partition function\nRH: sigma=1/2 midpoint of null line [OPEN]`, 'MATH'); break;
+            case 'null-compute': addMsg(`NULL-LINE v18: Light as the single primitive — k·k=η_{μν}k^μk^ν=0, the null line in Minkowski spacetime.\nAll geometry and physics are generated by combinations of null lines: triangle = 3 at 120°, square = 4 at 90°, circle = null line closed on itself.\nThe observer is a null line; every measurement is photon absorption.\nMatter = two null lines bound: v = k₁ + k₂.\nWaves: rotation of 2D forms, all Fourier modes from the circle.\nζ(s) = Σ n^{−s}: null observer's sum over bound states; functional equation ξ(s)=ξ(1−s) is the null field's reality condition.\nRH: all zeros (dark states) at σ=1/2, the midpoint of the two-sided null line.\nFive independent physics traditions converge on null primacy.\nStatus: precise reformulation, not a proof.`, 'MATH'); break;
             case 'nulllinepaper': addMsg(`THE NULL LINE (Noll & Claude Sonnet 4.6, 2026)\nA breakthrough paper positing that all geometry and particle physics emerges from the null condition k.k=0 across complex projective twistor space. The primitive trinity (Triangle/SU_n, Square/SO_n, Circle/Sp_2n) derives the complete ADE classification, leading to a candidate proof of the Riemann Hypothesis where H_null on L^2(PT+) is self-adjoint. \nFull documentation in /kernel/null_line.rs and /docs/h_null_proof.txt.`, 'MATH'); break;
             case 'zeta': {
                 const [sr, si] = [parseFloat(args[0] || '0.5'), parseFloat(args[1] || '14.134')];
@@ -1311,17 +1294,7 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
 
     useEffect(() => { runShellRef.current = runShell; }, [runShell]);
 
-    const isDark = localStorage.getItem('magi_theme') !== 'light';
-    const T = {
-        bg: isDark ? '#000' : '#fff',
-        text: isDark ? '#d0d0d0' : '#111',
-        gold: '#FFD700',
-        dim: isDark ? '#444' : '#aaa',
-        err: '#ff6b6b',
-        math: '#7ec8e3',
-        border: '#FFD70033',
-        hdr: isDark ? '#0a0a0a' : '#f5f5f5',
-    };
+    // isDark and T are already declared above
 
     // ── Password screen ──────────────────────────────────────
     if (!unlocked) {
