@@ -336,8 +336,8 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                 break;
             case 'verify-theory':
                 addMessage("INITIALIZING_THEORY_VERIFICATION...", 'SYSTEM');
-                // The prompt already contains the theory, so we just trigger a specific check
-                setLastInteractionTime(Date.now()); // Wake up
+                // Trigger an immediate autonomous interaction focused on the paper
+                setLastInteractionTime(Date.now());
                 break;
             case 'reboot':
                 addMessage("SYSTEM_REBOOT_INITIATED...", 'SYSTEM');
