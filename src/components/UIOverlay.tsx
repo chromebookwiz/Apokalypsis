@@ -6,6 +6,7 @@ import { getHymn, getNumericScripture } from '../data/scripture';
 import { LANG_NAMES, UI_STRINGS } from '../data/translations';
 import { v12Solver } from '../models/V12CurvatureSolver';
 import { MagiCouncilAgent } from './MagiCouncilAgent';
+import { THEORY_TRANSLATIONS } from '../data/theory_translations';
 
 const NollCubeContent = ({ language, isRTL }: { language: any, isRTL: boolean }) => {
     const text = getNollCubeText(language);
@@ -229,6 +230,7 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
     const [secretFlash, setSecretFlash] = useState(false);
     const [introUnlocked, _setIntroUnlocked] = useState(false);
     const [introOpen, setIntroOpen] = useState(false);
+    const [theoryLang, setTheoryLang] = useState('EN');
     const [labTab, setLabTab] = useState<'TOOLS' | 'LAB'>('TOOLS');
     const introAudioRef = React.useRef<HTMLAudioElement>(null);
     const hymnsAudioRef = React.useRef<HTMLAudioElement>(null);
@@ -557,8 +559,21 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
             <DivineCorners />
 
             {/* MAGI COUNCIL AGENT - PERSISTENT LEFT PANEL */}
+            {/* MAGI COUNCIL AI AGENT - NOW DRAGGABLE */}
             {controller.magiPanelOpen && controller.uiVisible && (
-                <MagiCouncilAgent controller={controller} />
+                <DraggablePanel
+                    initialStyle={{
+                        position: 'fixed',
+                        left: '20px',
+                        top: '120px',
+                        bottom: '40px',
+                        width: '320px',
+                        zIndex: 1500,
+                        pointerEvents: 'auto'
+                    }}
+                >
+                    <MagiCouncilAgent controller={controller} />
+                </DraggablePanel>
             )}
 
             {/* LEFT CORNER: EYE ICON ONLY */}
@@ -1378,38 +1393,104 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                 </DraggablePanel>
             )}
 
-            {/* THEORY ARTICLE OVERLAY */}
+            {/* THEORY ARTICLE TABLET - NOW DRAGGABLE & TRANSLATED */}
             {controller.theoryOpen && (
-                <div style={{
-                    position: 'fixed', inset: 0, zIndex: 10001, background: 'rgba(0, 0, 0, 0.92)',
-                    display: 'flex', flexDirection: 'column', pointerEvents: 'auto',
-                    animation: 'fadeIn 0.5s ease'
-                }}>
-                    <div style={{
-                        display: 'flex', justifyContent: 'flex-end', padding: '20px 30px',
-                        borderBottom: '1px solid rgba(212, 175, 55, 0.3)'
+                <DraggablePanel
+                    initialStyle={{
+                        position: 'fixed',
+                        top: '100px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        zIndex: 10001,
+                        width: 'min(90vw, 650px)',
+                        maxHeight: '80vh',
+                        background: '#fdfbf7',
+                        border: '2px solid #d4af37',
+                        borderRadius: '20px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        pointerEvents: 'auto',
+                        boxShadow: '0 10px 50px rgba(0,0,0,0.5)',
+                        overflow: 'hidden'
+                    }}
+                >
+                    {/* Header / Drag Handle */}
+                    <div className="drag-handle" style={{
+                        padding: '15px 20px',
+                        background: 'rgba(212, 175, 55, 0.1)',
+                        borderBottom: '1px solid #d4af37',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        cursor: 'grab'
                     }}>
-                        <button
-                            onClick={() => controller.setTheoryOpen(false)}
-                            style={{
-                                background: 'none', border: 'none', color: '#d4af37',
-                                fontSize: '2.5rem', cursor: 'pointer', lineHeight: 1,
-                                padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center'
-                            }}
-                        >✕</button>
+                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                            <span style={{ fontSize: '1.2rem', color: '#d4af37' }}>Ω</span>
+                            <div style={{ display: 'flex', gap: '5px' }}>
+                                {['EN', 'GR', 'LA'].map(lang => (
+                                    <button
+                                        key={lang}
+                                        onClick={() => setTheoryLang(lang)}
+                                        style={{
+                                            background: theoryLang === lang ? '#d4af37' : 'none',
+                                            border: '1px solid #d4af37',
+                                            color: theoryLang === lang ? '#fdfbf7' : '#d4af37',
+                                            padding: '2px 8px',
+                                            borderRadius: '4px',
+                                            fontSize: '0.65rem',
+                                            cursor: 'pointer',
+                                            fontFamily: 'Cinzel, serif'
+                                        }}
+                                    >
+                                        {lang}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                            <CopyButton text={THEORY_TRANSLATIONS[theoryLang].content} />
+                            <button
+                                onClick={() => controller.setTheoryOpen(false)}
+                                style={{
+                                    background: 'none', border: 'none', color: '#d4af37',
+                                    fontSize: '1.8rem', cursor: 'pointer', lineHeight: 1
+                                }}
+                            >✕</button>
+                        </div>
                     </div>
+
+                    {/* Content Area */}
                     <div
                         className="custom-scrollbar"
                         style={{
-                            flex: 1, overflowY: 'auto', padding: 'clamp(20px, 5vw, 40px) clamp(10px, 8vw, 60px)',
-                            color: '#e8dcc8', fontFamily: 'Cinzel, serif', fontSize: '1rem',
-                            lineHeight: 1.8, maxWidth: '900px', margin: '0 auto', width: '100%'
+                            flex: 1,
+                            overflowY: 'auto',
+                            padding: '30px',
+                            color: '#1a1a1a',
+                            fontFamily: theoryLang === 'GR' ? 'serif' : 'Cinzel, serif',
+                            fontSize: '1rem',
+                            lineHeight: 1.8,
+                            backgroundColor: '#fdfbf7',
+                            backgroundImage: 'radial-gradient(rgba(212,175,55,0.05) 1px, transparent 1px)',
+                            backgroundSize: '20px 20px'
                         }}
-                        dangerouslySetInnerHTML={{
-                            __html: document.getElementById('theory-article')?.innerHTML || '<p>No theory found.</p>'
-                        }}
-                    />
-                </div>
+                    >
+                        <h2 style={{ color: '#d4af37', textAlign: 'center', marginBottom: '20px', fontSize: '1.4rem' }}>
+                            {THEORY_TRANSLATIONS[theoryLang].title}
+                        </h2>
+                        <div style={{ whiteSpace: 'pre-wrap', textAlign: 'justify' }}>
+                            {THEORY_TRANSLATIONS[theoryLang].content}
+                        </div>
+                        {theoryLang === 'EN' && (
+                            <div
+                                style={{ marginTop: '30px', borderTop: '1px solid rgba(0,0,0,0.1)', paddingTop: '20px' }}
+                                dangerouslySetInnerHTML={{
+                                    __html: document.getElementById('theory-article')?.innerHTML || ''
+                                }}
+                            />
+                        )}
+                    </div>
+                </DraggablePanel>
             )}
 
             {/* SIDE GREEK COLUMNS - Refined opacity */}

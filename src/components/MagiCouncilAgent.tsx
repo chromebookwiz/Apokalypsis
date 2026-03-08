@@ -88,32 +88,28 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
 
     return (
         <div style={{
-            position: 'fixed',
-            left: '20px',
-            top: '120px',
-            bottom: '40px',
-            width: '320px',
+            width: '100%',
+            height: '100%',
             background: 'rgba(0, 0, 0, 0.85)',
             border: '2px solid #d4af37',
             borderRadius: '10px',
             display: 'flex',
             flexDirection: 'column',
-            zIndex: 1500,
-            pointerEvents: 'auto',
             fontFamily: 'Orbitron, monospace',
             boxShadow: '0 0 30px rgba(212, 175, 55, 0.2)',
             overflow: 'hidden',
             color: '#d4af37'
         }}>
             {/* HEADER */}
-            <div style={{
+            <div className="drag-handle" style={{
                 padding: '10px',
                 background: 'rgba(212, 175, 55, 0.1)',
                 borderBottom: '1px solid #d4af37',
                 fontSize: '0.7rem',
                 display: 'flex',
                 justifyContent: 'space-between',
-                alignItems: 'center'
+                alignItems: 'center',
+                cursor: 'grab'
             }}>
                 <span>MAGI COUNCIL // NODE_01</span>
                 <span style={{ color: '#00ff00' }}>● ONLINE</span>
