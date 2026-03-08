@@ -6,8 +6,10 @@ interface LoadingScreenProps {
 
 export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
     const [progress, setProgress] = useState(0);
+    const [resetKey, setResetKey] = useState(0);
 
     useEffect(() => {
+        setProgress(0);
         const interval = setInterval(() => {
             setProgress(prev => {
                 const next = Math.min(prev + 12.5, 100);
@@ -20,7 +22,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
         }, 500);
 
         return () => clearInterval(interval);
-    }, [onComplete]);
+    }, [onComplete, resetKey]);
 
     return (
         <div style={{
@@ -39,15 +41,36 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
             color: '#000'
         }}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px' }}>
-                <div style={{ width: '140px', height: '140px', position: 'relative' }}>
-                    <svg viewBox="0 0 120 120" width="140" height="140" style={{
+                <div style={{ width: '140px', height: '140px', position: 'relative', cursor: 'pointer' }} onClick={() => setResetKey(k => k + 1)}>
+                    <svg key={resetKey} viewBox="0 0 120 120" width="140" height="140" style={{
                         transform: 'rotate(0deg)',
-                        animation: 'spin 6s linear infinite'
+                        animation: 'slow-rotate 20s linear infinite'
                     }}>
-                        <circle cx="60" cy="60" r="56" fill="none" stroke="#d4af37" strokeWidth="4" opacity="0.7" />
-                        <g stroke="#d4af37" strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M60 14 L20 93 L100 93 Z" />
-                            <path d="M60 106 L20 27 L100 27 Z" />
+                        <circle
+                            cx="60"
+                            cy="60"
+                            r="56"
+                            fill="none"
+                            stroke="#d4af37"
+                            strokeWidth="4"
+                            opacity="0.7"
+                            style={{ animation: 'spin-cw 3.5s linear infinite' }}
+                        />
+                        <circle
+                            cx="60"
+                            cy="60"
+                            r="48"
+                            fill="none"
+                            stroke="#d4af37"
+                            strokeWidth="4"
+                            opacity="0.5"
+                            style={{ animation: 'spin-ccw 4.5s linear infinite' }}
+                        />
+                        <g strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'spin-cw 7s linear infinite' }}>
+                            <path d="M60 18 L18 92 L102 92 Z" stroke="#d62b2f" />
+                        </g>
+                        <g strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'spin-ccw 7s linear infinite' }}>
+                            <path d="M60 102 L18 28 L102 28 Z" stroke="#1b6cf7" />
                         </g>
                     </svg>
                 </div>
@@ -62,7 +85,11 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
             </div>
 
             <style>
-                {`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}
+                {`
+                    @keyframes slow-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+                    @keyframes spin-cw { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+                    @keyframes spin-ccw { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
+                `}
             </style>
         </div>
     );
