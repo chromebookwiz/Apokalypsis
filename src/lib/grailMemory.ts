@@ -20,12 +20,34 @@ export interface MemoryEntry {
     quality?: number;   // 0-1 quality score
 }
 
+export interface WalletAccount {
+    id: string;
+    name: string;
+    address: string;
+    balance: number;
+    createdAt: string;
+}
+
+export type WalletTxKind = 'MINT' | 'TRANSFER' | 'REWARD';
+
+export interface WalletTx {
+    id: string;
+    from: string | null;
+    to: string;
+    amount: number;
+    timestamp: string;
+    memo?: string;
+    kind: WalletTxKind;
+}
+
 export interface GrailMemory {
     entries: MemoryEntry[];
     projects: { id: string; name: string; code: string; url?: string; quality: number }[];
     agents: { name: string; role: string; lastActive: string; tasksCompleted: number }[];
     crawlCache: { url: string; content: string; timestamp: string }[];
     version: number;
+    wallets: WalletAccount[];
+    walletTxs: WalletTx[];
 }
 
 const MEMORY_KEY = 'grail_memory';
@@ -69,7 +91,17 @@ export const lorentzianSim = (a: number[], b: number[]): number => {
 export const loadMemory = (): GrailMemory => {
     try {
         const saved = localStorage.getItem(MEMORY_KEY);
-        if (saved) return JSON.parse(saved);
+        if (saved) {
+            const parsed = JSON.parse(saved) as GrailMemory & {
+                wallets?: WalletAccount[];
+                walletTxs?: WalletTx[];
+            };
+            return {
+                ...parsed,
+                wallets: parsed.wallets || [],
+                walletTxs: parsed.walletTxs || [],
+            };
+        }
     } catch (_) { }
     return {
         entries: [],
@@ -83,6 +115,8 @@ export const loadMemory = (): GrailMemory => {
         ],
         crawlCache: [],
         version: 1,
+        wallets: [],
+        walletTxs: [],
     };
 };
 
@@ -157,6 +191,136 @@ export const evaluateQuality = (content: string): number => {
     if (/ζ|null.line|RH|k·k|H_null|twistor|ADE/i.test(content)) score += 0.2; // Math
     if (!/error|failed|not found|undefined/i.test(content)) score += 0.1;
     return Math.min(score, 1.0);
+};
+
+// --- Crypto wallet (symbolic Null-Line currency) ---
+
+const TOKEN_SYMBOL = 'NOLL';
+
+const withWalletDefaults = (mem: GrailMemory): GrailMemory => ({
+    ...mem,
+    wallets: mem.wallets || [],
+    walletTxs: mem.walletTxs || [],
+});
+
+export const ensureDefaultWallet = (mem: GrailMemory): GrailMemory => {
+    const base = withWalletDefaults(mem);
+    if (base.wallets.length) return base;
+    const now = new Date().toISOString();
+    const root: WalletAccount = {
+        id: Math.random().toString(36).slice(2),
+        name: 'Root',
+        address: `NULL-ROOT-${Math.random().toString(36).slice(2, 10).toUpperCase()}`,
+        balance: 0,
+        createdAt: now,
+    };
+    return { ...base, wallets: [root] };
+};
+
+export const createWallet = (mem: GrailMemory, name: string): { mem: GrailMemory; wallet: WalletAccount } => {
+    const base = ensureDefaultWallet(mem);
+    const now = new Date().toISOString();
+    const wallet: WalletAccount = {
+        id: Math.random().toString(36).slice(2),
+        name: name || `Wallet-${base.wallets.length + 1}`,
+        address: `NULL-${Math.random().toString(36).slice(2, 10).toUpperCase()}`,
+        balance: 0,
+        createdAt: now,
+    };
+    const wallets = [...base.wallets, wallet];
+    return { mem: { ...base, wallets }, wallet };
+};
+
+const findWalletIndex = (wallets: WalletAccount[], key: string | null): number => {
+    if (!wallets.length) return -1;
+    if (!key) return 0;
+    return wallets.findIndex(
+        w => w.id === key || w.name === key || w.address === key,
+    );
+};
+
+export const mintToWallet = (
+    mem: GrailMemory,
+    targetKey: string | null,
+    amount: number,
+    memo?: string,
+    kind: WalletTxKind = 'MINT',
+): GrailMemory => {
+    if (!Number.isFinite(amount) || amount <= 0) return mem;
+    const base = ensureDefaultWallet(withWalletDefaults(mem));
+    const wallets = [...base.wallets];
+    const idx = findWalletIndex(wallets, targetKey);
+    if (idx < 0) return base;
+    const target = wallets[idx];
+    const updated: WalletAccount = { ...target, balance: (target.balance || 0) + amount };
+    wallets[idx] = updated;
+    const tx: WalletTx = {
+        id: Math.random().toString(36).slice(2),
+        from: null,
+        to: updated.address,
+        amount,
+        timestamp: new Date().toISOString(),
+        memo,
+        kind,
+    };
+    const walletTxs = [...(base.walletTxs || []), tx].slice(-500);
+    return { ...base, wallets, walletTxs };
+};
+
+export const transferWallet = (
+    mem: GrailMemory,
+    fromKey: string,
+    toKey: string,
+    amount: number,
+    memo?: string,
+): GrailMemory => {
+    if (!Number.isFinite(amount) || amount <= 0) return mem;
+    const base = ensureDefaultWallet(withWalletDefaults(mem));
+    const wallets = [...base.wallets];
+    const fromIdx = findWalletIndex(wallets, fromKey);
+    const toIdx = findWalletIndex(wallets, toKey);
+    if (fromIdx < 0 || toIdx < 0 || fromIdx === toIdx) return base;
+    const from = wallets[fromIdx];
+    const to = wallets[toIdx];
+    if ((from.balance || 0) < amount) return base;
+    wallets[fromIdx] = { ...from, balance: (from.balance || 0) - amount };
+    wallets[toIdx] = { ...to, balance: (to.balance || 0) + amount };
+    const tx: WalletTx = {
+        id: Math.random().toString(36).slice(2),
+        from: from.address,
+        to: to.address,
+        amount,
+        timestamp: new Date().toISOString(),
+        memo,
+        kind: 'TRANSFER',
+    };
+    const walletTxs = [...(base.walletTxs || []), tx].slice(-500);
+    return { ...base, wallets, walletTxs };
+};
+
+export const formatWalletSummary = (mem: GrailMemory): string => {
+    const base = ensureDefaultWallet(withWalletDefaults(mem));
+    const wallets = base.wallets;
+    if (!wallets.length) return '[Wallet] No accounts. Use "wallet-new <name>" to create one.';
+    const total = wallets.reduce((s, w) => s + (w.balance || 0), 0);
+    const header = `[Wallet — ${wallets.length} account${wallets.length === 1 ? '' : 's'}, total ${total.toFixed(4)} ${TOKEN_SYMBOL}]\n`;
+    const lines = wallets.map(
+        w => `- ${w.name}  ${w.address}  balance:${(w.balance || 0).toFixed(4)} ${TOKEN_SYMBOL}`,
+    ).join('\n');
+    return header + lines;
+};
+
+export const formatWalletHistory = (mem: GrailMemory, limit = 10): string => {
+    const base = withWalletDefaults(mem);
+    const txs = base.walletTxs || [];
+    if (!txs.length) return '[Wallet] No transactions yet.';
+    const last = txs.slice(-limit);
+    const header = `[Wallet History — last ${last.length}]\n`;
+    const lines = last.map(t => {
+        const dir = t.from ? (t.kind === 'TRANSFER' ? 'XFER' : t.kind) : t.kind;
+        return `${t.timestamp.slice(0, 19)}  [${dir}]  ${t.amount.toFixed(4)} ${TOKEN_SYMBOL}  ${t.from || '∅'} → ${t.to}${t.memo ? `  "${t.memo.slice(0, 60)}"` : ''}`;
+    }).join('\n');
+    return header + lines;
 };
 
 // Format agent roster

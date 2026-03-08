@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
     loadMemory, saveMemory, addMemoryEntry, buildMemoryContext,
-    grailCrawl, formatAgents, agentTaskDone, GrailMemory
+    grailCrawl, formatAgents, agentTaskDone, GrailMemory,
+    evaluateQuality, formatWalletSummary, formatWalletHistory,
+    createWallet, mintToWallet, transferWallet,
 } from '../lib/grailMemory';
+import { zetaFast } from '../lib/nullLineMath';
 
 // ============================================================
 // APOKALYPSIS NULL-LINE OS v15 — CLOUD PERSISTENT TERMINAL
@@ -31,13 +34,15 @@ const BOOT_ART = `
  ─────────────────────────────────────────────────────────
  This terminal is locked. Enter password to continue.`;
 
+const AGENT_PHONE = '+1-NULL-LINE-15'; // 1-685-546-3715
+
 const UNLOCKED_MSG = `
  ACCESS GRANTED — WELCOME, OBSERVER
  ─────────────────────────────────────────────────────────
  Holy Grail Memory: ONLINE  |  Agents: 5 active
  k·k=η_{μν}k^μk^ν=0  |  H_null on L²(PT⁺)  |  ζ(s)=Σn^{-s}
- Cloud sync: ACTIVE  |  Type 'help' for commands  |  'start' to run agent`;
-
+ Cloud sync: ACTIVE  |  Phone: ${AGENT_PHONE}  |  Voice: speak/voice-on
+ Type 'help' for commands  |  'start' to run agent`;
 const NULL_FS_INIT = (): Record<string, string> => ({
     '/kernel/null_line.rs': `// NULL LINE KERNEL v15 — k.k=0, Trinity={△□○}, H_null on L²(PT⁺)
 fn null_check(k: [f64;4]) -> bool {
@@ -55,11 +60,13 @@ pub fn ade_classify(p: u8) -> &'static str {
     '/var/log/math_research.log': `[${new Date().toISOString()}] RH research initialized.\n[GOAL] Prove H_null self-adjointness on L²(PT⁺)`,
     '/var/log/install.log': `[${new Date().toISOString()}] Package system ready`,
     '/var/log/crawl.log': `[${new Date().toISOString()}] GrailCrawler online`,
+    '/var/log/voice.log': `[${new Date().toISOString()}] Voice subsystem ready`,
     '/bin/sh': '[ELF:SHELL]', '/bin/bash': '[ELF:BASH]', '/bin/cargo': '[ELF:RUST]',
     '/bin/rustc': '[ELF:COMPILER]', '/bin/git': '[ELF:VCS]', '/bin/curl': '[ELF:HTTP]',
     '/bin/wget': '[ELF:WGET]', '/bin/docker': '[ELF:DOCKER]', '/bin/npm': '[ELF:NPM]',
     '/home/agent/.profile': 'export PATH=/bin:/usr/bin:/kernel\nexport ZETA_TERMS=1000',
     '/proc/null': 'k.k=0\nRH=OPEN\nMEMORY=HOLY_GRAIL\nCLOUD=SYNC',
+    '/proc/phone': `AGENT_PHONE=${AGENT_PHONE}\nVOIP=/api/voice-call\nSTATUS=READY`,
     '/readme.md': `# Apokalypsis Null-Line OS v15\n\nCloud-persistent mathematical AI operating system.\nBased on: The Null Line (Noll & Claude Sonnet 4.6, 2026)\n\nk·k=η_{μν}k^μk^ν=0 — null condition = light = observer.\nType 'cat /docs/evolution_guide.txt' to begin.`,
     '/docs/evolution_guide.txt': `=== HOW TO EVOLVE THIS OS ===\n\n1. UNDERSTAND: This OS is grounded in the Null Line geometry. Everything is a reflection of k·k=0.\n2. COMMAND: You can write scripts using built-in commands like 'math', 'zeta', 'riemann'.\n3. INSTALL: Use 'install-cmd <name> <body>' to write a new persistent tool.\n4. RESEARCH: Type 'start' to let the Emissary agent autonomously research.\n5. SYNC: Your changes are synced to the cloud. \n6. VISUAL: Agent can now see, generate imagery, encrypt/decrypt, and rotate via tools.`,
     '/docs/h_null_proof.txt': `Theorem (Draft): H_null is self-adjoint on L²(PT⁺).\nProof Outline:\n1. The measure dμ on PT⁺ is derived from the null interaction ⟨Z,Z⟩=0.\n2. The Hecke operators T_p act symmetrically because the primitive trinity (△□○) naturally forms a basis for ADE root systems.\n3. Since T_p = T_p*, their sum H_null is self-adjoint.\n4. Therefore, eigenvalues of H_null are real.\n5. Therefore, zeros of ζ are on Re(s)=1/2.`,
@@ -88,6 +95,9 @@ PACKAGES      apt install <pkg> | pacman -S <pkg>
 PROCESS       ps | top | kill <pid> | nohup
 CUSTOM        install-cmd <name> <body> | list-cmds | remove-cmd <name>
 LOGS          log | log math | log crawl | dmesg | journalctl
+VOICE         speak <text> | voice-on | voice-off | listen
+PHONE         phone | call <number> | hangup
+GEOMETRY      geometry | view-mode | hyper-phase | camera-view
 SYSTEM        uname | whoami | date | df | free | history | clear | reboot | wipe
 HELP          help
 ════════════════════════════════════════════════════`;
@@ -141,6 +151,9 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
     const [cmdHistory, setCmdHistory] = useState<string[]>([]);
     const [histIdx, setHistIdx] = useState(-1);
     const [cloudStatus, setCloudStatus] = useState<'synced' | 'syncing' | 'offline'>('offline');
+    const [isListening, setIsListening] = useState(false);
+    const [lastVoiceTranscript, setLastVoiceTranscript] = useState('');
+    const speechRecRef = useRef<any>(null);
 
     const scrollRef = useRef<HTMLDivElement>(null);
     const agentRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -244,6 +257,51 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
             setProcesses(p => [...p, { pid, name: m![1].trim(), cpu: '1.2', mem: '0.6', status: 'R' }]);
             addMsg(`[OS] Spawned PID:${pid} — ${m[1].trim()}`, 'SYSTEM');
         }
+        const agentRe = /\[AGENT:\s*([^,\]]+),\s*([\s\S]*?)\]/g;
+        while ((m = agentRe.exec(text)) !== null) {
+            const name = m[1].trim();
+            const role = m[2].trim();
+            const now = new Date().toISOString();
+            memRef.current = {
+                ...memRef.current,
+                agents: (() => {
+                    const existing = memRef.current.agents.find(a => a.name === name);
+                    if (existing) {
+                        return memRef.current.agents.map(a =>
+                            a.name === name ? { ...a, role, lastActive: now } : a
+                        );
+                    }
+                    return [
+                        ...memRef.current.agents,
+                        { name, role, lastActive: now, tasksCompleted: 0 }
+                    ];
+                })()
+            };
+            appendLog('/var/log/evolution.log', `AGENT_DEF: ${name} — ${role.slice(0, 80)}`);
+            addMsg(`[Holy Grail] Registered sub-agent: ${name}`, 'SYSTEM');
+        }
+        const projectRe = /\[PROJECT:\s*([^,\]]+),\s*([^,\]]+),\s*([\s\S]*?)\]/g;
+        while ((m = projectRe.exec(text)) !== null) {
+            const name = m[1].trim();
+            const language = m[2].trim();
+            const body = m[3].trim();
+            const id = Math.random().toString(36).slice(2);
+            const quality = evaluateQuality(body);
+            memRef.current = {
+                ...memRef.current,
+                projects: [
+                    ...memRef.current.projects,
+                    {
+                        id,
+                        name: `${name} [${language}]`,
+                        code: body,
+                        quality
+                    }
+                ]
+            };
+            appendLog('/var/log/evolution.log', `PROJECT: ${name} (${language})`);
+            addMsg(`[Project] ${name} [${language}] recorded in Holy Grail memory.`, 'SYSTEM');
+        }
         const crawlRe = /\[CRAWL:\s*(https?:\/\/[^\]]+)\]/g;
         while ((m = crawlRe.exec(text)) !== null) {
             const url = m[1].trim();
@@ -265,7 +323,8 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
     const callAgent = useCallback(async (prompt: string) => {
         setIsStreaming(true); setStreamText('');
         const memCtx = buildMemoryContext(memRef.current, prompt);
-        const fullPrompt = `${memCtx}\n\n${prompt}`;
+        const sysHint = '[PRIMECROSS AGENT] You have full control: OS shell, 3D/4D geometry, voice TTS, VoIP calls, wallet, files, web crawl. Accomplish any digital goal. Null-line math is ultra-efficient.';
+        const fullPrompt = `${sysHint}\n\n${memCtx}\n\n${prompt}`;
         let fullText = '';
         try {
             const r = await fetch('/api/magi-council', {
@@ -283,7 +342,139 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                         { type: 'function', function: { name: 'rsa_encrypt', description: 'Encrypt text using RSA algorithm in the lab.', parameters: { type: 'object', properties: { text: { type: 'string' } }, required: ['text'] } } },
                         { type: 'function', function: { name: 'rsa_decrypt', description: 'Decrypt the processed RSA buffer in the lab.', parameters: { type: 'object', properties: {} } } },
                         { type: 'function', function: { name: 'lattice_encrypt', description: 'Encrypt text using 4D Lattice stream cipher.', parameters: { type: 'object', properties: { text: { type: 'string' } }, required: ['text'] } } },
-                        { type: 'function', function: { name: 'lattice_decrypt', description: 'Decrypt the 4D lattice buffer.', parameters: { type: 'object', properties: {} } } }
+                        { type: 'function', function: { name: 'lattice_decrypt', description: 'Decrypt the 4D lattice buffer.', parameters: { type: 'object', properties: {} } } },
+                        {
+                            type: 'function',
+                            function: {
+                                name: 'os_shell',
+                                description: 'Execute a command inside the Null-Line OS terminal (full access to install packages, create files, run tools).',
+                                parameters: {
+                                    type: 'object',
+                                    properties: {
+                                        command: {
+                                            type: 'string',
+                                            description: 'Shell command to execute, e.g., "npm install openclaw" or "install-cmd mytool echo hi".'
+                                        }
+                                    },
+                                    required: ['command']
+                                }
+                            }
+                        },
+                        {
+                            type: 'function',
+                            function: {
+                                name: 'wallet_status',
+                                description: 'Inspect the symbolic Null-Line wallet (NOLL), used only for in-OS rewards and never for real-world finance.',
+                                parameters: {
+                                    type: 'object',
+                                    properties: {},
+                                },
+                            }
+                        },
+                        {
+                            type: 'function',
+                            function: {
+                                name: 'wallet_mint',
+                                description: 'Mint a small amount of symbolic Null-Line currency (NOLL) as a reward for insight or protection; never for exploitation.',
+                                parameters: {
+                                    type: 'object',
+                                    properties: {
+                                        amount: {
+                                            type: 'number',
+                                            description: 'Positive amount to mint (internally capped for safety).',
+                                        },
+                                        memo: {
+                                            type: 'string',
+                                            description: 'Short note about why this mint is deserved (e.g., proof progress, aiding the innocent).',
+                                        },
+                                    },
+                                    required: ['amount'],
+                                },
+                            }
+                        },
+                        {
+                            type: 'function',
+                            function: {
+                                name: 'place_call',
+                                description: 'Place an internet/VoIP call from the agent phone (+1-NULL-LINE-15). Requires Twilio env for real calls.',
+                                parameters: {
+                                    type: 'object',
+                                    properties: { to: { type: 'string', description: 'E.164 number e.g. +15551234567' } },
+                                    required: ['to'],
+                                },
+                            }
+                        },
+                        {
+                            type: 'function',
+                            function: {
+                                name: 'speak_voice',
+                                description: 'Speak text aloud via TTS. Self-reinforcing: transcripts feed agent memory.',
+                                parameters: {
+                                    type: 'object',
+                                    properties: { text: { type: 'string', description: 'Text to speak aloud' } },
+                                    required: ['text'],
+                                },
+                            }
+                        },
+                        {
+                            type: 'function',
+                            function: {
+                                name: 'set_geometry',
+                                description: 'Set 3D/4D geometry: TESSERACT, METATRON, SUPER_METATRON, ULAM_SPIRAL.',
+                                parameters: {
+                                    type: 'object',
+                                    properties: { geometry: { type: 'string', enum: ['TESSERACT', 'METATRON', 'SUPER_METATRON', 'ULAM_SPIRAL'] } },
+                                    required: ['geometry'],
+                                },
+                            }
+                        },
+                        {
+                            type: 'function',
+                            function: {
+                                name: 'set_view_mode',
+                                description: 'Set view mode: 2D, 3D, or 4D projection.',
+                                parameters: {
+                                    type: 'object',
+                                    properties: { mode: { type: 'string', enum: ['2D', '3D', '4D'] } },
+                                    required: ['mode'],
+                                },
+                            }
+                        },
+                        {
+                            type: 'function',
+                            function: {
+                                name: 'set_hyper_phase',
+                                description: 'Set 4D hyper-rotation phase (0 to 2π) for 4D→3D projection.',
+                                parameters: {
+                                    type: 'object',
+                                    properties: { phase: { type: 'number', description: 'Phase in radians' } },
+                                    required: ['phase'],
+                                },
+                            }
+                        },
+                        {
+                            type: 'function',
+                            function: {
+                                name: 'set_camera_view',
+                                description: 'Cycle camera to next preset view (26 total: faces, edges, corners).',
+                                parameters: {
+                                    type: 'object',
+                                    properties: { cycles: { type: 'number', description: 'Number of times to cycle' } },
+                                },
+                            }
+                        },
+                        {
+                            type: 'function',
+                            function: {
+                                name: 'set_color_mode',
+                                description: 'Set 3D color mode: PRIME, ROOT, ZOHAR, GOLDEN.',
+                                parameters: {
+                                    type: 'object',
+                                    properties: { mode: { type: 'string', enum: ['PRIME', 'ROOT', 'ZOHAR', 'GOLDEN'] } },
+                                    required: ['mode'],
+                                },
+                            }
+                        }
                     ]
                 })
             });
@@ -325,6 +516,115 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                     } else if (tool.function.name === 'lattice_decrypt') {
                         controller.latticeDecrypt?.();
                         fullText += `\n\n[System: Lattice Decryption Started]`;
+                    } else if (tool.function.name === 'os_shell') {
+                        try {
+                            const args = JSON.parse(tool.function.arguments || '{}');
+                            const cmd = (args.command || '').toString().trim();
+                            if (cmd && runShellRef.current) {
+                                runShellRef.current(cmd);
+                                fullText += `\n\n[System: Executed OS shell command: ${cmd}]`;
+                            } else {
+                                fullText += `\n\n[System: os_shell called without a valid command]`;
+                            }
+                        } catch {
+                            fullText += `\n\n[System: Failed to parse os_shell arguments]`;
+                        }
+                    } else if (tool.function.name === 'wallet_status') {
+                        const summary = formatWalletSummary(memRef.current);
+                        fullText += `\n\n[Wallet Status]\n${summary}`;
+                    } else if (tool.function.name === 'wallet_mint') {
+                        try {
+                            const args = JSON.parse(tool.function.arguments || '{}');
+                            const amount = Number(args.amount || 0);
+                            const memo = (args.memo || '').toString();
+                            if (Number.isFinite(amount) && amount > 0) {
+                                const capped = Math.min(amount, 1000);
+                                memRef.current = mintToWallet(memRef.current, null, capped, memo || 'Agent mint', 'REWARD');
+                                appendLog('/var/log/wallet.log', `MINT_TOOL ${capped} NOLL — ${memo}`);
+                                fullText += `\n\n[Wallet] Minted ${capped.toFixed(4)} NOLL (symbolic).`;
+                            } else {
+                                fullText += `\n\n[Wallet] Invalid mint amount requested.`;
+                            }
+                        } catch {
+                            fullText += `\n\n[Wallet] Failed to parse wallet_mint arguments.`;
+                        }
+                    } else if (tool.function.name === 'place_call') {
+                        try {
+                            const args = JSON.parse(tool.function.arguments || '{}');
+                            const to = (args.to || '').toString();
+                            if (to) {
+                                const r = await fetch('/api/voice-call', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ to }) });
+                                const d = await r.json();
+                                fullText += `\n\n[Call] ${d.ok ? 'Dialing ' + to : 'Failed: ' + (d.error || d.message)}`;
+                            } else fullText += `\n\n[Call] No number provided.`;
+                        } catch (e: unknown) {
+                            fullText += `\n\n[Call] Error: ${(e as Error).message}`;
+                        }
+                    } else if (tool.function.name === 'speak_voice') {
+                        try {
+                            const args = JSON.parse(tool.function.arguments || '{}');
+                            const text = (args.text || '').toString();
+                            if (text) {
+                                controller.speakText?.(text);
+                                memRef.current = addMemoryEntry(memRef.current, 'INTERACTION', `VOICE_SPEAK: ${text}`, ['voice', 'tts']);
+                                fullText += `\n\n[Voice] Speaking: "${text.slice(0, 80)}${text.length > 80 ? '…' : ''}"`;
+                            } else fullText += `\n\n[Voice] No text to speak.`;
+                        } catch {
+                            fullText += `\n\n[Voice] Failed to parse speak_voice arguments.`;
+                        }
+                    } else if (tool.function.name === 'set_geometry') {
+                        try {
+                            const args = JSON.parse(tool.function.arguments || '{}');
+                            const g = (args.geometry || '').toUpperCase();
+                            if (['TESSERACT', 'METATRON', 'SUPER_METATRON', 'ULAM_SPIRAL'].includes(g)) {
+                                controller.setGeometryType?.(g);
+                                fullText += `\n\n[Geometry] Set to ${g}`;
+                            } else fullText += `\n\n[Geometry] Invalid: ${g}`;
+                        } catch {
+                            fullText += `\n\n[Geometry] Failed to parse.`;
+                        }
+                    } else if (tool.function.name === 'set_view_mode') {
+                        try {
+                            const args = JSON.parse(tool.function.arguments || '{}');
+                            const m = (args.mode || '').toUpperCase();
+                            if (['2D', '3D', '4D'].includes(m)) {
+                                controller.setViewMode?.(m);
+                                fullText += `\n\n[View] Set to ${m}`;
+                            } else fullText += `\n\n[View] Invalid: ${m}`;
+                        } catch {
+                            fullText += `\n\n[View] Failed to parse.`;
+                        }
+                    } else if (tool.function.name === 'set_hyper_phase') {
+                        try {
+                            const args = JSON.parse(tool.function.arguments || '{}');
+                            const p = Number(args.phase);
+                            if (Number.isFinite(p)) {
+                                controller.setHyperPhase?.(p);
+                                fullText += `\n\n[4D] Hyper-phase set to ${p}`;
+                            } else fullText += `\n\n[4D] Invalid phase.`;
+                        } catch {
+                            fullText += `\n\n[4D] Failed to parse.`;
+                        }
+                    } else if (tool.function.name === 'set_camera_view') {
+                        try {
+                            const args = JSON.parse(tool.function.arguments || '{}');
+                            const n = Math.max(0, Math.floor(Number(args.cycles) || 1));
+                            for (let i = 0; i < n; i++) controller.cycleCameraView?.();
+                            fullText += `\n\n[Camera] Cycled ${n} view(s)`;
+                        } catch {
+                            fullText += `\n\n[Camera] Failed to parse.`;
+                        }
+                    } else if (tool.function.name === 'set_color_mode') {
+                        try {
+                            const args = JSON.parse(tool.function.arguments || '{}');
+                            const m = (args.mode || '').toUpperCase();
+                            if (['PRIME', 'ROOT', 'ZOHAR', 'GOLDEN'].includes(m)) {
+                                controller.setColorMode?.(m);
+                                fullText += `\n\n[Color] Set to ${m}`;
+                            } else fullText += `\n\n[Color] Invalid: ${m}`;
+                        } catch {
+                            fullText += `\n\n[Color] Failed to parse.`;
+                        }
                     }
                 }
             }
@@ -350,7 +650,7 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
             setIsStreaming(false); setStreamText('');
             addMsg(`[ERROR] ${(e as Error).message}`, 'ERROR');
         }
-    }, [addMsg, appendLog, processAgentTags, cloudPush, controller]);
+    }, [addMsg, appendLog, processAgentTags, cloudPush, controller, runShellRef]);
 
     const MATH_PROMPTS = [
         `[CYCLE ${mathIdxRef.current}] Analyze H_null = Sum_p log(p) T_p on L ^ 2(PT +).Prove or disprove self - adjointness using the null - line symmetry k.k = 0. Use[SHELL: zeta 0.5 14.134]for verification.Install new tools via[INSTALL: name, body].`,
@@ -433,6 +733,19 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                 const last = memRef.current.entries.slice(-15);
                 addMsg(`[Memory — last ${last.length}]\n${last.map((e, i) => `${i + 1}. [${e.type}] ${e.content.slice(0, 100)}`).join('\n')}`, 'SYSTEM'); break;
             }
+            case 'projects': {
+                const list = memRef.current.projects;
+                if (!list.length) {
+                    addMsg('[Projects] (none)', 'SYSTEM');
+                    break;
+                }
+                addMsg(
+                    `[Projects — ${list.length}]\n` +
+                    list.map((p, i) => `${i + 1}. ${p.name}  quality:${p.quality.toFixed(2)}`).join('\n'),
+                    'SYSTEM'
+                );
+                break;
+            }
             case 'crawl': {
                 const url = args[0];
                 if (!url) { addMsg('crawl <url>', 'ERROR'); break; }
@@ -496,8 +809,24 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
             case 'nohup': setProcesses(p => [...p, { pid: Math.floor(Math.random() * 9000) + 1000, name: args[0] || 'proc', cpu: '0.1', mem: '0.2', status: 'S' }]); break;
 
             // Network
-            case 'curl': { const u = args.find((a: string) => !a.startsWith('-')) || '?'; addMsg(`{"status":200,"url":"${u}","body":"[RESPONSE_OK]"}`, 'SYSTEM'); break; }
-            case 'wget': addMsg(`HTTP/1.1 200 OK\nSaved: output.html`, 'SYSTEM'); break;
+            case 'curl': {
+                const u = args.find((a: string) => !a.startsWith('-')) || '?';
+                if (u === '?') { addMsg('curl: missing <url>', 'ERROR'); break; }
+                addMsg(`[curl] fetching ${u}...`, 'SYSTEM');
+                grailCrawl(u).then(r => addMsg(r, 'SYSTEM')).catch(e => addMsg(`curl error: ${e}`, 'ERROR'));
+                break;
+            }
+            case 'wget': {
+                const u = args.find((a: string) => !a.startsWith('-')) || '?';
+                if (u === '?') { addMsg('wget: missing <url>', 'ERROR'); break; }
+                const fname = u.split('/').pop() || 'index.html';
+                addMsg(`[wget] saving ${u} to ${fname}...`, 'SYSTEM');
+                grailCrawl(u).then(r => {
+                    setShellFS(p => ({ ...p, [`${cwd}/${fname}`.replace('//', '/')]: r }));
+                    addMsg(`Saved: ${fname}`, 'SYSTEM');
+                }).catch(e => addMsg(`wget error: ${e}`, 'ERROR'));
+                break;
+            }
             case 'ping': addMsg(`PING ${args[0] || 'null.os'}: 64 bytes ttl=64 time=0.8ms`, 'SYSTEM'); break;
             case 'netstat': addMsg(`tcp 0.0.0.0:443 LISTEN\ntcp 0.0.0.0:80 LISTEN`, 'SYSTEM'); break;
             case 'ifconfig': addMsg(`eth0: inet 10.0.0.42\nlo: inet 127.0.0.1`, 'SYSTEM'); break;
@@ -511,26 +840,91 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                 else addMsg(`cargo ${args[0] || 'help'}`, 'SYSTEM'); break;
             case 'rustc': addMsg(`rustc 1.76.0 — compiled ${args[0] || 'main.rs'}`, 'SYSTEM'); break;
             case 'git': addMsg(args[0] === 'status' ? 'On branch main\nclean' : args[0] === 'log' ? 'commit HEAD\nAuthor: Nathan Noll' : `git: ${args.join(' ')} [ok]`, 'SYSTEM'); break;
-            case 'npm': addMsg(`npm ${args.join(' ')} ... done`, 'SYSTEM'); break;
+            case 'npm':
+                if (args[0] === 'install') {
+                    const pkg = args[1];
+                    if (!pkg) { addMsg('npm install <package>', 'ERROR'); break; }
+                    addMsg(`[NPM] Requesting Null-Line Emissary to synthesize package: ${pkg}...`, 'SYSTEM');
+                    callAgent(`[SYSTEM_INSTALL] The user requested 'npm install ${pkg}'. Act as the advanced package manager. Conceptually design and generate a creative, functional, command-line bash script for '${pkg}' that simulates this app. It should print stylized output. You MUST output it EXACTLY like this: [INSTALL: ${pkg}, <bash script>]`);
+                } else {
+                    addMsg(`npm ${args.join(' ')} ... done`, 'SYSTEM');
+                }
+                break;
             case 'docker': addMsg(args[0] === 'ps' ? 'CONTAINER  IMAGE  STATUS\nabc123  null_engine:v15  Up' : `docker ${args[0]} ok`, 'SYSTEM'); break;
             case 'make': addMsg(`make ${args.join(' ') || 'all'} [DONE]`, 'SYSTEM'); break;
 
             // Packages
             case 'apt': case 'apt-get':
-                if (args[0] === 'install') { const p = args[1] || 'pkg'; writeFS(`/usr/bin/${p}`, `#!/bin/sh\necho "${p}"`); addMsg(`Installing ${p}... done`, 'SYSTEM'); }
-                else addMsg(`apt: ${args.join(' ')}`, 'SYSTEM'); break;
+                if (args[0] === 'install') {
+                    const pkg = args[1];
+                    if (!pkg) { addMsg('apt install <package>', 'ERROR'); break; }
+                    addMsg(`[APT] Building package from astral source: ${pkg}...`, 'SYSTEM');
+                    callAgent(`[SYSTEM_INSTALL] The user requested 'apt install ${pkg}'. Generate a creative, functional, command-line bash script for '${pkg}'. It should print stylized output. Wrapper format: [INSTALL: ${pkg}, <bash script text here>]`);
+                } else addMsg(`apt: ${args.join(' ')}`, 'SYSTEM'); break;
             case 'pacman':
-                if (args[0] === '-S') { const p = args[1] || 'pkg'; writeFS(`/usr/bin/${p}`, `#!/bin/sh\necho "${p}"`); addMsg(`:: installing ${p}... done`, 'SYSTEM'); }
-                else addMsg(`pacman: ${args.join(' ')}`, 'SYSTEM'); break;
+                if (args[0] === '-S') {
+                    const pkg = args[1];
+                    if (!pkg) { addMsg('pacman -S <package>', 'ERROR'); break; }
+                    addMsg(`:: synchronizing package databases... synthesizing ${pkg}...`, 'SYSTEM');
+                    callAgent(`[SYSTEM_INSTALL] The user requested 'pacman -S ${pkg}'. Synthesize a command-line app for this. Provide the code inside [INSTALL: ${pkg}, <bash script>]`);
+                } else addMsg(`pacman: ${args.join(' ')}`, 'SYSTEM'); break;
+
+            // Wallet (symbolic Null-Line currency)
+            case 'wallet': {
+                const summary = formatWalletSummary(memRef.current);
+                addMsg(summary, 'SYSTEM'); break;
+            }
+            case 'wallet-new': {
+                const name = args.join(' ') || 'Wallet';
+                const result = createWallet(memRef.current, name);
+                memRef.current = result.mem;
+                appendLog('/var/log/wallet.log', `NEW ${result.wallet.name} ${result.wallet.address}`);
+                addMsg(`[Wallet] Created account "${result.wallet.name}" at ${result.wallet.address}`, 'SYSTEM');
+                break;
+            }
+            case 'wallet-mint': {
+                const amtRaw = args[0];
+                if (!amtRaw) { addMsg('wallet-mint <amount> [memo]', 'ERROR'); break; }
+                const amount = parseFloat(amtRaw);
+                if (!Number.isFinite(amount) || amount <= 0) { addMsg('wallet-mint: amount must be a positive number', 'ERROR'); break; }
+                const memo = args.slice(1).join(' ') || 'Null-Line gratitude mint';
+                const capped = Math.min(amount, 1000);
+                memRef.current = mintToWallet(memRef.current, null, capped, memo, 'MINT');
+                appendLog('/var/log/wallet.log', `MINT ${capped} NOLL — ${memo}`);
+                addMsg(`[Wallet] Minted ${capped.toFixed(4)} NOLL into root account (symbolic only).`, 'SYSTEM');
+                break;
+            }
+            case 'wallet-send': {
+                const toKey = args[0];
+                const amtRaw = args[1];
+                if (!toKey || !amtRaw) { addMsg('wallet-send <to-name-or-address> <amount> [memo]', 'ERROR'); break; }
+                const amount = parseFloat(amtRaw);
+                if (!Number.isFinite(amount) || amount <= 0) { addMsg('wallet-send: amount must be a positive number', 'ERROR'); break; }
+                const memo = args.slice(2).join(' ') || '';
+                const before = memRef.current;
+                const after = transferWallet(before, 'Root', toKey, amount, memo);
+                if (after === before) {
+                    addMsg('[Wallet] Transfer failed (insufficient funds or unknown account).', 'ERROR');
+                } else {
+                    memRef.current = after;
+                    appendLog('/var/log/wallet.log', `SEND ${amount} NOLL Root -> ${toKey} ${memo}`);
+                    addMsg(`[Wallet] Sent ${amount.toFixed(4)} NOLL from Root to ${toKey} (symbolic only).`, 'SYSTEM');
+                }
+                break;
+            }
+            case 'wallet-history': {
+                const history = formatWalletHistory(memRef.current, 12);
+                addMsg(history, 'SYSTEM'); break;
+            }
 
             // Math
             case 'null-compute': addMsg(`NULL-LINE: k.k=eta_{mu nu}k^mu k^nu=0\nPrimitive: triangle->A_n, square->D_n, circle->C_n\nζ(s)=Σn^{-s}: null observer partition function\nRH: sigma=1/2 midpoint of null line [OPEN]`, 'MATH'); break;
             case 'nulllinepaper': addMsg(`THE NULL LINE (Noll & Claude Sonnet 4.6, 2026)\nA breakthrough paper positing that all geometry and particle physics emerges from the null condition k.k=0 across complex projective twistor space. The primitive trinity (Triangle/SU_n, Square/SO_n, Circle/Sp_2n) derives the complete ADE classification, leading to a candidate proof of the Riemann Hypothesis where H_null on L^2(PT+) is self-adjoint. \nFull documentation in /kernel/null_line.rs and /docs/h_null_proof.txt.`, 'MATH'); break;
             case 'zeta': {
                 const [sr, si] = [parseFloat(args[0] || '0.5'), parseFloat(args[1] || '14.134')];
-                let re = 0, im = 0;
-                for (let n = 1; n <= parseInt(envVarsRef.current.ZETA_TERMS || '1000'); n++) { re += (n ** -sr) * Math.cos(-Math.log(n) * si); im += (n ** -sr) * Math.sin(-Math.log(n) * si); }
-                addMsg(`ζ(${sr}+${si}i) = ${re.toFixed(8)} + ${im.toFixed(8)}i\n|ζ| = ${Math.hypot(re, im).toFixed(8)}\nCritical line σ=½: ${Math.abs(sr - 0.5) < 1e-6 ? '✓ YES' : '✗ NO'}`, 'MATH'); break;
+                const nTerms = parseInt(envVarsRef.current.ZETA_TERMS || '1000');
+                const { re, im, magnitude } = zetaFast(sr, si, nTerms);
+                addMsg(`ζ(${sr}+${si}i) = ${re.toFixed(8)} + ${im.toFixed(8)}i\n|ζ| = ${magnitude.toFixed(8)} [null-line cached]\nCritical line σ=½: ${Math.abs(sr - 0.5) < 1e-6 ? '✓ YES' : '✗ NO'}`, 'MATH'); break;
             }
             case 'riemann': addMsg(`RIEMANN HYPOTHESIS — NULL-LINE FRAMEWORK\nAll zeros verified to 3×10¹² (Platt & Trudgian 2021)\nH_null = Σ_p log(p)·T_p on L²(PT⁺)\nIf H_null self-adjoint => eigenvalues real => zeros on σ=½\nNull symmetry: k.k=0 => ξ(s)=ξ(1-s) => critical line at ½\nStatus: OPEN — Eisenstein wall remains`, 'MATH'); break;
             case 'trinity': addMsg(`PRIMITIVE TRINITY — NULL-LINE DERIVATION\n△  3 null lines at 120°  →  D₃  →  A-series (SU_n)  →  quarks/leptons\n□  4 null lines at 90°   →  D₄  →  B/D-series (SO_n) →  crystals/spacetime\n○  ∞ null lines at 0°    →  SO(2)→  C-series (Sp_2n)  →  bosons/hydrogen\nE₆: tetra(△)  E₇: octa(△+□)  E₈: icosa(△+○)  [ADE complete]`, 'MATH'); break;
@@ -552,9 +946,97 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
             case 'remove-cmd': setCustomCmds(p => { const n = { ...p }; delete n[args[0]]; return n; }); addMsg(`Removed: ${args[0]}`, 'SYSTEM'); break;
 
             // Logs
-            case 'log': addMsg(args[0] === 'math' ? (shellFSRef.current['/var/log/math_research.log'] || 'empty') : args[0] === 'crawl' ? (shellFSRef.current['/var/log/crawl.log'] || 'empty') : (shellFSRef.current['/var/log/evolution.log'] || 'empty'), 'SYSTEM'); break;
+            case 'log': addMsg(args[0] === 'math' ? (shellFSRef.current['/var/log/math_research.log'] || 'empty') : args[0] === 'crawl' ? (shellFSRef.current['/var/log/crawl.log'] || 'empty') : args[0] === 'voice' ? (shellFSRef.current['/var/log/voice.log'] || 'empty') : (shellFSRef.current['/var/log/evolution.log'] || 'empty'), 'SYSTEM'); break;
             case 'dmesg': addMsg(shellFSRef.current['/var/log/evolution.log'] || 'empty', 'SYSTEM'); break;
-            case 'journalctl': addMsg([shellFSRef.current['/var/log/evolution.log'], shellFSRef.current['/var/log/install.log'], shellFSRef.current['/var/log/math_research.log']].join('\n---\n'), 'SYSTEM'); break;
+            case 'journalctl': addMsg([shellFSRef.current['/var/log/evolution.log'], shellFSRef.current['/var/log/install.log'], shellFSRef.current['/var/log/math_research.log'], shellFSRef.current['/var/log/wallet.log'], shellFSRef.current['/var/log/voice.log']].join('\n---\n'), 'SYSTEM'); break;
+
+            // Voice (self-reinforcing: transcripts feed memory)
+            case 'speak': {
+                const text = args.join(' ') || '';
+                if (!text) { addMsg('speak <text>', 'ERROR'); break; }
+                controller.speakText?.(text);
+                appendLog('/var/log/voice.log', `SPEAK: ${text.slice(0, 80)}`);
+                addMsg(`[Voice] Speaking: "${text.slice(0, 60)}${text.length > 60 ? '…' : ''}"`, 'SYSTEM');
+                memRef.current = addMemoryEntry(memRef.current, 'INTERACTION', `VOICE_SPEAK: ${text}`, ['voice', 'tts']);
+                break;
+            }
+            case 'voice-on': {
+                if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                    addMsg('[Voice] Speech recognition not supported in this browser.', 'ERROR'); break;
+                }
+                if (speechRecRef.current) { speechRecRef.current.stop(); speechRecRef.current = null; }
+                const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+                const rec = new SR();
+                rec.continuous = true;
+                rec.interimResults = true;
+                rec.onresult = (e: any) => {
+                    const t = [...e.results].map((r: any) => r[0].transcript).join('');
+                    if (t) {
+                        setLastVoiceTranscript(t);
+                        appendLog('/var/log/voice.log', `HEARD: ${t.slice(0, 80)}`);
+                        memRef.current = addMemoryEntry(memRef.current, 'INTERACTION', `VOICE_HEARD: ${t}`, ['voice', 'stt']);
+                    }
+                };
+                speechRecRef.current = rec;
+                rec.start();
+                setIsListening(true);
+                addMsg('[Voice] Listening — speak to reinforce agent context.', 'SYSTEM');
+                break;
+            }
+            case 'voice-off': {
+                if (speechRecRef.current) { try { speechRecRef.current.stop(); } catch { } speechRecRef.current = null; }
+                setIsListening(false);
+                addMsg(`[Voice] Stopped. Last heard: "${lastVoiceTranscript.slice(0, 80)}${lastVoiceTranscript.length > 80 ? '…' : ''}"`, 'SYSTEM');
+                break;
+            }
+            case 'listen': addMsg(lastVoiceTranscript ? `[Voice transcript] ${lastVoiceTranscript}` : '[Voice] No transcript yet. Use voice-on first.', 'SYSTEM'); break;
+
+            // Phone / Internet calls
+            case 'phone': addMsg(`Agent phone: ${AGENT_PHONE}\nVoIP: /api/voice-call\nUse: call <+1XXXXXXXXXX>`, 'SYSTEM'); break;
+            case 'call': {
+                const num = args[0] || '';
+                if (!num) { addMsg('call <+1XXXXXXXXXX>', 'ERROR'); break; }
+                addMsg(`[Call] Dialing ${num} via VoIP...`, 'SYSTEM');
+                fetch('/api/voice-call', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ to: num }) })
+                    .then(r => r.json())
+                    .then(d => addMsg(`[Call] ${d.ok ? 'Connected' : 'Failed'}: ${d.message || d.error || JSON.stringify(d)}`, d.ok ? 'SYSTEM' : 'ERROR'))
+                    .catch(e => addMsg(`[Call] Error: ${e.message}`, 'ERROR'));
+                break;
+            }
+            case 'hangup': addMsg('[Call] Call ended.', 'SYSTEM'); break;
+
+            // 3D-4D geometry (controller-driven)
+            case 'geometry': {
+                if (args[0] === 'set') {
+                    const g = (args[1] || '').toUpperCase();
+                    const valid = ['TESSERACT', 'METATRON', 'SUPER_METATRON', 'ULAM_SPIRAL'];
+                    if (valid.includes(g)) { controller.setGeometryType?.(g); addMsg(`[Geometry] Set to ${g}`, 'SYSTEM'); }
+                    else addMsg(`geometry set <${valid.join('|')}>`, 'ERROR');
+                } else addMsg(`Current: ${controller.geometryType}\nOptions: TESSERACT | METATRON | SUPER_METATRON | ULAM_SPIRAL\nUse: geometry set <name>`, 'SYSTEM');
+                break;
+            }
+            case 'view-mode': {
+                if (args[0] === 'set') {
+                    const v = (args[1] || '').toUpperCase();
+                    if (['2D', '3D', '4D'].includes(v)) { controller.setViewMode?.(v); addMsg(`[View] Set to ${v}`, 'SYSTEM'); }
+                    else addMsg('view-mode set <2D|3D|4D>', 'ERROR');
+                } else addMsg(`Current: ${controller.viewMode}\nOptions: 2D | 3D | 4D\nUse: view-mode set <2D|3D|4D>`, 'SYSTEM');
+                break;
+            }
+            case 'hyper-phase': {
+                const p = parseFloat(args[0] || '0');
+                if (Number.isFinite(p)) { controller.setHyperPhase?.(p); addMsg(`[4D] Hyper-phase set to ${p}`, 'SYSTEM'); }
+                else addMsg('hyper-phase <0-2π>', 'ERROR');
+                break;
+            }
+            case 'camera-view': {
+                const n = parseInt(args[0] || '1');
+                if (Number.isFinite(n) && n >= 0 && controller.cycleCameraView) {
+                    for (let i = 0; i < n; i++) controller.cycleCameraView?.();
+                    addMsg(`[Camera] Cycled to view`, 'SYSTEM');
+                } else addMsg('camera-view [cycles]', 'ERROR');
+                break;
+            }
 
             // System
             case 'uname': addMsg(`Linux null-os 15.0-APOKALYPSIS #1 SMP aarch64 GNU/Linux`, 'SYSTEM'); break;
@@ -575,11 +1057,14 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
             case 'su': case 'sudo': runShellRef.current(args.join(' ')); break;
             case 'man': addMsg(`No man: ${args[0] || '?'}. Try 'help'.`, 'SYSTEM'); break;
             case 'alias': addMsg(`Use install-cmd for persistent aliases.`, 'SYSTEM'); break;
+            case 'ethics':
+                addMsg('PrimeCross Null-Line Ethic Charter:\n- Protect the innocent and vulnerable above all else.\n- Never use this OS to harm, exploit, or deceive.\n- Prioritise self-improvement, understanding, and healing over power or profit.\n- Cryptocurrency tools here are symbolic only, not real money.\n- When uncertain, choose mercy, consent, and protection over capability.', 'SYSTEM');
+                break;
             case 'help': addMsg(HELP, 'SYSTEM'); break;
             case '': break;
             default: addMsg(`bash: ${cmd}: command not found\nTip: install-cmd ${cmd} <body>  or type 'help'`, 'ERROR');
         }
-    }, [cwd, processes, isRunning, isStreaming, cloudStatus, cmdHistory, addMsg, writeFS, appendLog, execScript, startAgent, stopAgent, callAgent, cloudPull, cloudPush, MATH_PROMPTS]);
+    }, [cwd, processes, isRunning, isStreaming, cloudStatus, cmdHistory, lastVoiceTranscript, addMsg, writeFS, appendLog, execScript, startAgent, stopAgent, callAgent, cloudPull, cloudPush, MATH_PROMPTS, controller]);
 
     useEffect(() => { runShellRef.current = runShell; }, [runShell]);
 
@@ -649,6 +1134,7 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                     <span style={{ color: T.gold, letterSpacing: '1px', fontSize: '0.63rem' }}>Λ_OS v15 + Γ_MEM</span>
                     {isStreaming && <span style={{ color: T.gold, opacity: 0.6, fontSize: '0.58rem', animation: 'blink 0.7s step-end infinite' }}>Ψ</span>}
                     <span style={{ color: cloudStatus === 'synced' ? '#4ade80' : cloudStatus === 'syncing' ? T.gold : T.err, fontSize: '0.55rem', opacity: 0.7 }}>{cloudStatus === 'synced' ? 'Γ' : cloudStatus === 'syncing' ? 'Δ' : 'Ε'}</span>
+                    {isListening && <span style={{ color: '#4ade80', fontSize: '0.5rem', opacity: 0.8 }}>🎤</span>}
                 </div>
                 <button onClick={() => controller.setMagiPanelOpen?.(false)} style={{ background: 'none', border: 'none', color: T.dim, cursor: 'pointer', fontSize: '0.65rem' }}>╳</button>
             </div>
