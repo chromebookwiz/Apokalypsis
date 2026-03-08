@@ -566,8 +566,8 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         position: 'fixed',
                         left: '20px',
                         top: '40px',
-                        width: '450px',
-                        height: '800px',
+                        width: '800px',
+                        height: '450px',
                         maxHeight: '90vh',
                         zIndex: 1500,
                         pointerEvents: 'auto'

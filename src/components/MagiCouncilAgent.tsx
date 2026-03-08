@@ -118,7 +118,7 @@ const cloudSet = async (key: string, value: unknown): Promise<void> => {
 
 export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) => {
     // ── Auth state ──
-    const [unlocked, setUnlocked] = useState(() => sessionStorage.getItem('os_auth') === '1');
+    const [unlocked, setUnlocked] = useState(false);
     const [pwInput, setPwInput] = useState('');
     const [pwError, setPwError] = useState('');
 
