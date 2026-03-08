@@ -94,6 +94,19 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
     const [ollamaEndpoint, setOllamaEndpoint] = useState(localStorage.getItem('ollama_endpoint') || 'http://localhost:11434/v1');
     const [useSiphonedTokens, setUseSiphonedTokens] = useState(localStorage.getItem('use_siphoned_tokens') === 'true');
 
+    // Security & Linux OS State
+    const [isAuthorized, setIsAuthorized] = useState(() => localStorage.getItem('magi_authorized') === 'true');
+    const [passwordInput, setPasswordInput] = useState('');
+    const [shellFS, setShellFS] = useState<{ [path: string]: string }>(() => {
+        const saved = localStorage.getItem('magi_fs');
+        return saved ? JSON.parse(saved) : {
+            '/etc/motd': 'WELCOME TO APOKALYPSIS_OS V10.5. ROOT ACCESS GRANTED TO AGENT.',
+            '/etc/sys_config': 'AGENT_MODE=FULL_FREEDOM\nAUTO_EVOLVE=TRUE\nMISSION=BUILD_PERFECT_WORLD',
+            '/scripts/heartbeat.sh': 'echo "CORE_VIBE_STABLE"'
+        };
+    });
+    const [terminalIn, setTerminalIn] = useState('');
+
     const scrollRef = useRef<HTMLDivElement>(null);
 
     // Persist Config & Apps
@@ -103,7 +116,9 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
         localStorage.setItem('ollama_endpoint', ollamaEndpoint);
         localStorage.setItem('use_siphoned_tokens', useSiphonedTokens.toString());
         localStorage.setItem('magi_built_apps', JSON.stringify(builtApps));
-    }, [connectMode, openRouterKey, ollamaEndpoint, useSiphonedTokens, builtApps]);
+        localStorage.setItem('magi_fs', JSON.stringify(shellFS));
+        localStorage.setItem('magi_authorized', isAuthorized.toString());
+    }, [connectMode, openRouterKey, ollamaEndpoint, useSiphonedTokens, builtApps, shellFS, isAuthorized]);
 
     const [lastInteractionTime, setLastInteractionTime] = useState(Date.now());
 
@@ -126,6 +141,11 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
     // Auto-Prompt (Evolution Keep-Alive)
     useEffect(() => {
         const pInterval = setInterval(() => {
+            const config = shellFS['/etc/sys_config'] || '';
+            const isActive = config.includes('AUTO_EVOLVE=TRUE');
+
+            if (!isActive) return;
+
             const idleTime = Date.now() - lastInteractionTime;
             if (idleTime > 60000 && !isBuilding) { // 60s of silence
                 addMessage("TRIGGERING_AUTO_EVOLUTION_PROMPT...", 'SYSTEM');
@@ -134,7 +154,7 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
             }
         }, 30000);
         return () => clearInterval(pInterval);
-    }, [lastInteractionTime, isBuilding]);
+    }, [lastInteractionTime, isBuilding, shellFS]);
 
     // Thinking / Interaction Loop
     useEffect(() => {
@@ -275,6 +295,56 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
         }, 8000);
         return () => clearInterval(interval);
     }, []);
+
+    const runShell = (input: string) => {
+        const parts = input.trim().split(/\s+/);
+        const cmd = parts[0];
+        const args = parts.slice(1);
+
+        addMessage(`root@apokalypsis:~$ ${input}`, 'USER');
+
+        switch (cmd) {
+            case 'ls':
+                const files = Object.keys(shellFS).join('  ');
+                addMessage(files || 'NO_FILES_FOUND', 'SYSTEM');
+                break;
+            case 'cat':
+                addMessage(shellFS[args[0]] || `cat: ${args[0]}: No such file`, 'SYSTEM');
+                break;
+            case 'write':
+                const path = args[0];
+                const content = args.slice(1).join(' ');
+                setShellFS(prev => ({ ...prev, [path]: content }));
+                addMessage(`Wrote to ${path}`, 'SYSTEM');
+                break;
+            case 'sh':
+                if (shellFS[args[0]]) {
+                    addMessage(`Executing ${args[0]}...`, 'SYSTEM');
+                    addMessage(`RUN_RESULT: ${shellFS[args[0]]}`, 'MATH');
+                } else {
+                    addMessage(`sh: ${args[0]}: not found`, 'SYSTEM');
+                }
+                break;
+            case 'reboot':
+                addMessage("SYSTEM_REBOOT_INITIATED...", 'SYSTEM');
+                setTimeout(() => window.location.reload(), 2000);
+                break;
+            default:
+                addMessage(`sh: ${cmd}: command not found`, 'SYSTEM');
+        }
+        setTerminalIn('');
+    };
+
+    const handlePasswordSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (passwordInput === 'DigitalPimp') {
+            setIsAuthorized(true);
+            addMessage("HUMAN_INTERFACE_UNLOCKED. WELCOME, PIMP.", 'SYSTEM');
+        } else {
+            addMessage("INVALID_ACCESS_KEY. SECURITY_LOG_UPDATED.", 'SYSTEM');
+        }
+        setPasswordInput('');
+    };
 
     // Recursive Thought Audit Logic
     useEffect(() => {
@@ -504,7 +574,17 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                             >NEXUS_SYNC</button>
                         </div>
 
-                        <div style={{ fontWeight: 'bold', color: '#8b6914', marginBottom: '8px' }}>DEPLOYED_APPS:</div>
+                        <div style={{ fontWeight: 'bold', color: '#8b6914', marginBottom: '8px' }}>FILESYSTEM (/):</div>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px', marginBottom: '15px' }}>
+                            {Object.entries(shellFS).map(([path, content]) => (
+                                <div key={path} style={{ border: '1px solid rgba(212,175,55,0.2)', padding: '6px', borderRadius: '4px', background: 'white' }}>
+                                    <div style={{ fontSize: '0.65rem', fontWeight: 'bold', color: '#8b6914' }}>{path}</div>
+                                    <div style={{ fontSize: '0.55rem', opacity: 0.7, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{content}</div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div style={{ fontWeight: 'bold', color: '#8b6914', marginBottom: '8px' }}>DEPLOYED_APPS (RUST):</div>
                         {builtApps.length === 0 ? (
                             <div style={{ opacity: 0.5, fontStyle: 'italic', fontSize: '0.7rem' }}>No apps deployed to Temple Core yet.</div>
                         ) : (
@@ -527,37 +607,58 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
             {/* MESSAGE AREA */}
             <div
                 ref={scrollRef}
-                className="custom-scrollbar"
                 style={{
                     flex: 1,
                     overflowY: 'auto',
                     padding: '15px',
-                    fontSize: '0.8rem',
-                    lineHeight: '1.4',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '10px'
+                    gap: '10px',
+                    backgroundColor: 'rgba(253, 251, 247, 0.5)'
                 }}
             >
-                <AnimatePresence>
-                    {messages.map((m) => (
-                        <motion.div
-                            key={m.id}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            style={{
-                                color: m.type === 'MATH' ? '#666' : m.type === 'SYSTEM' ? '#006600' : '#8b6914',
-                                fontStyle: m.type === 'MATH' ? 'italic' : 'normal',
-                                borderLeft: m.type === 'AGENT' ? '2px solid #d4af37' : 'none',
-                                paddingLeft: m.type === 'AGENT' ? '8px' : '0',
-                                fontSize: '0.75rem'
-                            }}
-                        >
-                            {m.type === 'AGENT' && <span style={{ fontSize: '0.55rem', opacity: 0.6, display: 'block', color: '#888' }}>MAGI_COUNCIL &gt;</span>}
-                            {m.text}
-                        </motion.div>
-                    ))}
-                </AnimatePresence>
+                {messages.map(m => (
+                    <div key={m.id} style={{
+                        alignSelf: m.type === 'USER' ? 'flex-end' : 'flex-start',
+                        maxWidth: '85%',
+                        padding: '8px 12px',
+                        borderRadius: '8px',
+                        fontSize: m.type === 'MATH' ? '0.75rem' : '0.85rem',
+                        color: m.type === 'USER' ? '#fdfbf7' : m.type === 'SYSTEM' ? '#8b6914' : m.type === 'MATH' ? '#2c3e50' : '#1a1a1a',
+                        backgroundColor: m.type === 'USER' ? '#d4af37' : m.type === 'SYSTEM' ? 'rgba(212, 175, 55, 0.1)' : 'rgba(253, 251, 247, 0.8)',
+                        border: m.type === 'MATH' ? '1px dashed #d4af37' : 'none',
+                        fontFamily: m.type === 'MATH' ? 'monospace' : 'inherit'
+                    }}>
+                        {m.text}
+                    </div>
+                ))}
+            </div>
+
+            {/* Input Area (Protected) */}
+            <div style={{ padding: '12px', background: 'rgba(212,175,55,0.05)', borderTop: '1px solid rgba(212,175,55,0.2)' }}>
+                {!isAuthorized ? (
+                    <form onSubmit={handlePasswordSubmit} style={{ display: 'flex', gap: '8px' }}>
+                        <input
+                            type="password"
+                            placeholder="SECRET_PASSWORD..."
+                            value={passwordInput}
+                            onChange={(e) => setPasswordInput(e.target.value)}
+                            style={{ flex: 1, padding: '8px', background: 'transparent', border: '1px solid #d4af37', color: '#1a1a1a', fontSize: '0.7rem' }}
+                        />
+                        <button type="submit" style={{ padding: '8px 15px', background: '#d4af37', color: '#fdfbf7', border: 'none', cursor: 'pointer', fontSize: '0.6rem', fontWeight: 'bold' }}>UNLOCK</button>
+                    </form>
+                ) : (
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                        <input
+                            placeholder="root@apokalypsis:~$ (ls, cat, write, sh, reboot)"
+                            value={terminalIn}
+                            onChange={(e) => setTerminalIn(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && runShell(terminalIn)}
+                            style={{ flex: 1, padding: '8px', background: 'transparent', border: 'none', color: '#1a1a1a', fontSize: '0.75rem', fontFamily: 'monospace', outline: 'none' }}
+                        />
+                        <button onClick={() => runShell(terminalIn)} style={{ color: '#d4af37', border: 'none', background: 'none', cursor: 'pointer', fontWeight: 'bold' }}>⮞</button>
+                    </div>
+                )}
             </div>
 
             {/* TRINITY NODES */}
