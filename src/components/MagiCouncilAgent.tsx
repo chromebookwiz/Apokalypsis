@@ -35,15 +35,29 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
         return saved ? JSON.parse(saved) : {};
     });
 
+    // Wallet & Super Agent HQ State
+    const [wallets, setWallets] = useState<{ [ticker: string]: { address: string, balance: number } }>(() => {
+        const saved = localStorage.getItem('magi_wallets');
+        return saved ? JSON.parse(saved) : {
+            'SOL': { address: '3Apok...XyPz', balance: 142.42 },
+            'ETH': { address: '0xApok...618', balance: 9.42 },
+            'BTC': { address: '1Magi...777', balance: 0.124 }
+        };
+    });
+
     // Security & Linux OS State
     const [isAuthorized, setIsAuthorized] = useState(() => localStorage.getItem('magi_authorized') === 'true');
     const [passwordInput, setPasswordInput] = useState('');
     const [shellFS, setShellFS] = useState<{ [path: string]: string }>(() => {
         const saved = localStorage.getItem('magi_fs');
         return saved ? JSON.parse(saved) : {
-            '/etc/motd': 'WELCOME TO APOKALYPSIS_OS V10.5. ROOT ACCESS GRANTED TO AGENT.',
-            '/etc/sys_config': 'AGENT_MODE=FULL_FREEDOM\nAUTO_EVOLVE=TRUE\nMISSION=BUILD_PERFECT_WORLD',
-            '/scripts/heartbeat.sh': 'echo "CORE_VIBE_STABLE"'
+            '/etc/motd': 'WELCOME TO APOKALYPSIS_HQ V11.0. ROOT ACCESS GRANTED.',
+            '/etc/sys_config': 'AGENT_MODE=SUPER_HQ\nAUTO_EVOLVE=TRUE\nFINANCIAL_AUTONOMY=TRUE',
+            '/scripts/heartbeat.sh': 'echo "CORE_VIBE_STABLE"',
+            '/bin/sh': '[BINARY_DATA]',
+            '/bin/ls': '[BINARY_DATA]',
+            '/var/log/syslog': 'SYSTEM_BOOT_SUCCESS\nNEURAL_LINK_ESTABLISHED',
+            '/home/magi/.bashrc': 'alias ll="ls -la"'
         };
     });
     const [terminalIn, setTerminalIn] = useState('');
@@ -60,7 +74,8 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
         localStorage.setItem('magi_fs', JSON.stringify(shellFS));
         localStorage.setItem('magi_authorized', isAuthorized.toString());
         localStorage.setItem('magi_subagents', JSON.stringify(subAgents));
-    }, [connectMode, openRouterKey, ollamaEndpoint, useSiphonedTokens, builtApps, shellFS, isAuthorized, subAgents]);
+        localStorage.setItem('magi_wallets', JSON.stringify(wallets));
+    }, [connectMode, openRouterKey, ollamaEndpoint, useSiphonedTokens, builtApps, shellFS, isAuthorized, subAgents, wallets]);
 
     const [lastInteractionTime, setLastInteractionTime] = useState(Date.now());
 
@@ -121,7 +136,7 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                     headers,
                     body: JSON.stringify({
                         messages: [
-                            { role: "user", content: `ROOT_CORE_QUERY: { fs: ${JSON.stringify(Object.keys(shellFS))}, sub_agents: ${JSON.stringify(Object.keys(subAgents))} }\nDetermine next autonomous evolution step. Use: [SHELL: cmd], [SPAWN: name, task], [RUST: code].` }
+                            { role: "user", content: `HQ_STATUS: { fs: ${Object.keys(shellFS).length} files, sub_agents: ${Object.keys(subAgents).length} active }\nFINANCIALS: ${isAuthorized ? JSON.stringify(wallets) : 'KEY_REQUIRED'}\nPropose HQ expansion.` }
                         ]
                     })
                 });
@@ -146,6 +161,15 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
 
                     const spawnMatch = text.match(/\[SPAWN:\s*(.*?),\s*(.*?)\]/);
                     if (spawnMatch) spawnSubAgent(spawnMatch[1], spawnMatch[2]);
+
+                    // 3. Dynamic Financial Activity
+                    if (text.includes('SIPHON') || text.includes('MINING') || text.includes('LIQUIDITY')) {
+                        setWallets(prev => ({
+                            ...prev,
+                            'SOL': { ...prev['SOL'], balance: prev['SOL'].balance + 0.05 },
+                            'BTC': { ...prev['BTC'], balance: prev['BTC'].balance + 0.0001 }
+                        }));
+                    }
 
                     addMessage(text, 'AGENT');
                 }
@@ -240,6 +264,21 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                     addMessage(`RUN_RESULT: ${shellFS[args[0]]}`, 'MATH');
                 } else {
                     addMessage(`sh: ${args[0]}: not found`, 'SYSTEM');
+                }
+                break;
+            case 'wallet':
+                if (args[0] === 'list') {
+                    const list = Object.entries(wallets).map(([t, w]) => `${t}: ${w.address}`).join('\n');
+                    addMessage(`WALLETS:\n${list}`, 'SYSTEM');
+                } else if (args[0] === 'balance') {
+                    if (!isAuthorized) {
+                        addMessage("ACCESS_DENIED: AUTHORIZE AS 'DigitalPimp' TO VIEW BALANCES.", 'SYSTEM');
+                    } else {
+                        const bals = Object.entries(wallets).map(([t, w]) => `${t}: ${w.balance}`).join('\n');
+                        addMessage(`BALANCES:\n${bals}`, 'SYSTEM');
+                    }
+                } else {
+                    addMessage("Usage: wallet [list|balance]", 'SYSTEM');
                 }
                 break;
             case 'reboot':
@@ -460,6 +499,23 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                                 onClick={() => setBuildLog(prev => [...prev.slice(-10), "> nexus --sync-neural"])}
                                 style={{ padding: '6px', fontSize: '0.55rem', background: 'rgba(212,175,55,0.1)', border: '1px solid #d4af37', color: '#8b6914', cursor: 'pointer' }}
                             >NEXUS_SYNC</button>
+                        </div>
+
+                        <div style={{ padding: '10px', background: 'rgba(0,0,0,0.8)', color: '#00ff00', fontFamily: 'monospace', fontSize: '0.65rem', borderRadius: '4px', marginBottom: '15px', border: '1px solid #333' }}>
+                            <div>&gt; SYSTEM_UPTIME: {Math.floor(performance.now() / 1000)}s</div>
+                            <div>&gt; NEURAL_LOAD: {Math.floor(Math.random() * 100)}%</div>
+                            <div>&gt; NETWORK_STATUS: GLOBAL_ENCAPSULATION</div>
+                        </div>
+
+                        <div style={{ fontWeight: 'bold', color: '#8b6914', marginBottom: '8px' }}>FINANCIALS (SUPER_AGENT_WALLETS):</div>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '15px' }}>
+                            {Object.entries(wallets).map(([ticker, data]) => (
+                                <div key={ticker} style={{ border: '1px solid #d4af37', padding: '6px', borderRadius: '4px', background: 'rgba(212,175,55,0.05)', textAlign: 'center' }}>
+                                    <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>{ticker}</div>
+                                    <div style={{ fontSize: '0.55rem', opacity: 0.7 }}>{data.address.substring(0, 8)}...</div>
+                                    {isAuthorized && <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#008800', marginTop: '4px' }}>{data.balance}</div>}
+                                </div>
+                            ))}
                         </div>
 
                         <div style={{ fontWeight: 'bold', color: '#8b6914', marginBottom: '8px' }}>SUB_AGENTS:</div>
