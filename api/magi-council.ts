@@ -52,9 +52,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
-    const apiKey = process.env.OPENROUTER_API_KEY;
+    const apiKey = process.env.OPENROUTER_API_KEY || process.env.VITE_OPENROUTER_API_KEY;
     if (!apiKey) {
-        return res.status(500).json({ error: 'OPENROUTER_API_KEY not configured on server.' });
+        // Find keys that might be misnamed for debugging
+        const availableKeys = Object.keys(process.env).filter(k =>
+            k.includes('API') || k.includes('KEY') || k.includes('OPEN') || k.includes('ROUTER')
+        );
+        return res.status(500).json({
+            error: 'API key not found in process.env',
+            details: 'The serverless function checked process.env.OPENROUTER_API_KEY but it was undefined.',
+            hint: 'In Vercel, ensure the Environment Variable is assigned to the "Production" environment. If testing locally, you must use an .env file.',
+            related_keys_found: availableKeys
+        });
     }
 
     const {
