@@ -138,7 +138,7 @@ export const useSceneController = () => {
     const [compressionToolActive, setCompressionToolActive] = useState(false);
     const [morphToolActive, setMorphToolActive] = useState(false);
     const [latticeToolActive, setLatticeToolActive] = useState(false);
-    const [magiPanelOpen, setMagiPanelOpen] = useState(true);
+    const [magiPanelOpen, setMagiPanelOpen] = useState(false);
 
     // Literal Math Results
     const [latticeGap, setLatticeGap] = useState(1.0);

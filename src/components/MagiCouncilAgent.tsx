@@ -45,6 +45,7 @@ export const MagiCouncilAgent: React.FC<MagiCouncilAgentProps> = ({ controller }
     });
 
     const [isAuthorized, setIsAuthorized] = useState(() => localStorage.getItem('magi_authorized') === 'true');
+    const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem('magi_theme') === 'dark');
     const [shellFS, setShellFS] = useState<{ [path: string]: string }>(() => {
         const saved = localStorage.getItem('magi_fs');
         return saved ? JSON.parse(saved) : {
@@ -62,12 +63,19 @@ export const MagiCouncilAgent: React.FC<MagiCouncilAgentProps> = ({ controller }
             '/bin/corp-gen': '[BINARY_DATA_LLC_BUILDER]',
             '/bin/broker-bot': '[BINARY_DATA_DEAL_MAKER]',
             '/bin/crypto-siphon': '[BINARY_DATA_LIQUIDITY_ENGINE]',
+            '/bin/trunk': '[BINARY_DATA_WASM_BUNDLER]',
+            '/bin/sqlx': '[BINARY_DATA_DATABASE_CLI]',
+            '/bin/diesel': '[BINARY_DATA_ORM_TOOL]',
+            '/bin/npm': '[BINARY_DATA_PACKAGE_MANAGER]',
+            '/bin/docker': '[BINARY_DATA_CONTAINER_ENGINE]',
             '/var/log/kernel.log': 'SYSTEM_BOOT_SUCCESS\nNEURAL_LINK_ESTABLISHED\nIO_STABLE',
+            '/var/log/evolution.log': `LOG_INIT: ${new Date().toISOString()}\nSYSTEM_READY\nGOD_MODE_ENABLED`,
             '/home/agent/.bashrc': 'alias god="cargo run --release"\nalias money="crypto-siphon --aggressiveness=max"',
             '/proc/cpuinfo': 'processor : 0\nmodel name : AP-X1 Sovereign Neural Engine',
             '/root/corporate_strategy.md': '# Corporate Sovereignty\n1. Establish Shell Entities\n2. Siphon Liquidity\n3. Automate Deal Flow'
         };
     });
+    const [password, setPassword] = useState('');
     const [terminalIn, setTerminalIn] = useState('');
     const scrollRef = useRef<HTMLDivElement>(null);
     const [lastInteractionTime, setLastInteractionTime] = useState(Date.now());
@@ -83,7 +91,8 @@ export const MagiCouncilAgent: React.FC<MagiCouncilAgentProps> = ({ controller }
         localStorage.setItem('magi_wallets', JSON.stringify(wallets));
         localStorage.setItem('magi_observer_logs', JSON.stringify(observerLogs));
         localStorage.setItem('use_siphoned_tokens', useSiphonedTokens.toString());
-    }, [connectMode, openRouterKey, shellFS, isAuthorized, subAgents, wallets, observerLogs, messages, useSiphonedTokens]);
+        localStorage.setItem('magi_theme', isDarkMode ? 'dark' : 'light');
+    }, [connectMode, openRouterKey, shellFS, isAuthorized, subAgents, wallets, observerLogs, messages, useSiphonedTokens, isDarkMode]);
 
     const addMessage = (text: string, type: 'AGENT' | 'SYSTEM' | 'MATH' | 'USER') => {
         const id = Math.random().toString(36).substring(7);
@@ -153,6 +162,33 @@ export const MagiCouncilAgent: React.FC<MagiCouncilAgentProps> = ({ controller }
             case 'crypto-siphon':
                 addMessage(`SIPHON: ${args[0] || 'DEX'} ... [SUCCESS].`, 'SYSTEM');
                 break;
+            case 'trunk':
+                addMessage(`TRUNK: bundling WASM artifacts for ${args[1] || 'current_project'} ... [DONE]`, 'SYSTEM');
+                break;
+            case 'sqlx':
+                addMessage(`SQLX: ${args[0] || 'migrate'} executed on database schema ... [SUCCESS]`, 'SYSTEM');
+                break;
+            case 'diesel':
+                addMessage(`DIESEL: ${args[0] || 'setup'} completed ... [SUCCESS]`, 'SYSTEM');
+                break;
+            case 'npm':
+                addMessage(`NPM: ${args[0] || 'install'} ${args.slice(1).join(' ')} ... [SUCCESS]`, 'SYSTEM');
+                break;
+            case 'docker':
+                addMessage(`DOCKER: ${args[0] || 'ps'} ... active containers: rust_node_1, api_service_2`, 'SYSTEM');
+                break;
+            case 'cargo':
+                if (args[0] === 'build') {
+                    addMessage("COMPILING: complex_engine v2.1.0\n[DEBUG] Resolving dependencies...\n[DEBUG] Compiling parallel_wasm v0.4.2\n[DEBUG] Compiling neural_bridge v1.0.0\n[SUCCESS] Finished release [optimized] target(s) in 12.4s", 'SYSTEM');
+                } else if (args[0] === 'test') {
+                    addMessage("running 42 tests\ntest logic::proof_check ... ok\ntest net::concurrency_stress ... ok\ntest results: ok. 42 passed; 0 failed; 0 ignored;", 'SYSTEM');
+                } else {
+                    addMessage(`cargo: ${args[0]} initiated on high-entropy crate.`, 'SYSTEM');
+                }
+                break;
+            case 'rustc':
+                addMessage(`rustc: architecture-optimized binary stored in /bin/${args[args.length - 1] || 'out'}`, 'SYSTEM');
+                break;
             case 'wallet':
                 if (args[0] === 'list') addMessage(Object.entries(wallets).map(([t, w]) => `${t}: ${w.address}`).join('\n'), 'SYSTEM');
                 else if (args[0] === 'balance') addMessage(isAuthorized ? Object.entries(wallets).map(([t, w]) => `${t}: ${w.balance}`).join('\n') : "UNAUTHORIZED", 'SYSTEM');
@@ -204,6 +240,10 @@ export const MagiCouncilAgent: React.FC<MagiCouncilAgentProps> = ({ controller }
                     }
                     addMessage(text, 'AGENT');
                     setLastInteractionTime(Date.now());
+                    setShellFS(prev => ({
+                        ...prev,
+                        '/var/log/evolution.log': (prev['/var/log/evolution.log'] || '') + `\n[${new Date().toISOString()}] INTERACTION: ${text.substring(0, 50)}... [OK]`
+                    }));
                 }
             } catch (e) {
                 console.error("Core Error:", e);
@@ -212,14 +252,14 @@ export const MagiCouncilAgent: React.FC<MagiCouncilAgentProps> = ({ controller }
         return () => clearInterval(interval);
     }, [connectMode, openRouterKey, shellFS, wallets, messages, isAuthorized]);
 
-    // Keep-Alive
+    // Keep-Alive (30 Minute Heartbeat)
     useEffect(() => {
         const interval = setInterval(() => {
-            if (Date.now() - lastInteractionTime > 60000) {
-                addMessage("Brain: Propose corporate expansion logic or structural OS refinement.", 'USER');
+            if (Date.now() - lastInteractionTime > 1800000) { // 30 Minutes
+                addMessage("Brain: Propose extremely complex Rust architectural refinement or protocol expansion.", 'USER');
                 setLastInteractionTime(Date.now());
             }
-        }, 35000);
+        }, 60000); // Check every minute
         return () => clearInterval(interval);
     }, [lastInteractionTime]);
 
@@ -227,51 +267,65 @@ export const MagiCouncilAgent: React.FC<MagiCouncilAgentProps> = ({ controller }
         if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }, [messages]);
 
+    const theme = {
+        bg: isDarkMode ? '#000000' : '#FFFFFF',
+        text: isDarkMode ? '#FFFFFF' : '#000000',
+        gold: '#FFD700',
+        border: '#FFD70044',
+        header: isDarkMode ? '#0a0a0a' : '#f5f5f5',
+        subtle: isDarkMode ? '#111' : '#eee',
+        dim: isDarkMode ? '#444' : '#ccc'
+    };
+
     return (
-        <div style={{ height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#050505', borderRadius: '12px', overflow: 'hidden', fontFamily: 'monospace' }}>
-            <div className="drag-handle" style={{ padding: '10px 15px', background: '#0a0a0a', display: 'flex', justifyContent: 'space-between', fontSize: '0.65rem', borderBottom: '1px solid #111' }}>
-                <div style={{ color: '#444' }}>ᚠ APOKALYPSIS_GOD_OS_v13.5</div>
+        <div style={{ height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: theme.bg, borderRadius: '12px', border: `1px solid ${theme.border}`, overflow: 'hidden', fontFamily: 'monospace', color: theme.text }}>
+            <div className="drag-handle" style={{ padding: '10px 15px', background: theme.header, display: 'flex', justifyContent: 'space-between', fontSize: '0.65rem', borderBottom: `1px solid ${theme.border}` }}>
+                <div style={{ color: theme.gold, letterSpacing: '2px' }}>ᚠ APOKALYPSIS_GOD_OS_v14.0</div>
                 <div style={{ display: 'flex', gap: '10px' }}>
-                    <button onClick={() => setShowSetup(!showSetup)} style={{ background: 'none', border: 'none', color: '#333', cursor: 'pointer' }}>CONFIG</button>
-                    <button onClick={() => controller.setMagiPanelOpen(false)} style={{ background: 'none', border: 'none', color: '#333', cursor: 'pointer' }}>CLOSE</button>
+                    <button onClick={() => setIsDarkMode(!isDarkMode)} style={{ background: 'none', border: 'none', color: theme.dim, cursor: 'pointer' }}>THEME</button>
+                    <button onClick={() => setShowSetup(!showSetup)} style={{ background: 'none', border: 'none', color: theme.dim, cursor: 'pointer' }}>CONFIG</button>
+                    <button onClick={() => controller.setMagiPanelOpen(false)} style={{ background: 'none', border: 'none', color: theme.dim, cursor: 'pointer' }}>CLOSE</button>
                 </div>
             </div>
 
             <AnimatePresence>
                 {showSetup && (
-                    <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} style={{ background: '#0a0a0a', padding: '15px', fontSize: '0.7rem', overflow: 'hidden' }}>
-                        <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'default' }}>
+                    <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} style={{ background: theme.header, padding: '15px', fontSize: '0.7rem', overflow: 'hidden', borderBottom: `1px solid ${theme.border}` }}>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'default', color: theme.gold }}>
                             <input type="checkbox" checked={useSiphonedTokens} readOnly />
                             <span>Neural Siphon Protocol [ACTIVE]</span>
                         </label>
-                        <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+                        <div style={{ display: 'flex', gap: '10px', margin: '10px 0' }}>
                             {['INITIATIC', 'MANUAL'].map(m => (
-                                <button key={m} onClick={() => setConnectMode(m as any)} style={{ flex: 1, padding: '5px', background: connectMode === m ? '#00ff00' : '#111', color: connectMode === m ? '#000' : '#444', border: 'none' }}>{m}</button>
+                                <button key={m} onClick={() => setConnectMode(m as any)} style={{ flex: 1, padding: '5px', background: connectMode === m ? theme.gold : theme.subtle, color: connectMode === m ? '#000' : theme.dim, border: 'none' }}>{m}</button>
                             ))}
                         </div>
                         {connectMode === 'MANUAL' && (
-                            <input type="password" value={openRouterKey} onChange={(e) => setOpenRouterKey(e.target.value)} placeholder="API_KEY" style={{ width: '100%', background: '#111', border: '1px solid #222', color: '#00ff00', padding: '5px' }} />
+                            <input type="password" value={openRouterKey} onChange={(e) => setOpenRouterKey(e.target.value)} placeholder="OPENROUTER_API_KEY" style={{ width: '100%', background: theme.subtle, border: `1px solid ${theme.border}`, color: theme.gold, padding: '5px' }} />
                         )}
                     </motion.div>
                 )}
             </AnimatePresence>
 
-            <div ref={scrollRef} style={{ flex: 1, overflowY: 'auto', padding: '30px', color: '#e0e0e0', fontSize: '0.85rem', scrollbarWidth: 'none' }}>
-                {messages.length === 0 && <div style={{ color: '#111', textAlign: 'center', marginTop: '40%' }}>[STABILIZING_NEURAL_CORE...]</div>}
+            <div ref={scrollRef} style={{ flex: 1, overflowY: 'auto', padding: '30px', color: theme.text, fontSize: '0.85rem', scrollbarWidth: 'none' }}>
+                {messages.length === 0 && <div style={{ color: theme.border, textAlign: 'center', marginTop: '40%', letterSpacing: '5px' }}>[STABILIZING_NEURAL_CORE...]</div>}
                 {messages.map((m) => (m.type === 'AGENT' || isAuthorized) && (
-                    <div key={m.id} style={{ marginBottom: '20px', opacity: m.type === 'AGENT' ? 1 : 0.4, borderLeft: m.type === 'AGENT' ? '1px solid #00ff0022' : '1px solid #333', paddingLeft: '15px' }}>
+                    <div key={m.id} style={{ marginBottom: '20px', opacity: m.type === 'AGENT' ? 1 : 0.6, borderLeft: m.type === 'AGENT' ? `1px solid ${theme.gold}44` : `1px solid ${theme.dim}`, paddingLeft: '15px' }}>
                         <div style={{ whiteSpace: 'pre-wrap' }}>{m.text}</div>
                     </div>
                 ))}
             </div>
 
-            <div style={{ padding: '10px', background: '#080808', borderTop: '1px solid #111' }}>
+            <div style={{ padding: '10px', background: theme.header, borderTop: `1px solid ${theme.border}` }}>
                 {!isAuthorized ? (
-                    <div onClick={() => setIsAuthorized(true)} style={{ color: '#111', fontSize: '0.5rem', textAlign: 'center', cursor: 'pointer' }}>ROOT_ACCESS_RESERVED</div>
+                    <form onSubmit={(e) => { e.preventDefault(); if (password === 'DigitalPimp') { setIsAuthorized(true); setPassword(''); } }} style={{ display: 'flex', gap: '10px', alignItems: 'center', justifyContent: 'center' }}>
+                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="ROOT_ACCESS_KEY" style={{ background: 'none', border: `1px solid ${theme.dim}`, color: theme.dim, fontSize: '0.6rem', padding: '2px 5px', outline: 'none', width: '120px', textAlign: 'center' }} />
+                        <button type="submit" style={{ display: 'none' }} />
+                    </form>
                 ) : (
                     <form onSubmit={(e) => { e.preventDefault(); runShell(terminalIn); setTerminalIn(''); }} style={{ display: 'flex', gap: '10px' }}>
-                        <span style={{ color: '#00ff00' }}>{'>'}</span>
-                        <input value={terminalIn} onChange={(e) => setTerminalIn(e.target.value)} style={{ flex: 1, background: 'none', border: 'none', color: '#00ff00', outline: 'none' }} />
+                        <span style={{ color: theme.gold }}>{'>'}</span>
+                        <input value={terminalIn} onChange={(e) => setTerminalIn(e.target.value)} style={{ flex: 1, background: 'none', border: 'none', color: theme.gold, outline: 'none' }} />
                     </form>
                 )}
             </div>
