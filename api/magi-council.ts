@@ -112,11 +112,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             }),
         });
 
-        const data = await response.json();
+        let data;
+        let text = await response.text();
+        try { data = JSON.parse(text); } catch { data = { raw: text }; }
 
         // Log agent activity server-side
         if (data.choices?.[0]?.message?.content) {
             console.log('[MAGI-OS]', new Date().toISOString(), '|', model, '|', data.choices[0].message.content.slice(0, 100));
+        }
+
+        if (!response.ok) {
+            // Return full error body for debugging
+            return res.status(response.status).json({ error: data, status: response.status });
         }
 
         return res.status(response.status).json(data);

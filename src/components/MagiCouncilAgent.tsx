@@ -141,13 +141,104 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
     const [pwError, setPwError] = useState('');
 
     // ── OS state ──
+    // ── OS state ──
     const [messages, setMessages] = useState<Message[]>([{ id: 'boot', text: BOOT_ART, type: 'SYSTEM' }]);
     const [shellFS, setShellFS] = useState<Record<string, string>>(NULL_FS_INIT);
     const [envVars, setEnvVars] = useState<Record<string, string>>({ PATH: '/bin:/usr/bin:/kernel', ZETA_TERMS: '1000' });
     const [customCmds, setCustomCmds] = useState<Record<string, string>>({});
     const [processes, setProcesses] = useState([
-        { pid: 1, name: 'null-init', cpu: '0.0', mem: '0.1', status: 'S' },
-        { pid: 42, name: 'emissary', cpu: '0.0', mem: '1.2', status: 'S' },
+    // --- OpenRouter Key Security ---
+    const [keyUnlocked, setKeyUnlocked] = useState(false);
+    const [keyPwInput, setKeyPwInput] = useState('');
+    const [keyPwError, setKeyPwError] = useState('');
+    const [encryptedKey, setEncryptedKey] = useState<string | null>(null);
+    const [decryptedKey, setDecryptedKey] = useState<string | null>(null);
+
+    // Simple XOR encryption for demo (replace with real crypto in production)
+    function xorEncrypt(str: string, pw: string) {
+        return btoa(Array.from(str).map((c, i) => String.fromCharCode(c.charCodeAt(0) ^ pw.charCodeAt(i % pw.length))).join(''));
+    }
+    function xorDecrypt(str: string, pw: string) {
+        try {
+            return atob(str).split('').map((c, i) => String.fromCharCode(c.charCodeAt(0) ^ pw.charCodeAt(i % pw.length))).join('');
+        } catch { return '[DECRYPTION FAILED]'; }
+    }
+    const [messages, setMessages] = useState<Message[]>([{ id: 'boot', text: BOOT_ART, type: 'SYSTEM' }]);
+    const [shellFS, setShellFS] = useState<Record<string, string>>(NULL_FS_INIT);
+    const [envVars, setEnvVars] = useState<Record<string, string>>({ PATH: '/bin:/usr/bin:/kernel', ZETA_TERMS: '1000' });
+    const [customCmds, setCustomCmds] = useState<Record<string, string>>({});
+            case 'openrouter-key': {
+                if (!keyUnlocked) {
+                    setMessages(p => [...p, { id: Math.random().toString(36).slice(2), text: '[SECURITY] Enter secondary password to unlock OpenRouter key:', type: 'SYSTEM' }]);
+                    setKeyPwInput('');
+                    setKeyPwError('');
+                    setEncryptedKey(null);
+                    setDecryptedKey(null);
+                    // Prompt for password in UI (see below)
+                    return;
+                }
+                if (decryptedKey) {
+                    setMessages(p => [...p, { id: Math.random().toString(36).slice(2), text: `[OPENROUTER KEY] ${decryptedKey}`, type: 'SYSTEM' }]);
+                } else {
+                    setMessages(p => [...p, { id: Math.random().toString(36).slice(2), text: '[ERROR] Key not decrypted.', type: 'ERROR' }]);
+                }
+                return;
+            }
+    // --- UI for secondary password prompt ---
+    useEffect(() => {
+        if (keyPwInput && !keyUnlocked) {
+            if (keyPwInput === 'random98!Ialso') {
+                // Fetch and encrypt the key from the server
+                fetch('/api/openrouter-key', { headers: { 'X-OS-Auth': OS_AUTH_HEADER } })
+                    .then(r => r.json())
+                    .then(d => {
+                        if (d.key) {
+                            const enc = xorEncrypt(d.key, keyPwInput);
+                            setEncryptedKey(enc);
+                            setDecryptedKey(d.key);
+                            setKeyUnlocked(true);
+                            setMessages(p => [...p, { id: Math.random().toString(36).slice(2), text: '[SECURITY] OpenRouter key unlocked and encrypted.', type: 'SYSTEM' }]);
+                        } else {
+                            setKeyPwError('Key not found.');
+                        }
+                    })
+                    .catch(() => setKeyPwError('Failed to fetch key.'));
+            } else {
+                setKeyPwError('Incorrect secondary password.');
+            }
+        }
+    }, [keyPwInput, keyUnlocked]);
+    // --- Secondary password prompt UI ---
+    if (!keyUnlocked && encryptedKey === null && messages.some(m => m.text.includes('Enter secondary password'))) {
+        return (
+            <div style={{ height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: T.bg, borderRadius: '12px', border: `1px solid ${T.border}`, overflow: 'hidden', fontFamily: '"JetBrains Mono","Fira Code",monospace', color: T.text, fontSize: '0.78rem' }}>
+                <div className="drag-handle" style={{ padding: '7px 14px', background: T.hdr, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: `1px solid ${T.border}` }}>
+                    <span style={{ color: T.gold, letterSpacing: '1px', fontSize: '0.65rem' }}>Λ_OS v15 — Ω</span>
+                    <button onClick={() => controller.setMagiPanelOpen?.(false)} style={{ background: 'none', border: 'none', color: T.dim, cursor: 'pointer', fontSize: '0.65rem' }}>Ξ</button>
+                </div>
+                <div style={{ flex: 1, overflowY: 'auto', padding: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px' }}>
+                    <form onSubmit={e => { e.preventDefault(); setKeyPwInput(keyPwInput); }} style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '260px' }}>
+                        <input
+                            type="password"
+                            value={keyPwInput}
+                            onChange={e => { setKeyPwInput(e.target.value); setKeyPwError(''); }}
+                            placeholder="Enter secondary password..."
+                            autoFocus
+                            style={{ background: isDark ? '#111' : '#f0f0f0', border: `1px solid ${keyPwError ? '#ff6b6b' : T.border}`, color: T.gold, padding: '10px 14px', borderRadius: '6px', fontFamily: 'inherit', fontSize: '0.8rem', outline: 'none', letterSpacing: '2px' }}
+                        />
+                        {keyPwError && <div style={{ color: T.err, textAlign: 'center', fontSize: '0.72rem', letterSpacing: '2px' }}>{keyPwError}</div>}
+                        <button type="submit" style={{ background: T.gold, color: '#000', border: 'none', padding: '10px', borderRadius: '6px', fontFamily: 'inherit', fontSize: '0.75rem', letterSpacing: '2px', cursor: 'pointer', fontWeight: 'bold' }}>
+                            Unlock Key
+                        </button>
+                    </form>
+                </div>
+            </div>
+        );
+    }
+
+    // ── Main terminal ─────────────────────────────────────────
+    return (
+        <div style={{ height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: T.bg, borderRadius: '12px', border: `1px solid ${T.border}`, overflow: 'hidden', fontFamily: '"JetBrains Mono","Fira Code",monospace', color: T.text, fontSize: '0.78rem' }}>
         { pid: 43, name: 'memento', cpu: '0.0', mem: '0.8', status: 'S' },
         { pid: 44, name: 'grailcrawler', cpu: '0.0', mem: '0.6', status: 'S' },
     ]);
