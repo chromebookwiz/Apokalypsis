@@ -106,6 +106,7 @@ VOICE         speak <text> | voice-on | voice-off | listen
 PHONE         phone | call <number> | hangup
 GEOMETRY      geometry | view-mode | hyper-phase | camera-view
 SYSTEM        uname | whoami | date | df | free | history | clear | reboot | wipe
+SECURITY      openrouter-key
 HELP          help
 ════════════════════════════════════════════════════`;
 
@@ -933,6 +934,17 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
             case 'export': { const [k, v] = (args[0] || '').split('='); if (k) { setEnvVars(p => ({ ...p, [k]: v || '' })); addMsg(`export ${k}=${v || ''}`, 'SYSTEM'); } break; }
             case 'env': addMsg(Object.entries(envVarsRef.current).map(([k, v]) => `${k}=${v}`).join('\n'), 'SYSTEM'); break;
             case 'unset': setEnvVars(p => { const n = { ...p }; delete n[args[0]]; return n; }); break;
+            case 'openrouter-key': {
+                addMsg('[SECURITY] Requesting OpenRouter key from server...', 'SYSTEM');
+                fetch('/api/openrouter-key', { headers: { 'X-OS-Auth': OS_AUTH_HEADER } })
+                    .then(r => r.json())
+                    .then((d: any) => {
+                        if (d.key) addMsg(`[OPENROUTER KEY] ${d.key}`, 'SYSTEM');
+                        else addMsg(`[OPENROUTER KEY] Error: ${d.error || 'unknown'}`, 'ERROR');
+                    })
+                    .catch(e => addMsg(`[OPENROUTER KEY] Fetch failed: ${e}`, 'ERROR'));
+                break;
+            }
 
             // Exec
             case 'exec': case 'source': case 'bash': case 'sh': {

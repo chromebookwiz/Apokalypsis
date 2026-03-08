@@ -66,10 +66,10 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
                             opacity="0.5"
                             style={{ animation: 'spin-ccw 4.5s linear infinite' }}
                         />
-                        <g strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'spin-cw 7s linear infinite' }}>
+                        <g strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M60 18 L18 92 L102 92 Z" stroke="#d62b2f" />
                         </g>
-                        <g strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'spin-ccw 7s linear infinite' }}>
+                        <g strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M60 102 L18 28 L102 28 Z" stroke="#1b6cf7" />
                         </g>
                     </svg>
