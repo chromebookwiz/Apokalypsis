@@ -226,23 +226,51 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
             <div style={{ height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: T.bg, borderRadius: '12px', border: `1px solid ${T.border}`, overflow: 'hidden', fontFamily: '"JetBrains Mono","Fira Code",monospace', color: T.text, fontSize: '0.78rem' }}>
                 <div className="drag-handle" style={{ padding: '7px 14px', background: T.hdr, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: `1px solid ${T.border}` }}>
                     <span style={{ color: T.gold, letterSpacing: '1px', fontSize: '0.65rem' }}>Λ_OS v15 — Ω</span>
-                    <button onClick={() => controller.setMagiPanelOpen?.(false)} style={{ background: 'none', border: 'none', color: T.dim, cursor: 'pointer', fontSize: '0.65rem' }}>Ξ</button>
+                    <button onClick={() => controller.setMagiPanelOpen?.(false)} style={{ background: 'none', border: 'none', color: T.dim, cursor: 'pointer', fontSize: '0.65rem' }}>╳</button>
                 </div>
                 <div style={{ flex: 1, overflowY: 'auto', padding: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px' }}>
-                    <form onSubmit={e => { e.preventDefault(); setKeyPwInput(keyPwInput); }} style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '260px' }}>
-                        <input
-                            type="password"
-                            value={keyPwInput}
-                            onChange={e => { setKeyPwInput(e.target.value); setKeyPwError(''); }}
-                            placeholder="Enter secondary password..."
-                            autoFocus
-                            style={{ background: isDark ? '#111' : '#f0f0f0', border: `1px solid ${keyPwError ? '#ff6b6b' : T.border}`, color: T.gold, padding: '10px 14px', borderRadius: '6px', fontFamily: 'inherit', fontSize: '0.8rem', outline: 'none', letterSpacing: '2px' }}
-                        />
-                        {keyPwError && <div style={{ color: T.err, textAlign: 'center', fontSize: '0.72rem', letterSpacing: '2px' }}>{keyPwError}</div>}
-                        <button type="submit" style={{ background: T.gold, color: '#000', border: 'none', padding: '10px', borderRadius: '6px', fontFamily: 'inherit', fontSize: '0.75rem', letterSpacing: '2px', cursor: 'pointer', fontWeight: 'bold' }}>
-                            Unlock Key
-                        </button>
-                    </form>
+                    <pre style={{ color: T.gold, fontSize: '0.6rem', lineHeight: 1.3, textAlign: 'center', opacity: 0.9 }}>{BOOT_ART}</pre>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '260px' }}>
+                        <form onSubmit={e => {
+                            e.preventDefault();
+                            if (pwInput === TERMINAL_PASSWORD) {
+                                sessionStorage.setItem('os_auth', '1');
+                                setUnlocked(true);
+                                setMessages([{ id: 'unlock', text: UNLOCKED_MSG, type: 'SYSTEM' }]);
+                            } else {
+                                setPwError('ACCESS DENIED');
+                                setPwInput('');
+                                setTimeout(() => setPwError(''), 2000);
+                            }
+                        }} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            <input
+                                type="password"
+                                value={pwInput}
+                                onChange={e => { setPwInput(e.target.value); setPwError(''); }}
+                                placeholder="Enter password..."
+                                autoFocus
+                                style={{ background: isDark ? '#111' : '#f0f0f0', border: `1px solid ${pwError ? '#ff6b6b' : T.border}`, color: T.gold, padding: '10px 14px', borderRadius: '6px', fontFamily: 'inherit', fontSize: '0.8rem', outline: 'none', letterSpacing: '2px' }}
+                            />
+                            {pwError && <div style={{ color: T.err, textAlign: 'center', fontSize: '0.72rem', letterSpacing: '2px' }}>{pwError}</div>}
+                            <button
+                                type="submit"
+                                style={{ background: T.gold, color: '#000', border: 'none', padding: '10px', borderRadius: '6px', fontFamily: 'inherit', fontSize: '0.75rem', letterSpacing: '2px', cursor: 'pointer', fontWeight: 'bold' }}
+                                onClick={() => {
+                                    // On successful unlock, open the Null Line v24 doc page
+                                    if (pwInput === TERMINAL_PASSWORD) {
+                                        setTimeout(() => {
+                                            window.open('/the_null_line_v24.html', '_blank', 'noopener');
+                                        }, 100);
+                                    }
+                                }}
+                            >
+                                Ω
+                            </button>
+                        </form>
+                    </div>
+                    <div style={{ color: T.dim, fontSize: '0.6rem', textAlign: 'center' }}>
+                        Λ_OS v15 | k·k=0 | Γ_MEM
+                    </div>
                 </div>
             </div>
         );
@@ -405,7 +433,7 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
         quantumMemRef.current.superposition = createSuperposition(memRef.current.entries);
         quantumMemRef.current.entanglement = createEntanglement(memRef.current.entries);
         memRef.current = agentTaskDone(memRef.current, 'Emissary');
-    }, [addMsg, appendLog]);
+    }, [addMsg, appendLog, processAgentTags, cloudPush, controller, runShellRef]);
 
     const callAgent = useCallback(async (prompt: string) => {
         setIsStreaming(true); setStreamText('');
@@ -614,8 +642,16 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                 })
             });
             if (!r.ok) {
-                const errData = await r.json().catch(() => null);
-                throw new Error(`API ${r.status}: ${(errData?.error?.message || errData?.error || r.statusText)}`);
+                let errMsg = `API ${r.status}: `;
+                try {
+                    const errData = await r.json();
+                    errMsg += errData?.error?.message || errData?.error || JSON.stringify(errData) || r.statusText;
+                } catch (e) {
+                    errMsg += r.statusText;
+                }
+                addMsg(`[ERROR] OpenRouter API call failed. ${errMsg}\nCheck your API key, model, and server logs.`, 'ERROR');
+                setIsStreaming(false); setStreamText('');
+                return;
             }
             const d = await r.json();
 
@@ -1259,7 +1295,7 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                 const n = parseInt(args[0] || '1');
                 if (Number.isFinite(n) && n >= 0 && controller.cycleCameraView) {
                     for (let i = 0; i < n; i++) controller.cycleCameraView?.();
-                    addMsg(`[Camera] Cycled to view`, 'SYSTEM');
+                    addMsg(`[Camera] Cycled ${n} view(s)`);
                 } else addMsg('camera-view [cycles]', 'ERROR');
                 break;
             }
@@ -1302,7 +1338,7 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
             <div style={{ height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: T.bg, borderRadius: '12px', border: `1px solid ${T.border}`, overflow: 'hidden', fontFamily: '"JetBrains Mono","Fira Code",monospace', color: T.text, fontSize: '0.78rem' }}>
                 <div className="drag-handle" style={{ padding: '7px 14px', background: T.hdr, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: `1px solid ${T.border}` }}>
                     <span style={{ color: T.gold, letterSpacing: '1px', fontSize: '0.65rem' }}>Λ_OS v15 — Ω</span>
-                    <button onClick={() => controller.setMagiPanelOpen?.(false)} style={{ background: 'none', border: 'none', color: T.dim, cursor: 'pointer', fontSize: '0.65rem' }}>Ξ</button>
+                    <button onClick={() => controller.setMagiPanelOpen?.(false)} style={{ background: 'none', border: 'none', color: T.dim, cursor: 'pointer', fontSize: '0.65rem' }}>╳</button>
                 </div>
                 <div style={{ flex: 1, overflowY: 'auto', padding: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px' }}>
                     <pre style={{ color: T.gold, fontSize: '0.6rem', lineHeight: 1.3, textAlign: 'center', opacity: 0.9 }}>{BOOT_ART}</pre>
@@ -1405,3 +1441,32 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
         </div>
     );
 };
+
+// (moved to top of component, after state declarations)
+
+// ── Install some sample packages and a game (tetris) on first unlock
+useEffect(() => {
+    // Install some sample packages and a game (tetris) on first unlock
+    if (unlocked && shellFS['/bin/fortune'] === undefined) {
+        // Install 'fortune' command
+        setShellFS(fs => ({ ...fs, '/bin/fortune': 'echo "Fortune: The Null Line is light."' }));
+    }
+    if (unlocked && shellFS['/bin/cowsay'] === undefined) {
+        // Install 'cowsay' command
+        setShellFS(fs => ({ ...fs, '/bin/cowsay': 'echo "(\^oo^)/  Null Line!"' }));
+    }
+    if (unlocked && shellFS['/bin/tetris'] === undefined) {
+        // Install a simple tetris game (text placeholder)
+        setShellFS(fs => ({ ...fs, '/bin/tetris': 'echo "TETRIS: [####]  Score: 0\nUse arrow keys to move blocks. (Demo)"' }));
+    }
+}, [unlocked, shellFS]);
+
+// ── Test launching installed packages and game after unlock
+useEffect(() => {
+    if (unlocked) {
+        // Test launching installed packages and game
+        setTimeout(() => runShellRef.current('fortune'), 500);
+        setTimeout(() => runShellRef.current('cowsay'), 1000);
+        setTimeout(() => runShellRef.current('tetris'), 1500);
+    }
+}, [unlocked]);
