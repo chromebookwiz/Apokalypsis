@@ -1331,7 +1331,7 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                             <button
                                 type="submit"
                                 style={{ background: T.gold, color: '#000', border: 'none', padding: '10px', borderRadius: '6px', fontFamily: 'inherit', fontSize: '0.75rem', letterSpacing: '2px', cursor: 'pointer', fontWeight: 'bold' }}
-                                onClick={e => {
+                                onClick={() => {
                                     // On successful unlock, open the Null Line v24 doc page
                                     if (pwInput === TERMINAL_PASSWORD) {
                                         setTimeout(() => {
