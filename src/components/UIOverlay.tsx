@@ -1489,28 +1489,17 @@ export const UIOverlay: React.FC<Props> = ({ controller }) => {
                         <h2 style={{ color: '#d4af37', textAlign: 'center', marginBottom: '20px', fontSize: '1.4rem' }}>
                             {THEORY_TRANSLATIONS[theoryLang]?.title || 'Theory'}
                         </h2>
-                        <div style={{ whiteSpace: 'pre-wrap', textAlign: 'justify' }}>
-                            {THEORY_TRANSLATIONS[theoryLang]?.content || ''}
-                        </div>
-                        {/* Only fall back to English HTML article if no translation exists for this language */}
-                        {(!THEORY_TRANSLATIONS[theoryLang] || THEORY_TRANSLATIONS[theoryLang]?.content === '[Translation Pending]') && (
-                            <>
-                                <style>{`
-                                    .theory-override p, .theory-override h1, .theory-override h2, .theory-override h3, .theory-override td {
-                                        color: #1a1a1a !important;
-                                    }
-                                    .theory-override table {
-                                        border-color: rgba(212,175,55,0.3) !important;
-                                    }
-                                `}</style>
-                                <div
-                                    className="theory-override"
-                                    style={{ marginTop: '30px', borderTop: '1px solid rgba(0,0,0,0.1)', paddingTop: '20px' }}
-                                    dangerouslySetInnerHTML={{
-                                        __html: (document.getElementById(`theory-article-${theoryLang}`) || document.getElementById('theory-article'))?.innerHTML || ''
-                                    }}
-                                />
-                            </>
+                        {/* If English, render the full v18 proof HTML with images/graphs via iframe */}
+                        {theoryLang === 'EN' ? (
+                            <iframe
+                                src="/v18_proof/proof.html"
+                                title="Null Line v18 Proof"
+                                style={{ width: '100%', minHeight: '60vh', border: 'none', background: '#fff' }}
+                            />
+                        ) : (
+                            <div style={{ whiteSpace: 'pre-wrap', textAlign: 'justify' }}>
+                                {THEORY_TRANSLATIONS[theoryLang]?.content || ''}
+                            </div>
                         )}
                     </div>
                 </DraggablePanel>

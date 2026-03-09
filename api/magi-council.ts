@@ -91,43 +91,90 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(400).json({ error: 'messages array required' });
     }
 
-    try {
-        const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${apiKey}`,
-                'HTTP-Referer': 'https://apokalypsis.vercel.app',
-                'X-Title': 'Apokalypsis Null-Line OS',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                model,
-                messages: [
-                    { role: 'system', content: system || SYSTEM_PROMPT },
-                    ...messages,
-                ],
-                temperature,
-                max_tokens,
-                ...(tools ? { tools } : {})
-            }),
-        });
+    // Retry logic for OpenRouter API call
+    const MAX_RETRIES = 3;
+    let lastError = null;
+    let lastStatus = 500;
+    let lastResponseText = '';
+    let lastHeaders = {};
+    for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+        try {
+            const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'HTTP-Referer': 'https://apokalypsis.vercel.app',
+                    'X-Title': 'Apokalypsis Null-Line OS',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    model,
+                    messages: [
+                        { role: 'system', content: system || SYSTEM_PROMPT },
+                        ...messages,
+                    ],
+                    temperature,
+                    max_tokens,
+                    ...(tools ? { tools } : {})
+                }),
+            });
 
-        let data;
-        let text = await response.text();
-        try { data = JSON.parse(text); } catch { data = { raw: text }; }
+            lastStatus = response.status;
+            lastHeaders = Object.fromEntries(response.headers.entries());
+            lastResponseText = await response.text();
+            let data;
+            try { data = JSON.parse(lastResponseText); } catch { data = { raw: lastResponseText }; }
 
-        // Log agent activity server-side
-        if (data.choices?.[0]?.message?.content) {
-            console.log('[MAGI-OS]', new Date().toISOString(), '|', model, '|', data.choices[0].message.content.slice(0, 100));
+            // Log agent activity server-side
+            if (data.choices?.[0]?.message?.content) {
+                console.log('[MAGI-OS]', new Date().toISOString(), '|', model, '|', data.choices[0].message.content.slice(0, 100));
+            }
+
+            if (!response.ok) {
+                // Log error details for debugging
+                console.error(`[MAGI-OS][OpenRouter][Attempt ${attempt}] API error`, {
+                    status: response.status,
+                    headers: lastHeaders,
+                    body: lastResponseText,
+                    data
+                });
+                lastError = data;
+                // Retry only on 5xx errors
+                if (response.status >= 500 && response.status < 600 && attempt < MAX_RETRIES) {
+                    await new Promise(r => setTimeout(r, 500 * attempt));
+                    continue;
+                }
+                // Return error for 4xx or after max retries
+                return res.status(response.status).json({ error: data, status: response.status });
+            }
+
+            // Success
+            return res.status(response.status).json(data);
+        } catch (error: unknown) {
+            // Log fetch/network error
+            console.error(`[MAGI-OS][OpenRouter][Attempt ${attempt}] Network error`, {
+                error: (error as Error).message,
+                stack: (error as Error).stack,
+                attempt
+            });
+            lastError = error;
+            if (attempt < MAX_RETRIES) {
+                await new Promise(r => setTimeout(r, 500 * attempt));
+                continue;
+            }
         }
-
-        if (!response.ok) {
-            // Return full error body for debugging
-            return res.status(response.status).json({ error: data, status: response.status });
-        }
-
-        return res.status(response.status).json(data);
-    } catch (error: unknown) {
-        return res.status(500).json({ error: (error as Error).message });
     }
+    // If all retries failed, return last error and log
+    console.error('[MAGI-OS][OpenRouter] All retries failed', {
+        lastError,
+        lastStatus,
+        lastHeaders,
+        lastResponseText
+    });
+    return res.status(lastStatus || 500).json({
+        error: lastError ? (typeof lastError === 'object' ? lastError : { message: String(lastError) }) : { message: 'Unknown error' },
+        status: lastStatus,
+        headers: lastHeaders,
+        body: lastResponseText
+    });
 }
