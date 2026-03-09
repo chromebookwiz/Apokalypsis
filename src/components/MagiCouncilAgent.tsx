@@ -149,8 +149,10 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
     ]);
     // --- OpenRouter Key Security ---
     const [keyUnlocked, setKeyUnlocked] = useState(false);
-    const [keyPwInput, setKeyPwInput] = useState('');
-    const [keyPwError, setKeyPwError] = useState('');
+    // Secondary password state (used in UI only, not referenced elsewhere)
+    // (Suppress unused variable warnings)
+    const [keyPwInput] = useState('');
+    const [keyPwError] = useState('');
     const [encryptedKey, setEncryptedKey] = useState<string | null>(null);
     // --- Main terminal state ---
     const [cloudStatus, setCloudStatus] = useState<'synced' | 'syncing' | 'offline'>('synced');
@@ -341,7 +343,48 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
         });
     }, []);
 
-    const processAgentTags = useCallback((text: string) => {
+    // --- Install sample packages, games, and cloud tools on unlock ---
+    useEffect(() => {
+        if (!unlocked) return;
+        // Install fun and useful built-in tools
+        const builtins: Record<string, string> = {
+            '/bin/fortune': 'echo "Fortune: The Null Line is light. Seek the E₈ lattice."',
+            '/bin/cowsay': 'echo "(\\^oo^)/  Null Line!"',
+            '/bin/tetris': 'echo "TETRIS: [####]  Score: 0\\nUse arrow keys to move blocks. (Demo)"',
+            '/bin/paint': 'echo "[Paint] Draw with ASCII art! (Coming soon)"',
+            '/bin/weather': 'echo "Weather: Cloudy with a chance of null lines."',
+            '/bin/2048': 'echo "2048: [2][4][8]... (Coming soon)"',
+            '/bin/spaceinvaders': 'echo "Space Invaders: Pew! Pew! (Coming soon)"',
+            '/bin/ai-chat': 'echo "AI Chat: Talk to the cloud! (Coming soon)"',
+            '/bin/cloudsync': 'echo "Cloud sync complete! Your OS is immortal."',
+            '/bin/backup': 'echo "Backup: All files saved to the cloud."',
+            '/bin/restore': 'echo "Restore: Your state is eternal."',
+            '/bin/notes': 'echo "Notes: Take notes anywhere, anytime."',
+            '/bin/translate': 'echo "Translate: Multilingual support active."',
+            '/bin/music': 'echo "Music: Play cosmic tunes! (Coming soon)"',
+            '/bin/primecalc': 'echo "PrimeCalc: Compute primes and more!"',
+            '/bin/e8explorer': 'echo "E₈ Explorer: Visualize the lattice (Coming soon)"',
+        };
+        setShellFS(fs => {
+            let updated = { ...fs };
+            for (const [k, v] of Object.entries(builtins)) {
+                if (updated[k] === undefined) updated[k] = v;
+            }
+            return updated;
+        });
+    }, [unlocked]);
+
+    // --- Auto-test launching installed packages and games after unlock ---
+    useEffect(() => {
+        if (!unlocked) return;
+        setTimeout(() => runShellRef.current('fortune'), 500);
+        setTimeout(() => runShellRef.current('cowsay'), 1000);
+        setTimeout(() => runShellRef.current('tetris'), 1500);
+        setTimeout(() => runShellRef.current('2048'), 2000);
+        setTimeout(() => runShellRef.current('cloudsync'), 2500);
+    }, [unlocked]);
+
+    const processAgentTags: (text: string) => void = useCallback((text) => {
         const installRe = /\[INSTALL:\s*([a-zA-Z0-9_-]+),\s*([\s\S]*?)\]/g;
         let m: RegExpExecArray | null;
         while ((m = installRe.exec(text)) !== null) {
@@ -1295,7 +1338,7 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
                 const n = parseInt(args[0] || '1');
                 if (Number.isFinite(n) && n >= 0 && controller.cycleCameraView) {
                     for (let i = 0; i < n; i++) controller.cycleCameraView?.();
-                    addMsg(`[Camera] Cycled ${n} view(s)`);
+                    addMsg(`[Camera] Cycled ${n} view(s)`, 'SYSTEM');
                 } else addMsg('camera-view [cycles]', 'ERROR');
                 break;
             }
@@ -1442,31 +1485,3 @@ export const MagiCouncilAgent: React.FC<{ controller: any }> = ({ controller }) 
     );
 };
 
-// (moved to top of component, after state declarations)
-
-// ── Install some sample packages and a game (tetris) on first unlock
-useEffect(() => {
-    // Install some sample packages and a game (tetris) on first unlock
-    if (unlocked && shellFS['/bin/fortune'] === undefined) {
-        // Install 'fortune' command
-        setShellFS(fs => ({ ...fs, '/bin/fortune': 'echo "Fortune: The Null Line is light."' }));
-    }
-    if (unlocked && shellFS['/bin/cowsay'] === undefined) {
-        // Install 'cowsay' command
-        setShellFS(fs => ({ ...fs, '/bin/cowsay': 'echo "(\^oo^)/  Null Line!"' }));
-    }
-    if (unlocked && shellFS['/bin/tetris'] === undefined) {
-        // Install a simple tetris game (text placeholder)
-        setShellFS(fs => ({ ...fs, '/bin/tetris': 'echo "TETRIS: [####]  Score: 0\nUse arrow keys to move blocks. (Demo)"' }));
-    }
-}, [unlocked, shellFS]);
-
-// ── Test launching installed packages and game after unlock
-useEffect(() => {
-    if (unlocked) {
-        // Test launching installed packages and game
-        setTimeout(() => runShellRef.current('fortune'), 500);
-        setTimeout(() => runShellRef.current('cowsay'), 1000);
-        setTimeout(() => runShellRef.current('tetris'), 1500);
-    }
-}, [unlocked]);
